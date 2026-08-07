@@ -1,0 +1,6 @@
+// A4 — 10^20 exceeds i64. Four engines, four answers.
+//   zytw  Runtime error: power operation overflow
+//   zyvm  7766279631452241920      (silent i64 wraparound)
+//   zyjs  100000000000000000000    (exact: 1e20 is representable in f64)
+//   zyml  -1457092405402533888     (a different wraparound)
+>> (10 ^ 20) ¶

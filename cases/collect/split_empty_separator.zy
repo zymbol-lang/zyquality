@@ -1,0 +1,3 @@
+// A6 — splitting by nothing. Rust yields empty strings at both ends,
+// JavaScript does not, zyml refuses the operation.
+>> ("hello" $/ "") ¶

@@ -1,0 +1,3 @@
+// A4 (related) — the tree-walker guards `^` against overflow but not `+`.
+x = 9223372036854775807
+>> (x + 1) ¶
