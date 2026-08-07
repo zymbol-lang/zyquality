@@ -1,0 +1,14 @@
+# Build artifacts — ocamlopt writes these next to the sources.
+*.cmx
+*.cmi
+*.o
+*.a
+
+# The binary itself
+/zyq
+
+# Native oracles are compiled on demand next to their source.
+*.exe
+
+# Scratch a corpus run can leave behind if isolation is bypassed.
+*.db

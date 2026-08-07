@@ -1,0 +1,66 @@
+# Engines ZyQuality knows how to run.
+#
+# Adding a fifth Zymbol engine should be an entry here, never a patch to the
+# runner.  Fields:
+#
+#   id           short name used in reports and in --engines
+#   cmd          argv; {file} is replaced by the program to run
+#   lang         "zymbol" for engines under test, anything else for oracles
+#   oracle       true if this engine may be cited as authoritative
+#   unsupported  stderr line prefixes meaning "this engine cannot run this
+#                program", reported apart from "gave a different answer".
+#                Without it, a missing feature reads as a divergence.
+#
+# An engine whose binary is absent is reported as unavailable and never counted
+# as a pass — a gate must not read "nothing ran" as "nothing failed".
+
+[[engine]]
+id = "zytw"
+cmd = ["zymbol", "run", "{file}"]
+lang = "zymbol"
+desc = "Rust tree-walker (default engine)"
+
+[[engine]]
+id = "zyvm"
+cmd = ["zymbol", "run", "--vm", "{file}"]
+lang = "zymbol"
+desc = "Rust register VM"
+
+[[engine]]
+id = "zyml"
+cmd = ["../zyml/zyml", "run", "{file}"]
+lang = "zymbol"
+unsupported = ["Lex error:", "Parse error:", "Compile error:"]
+desc = "OCaml closure-compiling engine"
+
+[[engine]]
+id = "zyjs"
+cmd = ["node", "harness/js.mjs", "{file}"]
+lang = "zymbol"
+desc = "JavaScript engine used by the playground"
+
+# ── Oracles ──────────────────────────────────────────────────────────────────
+# These do not run Zymbol.  They run the same computation written in their own
+# language, which is what gives a case an answer independent of every engine.
+
+[[engine]]
+id = "py"
+cmd = ["python3", "{file}"]
+lang = "python"
+oracle = true
+desc = "CPython — arbitrary-precision integers, the authority on integer maths"
+
+[[engine]]
+id = "js"
+cmd = ["node", "{file}"]
+lang = "js"
+oracle = true
+desc = "Node — f64 semantics, BigInt available"
+
+[[engine]]
+id = "ml"
+cmd = ["{exe}"]
+lang = "ocaml"
+oracle = true
+build = "ocamlopt -O3 -unsafe -w -a {file} -o {exe}"
+desc = "OCaml, compiled native — the fast reference for benchmarks"
