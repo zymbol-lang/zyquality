@@ -1,0 +1,5 @@
+// A3 — integer base, negative exponent. 0.5 in the tree-walker, 0 elsewhere.
+// A design decision that was never made, not a bug in any one engine.
+>> (2 ^ -1) ¶
+>> (2 ^ -2) ¶
+>> (2.0 ^ -1) ¶

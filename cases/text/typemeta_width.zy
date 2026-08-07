@@ -1,0 +1,6 @@
+// A1 — `#?` counts bytes in the tree-walker, characters in the VM and JS.
+// It also contradicts `$#` inside the tree-walker itself.
+>> "héllo"#? ¶
+>> ("héllo"$#) ¶
+>> "日本語"#? ¶
+>> ("日本語"$#) ¶

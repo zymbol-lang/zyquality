@@ -1,0 +1,3 @@
+// A2 — `==` over arrays is #0 in the VM alone. Tuples work in all four.
+>> ([1,2,3] == [1,2,3]) ¶
+>> ((1,2) == (1,2)) ¶

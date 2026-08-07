@@ -1,0 +1,6 @@
+// A7 — `#?` over an error value: message length (38) in the tree-walker,
+// 0 in the VM. GUIDE §18 specifies the message length.
+<# std/io => io
+x = io::read("definitely_not_here.txt")
+>> x#? ¶
+>> (x$!) ¶
