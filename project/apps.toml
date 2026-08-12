@@ -1,0 +1,67 @@
+# The real programs written in Zymbol, and where their test suites live.
+#
+# The corpus proves the language works on test cases. These prove it works on
+# the programs actually written in it — a go engine, two TUI games, a
+# neural-network library, a code auditor. When one of those stops working, the
+# language broke in a way no test case caught.
+#
+# ── Why the suites are not in this repository ─────────────────────────────
+#
+# A suite imports the application it tests: `<# ../核/盤 => 盤`. Move the file
+# and the import points at nothing. So the *programs* stay with their app, and
+# their goldens sit beside them — which is what Zofia already did, and the only
+# arrangement where `zyq expect` finds a pair.
+#
+# What is here is the part that was missing: a registry, one runner, one report,
+# and a verdict that is not a grep.
+#
+# ── What was wrong before ─────────────────────────────────────────────────
+#
+# Each project had a shell runner of its own that decided correctness by
+# `grep -q FAIL` over the suite's output. A suite that crashes half way through
+# prints no FAIL and passes — verified, not supposed. Goldens catch that: a
+# truncated run does not match.
+#
+# GO ran its seven suites on the tree-walker only. Put on the register VM they
+# all pass, and on zyml two of them do not — divergences that had never been
+# looked at because nothing had ever asked. `性能試験` was in the directory and
+# not in the runner at all.
+#
+# ── Fields ────────────────────────────────────────────────────────────────
+#
+#   id     short name, used in the report and in --only
+#   dir    the suite directory, relative to zyquality/
+#   desc   what the application is
+#
+# Engines are not declared per app: `zyq` works out per file which of them can
+# run a given suite, and reports "unsupported" apart from "gave a different
+# answer". What *is* fixed is the set the runner asks — zytw, zyvm, zyml — and
+# it excludes the browser engine on purpose. These are command-line
+# applications; the browser engine has no terminal, no filesystem and no shell,
+# so it diverges on every one of them and the number means nothing. Ask for it
+# with `--engines` when there is a reason to.
+
+[[app]]
+id = "go"
+dir = "../GO/試験"
+desc = "go engine, written in Japanese — rules, scoring, AI, layout, text metrics"
+
+[[app]]
+id = "serpiente"
+dir = "../serpiente/pruebas"
+desc = "Serpiente (snake), TUI — i18n catalogue and frame arithmetic"
+
+[[app]]
+id = "klingon"
+dir = "../klingon_galaxy/mIw"
+desc = "Hov veS, TUI — i18n catalogue, composed phrases, pIqaD numerals"
+
+[[app]]
+id = "zofia"
+dir = "../Zofia/tests"
+desc = "neural-network library — activations, gradients, attention, forward pass"
+
+[[app]]
+id = "zyaudit"
+dir = "../ZyAudit/测试"
+desc = "code auditor, written in Chinese — parsing, metrics, reports, translation"

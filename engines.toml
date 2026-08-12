@@ -5,39 +5,57 @@
 #
 #   id           short name used in reports and in --engines
 #   cmd          argv; {file} is replaced by the program to run
+#   check_cmd    argv for analysing a program without running it.  Optional:
+#                an engine without one is simply not judged on the goldens
+#                recorded that way (errors/semantic/), rather than failing
+#                them all.
 #   lang         "zymbol" for engines under test, anything else for oracles
 #   oracle       true if this engine may be cited as authoritative
 #   unsupported  stderr line prefixes meaning "this engine cannot run this
 #                program", reported apart from "gave a different answer".
 #                Without it, a missing feature reads as a divergence.
 #
+# Relative paths are resolved against zyquality's own directory, not against
+# the caller's — other repositories' test scripts delegate here and run from
+# their own tree, where `../zyml/zyml` points at nothing.
+#
+# `${NAME:-default}` is expanded from the environment.  That is how a release
+# gate points the suite at an installed package instead of a build tree:
+#
+#   ZYMBOL_BIN=/usr/bin/zymbol zyq consensus --engines zytw,zyvm --without STD_DB
+#
+# which is what vm_compare.sh's ZYMBOL_BIN and VM_COMPARE_EXCLUDE did between
+# them.
+#
 # An engine whose binary is absent is reported as unavailable and never counted
 # as a pass — a gate must not read "nothing ran" as "nothing failed".
 
 [[engine]]
 id = "zytw"
-cmd = ["zymbol", "run", "{file}"]
+cmd = ["${ZYMBOL_BIN:-zymbol}", "run", "{file}"]
+check_cmd = ["${ZYMBOL_BIN:-zymbol}", "check", "{file}"]
 lang = "zymbol"
 desc = "Rust tree-walker (default engine)"
 
 [[engine]]
 id = "zyvm"
-cmd = ["zymbol", "run", "--vm", "{file}"]
+cmd = ["${ZYMBOL_BIN:-zymbol}", "run", "--vm", "{file}"]
+check_cmd = ["${ZYMBOL_BIN:-zymbol}", "check", "{file}"]
 lang = "zymbol"
 desc = "Rust register VM"
 
 [[engine]]
 id = "zyml"
-cmd = ["../zyml/zyml", "run", "{file}"]
+cmd = ["${ZYML_BIN:-../zyml/zyml}", "run", "{file}"]
 lang = "zymbol"
 unsupported = ["Lex error:", "Parse error:", "Compile error:"]
 desc = "OCaml closure-compiling engine"
 
 [[engine]]
 id = "zyjs"
-cmd = ["node", "harness/js.mjs", "{file}"]
+cmd = ["node", "${ZYJS_HARNESS:-../web/tests/run_one.mjs}", "{file}"]
 lang = "zymbol"
-desc = "JavaScript engine used by the playground"
+desc = "JavaScript engine used by the playground (driver lives in web/)"
 
 # ── Oracles ──────────────────────────────────────────────────────────────────
 # These do not run Zymbol.  They run the same computation written in their own

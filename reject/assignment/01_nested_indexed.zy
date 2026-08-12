@@ -1,0 +1,5 @@
+// @reject: nesting is navigated with '>', and a change must say so with '$~':
+// @reject: m = m[i>j]$~ v.  Accepting m[i][j] = v would give the language two
+// @reject: ways to write the same change, one of which hides the intent.
+m = [[1,2],[3,4]]
+m[1][2] = 77

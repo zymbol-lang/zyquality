@@ -27,38 +27,46 @@ let status_note = function
   | Engine.Timeout -> "timeout"
   | Engine.Unavailable -> "unavailable"
 
+let skip_note = function
+  | Consensus.Status st -> status_note st
+  | Consensus.Excused (r : Corpus.rule) ->
+    "excused" ^ (if r.tag = "" then "" else " [" ^ r.tag ^ "]")
+
 (* An engine that printed nothing usually printed a *reason* on stderr.  Showing
    `<empty>` for it would hide the most informative line in the report — the
    tree-walker's overflow error is the whole finding in pow_overflow. *)
-let class_preview (o : Consensus.outcome) (out : string) (ids : string list) =
-  if String.trim out <> "" then preview out
-  else
-    match List.find_opt (fun (r : Engine.result) ->
-        List.mem r.eid ids && String.trim r.stderr <> "") o.results with
-    | Some r -> dim "stderr: " ^ preview ~width:48 r.stderr
-    | None -> preview out
+let class_preview (v : Consensus.vote) =
+  let body =
+    if String.trim v.out <> "" then preview v.out
+    else if String.trim v.err <> "" then dim "stderr: " ^ preview ~width:46 v.err
+    else preview v.out
+  in
+  match v.verdict with
+  | Engine.Ok -> body
+  | Engine.Failed -> red "ERROR " ^ body
 
 let print_divergence (o : Consensus.outcome) =
   match o.verdict with
   | Consensus.Split classes ->
-    Printf.printf "\n%s %s\n" (red "DIVERGE") (bold o.file);
-    List.iter (fun (out, ids) ->
-        Printf.printf "    %-22s %s\n"
-          (String.concat "," ids) (class_preview o out ids)) classes;
+    Printf.printf "\n%s %s\n" (red "DIVERGE") (bold o.rel);
+    List.iter (fun (v, ids) ->
+        Printf.printf "    %-22s %s\n" (String.concat "," ids) (class_preview v))
+      classes;
     if o.skipped <> [] then
       Printf.printf "    %s\n"
         (dim ("(" ^ String.concat ", "
-                (List.map (fun (id, st) -> id ^ ": " ^ status_note st) o.skipped)
+                (List.map (fun (id, w) -> id ^ ": " ^ skip_note w) o.skipped)
               ^ ")"))
   | _ -> ()
 
 let print_verbose (o : Consensus.outcome) =
   match o.verdict with
-  | Consensus.Agree _ -> Printf.printf "  %s  %s\n" (green "AGREE") o.file
+  | Consensus.Agree _ -> Printf.printf "  %s  %s\n" (green "AGREE") o.rel
   | Consensus.TooFew ->
-    Printf.printf "  %s   %s  %s\n" (yellow "FEW") o.file
-      (dim ("only " ^ string_of_int (List.length (Consensus.voters o.results))
-            ^ " engine(s) ran"))
+    Printf.printf "  %s   %s  %s\n" (yellow "FEW") o.rel
+      (dim (if o.skipped = [] then "no engine ran it"
+            else String.concat ", "
+                (List.map (fun (id, w) -> id ^ ": " ^ skip_note w) o.skipped)))
   | Consensus.Split _ -> print_divergence o
 
 (* ------------------------------------------------------------------ summary *)
@@ -83,8 +91,10 @@ let record t (o : Consensus.outcome) =
       | None -> t.per_engine_skips <- (id, ref 1) :: t.per_engine_skips)
     o.skipped
 
+let rule = bold "─────────────────────────────────────────────"
+
 let print_summary t total =
-  Printf.printf "\n%s\n" (bold "─────────────────────────────────────────────");
+  Printf.printf "\n%s\n" rule;
   Printf.printf "%s  %d files: %s agree, %s diverge, %d with too few engines\n"
     (bold "consensus")
     total
@@ -98,6 +108,56 @@ let print_summary t total =
     in
     Printf.printf "%s      %s\n" (dim "did not run") (dim (String.concat "  ·  " parts))
   end
+
+(* ------------------------------------------------------------------ goldens *)
+
+let print_golden (o : Golden.outcome) ~verbose =
+  let bad = List.filter (fun (_, v) -> Golden.is_failure v) o.per_engine in
+  if bad <> [] then begin
+    Printf.printf "\n%s %s\n" (red "STALE") (bold o.rel);
+    List.iter (fun (eid, v) ->
+        match v with
+        | Golden.Mismatch (Some (ln, g, a)) ->
+          Printf.printf "    %-8s %s %d\n" eid (dim "first difference at line") ln;
+          Printf.printf "        %s %s\n" (dim "golden|") (preview ~width:64 g);
+          Printf.printf "        %s %s\n" (dim "actual|") (preview ~width:64 a)
+        | Golden.Mismatch None ->
+          Printf.printf "    %-8s %s\n" eid (dim "differs, but no line does")
+        | _ -> ())
+      bad
+  end else if verbose then
+    Printf.printf "  %s  %s  %s\n" (green "MATCH") o.rel
+      (dim (String.concat "," (List.map fst o.per_engine)))
+
+type gtally = {
+  mutable gpass : int;
+  mutable gfail : int;
+  mutable gskip : int;
+  mutable gnone : int;   (* every engine excused or missing: nothing was checked *)
+}
+
+let new_gtally () = { gpass = 0; gfail = 0; gskip = 0; gnone = 0 }
+
+let grecord t (o : Golden.outcome) =
+  let judged = List.filter (fun (_, v) ->
+      match v with Golden.Pass | Golden.Mismatch _ -> true | _ -> false)
+      o.per_engine
+  in
+  if judged = [] then t.gnone <- t.gnone + 1
+  else if Golden.failed o then t.gfail <- t.gfail + 1
+  else t.gpass <- t.gpass + 1;
+  t.gskip <- t.gskip + List.length o.per_engine - List.length judged
+
+let print_gsummary t total how =
+  Printf.printf "\n%s\n" rule;
+  Printf.printf "%s  %d goldens via `%s`: %s match, %s stale, %d unchecked\n"
+    (bold "expect") total how
+    (green (string_of_int t.gpass))
+    ((if t.gfail > 0 then red else green) (string_of_int t.gfail))
+    t.gnone;
+  if t.gskip > 0 then
+    Printf.printf "%s   %s\n" (dim "engine-file pairs excused or unavailable")
+      (dim (string_of_int t.gskip))
 
 (* --------------------------------------------------------------------- JSON *)
 
@@ -117,25 +177,27 @@ let json_escape s =
 
 let json_of_outcome (o : Consensus.outcome) =
   let b = Buffer.create 256 in
-  Buffer.add_string b (Printf.sprintf "{\"file\":\"%s\"," (json_escape o.file));
+  Buffer.add_string b (Printf.sprintf "{\"file\":\"%s\"," (json_escape o.rel));
   (match o.verdict with
    | Consensus.Agree _ -> Buffer.add_string b "\"verdict\":\"agree\""
    | Consensus.TooFew -> Buffer.add_string b "\"verdict\":\"too_few\""
    | Consensus.Split classes ->
      Buffer.add_string b "\"verdict\":\"diverge\",\"classes\":[";
-     List.iteri (fun i (out, ids) ->
+     List.iteri (fun i ((v : Consensus.vote), ids) ->
          if i > 0 then Buffer.add_char b ',';
          Buffer.add_string b
-           (Printf.sprintf "{\"engines\":[%s],\"output\":\"%s\"}"
+           (Printf.sprintf
+              "{\"engines\":[%s],\"verdict\":\"%s\",\"stdout\":\"%s\",\"stderr\":\"%s\"}"
               (String.concat "," (List.map (fun s -> "\"" ^ s ^ "\"") ids))
-              (json_escape out))) classes;
+              (Engine.verdict_name v.verdict)
+              (json_escape v.out) (json_escape v.err))) classes;
      Buffer.add_char b ']');
   if o.skipped <> [] then begin
     Buffer.add_string b ",\"skipped\":{";
-    List.iteri (fun i (id, st) ->
+    List.iteri (fun i (id, w) ->
         if i > 0 then Buffer.add_char b ',';
         Buffer.add_string b
-          (Printf.sprintf "\"%s\":\"%s\"" id (Engine.status_name st))) o.skipped;
+          (Printf.sprintf "\"%s\":\"%s\"" id (json_escape (skip_note w)))) o.skipped;
     Buffer.add_char b '}'
   end;
   Buffer.add_char b '}';

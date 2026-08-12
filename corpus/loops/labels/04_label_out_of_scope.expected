@@ -1,0 +1,6 @@
+[1m[31merror[39m[0m: no enclosing loop is labelled 'first'
+  [1m[34m-->[39m[0m loops/labels/04_label_out_of_scope.zy:8:5
+[1m[34m   8[39m[0m [34m|[39m
+[1m[34m   8[39m[0m [34m|[39m     @:first!
+[34m     |[39m [1m[31m    ^^^^^^^^[39m[0m
+  [1m[32mhelp:[39m[0m labels in scope here: 'second'

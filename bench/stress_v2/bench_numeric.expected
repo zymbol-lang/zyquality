@@ -1,0 +1,8 @@
+=== Zymbol Numeric v2 ===
+N1_fib40_loop:      result=102334155  (0.004s)
+N2_digit_sum:       total=1000005  (0.089s)
+N3_primes_5k:       count=669  (0.023s)
+N4_modular_sq:      total=92300000  (0.037s)
+N5_fizzbuzz_1M:     fizz=266667 buzz=133334 fb=66666  (1.000s)
+N6_dot_product:     result=20845835000  (0.828s)
+=== Done (2.002s total) ===

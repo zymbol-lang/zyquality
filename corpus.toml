@@ -1,0 +1,392 @@
+# corpus.toml — what the corpus knows about itself.
+#
+# Every runner used to carry its own idea of which files it could not compare:
+#
+#   vm_compare.sh      a `@vm-skip` marker in line 1, an env regex
+#                      VM_COMPARE_EXCLUDE, and three hard-coded paths
+#   test_runner.mjs    a 40-entry SKIP_SET literal inside the JavaScript,
+#                      plus a `// @skip-parity:` marker
+#   parity.sh          `input/`, `manual_check.zy`, and `grep -L lib_time`
+#   engine_compare.sh  nothing at all
+#
+# Four lists, none of which could see the others, all of them claiming to
+# describe the same corpus.  A file excluded from the JavaScript comparison
+# because it shells out was still counted as a divergence by zyml.  So the
+# lists are merged here, once, next to the corpus they describe — a property of
+# the *file*, not of whoever is running it.
+#
+# One rule was dropped rather than merged: parity.sh excluded all of `input/`
+# because it fed every engine /dev/null.  Each of those 14 files has a `.input`
+# beside it and zyq feeds it, so the exclusion described the runner, not the
+# corpus, and those files are now compared.
+#
+# ── rule ──────────────────────────────────────────────────────────────────
+#   match     glob over the corpus-relative path.  `*` stays inside a path
+#             segment, `**` crosses them, `?` is one character.
+#   engines   engine ids the rule applies to.  Omitted means every engine,
+#             which is how you say "this file's output is not a function of
+#             the program" rather than "this engine is behind".
+#   tag       groups rules so a gate can drop a whole class:
+#             `zyq consensus --without STD_DB`, which is what the release
+#             workflow used VM_COMPARE_EXCLUDE for.
+#   reason    why.  Required — an exclusion whose reason nobody wrote down is
+#             indistinguishable from a bug someone hid.
+
+# ── Output that is not a function of the program ──────────────────────────
+# These are excluded for every engine.  Nothing here is an engine falling
+# behind; comparing these outputs would be meaningless rather than informative.
+#
+# There used to be a WALL_TIME class here — `stress_v2/**` and the `lib_time`
+# module it imports.  It is gone, and not because the rule was wrong: those
+# files were benchmarks, so no rule could make them comparable.  They live in
+# `bench/` now.  A file the corpus can never compare does not belong in the
+# corpus; keeping it there means carrying an exclusion, a golden nobody checks,
+# and a number in every report that has to be explained away.
+
+[[rule]]
+match = "i18n/matematicas/module.zy"
+tag = "MODULE_ONLY"
+reason = "re-export layer for the i18n/matematicas/ tests; has no output of its own"
+
+# ── std/db needs ODBC ─────────────────────────────────────────────────────
+# The Rust engines have std/db when built with the feature and an ODBC driver
+# present; a release package has neither, which is what VM_COMPARE_EXCLUDE
+# existed for.  Drop the whole class with `--without STD_DB`.
+
+[[rule]]
+match = "stdlib/stdlib_db_*.zy"
+engines = ["zyjs"]
+tag = "STD_DB"
+reason = "std/db is ODBC; a browser has no equivalent"
+
+[[rule]]
+match = "stdlib/stdlib_i18n_db_es.zy"
+engines = ["zyjs"]
+tag = "STD_DB"
+reason = "std/db is ODBC; a browser has no equivalent"
+
+# ── The JavaScript engine runs in a browser ───────────────────────────────
+# Everything below was the SKIP_SET inside test_runner.mjs.  The reasons are
+# the ones its comments gave, kept per file rather than per block so that
+# deleting one file does not silently widen the exclusion.
+
+[[rule]]
+match = "i18n/test_bash.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "`<\\ shell \\>` has no browser equivalent"
+
+[[rule]]
+match = "i18n/test_bash_simple.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "`<\\ shell \\>` has no browser equivalent"
+
+[[rule]]
+match = "i18n/test_archivos.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "`<\\ shell \\>` has no browser equivalent"
+
+[[rule]]
+match = "i18n/test_database.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "`<\\ shell \\>` has no browser equivalent"
+
+[[rule]]
+match = "i18n/test_http_api.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "`<\\ shell \\>` has no browser equivalent"
+
+[[rule]]
+match = "i18n/test_integration_all.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "`<\\ shell \\>` has no browser equivalent"
+
+[[rule]]
+match = "i18n/test_interpolacion_simple.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "`<\\ shell \\>` has no browser equivalent"
+
+[[rule]]
+match = "i18n/test_modulos_sistema.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "`<\\ shell \\>` has no browser equivalent"
+
+[[rule]]
+match = "i18n/test_sqlite_direct.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "`<\\ shell \\>` has no browser equivalent"
+
+[[rule]]
+match = "i18n/test_sqlite_simple.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "`<\\ shell \\>` has no browser equivalent"
+
+[[rule]]
+match = "i18n/test_execute.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "`<\\ shell \\>` has no browser equivalent"
+
+[[rule]]
+match = "gaps/g12_bashexec_expression.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "`<\\ shell \\>` has no browser equivalent"
+
+[[rule]]
+match = "errors/semantic/no_false_positive_unused.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "`<\\ shell \\>` has no browser equivalent"
+
+[[rule]]
+match = "i18n/matematicas/archivos.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "the CLI parser rejects the `<\\ pipe/dot \\>` forms as invalid tokens while the browser stub accepts everything silently, so the two can never agree on the diagnostic"
+
+[[rule]]
+match = "i18n/matematicas/db.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "the CLI parser rejects the `<\\ pipe/dot \\>` forms as invalid tokens while the browser stub accepts everything silently"
+
+[[rule]]
+match = "i18n/matematicas/http.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "the CLI parser rejects the `<\\ pipe/dot \\>` forms as invalid tokens while the browser stub accepts everything silently"
+
+[[rule]]
+match = "i18n/matematicas/sistema.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "the CLI parser rejects the `<\\ pipe/dot \\>` forms as invalid tokens while the browser stub accepts everything silently"
+
+[[rule]]
+match = "scope04_match_block.zy"
+engines = ["zyjs"]
+tag = "ANSI_FORMAT"
+reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
+
+[[rule]]
+match = "arithmetic/04_comparison_ops.zy"
+engines = ["zyjs"]
+tag = "ANSI_FORMAT"
+reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
+
+[[rule]]
+match = "strings/09_length.zy"
+engines = ["zyjs"]
+tag = "ANSI_FORMAT"
+reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
+
+[[rule]]
+match = "collections/11_hof_filter_reduce.zy"
+engines = ["zyjs"]
+tag = "ANSI_FORMAT"
+reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
+
+[[rule]]
+match = "collections/22_sort_named.zy"
+engines = ["zyjs"]
+tag = "ANSI_FORMAT"
+reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
+
+[[rule]]
+match = "collections/34_homogeneous_type_error.zy"
+engines = ["zyjs"]
+tag = "ANSI_FORMAT"
+reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
+
+[[rule]]
+match = "memory02_function_isolation.zy"
+engines = ["zyjs"]
+tag = "ANSI_FORMAT"
+reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
+
+[[rule]]
+match = "memory_correct_01_lambdas.zy"
+engines = ["zyjs"]
+tag = "ANSI_FORMAT"
+reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
+
+[[rule]]
+match = "named_tuples/error_01_field_not_found.zy"
+engines = ["zyjs"]
+tag = "ANSI_FORMAT"
+reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
+
+[[rule]]
+match = "named_tuples/error_02_member_on_positional.zy"
+engines = ["zyjs"]
+tag = "ANSI_FORMAT"
+reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
+
+[[rule]]
+match = "manual/tui/05_key_input.zy"
+engines = ["zyjs"]
+tag = "TUI"
+reason = "raw mode and key input need a real terminal"
+
+[[rule]]
+match = "manual/tui/06_tui_block.zy"
+engines = ["zyjs"]
+tag = "TUI"
+reason = "raw mode and key input need a real terminal"
+
+[[rule]]
+match = "gaps/gap_hot_def_double_hot_error.zy"
+engines = ["zyjs"]
+tag = "HOT_DEF"
+reason = "the browser engine does not detect the HOT_DEF warning"
+
+[[rule]]
+match = "gaps/gap_hot_def_error_in_output.zy"
+engines = ["zyjs"]
+tag = "HOT_DEF"
+reason = "the browser engine does not detect the HOT_DEF warning"
+
+[[rule]]
+match = "gaps/gap_hot_def_scope_postfix_loops.zy"
+engines = ["zyjs"]
+tag = "HOT_DEF"
+reason = "the browser engine does not detect the HOT_DEF warning"
+
+[[rule]]
+match = "analysis/p5d_fn_capture_asymmetry.zy"
+engines = ["zyjs"]
+tag = "FEATURE_GAP"
+reason = "closure snapshot semantics — capture by value with write isolation — are not implemented in the browser engine"
+
+[[rule]]
+match = "lambdas/28_eval_order_and_capture.zy"
+engines = ["zyjs"]
+tag = "FEATURE_GAP"
+reason = "closure snapshot semantics — capture by value with write isolation — are not implemented in the browser engine"
+
+# ── golden ────────────────────────────────────────────────────────────────
+# How a `.expected` file was recorded, and therefore how it has to be checked.
+# The last matching entry wins, so write the general case first.
+#
+#   via   `run` executes the program; `check` analyses it without running.
+#   by    the engine whose answer this is.
+#
+# `by` matters because a golden is not a neutral truth: it is one engine
+# printing one thing on one day.  Judging a *second* engine against it asks the
+# consensus question in a noisier way and reports a stale golden where the real
+# finding is a divergence.  So `zyq expect` runs the recording engine unless
+# told otherwise.
+#
+# Two scripts knew the `via` split between them and neither said it:
+# expected_compare.sh ran the program and excluded errors/semantic/,
+# semantic_compare.sh checked the program and looked at nothing else.  A file
+# that landed in neither scope had a golden nobody ever compared — `zyq audit`
+# now reports that.
+
+[[golden]]
+match = "**"
+via = "run"
+by = "zytw"
+
+# These files are supposed to fail.  Running them proves nothing; analysing
+# them proves everything.
+[[golden]]
+match = "errors/semantic/**"
+via = "check"
+by = "zytw"
+
+# ── redact ────────────────────────────────────────────────────────────────
+# Applied to every engine's output before comparing.  This is not a licence to
+# paper over differences: each entry names something the *network or the clock*
+# decided, which no engine can be right or wrong about.  A difference an engine
+# is responsible for must never be redacted.
+#
+#   find  a pattern in the small regex subset zyq understands:
+#         literals, `.`, `[a-z]` and `[^x]` classes, and `*` `+` `?`
+#   with  the literal text that replaces every match
+#
+# These came from vm_compare.sh's `normalize_output`, where they were five sed
+# expressions no other runner applied.
+
+[[redact]]
+find = '"X-Amzn-Trace-Id": "[^"]*"'
+with = '"X-Amzn-Trace-Id": "<REDACTED>"'
+reason = "AWS assigns the trace id; the HTTP tests print whatever came back"
+
+[[redact]]
+find = 'Root=[A-Za-z0-9;:-]*'
+with = 'Root=<REDACTED>'
+reason = "same trace id in its other spelling"
+
+[[redact]]
+find = '"id": "[0-9a-f-]*"'
+with = '"id": "<UUID>"'
+reason = "server-assigned identifier"
+
+[[redact]]
+find = '"uuid": "[0-9a-f-]*"'
+with = '"uuid": "<UUID>"'
+reason = "server-assigned identifier"
+
+[[redact]]
+find = 'date: [A-Za-z]*, [0-9]* [A-Za-z]* [0-9]* [0-9:]* GMT'
+with = 'date: <DATE>'
+reason = "the clock, not the program"
+
+# ── wildcard ──────────────────────────────────────────────────────────────
+# What a marker in an `.expected` golden file may stand for.  A golden line is
+# matched against the whole line, with everything outside a marker taken
+# literally.  `****` is built in and matches any run of characters within the
+# line; the typed markers are declared here, so `***int***` means the same
+# thing to every runner that reads a golden.
+#
+# expected_compare.sh built these as Python regexes and fell back to a plain
+# `****` glob when python3 was absent, which quietly turned "an integer goes
+# here" into "anything at all goes here" — on a machine where you would never
+# think to check.  zyq has no fallback because it has no dependency.
+#
+# Order matters: markers are recognised longest-first, so `***float***` is
+# tried before `***int***` and `****` last.  The patterns below are the ones
+# expected_compare.sh used, kept identical — 553 golden files were written
+# against them and a "better" pattern here is a mass rewrite, not an
+# improvement.
+
+[[wildcard]]
+name = "int"
+pattern = '-?[0-9]+'
+
+[[wildcard]]
+name = "float"
+pattern = '-?[0-9]+(\.[0-9]+)?([eE][+-]?[0-9]+)?'
+
+# Deliberately not the same as `float`: no exponent.  That is what the Python
+# table said, and widening it here would make goldens accept output they were
+# written to reject.
+[[wildcard]]
+name = "num"
+pattern = '-?[0-9]+(\.[0-9]+)?'
+
+# `µs` is two bytes in UTF-8, so the units are spelled out as alternatives
+# rather than as a character class.  Longest first: `ms` before `s`.
+[[wildcard]]
+name = "time"
+pattern = '[0-9]+(\.[0-9]+)?(ms|µs|us|ns|s)'
+
+[[wildcard]]
+name = "date"
+pattern = '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
+
+# Python's \S.  Matched per line, so a newline cannot appear here anyway.
+[[wildcard]]
+name = "path"
+pattern = '[^ \t\r]+'
