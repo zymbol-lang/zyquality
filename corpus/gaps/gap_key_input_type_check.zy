@@ -7,7 +7,10 @@
 // Its purpose is to verify that `zymbol check` produces no false errors.
 // Run with: zymbol check gap_key_input_type_check.zy → "No errors or warnings"
 //
-// @vm-skip
+// It carried a VM skip marker from a version where the register VM could not
+// run it.  All four engines execute it and agree now, so the marker was hiding
+// a test that passes; removed 2026-08-12.  (Naming the marker literally here
+// would re-trigger it: zyq scans the first ten lines for it.)
 
 // Placeholder that mirrors the <<| usage pattern in dibujo.zy:
 // Inside a TUI block the type checker must accept tecla after <<| tecla.

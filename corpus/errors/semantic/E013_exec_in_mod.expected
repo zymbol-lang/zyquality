@@ -1,5 +1,5 @@
 error: E013: executable statement not allowed in module body
-  --> tests/errors/semantic/E013_exec_in_mod.zy:6:5
+  --> errors/semantic/E013_exec_in_mod.zy:6:5
    6 |
    6 |     >> "this should not be allowed" ¶
      |     ^^

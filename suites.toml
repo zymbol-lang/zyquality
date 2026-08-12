@@ -1,0 +1,72 @@
+# Suites that are not `zyq` itself.
+#
+# `zyq` answers the differential questions — do the engines agree, do the
+# goldens still hold, is every refused form still refused. Some questions are
+# not differential, or cannot be asked through a pipe, and those are scripts.
+# They are registered here so `zyq suite` runs them too, and so the project has
+# **one** command that means "run the tests".
+#
+# They used to be spread across three repositories with no common entry point:
+# the formatter audit and the benchmark gate beside the interpreter, the pty
+# harness beside zyml, the GUIDE verification in a Python file nobody invoked.
+# Each was documented; none was in a gate.
+#
+# Fields:
+#
+#   id       short name, used in the report and in `--only`
+#   cmd      argv, relative to zyquality/
+#   desc     what question it answers
+#   needs    what has to exist for it to mean anything.  A suite whose needs
+#            are missing is reported as skipped, never as a pass:
+#              zymbol | zyml | python3    a program on PATH (or via *_BIN)
+#              tty                        allocates a pty
+#              interpreter                the sibling interpreter/ checkout
+#   gate     true  = a failure makes `zyq suite` red
+#            false = reported, but does not fail the gate.  For suites that
+#                    measure something machine-dependent, or that grade a
+#                    document rather than the language.
+
+[[suite]]
+id = "fmt"
+cmd = ["bash", "fmt/fmt_property.sh", "--baseline", "fmt/baseline.txt"]
+desc = "formatter properties P1-P4 over the corpus (reparse, idempotence, semantics, comments)"
+needs = ["zymbol"]
+gate = true
+
+[[suite]]
+id = "tui"
+cmd = ["bash", "tui/run.sh"]
+desc = "key input and raw mode through a real pty, on every engine that has a terminal"
+needs = ["zymbol", "python3", "tty"]
+gate = true
+
+[[suite]]
+id = "guide"
+cmd = ["python3", "docs/guide_verify.py"]
+desc = "every annotated example in the interpreter's GUIDE.md still produces what it claims"
+needs = ["zymbol", "python3", "interpreter"]
+# Not a gate: it grades a document against the language, so it goes red when
+# the docs fall behind — which is worth knowing and is not a regression in any
+# engine.
+gate = false
+
+[[suite]]
+id = "project"
+cmd = ["bash", "project/run.sh"]
+desc = "the real programs written in Zymbol: a go engine, two TUI games, a neural-network library, a code auditor"
+needs = ["zymbol"]
+# A gate. These suites are the strongest regression signal the project has: a
+# test case failing says a feature broke, an application failing says something
+# people rely on broke. An app whose checkout is not present is reported absent
+# and not counted, so this works in a partial workspace.
+gate = true
+
+[[suite]]
+id = "bench"
+cmd = ["bash", "bench/bench_gate.sh"]
+desc = "benchmarks against a recorded baseline"
+needs = ["zymbol"]
+# Not a gate: the baseline is wall time on one machine, so it is only true on
+# the machine that recorded it. Enforce it in CI by running `zyq suite --only
+# bench` on the runner that owns the baseline.
+gate = false
