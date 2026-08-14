@@ -1,0 +1,77 @@
+// Test: what a float *is* — equality, ordering against NaN, and how it prints.
+//
+// The integer range got a rule (11–13) before the float did, and the float had
+// more disagreements than the integer, not fewer. Eleven of them, none in the
+// corpus, all silent:
+//
+//   · the tree-walker compared floats with an ABSOLUTE tolerance, so every pair
+//     closer than 2.2e-16 was "equal" — including 1e-20 and -5e-20;
+//   · the register VM folded NaN's missing ordering into "equal", so NaN was
+//     equal to everything, itself included;
+//   · the OCaml engine used OCaml's total `compare`, which sorts NaN below every
+//     number, so `nan < 1.0` was true;
+//   · three engines answered `nan <= 1.0` with true, because a three-state
+//     comparator (-1/0/1) cannot say "no ordering" and they all read 0;
+//   · the browser engine printed `Infinity`, dropped the sign of -0, and
+//     switched to exponent notation past 1e21 and below 1e-6.
+
+<# std/math => m
+
+// ── How a float prints ──────────────────────────────────────────────────────
+// Always flat digits, never an exponent: `#^` is the operator that asks for
+// scientific notation, and it is tested at the end of this file.
+>> 0.1 ¶
+>> 0.5 ¶
+>>(1.0 / 3.0) ¶
+>>(0.1 + 0.2) ¶
+>> 1.0e16 ¶
+>> 1.0e21 ¶
+>> 1.0e-7 ¶
+>> 1.5e-10 ¶
+>>(0.1 + 0.2 - 0.3) ¶
+
+// Signed zero: -0.0 is not 0.0's spelling, it is a different bit pattern, and
+// every engine prints the sign.
+>>(-0.0) ¶
+>>(0.0 * -1.0) ¶
+
+// ── Equality is exact ───────────────────────────────────────────────────────
+// IEEE-754 equality, like the language's other three engines always had. A
+// program that wants a tolerance names it.
+>>(0.1 + 0.2 == 0.3) ¶
+>>(1.0e-20 == 2.0e-20) ¶
+>>(1.0e-20 == -5.0e-20) ¶
+>>(0.0000000000000000001 == 0.0) ¶
+
+// Int/Float promotion still holds — this is what the tolerance was mistakenly
+// introduced for, and promotion is what actually delivers it.
+>>(1.0 == 1) ¶
+>>(1.0 >= 1) ¶
+>>(1.0 <= 1) ¶
+
+// ── NaN compares false in every direction ───────────────────────────────────
+n = m::sqrt(-1.0)
+>> n ¶
+>>(n == n) ¶
+>>(n <> n) ¶
+>>(n == 0.0) ¶
+>>(n < 1.0) ¶
+>>(n > 1.0) ¶
+>>(n <= 1.0) ¶
+>>(n >= 1.0) ¶
+>>(n <= n) ¶
+>>(1.0 <= n) ¶
+
+// ── Infinity is a value ─────────────────────────────────────────────────────
+i = 1.0e308 * 10.0
+>> i ¶
+>>(-1.0e308 * 10.0) ¶
+>> 1.0e400 ¶
+>>(i > 1.0e308) ¶
+>>(i == i) ¶
+>>(i - i) ¶
+>>(i * 0.0) ¶
+
+// ── Scientific notation, when asked for ─────────────────────────────────────
+>> #^|1234567.0| ¶
+>> #^.2|1234567.0| ¶

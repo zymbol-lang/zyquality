@@ -1,0 +1,43 @@
+// Test: floats are IEEE-754 doubles, and an infinity is a value.
+//
+// The integer range is fail-closed; the float range is not, and the asymmetry
+// is deliberate. IEEE-754 *has* an infinity, so overflowing to it loses no
+// information the format was ever holding — where an integer that leaves its
+// range has nowhere to go but a wrong answer.
+//
+// The engines agreed on the values here and disagreed on how to spell them: the
+// browser wrote `Infinity` where the other three wrote `inf`.
+
+// Overflow to infinity: a value, not an error.
+>>(1.0e308 * 10.0) ¶
+>>(-1.0e308 * 10.0) ¶
+
+// Infinity keeps arithmetic working.
+>>(1.0e308 * 10.0 + 1.0) ¶
+>>(1.0e308 * 10.0 > 1.0e308) ¶
+
+// Underflow to zero, the other end of the same rule.
+>>(1.0e-308 / 1.0e308) ¶
+
+// A float can hold magnitudes no integer can; that is what floats are for.
+>>(##.9007199254740991 * 1000.0) ¶
+
+// Floats do not participate in the integer range: this is not an overflow.
+>>(9007199254740991.0 + 1000000.0) ¶
+
+// Integer division by zero is still an error — that rule is unchanged.
+!? {
+    >>(1 / 0) ¶
+} :! ##Div {
+    >> "int div zero caught" ¶
+}
+
+// And so is modulo by zero, which used to panic the tree-walker outright
+// (exit 101, a Rust abort, not a Zymbol error a program could catch).
+!? {
+    >>(7 % 0) ¶
+} :! ##Div {
+    >> "int mod zero caught" ¶
+}
+
+>> "end" ¶
