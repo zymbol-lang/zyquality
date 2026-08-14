@@ -170,11 +170,17 @@ merely one that happens to fail today.
 
 `zyq suite` is red today, and honestly so:
 
-- `expect` — 583 of 583 goldens match, nothing unchecked.
-- `reject` — the browser engine accepts all four forms.
-- `consensus` — 103 of 585 files diverge; 90 with the browser engine alone, 12
-  with zyml alone, 1 with both. **None where the tree-walker or the VM is the
-  outlier.**
+- `expect` — 584 of 584 goldens match, nothing unchecked.
+- `reject` — 4 of 7 forms are refused everywhere. The three that are not are the
+  `$~`-as-a-statement family, which the browser engine still runs. The three
+  loop-specifier forms were added and closed in the same change; the fourth
+  assignment form closed with them, for a reason worth recording: the browser
+  engine *did* refuse it, but `runZymbol` catches its own errors so the
+  playground can render them, and `tests/run_one.mjs` never read the result — so
+  a refused program exited 0 and the gate scored it as accepted. A rejection
+  suite that cannot see a rejection was measuring the runner, not the engine.
+- `consensus` — 103 of 586 files diverge; **none where the tree-walker or the VM
+  is the outlier.**
 - `project` — two of Zofia's eleven suites error where their goldens record
   numbers: `forward_pass.zy` and `matmul.zy` now say *cannot access underscore
   variable from inner scope*. Those goldens were recorded when the programs
