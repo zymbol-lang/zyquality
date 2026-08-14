@@ -1,0 +1,66 @@
+// Test: @ <expr> picks TIMES or WHILE from the value, not from the syntax.
+// An Int specifier is a repeat count evaluated once; anything else is a
+// condition re-tested every pass. All four engines must agree on every form.
+
+// A call returning an Int is a count, exactly like a variable holding one.
+three() { <~ 3 }
+a = 0
+@ three() {
+    a++
+    ? a > 9 { @! }
+}
+>> "call: " a ¶
+
+// So is any other expression that evaluates to an Int.
+items = [10, 20, 30]
+b = 0
+@ items$# {
+    b++
+    ? b > 9 { @! }
+}
+>> "len: " b ¶
+
+// Parenthesised count — the group is looked through.
+k = 4
+c = 0
+@ (k) {
+    c++
+    ? c > 9 { @! }
+}
+>> "group: " c ¶
+
+// A Bool specifier is a condition: re-evaluated until it turns false.
+flag = #1
+d = 0
+@ flag {
+    d++
+    ? d >= 3 { flag = #0 }
+}
+>> "bool: " d ¶
+
+// A count of zero runs the body zero times...
+zero = 0
+e = 0
+@ zero {
+    e++
+}
+>> "zero: " e ¶
+
+// ...and so does a negative one. It is a count, not a condition, so it never
+// falls through to the WHILE form and never loops forever.
+neg = -2
+f = 0
+@ neg {
+    f++
+    ? f > 9 { @! }
+}
+>> "negative: " f ¶
+
+// A comparison stays a WHILE, as always.
+n = 1
+g = 0
+@ n <= 3 {
+    n++
+    g++
+}
+>> "while: " g ¶

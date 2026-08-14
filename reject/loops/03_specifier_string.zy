@@ -1,0 +1,9 @@
+// @reject: a string specifier is the trap that hid the disagreement: "hola" was
+// @reject: true everywhere, so the engines looked like they agreed, while ""
+// @reject: was false in the tree-walker and in the browser but true in the VM.
+// @reject: Iterating a string's characters is `@ c:"hola"`, which is a different
+// @reject: form and still works.
+s = ""
+@ s {
+    >> "x" ¶
+}

@@ -12,3 +12,6 @@
 
 # Scratch a corpus run can leave behind if isolation is bypassed.
 *.db
+
+# Python bytecode from the pty harness and the GUIDE verifier.
+__pycache__/

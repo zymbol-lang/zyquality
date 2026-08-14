@@ -1,0 +1,8 @@
+// @reject: a loop specifier is a count (Int) or a condition (Bool). An array is
+// @reject: neither, and reading it through truthiness meant guessing: the
+// @reject: tree-walker called it false, the VM called it true, zyml refused it.
+// @reject: Three answers to one question is not a language feature.
+items = [1, 2, 3]
+@ items {
+    >> "x" ¶
+}
