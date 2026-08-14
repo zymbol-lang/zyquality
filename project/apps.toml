@@ -47,6 +47,11 @@ dir = "../GO/試験"
 desc = "go engine, written in Japanese — rules, scoring, AI, layout, text metrics"
 
 [[app]]
+id = "chaturanga"
+dir = "../Chaturanga/परीक्षा"
+desc = "chaturanga engine, written in Sanskrit — historical rules, alpha-beta search, five locales incl. two numeral scripts"
+
+[[app]]
 id = "serpiente"
 dir = "../serpiente/pruebas"
 desc = "Serpiente (snake), TUI — i18n catalogue and frame arithmetic"
