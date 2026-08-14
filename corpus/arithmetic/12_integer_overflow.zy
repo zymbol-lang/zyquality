@@ -1,0 +1,63 @@
+// Test: leaving the integer range is a ##Range error, in every engine.
+//
+// This is the file `10 ^ 20` should have had. It gave four answers: the
+// tree-walker raised, the VM printed 7766279631452241920 (the low 64 bits), the
+// OCaml engine printed -1457092405402533888 (the low 63), and the browser
+// printed 100000000000000000000 — right only because 10²⁰ = 2²⁰·5²⁰ happens to
+// fit a double's mantissa. `10 ^ 23` was wrong there too.
+//
+// Every case below is caught, so the file runs to the end and the goldens
+// compare the whole of it, not just how far it got before it stopped.
+
+!? {
+    >>(10 ^ 20) ¶
+} :! ##Range {
+    >> "pow caught" ¶
+}
+
+!? {
+    >>(9007199254740991 + 1) ¶
+} :! ##Range {
+    >> "add caught" ¶
+}
+
+!? {
+    >>(-9007199254740991 - 1) ¶
+} :! ##Range {
+    >> "sub caught" ¶
+}
+
+!? {
+    >>(9007199254740991 * 2) ¶
+} :! ##Range {
+    >> "mul caught" ¶
+}
+
+// The intermediate matters, not only the result: a fixed-width accumulator can
+// wrap past the range and land back inside it, which would answer with a number
+// no step of the computation ever held.
+!? {
+    >>(3 ^ 41) ¶
+} :! ##Range {
+    >> "pow intermediate caught" ¶
+}
+
+// A float with no integer form in range: `###` used to saturate silently to the
+// host's largest integer.
+!? {
+    >>(###1.0e300) ¶
+} :! ##Range {
+    >> "cast caught" ¶
+}
+
+// A negative exponent is a float operation, not a truncated integer. Three
+// engines answered 0 here and the tree-walker answered 0.25.
+>>(2 ^ -2) ¶
+
+// Bases whose powers never leave the range are answered, not looped.
+>>(1 ^ 1000000) ¶
+>>(0 ^ 1000000) ¶
+>>(-1 ^ 1000001) ¶
+
+// Execution continues normally after every catch.
+>>(6 * 7) ¶

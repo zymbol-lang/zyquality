@@ -1,6 +1,11 @@
 # lib_time {
     // Timing utilities for Zymbol-Lang benchmarks.
-    // Uses <\ "date +%s%N" \> (Unix epoch nanoseconds via system call) — no built-ins.
+    // Uses <\ "date +%s%6N" \> (Unix epoch MICROseconds via system call) — no built-ins.
+    // Microseconds, not nanoseconds: an epoch in nanoseconds is ~1.7e18, past the
+    // integer range (±(2^53 − 1) ≈ 9.007e15), so `#|...|` returns the text
+    // unchanged and the division below fails. In microseconds it is ~1.7e15,
+    // which fits with room until the year 2255 and still resolves far finer than
+    // the shell round-trip being measured.
     // Note: BashExec args are Zymbol expressions; shell commands with non-Zymbol tokens
     //       (like +%s%N) must be quoted as string literals.
     //
@@ -13,14 +18,14 @@
 
     #> { now, elapsed, total }
 
-    // Return current time in milliseconds (epoch nanoseconds / 1_000_000).
+    // Return current time in milliseconds (epoch microseconds / 1_000).
     now() {
-        <~ #|<\ "date +%s%N" \>| / 1000000
+        <~ #|<\ "date +%s%6N" \>| / 1000
     }
 
     // Format elapsed time since start_ms as "(X.XXXs)".
     elapsed(start_ms) {
-        diff = #|<\ "date +%s%N" \>| / 1000000 - start_ms
+        diff = #|<\ "date +%s%6N" \>| / 1000 - start_ms
         s    = diff / 1000
         ms   = diff - (s * 1000)
         ? ms < 10 {
@@ -36,7 +41,7 @@
 
     // Format elapsed time since start_ms as "X.XXXs total".
     total(start_ms) {
-        diff = #|<\ "date +%s%N" \>| / 1000000 - start_ms
+        diff = #|<\ "date +%s%6N" \>| / 1000 - start_ms
         s    = diff / 1000
         ms   = diff - (s * 1000)
         ? ms < 10 {

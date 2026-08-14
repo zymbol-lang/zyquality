@@ -1,0 +1,6 @@
+// @reject: an integer literal past the range is not an integer. `i64::MAX`
+// @reject: used to lex fine in the two Rust engines, fail as an unhelpful
+// @reject: "int_of_string" in the OCaml one, and quietly round to
+// @reject: 9223372036854778000 in the browser — four readings of one literal.
+// @reject: The range is ±(2^53 − 1); this is 2^63 − 1.
+>>(9223372036854775807) ¶

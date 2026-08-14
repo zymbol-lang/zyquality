@@ -1,0 +1,4 @@
+// @reject: 2^53 + 1 is the first integer a double cannot hold. The browser
+// @reject: engine printed it as 9007199254740992 — the literal on the page and
+// @reject: the number in the program were different values, and nothing said so.
+>>(9007199254740993) ¶

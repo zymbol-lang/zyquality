@@ -1,0 +1,48 @@
+// Test: a *hard* error from a std/ function is catchable, in every engine.
+//
+// The stdlib has two failure channels (REFERENCE.md §20b): environmental
+// failures come back as a soft `Value::Error`, and programmer mistakes — a
+// wrong argument type, an argument outside a function's domain — raise. The
+// soft channel was well covered. The hard one was not, and in the register VM
+// it did not work at all: `CallBuiltin` propagated the error with `?`, straight
+// out of the interpreter loop, without ever looking for an armed `:!`.
+//
+// So `!? { m::ln(0.0) } :! ##_ { }` caught the error under the tree-walker and
+// killed the program under `--vm`, for every function in every std/ module.
+// Nothing noticed, because no corpus file had ever tried to catch one.
+
+<# std/json => j
+<# std/math => m
+
+// Wrong argument type — a programmer mistake, not an environmental failure.
+!? {
+    >> j::decode(42) ¶
+} :! ##_ {
+    >> "json type error caught" ¶
+}
+
+// Outside a function's domain.
+!? {
+    >> m::ln(0.0) ¶
+} :! ##_ {
+    >> "math domain caught" ¶
+}
+
+!? {
+    >> m::asin(2.0) ¶
+} :! ##_ {
+    >> "asin domain caught" ¶
+}
+
+// The soft channel is unaffected: malformed JSON returns an error *value*,
+// which is tested with `$!` rather than caught.
+// (no braces in the literal: `{}` is string interpolation in Zymbol)
+bad = j::decode("[1, 2")
+? bad$! {
+    >> "soft parse error returned" ¶
+}
+
+// Execution continues normally afterwards.
+>> j::encode([1, 2, 3]) ¶
+>> m::ln(1.0) ¶
+>> "end" ¶

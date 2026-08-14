@@ -1,0 +1,41 @@
+// Test: std/math outside its domain.
+//
+// Kept apart from stdlib_math_complete.zy on purpose: a domain error stops the
+// program, so one uncaught call hides every line after it, and the file that
+// measures the functions should not also be the file that measures the errors.
+//
+// Two questions here, and they are different: *does* the call fail, and can the
+// program catch it when it does. The engines disagreed on both — the OCaml
+// engine answered -inf for `ln(0)` where the others raised, and the register VM
+// let the error escape a `:!` that the tree-walker honoured.
+
+<# std/math => m
+
+// ── Logarithm of zero and of a negative ─────────────────────────────────────
+!? { >> m::ln(0.0) ¶ }        :! ##_ { >> "ln(0) refused" ¶ }
+!? { >> m::ln(-1.0) ¶ }       :! ##_ { >> "ln(-1) refused" ¶ }
+!? { >> m::log(0.0) ¶ }       :! ##_ { >> "log(0) refused" ¶ }
+!? { >> m::log(-1.0, 10.0) ¶ } :! ##_ { >> "log(-1, 10) refused" ¶ }
+
+// ── Inverse trigonometry outside [-1, 1] ────────────────────────────────────
+!? { >> m::asin(2.0) ¶ }      :! ##_ { >> "asin(2) refused" ¶ }
+!? { >> m::asin(-2.0) ¶ }     :! ##_ { >> "asin(-2) refused" ¶ }
+!? { >> m::acos(2.0) ¶ }      :! ##_ { >> "acos(2) refused" ¶ }
+!? { >> m::acos(-2.0) ¶ }     :! ##_ { >> "acos(-2) refused" ¶ }
+
+// ── The edges of the domain, which are inside it ────────────────────────────
+>> m::asin(1.0) ¶
+>> m::asin(-1.0) ¶
+>> m::acos(1.0) ¶
+>> m::acos(-1.0) ¶
+>> m::ln(0.5) ¶
+
+// ── sqrt of a negative is NaN, not an error ─────────────────────────────────
+// Deliberately different from ln: sqrt has an IEEE-754 answer for a negative
+// argument and ln's -inf at zero is a limit, not a value the caller asked for.
+>> m::sqrt(-1.0) ¶
+>> m::sqrt(-4.0) ¶
+
+// ── Execution continues after every catch ───────────────────────────────────
+>> m::sqrt(16.0) ¶
+>> "end" ¶

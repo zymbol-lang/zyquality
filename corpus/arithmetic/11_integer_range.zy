@@ -1,0 +1,47 @@
+// Test: the edges of the integer range, which every engine holds exactly.
+//
+// A Zymbol integer is a safe integer: ±(2⁵³ − 1). The bound is the f64
+// mantissa, so the browser engine can hold it with no rounding and the Rust and
+// OCaml engines have room to spare. Before this range was written down each
+// engine used its host's: i64 twice, OCaml's 63-bit int, and a double — and
+// `10 ^ 20` gave four different answers, two of them wrong in silence.
+
+// The bounds themselves round-trip.
+>> 9007199254740991 ¶
+>> -9007199254740991 ¶
+
+// Arithmetic that lands exactly on the edge is fine.
+>>(9007199254740990 + 1) ¶
+>>(-9007199254740990 - 1) ¶
+
+// The last power of two that fits, and the one before it.
+>>(2 ^ 52) ¶
+>>(2 ^ 52 - 1) ¶
+
+// Negation is total: the range is symmetric, so every integer's negation is an
+// integer. This is why `-x` is the one operation that can never overflow.
+>>(-9007199254740991) ¶
+x = 9007199254740991
+>> -x ¶
+
+// The precision the browser engine used to lose: 2⁵³ − 1 is exact, and the
+// integer before it is a different number. `9007199254740993` printed
+// `9007199254740992` there for as long as the engine existed.
+>>(9007199254740991 - 1) ¶
+>>(9007199254740991 == 9007199254740990) ¶
+
+// Multiplication up to the edge.
+>>(94906265 * 94906265) ¶
+
+// A zero operand. The overflow guard has to divide by one of the operands to
+// test the product before computing it, and in the OCaml engine — built with
+// -unsafe -O3 — dividing by zero is a CPU trap, not an exception: this line
+// dumped core until the guard was moved onto the divisor.
+>>(9007199254740991 * 0) ¶
+>>(0 * 9007199254740991) ¶
+>>(0 * 0) ¶
+>>(-9007199254740991 * 0) ¶
+
+// Integer division and modulo never leave the range.
+>>(9007199254740991 / 3) ¶
+>>(9007199254740991 % 1000) ¶

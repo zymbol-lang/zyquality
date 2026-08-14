@@ -1,0 +1,117 @@
+// Test: every arithmetic operator with an Int and a Float, in both orders.
+//
+// Type promotion is where two engines can agree on the arithmetic and still
+// disagree on the answer, because the question is which of the two types the
+// result takes and when the conversion happens. `7 / 2` is 3 and `7 / 2.0` is
+// 3.5, and nothing in the source says so except the type of a literal.
+
+// ── Addition ────────────────────────────────────────────────────────────────
+>>(3 + 2) ¶
+>>(3 + 2.0) ¶
+>>(3.0 + 2) ¶
+>>(3.0 + 2.0) ¶
+>>(3 + 0.5) ¶
+>>(-3 + 0.5) ¶
+>>(3 + -0.5) ¶
+
+// ── Subtraction, in both orders (it does not commute) ───────────────────────
+>>(3 - 2) ¶
+>>(3 - 2.0) ¶
+>>(3.0 - 2) ¶
+>>(2 - 3.0) ¶
+>>(2.0 - 3) ¶
+>>(0 - 0.5) ¶
+>>(0.5 - 1) ¶
+
+// ── Multiplication ──────────────────────────────────────────────────────────
+>>(3 * 2) ¶
+>>(3 * 2.0) ¶
+>>(3.0 * 2) ¶
+>>(3 * 0.5) ¶
+>>(0.5 * 3) ¶
+>>(-3 * 0.5) ¶
+>>(3 * 0.0) ¶
+>>(3.0 * 0) ¶
+
+// ── Division — the operator whose type changes the answer ───────────────────
+// Int / Int truncates; one Float on either side makes it exact.
+>>(7 / 2) ¶
+>>(7 / 2.0) ¶
+>>(7.0 / 2) ¶
+>>(7.0 / 2.0) ¶
+>>(6 / 3) ¶
+>>(6 / 3.0) ¶
+>>(1 / 2) ¶
+>>(1 / 2.0) ¶
+>>(1.0 / 2) ¶
+
+// Truncation of a negative quotient: toward zero, not toward −∞.
+>>(-7 / 2) ¶
+>>(7 / -2) ¶
+>>(-7 / -2) ¶
+>>(-7 / 2.0) ¶
+>>(-7.0 / 2) ¶
+
+// ── Modulo, including the sign of the remainder ─────────────────────────────
+>>(7 % 2) ¶
+>>(7 % 2.0) ¶
+>>(7.0 % 2) ¶
+>>(7.0 % 2.0) ¶
+>>(-7 % 2) ¶
+>>(7 % -2) ¶
+>>(-7 % -2) ¶
+>>(-7.0 % 2) ¶
+>>(7 % -2.0) ¶
+>>(7.5 % 2) ¶
+>>(7 % 2.5) ¶
+
+// ── Exponentiation ──────────────────────────────────────────────────────────
+>>(2 ^ 3) ¶
+>>(2 ^ 3.0) ¶
+>>(2.0 ^ 3) ¶
+>>(2.0 ^ 3.0) ¶
+>>(2 ^ 0) ¶
+>>(2.0 ^ 0) ¶
+>>(2 ^ 0.5) ¶
+>>(4.0 ^ 0.5) ¶
+>>(2 ^ -2) ¶
+>>(2.0 ^ -2) ¶
+>>(-2 ^ 3) ¶
+>>(-2.0 ^ 3) ¶
+>>(0 ^ 0) ¶
+>>(0.0 ^ 0) ¶
+>>(1 ^ 0.5) ¶
+
+// A fractional power of a negative base has no real answer.
+>>(-8.0 ^ 0.5) ¶
+
+// ── The result type, stated rather than inferred from how it prints ─────────
+// `3 + 2.0` is 5 and `3 + 2` is 5; only `#?` tells them apart.
+>>((3 + 2)#?) ¶
+>>((3 + 2.0)#?) ¶
+>>((7 / 2)#?) ¶
+>>((7 / 2.0)#?) ¶
+>>((2 ^ 3)#?) ¶
+>>((2 ^ 3.0)#?) ¶
+>>((2 ^ -2)#?) ¶
+>>((7 % 2)#?) ¶
+>>((7 % 2.0)#?) ¶
+
+// ── Comparison across the two types ─────────────────────────────────────────
+>>(3 == 3.0) ¶
+>>(3 < 3.5) ¶
+>>(3.5 < 4) ¶
+>>(3 <= 3.0) ¶
+>>(3 >= 3.0) ¶
+>>(3 <> 3.0) ¶
+>>(2.5 > 2) ¶
+
+// ── Division and modulo by zero keep their rules across the promotion ───────
+!? { >>(1 / 0) ¶ }     :! ##Div { >> "int div zero" ¶ }
+!? { >>(1 / 0.0) ¶ }   :! ##Div { >> "float div zero" ¶ }
+!? { >>(1.0 / 0) ¶ }   :! ##Div { >> "float div int zero" ¶ }
+!? { >>(1 % 0) ¶ }     :! ##Div { >> "int mod zero" ¶ }
+!? { >>(1 % 0.0) ¶ }   :! ##Div { >> "float mod zero" ¶ }
+!? { >>(1.0 % 0) ¶ }   :! ##Div { >> "float mod int zero" ¶ }
+
+>> "end" ¶

@@ -1,0 +1,17 @@
+ln(0) refused
+ln(-1) refused
+log(0) refused
+log(-1, 10) refused
+asin(2) refused
+asin(-2) refused
+acos(2) refused
+acos(-2) refused
+1.5707963267948966
+-1.5707963267948966
+0
+3.141592653589793
+-0.6931471805599453
+NaN
+NaN
+4
+end

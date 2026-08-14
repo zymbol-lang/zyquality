@@ -1,0 +1,170 @@
+// Test: std/math in full — all 21 functions and both constants, at the values
+// where implementations differ rather than only where they agree.
+//
+// The existing math files test sqrt(4), exp(0), sin(0) and ln(1) — the four
+// inputs whose answers every library gets right by construction. What separates
+// two implementations is the rest: half-way rounding of a negative, a domain
+// error, the quadrant of atan2, which type max() returns when its arguments
+// have two.
+
+<# std/math => m
+
+// ── Constants ───────────────────────────────────────────────────────────────
+>> m.PI ¶
+>> m.E ¶
+
+// ── sqrt ────────────────────────────────────────────────────────────────────
+>> m::sqrt(4.0) ¶
+>> m::sqrt(2.0) ¶
+>> m::sqrt(0.0) ¶
+>> m::sqrt(9) ¶
+>> m::sqrt(0.25) ¶
+>> m::sqrt(-1.0) ¶
+>> m::sqrt(-0.0) ¶
+
+// ── exp ─────────────────────────────────────────────────────────────────────
+>> m::exp(0.0) ¶
+>> m::exp(1.0) ¶
+>> m::exp(-1.0) ¶
+>> m::exp(2) ¶
+>> m::exp(1000.0) ¶
+>> m::exp(-1000.0) ¶
+
+// ── ln, and its behaviour at the edges of the domain ────────────────────────
+>> m::ln(1.0) ¶
+>> m::ln(m.E) ¶
+>> m::ln(10.0) ¶
+>> m::ln(0.5) ¶
+// ln(0) and ln(-1) are outside the domain — see stdlib_math_domain.zy.
+
+// ── log — one argument is natural, two gives the base ───────────────────────
+>> m::log(1.0) ¶
+>> m::log(m.E) ¶
+>> m::log(100.0, 10.0) ¶
+>> m::log(8.0, 2.0) ¶
+>> m::log(1.0, 10.0) ¶
+>> m::log(1000, 10) ¶
+
+// ── pow ─────────────────────────────────────────────────────────────────────
+>> m::pow(2.0, 10.0) ¶
+>> m::pow(2, 8) ¶
+>> m::pow(2.0, 0.5) ¶
+>> m::pow(2.0, -1.0) ¶
+>> m::pow(0.0, 0.0) ¶
+>> m::pow(-2.0, 3.0) ¶
+>> m::pow(-8.0, 0.5) ¶
+>> m::pow(10.0, 20.0) ¶
+
+// ── Trigonometry ────────────────────────────────────────────────────────────
+>> m::sin(0.0) ¶
+>> m::cos(0.0) ¶
+>> m::tan(0.0) ¶
+>> m::sin(m.PI / 2.0) ¶
+>> m::cos(m.PI) ¶
+>> m::sin(1.0) ¶
+>> m::cos(1.0) ¶
+>> m::tan(1.0) ¶
+>> m::sin(-1.0) ¶
+
+// ── Inverse trigonometry (the out-of-domain values live in the domain file) ─
+>> m::asin(0.0) ¶
+>> m::asin(1.0) ¶
+>> m::asin(-1.0) ¶
+>> m::acos(1.0) ¶
+>> m::acos(0.0) ¶
+>> m::atan(0.0) ¶
+>> m::atan(1.0) ¶
+
+// atan2 in all four quadrants, plus the axes and the origin — the whole point
+// of atan2 over atan is that it knows which quadrant it is in.
+>> m::atan2(0.0, 1.0) ¶
+>> m::atan2(1.0, 1.0) ¶
+>> m::atan2(1.0, -1.0) ¶
+>> m::atan2(-1.0, -1.0) ¶
+>> m::atan2(-1.0, 1.0) ¶
+>> m::atan2(1.0, 0.0) ¶
+>> m::atan2(-1.0, 0.0) ¶
+>> m::atan2(0.0, -1.0) ¶
+>> m::atan2(0.0, 0.0) ¶
+>> m::atan2(1, 1) ¶
+
+// ── Hyperbolic ──────────────────────────────────────────────────────────────
+>> m::sinh(0.0) ¶
+>> m::cosh(0.0) ¶
+>> m::tanh(0.0) ¶
+>> m::sinh(1.0) ¶
+>> m::cosh(1.0) ¶
+>> m::tanh(1.0) ¶
+>> m::tanh(-1.0) ¶
+>> m::tanh(100.0) ¶
+>> m::cosh(1000.0) ¶
+
+// ── sigmoid ─────────────────────────────────────────────────────────────────
+>> m::sigmoid(0.0) ¶
+>> m::sigmoid(1.0) ¶
+>> m::sigmoid(-1.0) ¶
+>> m::sigmoid(100.0) ¶
+>> m::sigmoid(-100.0) ¶
+>> m::sigmoid(0) ¶
+
+// ── abs ─────────────────────────────────────────────────────────────────────
+>> m::abs(3) ¶
+>> m::abs(-3) ¶
+>> m::abs(0) ¶
+>> m::abs(2.5) ¶
+>> m::abs(-2.5) ¶
+>> m::abs(-0.0) ¶
+>> m::abs(9007199254740991) ¶
+>> m::abs(-9007199254740991) ¶
+
+// ── max / min, including which type comes back from a mixed pair ────────────
+>> m::max(3, 5) ¶
+>> m::min(3, 5) ¶
+>> m::max(-3, -5) ¶
+>> m::min(-3, -5) ¶
+>> m::max(1.5, 2.7) ¶
+>> m::min(1.5, 2.7) ¶
+>> m::max(3, 3) ¶
+>> m::max(2, 2.5) ¶
+>> m::min(2, 2.5) ¶
+>> m::max(3.0, 3) ¶
+>> ((m::max(2, 2.5))#?) ¶
+>> ((m::max(3, 5))#?) ¶
+
+// ── floor / ceil / round, where the negatives and the half-way cases live ───
+>> m::floor(2.9) ¶
+>> m::floor(2.1) ¶
+>> m::floor(-2.1) ¶
+>> m::floor(-2.9) ¶
+>> m::floor(2.0) ¶
+>> m::ceil(2.1) ¶
+>> m::ceil(2.9) ¶
+>> m::ceil(-2.1) ¶
+>> m::ceil(-2.9) ¶
+>> m::ceil(2.0) ¶
+
+// Half-way rounding: away from zero, so -2.5 goes to -3 and not to -2.
+>> m::round(2.5) ¶
+>> m::round(3.5) ¶
+>> m::round(-2.5) ¶
+>> m::round(-3.5) ¶
+>> m::round(2.4) ¶
+>> m::round(2.6) ¶
+>> m::round(-2.4) ¶
+>> m::round(-2.6) ¶
+>> m::round(2.0) ¶
+>> m::round(0.5) ¶
+>> m::round(-0.5) ¶
+
+// The three of them on an Int, which is already whole.
+>> m::floor(5) ¶
+>> m::ceil(5) ¶
+>> m::round(5) ¶
+
+// ── Composition, since these are used together far more than alone ──────────
+>> m::sqrt(m::pow(3.0, 2.0) + m::pow(4.0, 2.0)) ¶
+>> m::abs(m::floor(-2.5)) ¶
+>> m::max(m::abs(-7), m::abs(3)) ¶
+>> m::round(m::sigmoid(0.5) * 1000.0) ¶
+
+>> "end" ¶

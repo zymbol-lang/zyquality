@@ -1,0 +1,56 @@
+// Test: the fused split operations of the register VM.
+//
+// Found by measuring coverage, not by reading the language: `(s $/ sep)$#`,
+// `$>`, `$|` and `$<` each compile to a *single* instruction that never builds
+// the intermediate array — StrSplitCount, StrSplitMap, StrSplitFilter and
+// StrSplitReduce. Eight instructions in the dispatch loop, and no file in a
+// 594-file corpus executed a single one of them.
+//
+// A fusion is exactly the kind of optimisation that can be wrong quietly: the
+// unfused path stays correct, so the tree-walker agrees with itself and only
+// `--vm` is off. Nothing was wrong here, which is worth recording too — the
+// value of the file is that the next change to the fusions cannot be silent.
+
+s = "uno,dos,tres,cuatro"
+
+// (split)$#  →  StrSplitCount
+>>((s $/ ',')$#) ¶
+
+// (split)$>  →  StrSplitMap
+>>((s $/ ',')$> (x -> x$#)) ¶
+
+// (split)$|  →  StrSplitFilter
+>>((s $/ ',')$| (x -> x$# > 3)) ¶
+
+// (split)$<  →  StrSplitReduce
+>>((s $/ ',')$< (0, (acc, x) -> acc + x$#)) ¶
+
+// The unfused split, which must agree with all of the above.
+>>(s $/ ',') ¶
+parts = s $/ ','
+>>(parts$#) ¶
+>>(parts$> (x -> x$#)) ¶
+>>(parts$| (x -> x$# > 3)) ¶
+>>(parts$< (0, (acc, x) -> acc + x$#)) ¶
+
+// ── The edges of splitting ──────────────────────────────────────────────────
+// An empty string is one empty field, not zero fields.
+>>(("" $/ ',')$#) ¶
+// A string with no separator is one field.
+>>(("a" $/ ',')$#) ¶
+// Consecutive separators produce empty fields; they are not collapsed.
+>>((",," $/ ',')$#) ¶
+>>(",," $/ ',') ¶
+// Leading and trailing separators count too.
+>>((",a," $/ ',')$#) ¶
+>>(",a," $/ ',') ¶
+
+// ── Membership over a split ─────────────────────────────────────────────────
+>>((s $/ ',')$? "dos") ¶
+>>((s $/ ',')$? "cinco") ¶
+
+// ── A separator that is a multi-byte character ──────────────────────────────
+u = "uno·dos·tres"
+>>((u $/ '·')$#) ¶
+>>(u $/ '·') ¶
+>>((u $/ '·')$> (x -> x$#)) ¶

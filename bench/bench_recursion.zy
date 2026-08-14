@@ -40,8 +40,11 @@ r1 = fib(30)
 >> "fib(30) = " r1 "  " T::elapsed(t) ¶
 
 t = T::now()
-r2 = fact(20)
->> "fact(20) = " r2 "  " T::elapsed(t) ¶
+// 18, not 20: 19! is 1.2e17 and the integer range ends at 9007199254740991.
+// Two fewer multiplications out of a benchmark whose cost is the call overhead,
+// not the arithmetic — but the largest factorial Zymbol holds exactly is 18!.
+r2 = fact(18)
+>> "fact(18) = " r2 "  " T::elapsed(t) ¶
 
 t = T::now()
 r3 = pow(2, 20)

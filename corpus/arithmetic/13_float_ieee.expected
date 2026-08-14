@@ -1,0 +1,10 @@
+inf
+-inf
+inf
+#1
+0
+9007199254740991000
+9007199255740992
+int div zero caught
+int mod zero caught
+end
