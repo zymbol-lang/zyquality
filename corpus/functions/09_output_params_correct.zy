@@ -6,11 +6,11 @@ increment(counter<~) {
 }
 
 x = 0
-increment(x)
+increment(x<~)
 >> x ¶
 
-increment(x)
-increment(x)
+increment(x<~)
+increment(x<~)
 >> x ¶
 
 // Swap: exchanges two variables
@@ -22,7 +22,7 @@ swap(a<~, b<~) {
 
 p = 10
 q = 20
-swap(p, q)
+swap(p<~, q<~)
 >> p ¶
 >> q ¶
 
@@ -33,6 +33,6 @@ get_and_increment(val<~) {
 }
 
 n = 5
-result = get_and_increment(n)
+result = get_and_increment(n<~)
 >> result ¶
 >> n ¶

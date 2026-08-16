@@ -1,0 +1,6 @@
+error: argument 1 of 'bump' is an output parameter '<~' and needs a variable, not an expression
+  --> errors/semantic/output_param_expression.zy:13:6
+  13 |
+  13 | bump((2 + 3)<~)
+     |      ^^^^^^^
+  help: '<~' writes the change back into the caller's variable; there is nowhere to write an expression back to — assign it to a variable first

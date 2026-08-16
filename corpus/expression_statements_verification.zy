@@ -19,13 +19,13 @@ increment_counter(c<~) {
     c = c + 1
 }
 
-increment_counter(counter)
+increment_counter(counter<~)
 >> "Counter after 1st call: " counter ¶  // Expected: 1
 
-increment_counter(counter)
+increment_counter(counter<~)
 >> "Counter after 2nd call: " counter ¶  // Expected: 2
 
-increment_counter(counter)
+increment_counter(counter<~)
 >> "Counter after 3rd call: " counter ¶  // Expected: 3
 
 ? counter == 3 {
@@ -61,11 +61,11 @@ increment_seq(c<~) {
     c = c + 1
 }
 
-increment_seq(seq_count)
-increment_seq(seq_count)
-increment_seq(seq_count)
-increment_seq(seq_count)
-increment_seq(seq_count)
+increment_seq(seq_count<~)
+increment_seq(seq_count<~)
+increment_seq(seq_count<~)
+increment_seq(seq_count<~)
+increment_seq(seq_count<~)
 
 >> "Sequence count: " seq_count ¶  // Expected: 5
 
@@ -89,13 +89,13 @@ set_if_result(val, result<~) {
 
 x = 10
 ? x > 5 {
-    set_if_result(1, if_result)
+    set_if_result(1, if_result<~)
 }
 _? x > 0 {
-    set_if_result(2, if_result)
+    set_if_result(2, if_result<~)
 }
 _{
-    set_if_result(3, if_result)
+    set_if_result(3, if_result<~)
 }
 
 >> "IF result: " if_result ¶  // Expected: 1
@@ -120,7 +120,7 @@ add_to_while(val, result<~) {
 }
 
 @ loop_counter < 5 {
-    add_to_while(1, while_result)
+    add_to_while(1, while_result<~)
     loop_counter = loop_counter + 1
 }
 
@@ -145,7 +145,7 @@ add_to_sum(n, sum<~) {
 }
 
 @ i:1..5 {
-    add_to_sum(i, foreach_sum)
+    add_to_sum(i, foreach_sum<~)
 }
 
 >> "For-each sum: " foreach_sum ¶  // Expected: 15 (1+2+3+4+5)
@@ -169,7 +169,7 @@ inc_times(c<~) {
 }
 
 @ 10 {
-    inc_times(times_counter)
+    inc_times(times_counter<~)
 }
 
 >> "Times loop counter: " times_counter ¶  // Expected: 10
@@ -194,7 +194,7 @@ modify_values(a, b, x<~, y<~) {
 
 val1 = 0
 val2 = 0
-modify_values(5, 10, val1, val2)  // Expression statement
+modify_values(5, 10, val1<~, val2<~)  // Expression statement
 
 >> "Modified values: " val1 " and " val2 ¶  // Expected: 10 and 30
 
@@ -222,12 +222,12 @@ increment_nested(r<~) {
 }
 
 outer_nested(result<~) {
-    increment_nested(result)
-    increment_nested(result)
-    increment_nested(result)
+    increment_nested(result<~)
+    increment_nested(result<~)
+    increment_nested(result<~)
 }
 
-outer_nested(nested_result)
+outer_nested(nested_result<~)
 
 >> "Nested result: " nested_result ¶  // Expected: 3
 
@@ -251,10 +251,10 @@ set_match_value(val, result<~) {
 
 value = 85
 ?? value {
-    90..100 => { set_match_value(1, match_result) }
-    80..89  => { set_match_value(2, match_result) }
-    70..79  => { set_match_value(3, match_result) }
-    _       => { set_match_value(0, match_result) }
+    90..100 => { set_match_value(1, match_result<~) }
+    80..89  => { set_match_value(2, match_result<~) }
+    70..79  => { set_match_value(3, match_result<~) }
+    _       => { set_match_value(0, match_result<~) }
 }
 
 >> "Match result: " match_result ¶  // Expected: 2
@@ -279,10 +279,10 @@ get_and_increment(counter<~) {
 
 mixed_counter = 0
 
-get_and_increment(mixed_counter)         // Expression statement (discard return)
-result1 = get_and_increment(mixed_counter)    // Assignment (capture return)
-get_and_increment(mixed_counter)         // Expression statement (discard return)
-result2 = get_and_increment(mixed_counter)    // Assignment (capture return)
+get_and_increment(mixed_counter<~)         // Expression statement (discard return)
+result1 = get_and_increment(mixed_counter<~)    // Assignment (capture return)
+get_and_increment(mixed_counter<~)         // Expression statement (discard return)
+result2 = get_and_increment(mixed_counter<~)    // Assignment (capture return)
 
 >> "Mixed: counter=" mixed_counter " result1=" result1 " result2=" result2 ¶
 // Expected: counter=4 result1=2 result2=4
@@ -317,7 +317,7 @@ add_to_array_sum(n, sum<~) {
 
 numbers = [10, 20, 30, 40, 50]
 @ num:numbers {
-    add_to_array_sum(num, arr_sum)
+    add_to_array_sum(num, arr_sum<~)
 }
 
 >> "Array sum: " arr_sum ¶  // Expected: 150
@@ -341,7 +341,7 @@ void_func(val, result<~) {
     // No return statement
 }
 
-void_func(5, void_result)
+void_func(5, void_result<~)
 
 >> "Void result: " void_result ¶  // Expected: 10
 
@@ -363,7 +363,7 @@ multi_param(a, b, c, d, result<~) {
     result = a + b + c + d
 }
 
-multi_param(1, 2, 3, 4, multi_result)
+multi_param(1, 2, 3, 4, multi_result<~)
 
 >> "Multi param result: " multi_result ¶  // Expected: 10
 
@@ -390,11 +390,11 @@ helper2(r<~) {
 }
 
 complex_func(result<~) {
-    helper1(result)
-    helper2(result)
+    helper1(result<~)
+    helper2(result<~)
 }
 
-complex_func(complex_result)
+complex_func(complex_result<~)
 
 >> "Complex result: " complex_result ¶  // Expected: 20
 

@@ -19,14 +19,14 @@ fib(n) {
 >> fib(20) ¶
 increment(counter<~) { counter = counter + 1 }
 x = 0
-increment(x)
+increment(x<~)
 >> x ¶
 get_and_increment(val<~) {
     val = val + 1
     <~ val
 }
 n = 5
-result = get_and_increment(n)
+result = get_and_increment(n<~)
 >> "result=" result " n=" n ¶
 swap(a<~, b<~) {
     tmp = a
@@ -35,5 +35,5 @@ swap(a<~, b<~) {
 }
 p = 10
 q = 20
-swap(p, q)
+swap(p<~, q<~)
 >> "p=" p " q=" q ¶

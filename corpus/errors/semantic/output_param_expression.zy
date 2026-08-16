@@ -1,0 +1,13 @@
+// L34 (REFERENCE.md): a `<~` slot writes its change back into the caller's
+// variable. An expression gives it nowhere to write, and the write was silently
+// lost — every engine accepted `bump(2 + 3)` and did nothing with the result.
+//
+// Since L36 the mark is required at the call site, so the mistake now has to be
+// written `(2 + 3)<~`: the caller says the value comes back changed, and there
+// is no variable for it to come back to.
+
+bump(b<~) {
+    b = b + 100
+}
+
+bump((2 + 3)<~)

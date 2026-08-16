@@ -1,0 +1,34 @@
+// The destructuring pattern is typed (REFERENCE.md L32): `[ … ]` takes an array,
+// `( … )` takes a tuple. Receiving one shape with the other's pattern used to be
+// accepted silently, which is how `[H, W] = >>?` — a tuple — went unnoticed in
+// two corpus files and two Rust tests.
+//
+// Caught rather than left to abort: the Rust engines report an uncaught runtime
+// error on stderr and the browser engine on stdout, so an uncaught one cannot be
+// compared across engines.
+
+t = (1, 2)
+!? {
+    [a, b] = t
+    >> a ¶
+    >> b ¶
+} :! ##_ {
+    >> "array pattern rejected a tuple" ¶
+}
+
+l = [1, 2]
+!? {
+    (c, d) = l
+    >> c ¶
+    >> d ¶
+} :! ##_ {
+    >> "tuple pattern rejected an array" ¶
+}
+
+// The matching shapes still work.
+(e, f) = (1, 2)
+>> e ¶
+>> f ¶
+[g, h] = [3, 4]
+>> g ¶
+>> h ¶

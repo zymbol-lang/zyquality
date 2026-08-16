@@ -46,4 +46,4 @@ c3 = m::siguiente()
 // ── output parameters still work alongside state (QW13 guard) ──────────────
 salida = 0
 m::fijar("es")
->> "outparam  ret=" (m::g_salida(salida)) " out=" salida " estado=" (m::ver()) ¶
+>> "outparam  ret=" (m::g_salida(salida<~)) " out=" salida " estado=" (m::ver()) ¶
