@@ -1,0 +1,60 @@
+// Test: the two parameter marks (SYMBOLS.md §9.1, REFERENCE.md L35)
+//
+// `p~`  is a working copy — the body may reassign it, the caller's argument is
+//       untouched.  It declares in the signature the copy the body would
+//       otherwise write on its first line.
+// `p<~` is by reference — the change travels back to the caller.
+//
+// Until v0.0.9 no file in the corpus used either mark in a signature, so the
+// OCaml engine's lexer rejecting `~` outright went unnoticed by the gate.
+
+// ── `~` — the caller's argument survives ─────────────────────────────────────
+work(a~) {
+    a = a + 100
+    <~ a
+}
+x = 1
+r = work(x)
+>> r ¶                      // → 101 — the copy came back as the return value
+>> x ¶                      // → 1   — the caller's variable is untouched
+
+// ── `<~` — the change travels back ───────────────────────────────────────────
+bump(b<~) {
+    b = b + 100
+}
+y = 2
+bump(y<~)
+>> y ¶                      // → 102
+
+// ── both marks in one signature ──────────────────────────────────────────────
+mixed(c~, d<~) {
+    c = c * 2
+    d = d * 2
+}
+p = 3
+q = 4
+mixed(p, q<~)
+>> p ¶                      // → 3 — `~` never reaches the call site
+>> q ¶                      // → 8
+
+// ── `<~` alongside a return value ────────────────────────────────────────────
+both(n<~) {
+    n = n + 1
+    <~ n
+}
+m = 5
+got = both(m<~)
+>> got ¶                    // → 6
+>> m ¶                      // → 6
+
+// ── two outputs at once ──────────────────────────────────────────────────────
+swap(u<~, v<~) {
+    tmp = u
+    u = v
+    v = tmp
+}
+s = 10
+t = 20
+swap(s<~, t<~)
+>> s ¶                      // → 20
+>> t ¶                      // → 10

@@ -58,7 +58,7 @@ divide_with_remainder(dividend, divisor, remainder<~) {
 }
 
 remainder = 0
-quotient = divide_with_remainder(17, 5, remainder)
+quotient = divide_with_remainder(17, 5, remainder<~)
 >> "17 / 5 = " quotient " remainder " remainder ¶
 >> "Expected: 3 remainder 2" ¶
 ¶

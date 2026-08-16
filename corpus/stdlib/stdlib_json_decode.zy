@@ -21,4 +21,7 @@ arr = json::decode("[10, 20, 30]")
 >> json::encode(json::decode("[1, null, 3]")) ¶
 
 // malformed JSON -> soft Error value (catchable, not a hard abort)
->> json::decode("\{bad") ¶
+// The parser's own wording is engine-specific — the Rust engines use their
+// JSON parser and the browser uses JSON.parse — so this asserts the contract
+// (an Error value, not an abort) rather than the message text.
+>> (json::decode("\{bad"))$! ¶

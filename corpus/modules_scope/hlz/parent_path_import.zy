@@ -7,5 +7,5 @@
 
 a = s::nuevo(2)
 c = 0
-s::poner(a, 1, 5, c)
+s::poner(a<~, 1, 5, c<~)
 >> "ruta ../ resuelta: " a "  c=" c ¶

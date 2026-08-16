@@ -54,7 +54,7 @@ desc = "chaturanga engine, written in Sanskrit — historical rules, alpha-beta 
 [[app]]
 id = "serpiente"
 dir = "../serpiente/pruebas"
-desc = "Serpiente (snake), TUI — i18n catalogue and frame arithmetic"
+desc = "Serpiente (snake), TUI — i18n catalogue, frame arithmetic, and the game loop's multi-value returns"
 
 [[app]]
 id = "klingon"

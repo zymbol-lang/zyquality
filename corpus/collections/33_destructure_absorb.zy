@@ -1,0 +1,40 @@
+// Test: the last name of a pattern absorbs the remainder (REFERENCE.md L33)
+// Unit when nothing is left, the bare value when one is, a collection when several
+// are — and the collection keeps the shape of the container it came from.
+
+// ── Tuple: several remain, one remains, none remain ──────────────────────────
+t9 = (1, 2, 3, 4, 5, 6, 7, 8, 9)
+(a, b, c) = t9
+>> c ¶                           // → (3, 4, 5, 6, 7, 8, 9)
+
+(d, e, f) = (1, 2, 3)
+>> f ¶                           // → 3
+
+(g, h, i) = (1, 2)
+>> i ¶                           // → ##_ (Unit prints as nothing)
+>> "after unit" ¶
+
+// ── Array: the remainder stays an array ──────────────────────────────────────
+l5 = [10, 20, 30, 40, 50]
+[p, q, r] = l5
+>> r ¶                           // → [30, 40, 50]
+
+// ── A single name is also the last one, so it absorbs everything ─────────────
+[solo] = l5
+>> solo ¶
+
+// ── An explicit *rest opts out: always a collection, of the container's shape ─
+(m, n, *o) = (1, 2, 3)
+>> o ¶                           // → (3), not the bare 3
+
+(s, u, *v) = (1, 2)
+>> v ¶                           // → () — empty, not Unit
+
+// ── *rest still leaves room for the items that follow it ─────────────────────
+[w, *x, y] = l5
+>> x ¶
+>> y ¶
+
+// ── In the last position `_` absorbs without binding ─────────────────────────
+[aa, bb, _] = l5
+>> bb ¶

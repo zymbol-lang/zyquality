@@ -26,4 +26,7 @@ s = json::decode_map("\{\"flag\": true, \"score\": 9.5, \"tags\": [1, 2]\}",
 >> s.标签[2] ¶
 
 // Malformed JSON -> soft Error value (catchable, not a hard abort)
->> json::decode_map("\{bad", (a: "b")) ¶
+// The parser's own wording is engine-specific — the Rust engines use their
+// JSON parser and the browser uses JSON.parse — so this asserts the contract
+// (an Error value, not an abort) rather than the message text.
+>> (json::decode_map("\{bad", (a: "b")))$! ¶
