@@ -23,9 +23,9 @@
 # truncated run does not match.
 #
 # GO ran its seven suites on the tree-walker only. Put on the register VM they
-# all pass, and on zyml two of them do not — divergences that had never been
-# looked at because nothing had ever asked. `性能試験` was in the directory and
-# not in the runner at all.
+# all pass, and on zyml — the OCaml engine, retired 2026-08-17 — two of them did
+# not: divergences that had never been looked at because nothing had ever asked.
+# `性能試験` was in the directory and not in the runner at all.
 #
 # ── Fields ────────────────────────────────────────────────────────────────
 #
@@ -35,11 +35,11 @@
 #
 # Engines are not declared per app: `zyq` works out per file which of them can
 # run a given suite, and reports "unsupported" apart from "gave a different
-# answer". What *is* fixed is the set the runner asks — zytw, zyvm, zyml — and
-# it excludes the browser engine on purpose. These are command-line
-# applications; the browser engine has no terminal, no filesystem and no shell,
-# so it diverges on every one of them and the number means nothing. Ask for it
-# with `--engines` when there is a reason to.
+# answer". What *is* fixed is the set the runner asks — zytw, zyvm — and it
+# excludes the browser engine on purpose. These are command-line applications;
+# the browser engine has no terminal, no filesystem and no shell, so it diverges
+# on every one of them and the number means nothing. Ask for it with `--engines`
+# when there is a reason to.
 
 [[app]]
 id = "go"

@@ -69,9 +69,6 @@ let missing ~(root : string) (need : string) : string option =
   | "zymbol" ->
     let b = env_or "ZYMBOL_BIN" "zymbol" in
     if on_path b || Sys.file_exists b then None else Some ("zymbol (" ^ b ^ ")")
-  | "zyml" ->
-    let b = env_or "ZYML_BIN" (Filename.concat root "../zyml/zyml") in
-    if Sys.file_exists b then None else Some ("zyml (" ^ b ^ ")")
   | "python3" -> if on_path "python3" then None else Some "python3"
   | "tty" ->
     (* The pty is allocated by the script; what has to exist here is the

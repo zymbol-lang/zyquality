@@ -1,8 +1,17 @@
 # The point of record
 
-Zymbol has four engines in four repositories. **They are graded here, against
+Zymbol has three engines in three repositories. **They are graded here, against
 one corpus, under one set of rules.** This document says what that commits each
 repository to.
+
+> There were four until 2026-08-17, when `zyml` — the OCaml closure-compiling
+> engine — was retired. It could not run 131 of the 599 corpus files and
+> diverged on 15 more, while the two Rust engines diverge on zero, and its speed
+> case did not survive real load (3.4× slower than the register VM at 19×19 go,
+> after copy-on-write). Its repository is archived and `zyml/DEPRECATED.md` has
+> the numbers. **This document keeps its history**: `corpus/arity/` and
+> `corpus/loops/labels/` exist because of it, and a rule whose reason has been
+> deleted is indistinguishable from one nobody can justify.
 
 ## The rule
 
@@ -15,7 +24,6 @@ Concretely:
 | repository | its gate | what it runs |
 |---|---|---|
 | `interpreter` | `bash tests/scripts/vm_compare.sh` | `zyq consensus --engines zytw,zyvm` |
-| `zyml` | `make test` | consensus + `zyq reject` + `tui/run.sh` |
 | `web` | `node tests/test_runner.mjs` | `zyq consensus --engines zytw,zyjs` |
 | the project | `zyq suite` | all of it, one verdict |
 
@@ -98,9 +106,9 @@ zyquality/
 | `interpreter/tests/scripts/run-project-tests.sh` | `project/` |
 | `interpreter/tests/scripts/run-tests.ps1` | `platform/` |
 | `interpreter/tests/scripts/*.md` | `notes/` |
-| `zyml/tests/cases/*.zy` | `corpus/smoke/` |
-| `zyml/tests/ptydrive.py`, `tests/tui/` | `tui/` |
-| `zyml/tests/parity.sh` | `zyq consensus --engines zytw,zyml` |
+| `zyml/tests/cases/*.zy` | `corpus/smoke/` (kept: 22 files that outlived the engine) |
+| `zyml/tests/ptydrive.py`, `tests/tui/` | `tui/` (kept: the pty driver is engine-agnostic) |
+| `zyml/tests/parity.sh` | retired with the engine, 2026-08-17 |
 | `GO/試験/全試験.sh`, `serpiente/pruebas/todas.sh`, `klingon_galaxy/mIw/Hoch.sh` | `project/run.sh` (the suites stay; the verdict moved) |
 | `zyml/tests/rejects.sh` | `zyq reject` |
 | `web/tests/test_runner.mjs` | `zyq consensus --engines zytw,zyjs` |

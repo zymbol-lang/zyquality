@@ -8,8 +8,8 @@
 // with the corpus it drives — it used to sit in interpreter/tests/scripts/ and
 // reach sideways into interpreter/tests/manual/, which stopped existing.
 //
-// For the parts of the TUI that can be automated, ../../zyml/tests/ptydrive.py
-// drives a real pty and needs nobody watching.
+// For the parts of the TUI that can be automated, tui/ptydrive.py drives a real
+// pty and needs nobody watching -- `bash tui/run.sh`, or `zyq suite --only tui`.
 //
 // @zyq-skip: an interactive tool that shells out and waits for a person
 

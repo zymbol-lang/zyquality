@@ -47,7 +47,7 @@ TIMEOUT=120
 # auditor. The browser engine has no terminal, no filesystem and no shell, so
 # comparing it against them is not a question anybody is asking -- it diverges
 # on all of them and says nothing. Override with --engines when it is.
-ENGINES="${ZY_APP_ENGINES:-zytw,zyvm,zyml}"
+ENGINES="${ZY_APP_ENGINES:-zytw,zyvm}"
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --only)    ONLY="$2"; shift 2 ;;

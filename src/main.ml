@@ -492,8 +492,13 @@ let cmd_reject o =
         List.filter (fun (r : Engine.result) ->
             match r.status with
             (* `Unsupported` means the engine refused the program, which is
-               the correct answer here — zyml reports it as "Parse error:".
-               Only a clean run is a failure. *)
+               the correct answer here.  Only a clean run is a failure.
+
+               No engine declares `unsupported` prefixes since zyml was
+               retired — it was the only one that did.  The branch stays
+               because the field is the declared way for a new engine to say
+               "I cannot run this", and a reject suite that mistook that for
+               a pass would be worse than one that never saw it. *)
             | Engine.Completed -> Engine.verdict_of r = Engine.Ok
             | Engine.Unsupported -> false
             | Engine.Timeout | Engine.Unavailable -> false)
@@ -757,8 +762,8 @@ let cmd_selftest () =
   let write s = let oc = open_out tmp in output_string oc s; close_out oc in
   write "// @zyq-skip: because\n>> 1 ¶\n";
   ok "marker all"        (Corpus.marker_in tmp = Some ([], "because"));
-  write "// @zyq-skip zyjs,zyml: browser only\n";
-  ok "marker engines"    (Corpus.marker_in tmp = Some ([ "zyjs"; "zyml" ], "browser only"));
+  write "// @zyq-skip zyjs,zyvm: browser only\n";
+  ok "marker engines"    (Corpus.marker_in tmp = Some ([ "zyjs"; "zyvm" ], "browser only"));
   (* A legacy marker excuses the engine it was about, not every engine: each
      lived in a two-engine runner where those two readings look identical. *)
   write "// @skip-parity: legacy spelling\n";

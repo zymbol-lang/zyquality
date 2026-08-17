@@ -49,12 +49,14 @@ if command -v "$ZYMBOL" >/dev/null 2>&1 || [[ -x "$ZYMBOL" ]]; then
     NAMES+=(zytw); CMDS+=("$ZYMBOL run")
     NAMES+=(zyvm); CMDS+=("$ZYMBOL run --vm")
 fi
-ZYML="${ZYML_BIN:-$ZYQ_HOME/../zyml/zyml}"
-if [[ -x "$ZYML" ]]; then NAMES+=(zyml); CMDS+=("$ZYML run"); fi
 
+# zyml was the third engine here until 2026-08-17; it is retired, and its
+# byte-identical TUI output through a pty was the last thing it still won on.
+# The two remaining candidates both come from the same binary, so this is now a
+# tree-walker/VM comparison rather than a cross-implementation one.
 if [[ ${#NAMES[@]} -lt 2 ]]; then
     echo "tui/run.sh: need at least two engines that can reach raw mode; found: ${NAMES[*]:-none}" >&2
-    echo "  set ZYMBOL_BIN and/or ZYML_BIN, or build them." >&2
+    echo "  set ZYMBOL_BIN, or build the interpreter." >&2
     exit 2
 fi
 
