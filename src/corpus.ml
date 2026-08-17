@@ -128,7 +128,7 @@ let load (path : string) : t =
 (* A `.zy` file may declare its own exclusion in its first lines:
 
      // @zyq-skip: reason                 every engine
-     // @zyq-skip zyjs,zyml: reason       only those
+     // @zyq-skip zyjs,zyvm: reason       only those
 
    corpus.toml is the right place for a file in the shared corpus.  This is for
    a corpus that lives in another repository and travels with its files — the

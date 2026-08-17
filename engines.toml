@@ -1,7 +1,10 @@
 # Engines ZyQuality knows how to run.
 #
-# Adding a fifth Zymbol engine should be an entry here, never a patch to the
-# runner.  Fields:
+# Adding a fourth Zymbol engine should be an entry here, never a patch to the
+# runner.  Removing one is the same edit backwards, which is what happened to
+# `zyml` on 2026-08-17 — see "Retired engines" at the foot of this file.
+#
+# Fields:
 #
 #   id           short name used in reports and in --engines
 #   cmd          argv; {file} is replaced by the program to run
@@ -17,7 +20,7 @@
 #
 # Relative paths are resolved against zyquality's own directory, not against
 # the caller's — other repositories' test scripts delegate here and run from
-# their own tree, where `../zyml/zyml` points at nothing.
+# their own tree, where `../web/tests/run_one.mjs` points at nothing.
 #
 # `${NAME:-default}` is expanded from the environment.  That is how a release
 # gate points the suite at an installed package instead of a build tree:
@@ -43,13 +46,6 @@ cmd = ["${ZYMBOL_BIN:-zymbol}", "run", "--vm", "{file}"]
 check_cmd = ["${ZYMBOL_BIN:-zymbol}", "check", "{file}"]
 lang = "zymbol"
 desc = "Rust register VM"
-
-[[engine]]
-id = "zyml"
-cmd = ["${ZYML_BIN:-../zyml/zyml}", "run", "{file}"]
-lang = "zymbol"
-unsupported = ["Lex error:", "Parse error:", "Compile error:"]
-desc = "OCaml closure-compiling engine"
 
 [[engine]]
 id = "zyjs"
@@ -82,3 +78,39 @@ lang = "ocaml"
 oracle = true
 build = "ocamlopt -O3 -unsafe -w -a {file} -o {exe}"
 desc = "OCaml, compiled native — the fast reference for benchmarks"
+
+# ── Retired engines ──────────────────────────────────────────────────────────
+# An engine that vanishes from this file with no trace is indistinguishable
+# from one somebody deleted by accident.  Adding an exclusion requires a
+# reason (corpus.toml); so does removing an engine.
+#
+# `zyml` — OCaml closure-compiling engine, the project's third.  Removed
+# 2026-08-17.  Its repository is archived, read-only, with the full account in
+# zyml/DEPRECATED.md.  Measured here on the day it was retired:
+#
+#     zyq consensus --engines zytw,zyvm          597 agree,  0 diverge
+#     zyq consensus --engines zytw,zyvm,zyml     582 agree, 15 diverge
+#                                                zyml declined 131 of 599
+#
+# It could not run 22% of the corpus and disagreed on 15 more files, while the
+# two Rust engines agreed on everything either could run.  Its speed case did
+# not survive real load either: faster than the register VM on the
+# microbenchmarks and at 13x13 go, 3.4x slower at 19x19 even after
+# copy-on-write.  Nothing depended on it.
+#
+# It earned its keep before that, and the corpus still carries the proof: the
+# `arity/` cases exist because zyml had the call-arity rule and rejected two
+# real programs the Rust tooling accepted, and `loops/labels/` exists because
+# zyml was the *fourth* answer to a question every pair of engines had already
+# agreed on.  That is the argument for a third implementation, and also the
+# reason it was retired once it had made it.
+#
+# Reviving it: restore the [[engine]] block below, and the `"zyml"` case in
+# src/suite.ml's `missing`.
+#
+#     [[engine]]
+#     id = "zyml"
+#     cmd = ["${ZYML_BIN:-../zyml/zyml}", "run", "{file}"]
+#     lang = "zymbol"
+#     unsupported = ["Lex error:", "Parse error:", "Compile error:"]
+#     desc = "OCaml closure-compiling engine"

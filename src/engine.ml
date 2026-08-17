@@ -1,6 +1,6 @@
 (* Engines: what they are, and how to run one over a file.
 
-   An engine is anything that turns a source file into stdout.  Four of them
+   An engine is anything that turns a source file into stdout.  Three of them
    run Zymbol; the rest run their own language and exist to be an oracle — a
    source of truth that does not depend on any Zymbol implementation being
    right. *)
@@ -28,7 +28,7 @@ type engine = {
    worked when run from inside zyquality/.  That is fine for a tool you run by
    hand and fatal for one that other repositories' test scripts delegate to:
    `bash interpreter/tests/scripts/vm_compare.sh` runs from interpreter/, and
-   `../zyml/zyml` resolved from there points at nothing. *)
+   `../web/tests/run_one.mjs` resolved from there points at nothing. *)
 let root = ref (Sys.getcwd ())
 
 let set_root d = root := d

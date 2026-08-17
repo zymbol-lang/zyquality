@@ -18,7 +18,7 @@
 #   desc     what question it answers
 #   needs    what has to exist for it to mean anything.  A suite whose needs
 #            are missing is reported as skipped, never as a pass:
-#              zymbol | zyml | python3    a program on PATH (or via *_BIN)
+#              zymbol | python3           a program on PATH (or via *_BIN)
 #              tty                        allocates a pty
 #              interpreter                the sibling interpreter/ checkout
 #   gate     true  = a failure makes `zyq suite` red
@@ -36,7 +36,7 @@ gate = true
 [[suite]]
 id = "tui"
 cmd = ["bash", "tui/run.sh"]
-desc = "key input and raw mode through a real pty, on every engine that has a terminal"
+desc = "key input and raw mode through a real pty, on both engines that have a terminal"
 needs = ["zymbol", "python3", "tty"]
 gate = true
 

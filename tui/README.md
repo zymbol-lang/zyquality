@@ -4,12 +4,30 @@
 a program reading from a pipe never reaches raw mode at all.  `ptydrive.py`
 allocates a pty and feeds keystrokes as the program asks for them.
 
+**Run them as a suite** — this is the gate, and it compares the engines for you:
+
 ```bash
-python3 tests/ptydrive.py ./zyml run tests/tui/keys_blocking.zy -- 'x' '\x1b[A' 'z'
-python3 tests/ptydrive.py zymbol   run tests/tui/keys_blocking.zy -- 'x' '\x1b[A' 'z'
+bash tui/run.sh                    # every case, every engine with a terminal
+bash tui/run.sh -v                 # name the cases that agree too
+./zyq suite --only tui             # the same thing, through zyq
 ```
 
-The two outputs must be byte-identical, escape sequences included.
+By hand, one engine at a time:
+
+```bash
+python3 tui/ptydrive.py zymbol run       tui/keys_blocking.zy -- 'x' '\x1b[A' 'z'
+python3 tui/ptydrive.py zymbol run --vm  tui/keys_blocking.zy -- 'x' '\x1b[A' 'z'
+```
+
+The outputs must be byte-identical, escape sequences included.
+
+> This file used to give exactly two commands to type by hand, one of them
+> `./zyml run`, and the sentence above — with nothing checking that the outputs
+> matched. `run.sh` is that check. zyml, the OCaml engine those commands
+> compared against, was retired on 2026-08-17; both remaining engines come from
+> the same binary, so this is now a tree-walker/VM comparison rather than a
+> cross-implementation one, and byte-identical TUI output through a pty was the
+> last thing zyml still won on outright.
 
 Keys are sent **interleaved** with reading, not up front.  A program that has
 not yet put the terminal into raw mode is still line-buffered, so anything sent

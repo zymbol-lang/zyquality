@@ -22,18 +22,27 @@
 
 ## Why this exists
 
-Zymbol has four engines. Ask them all the same question:
+Zymbol had four engines when this was written. Ask them all the same question:
 
 ```zymbol
 >> (10 ^ 20) ¶
 ```
 
-| zytw | zyvm | zyjs | zyml |
+| zytw | zyvm | zyjs | zyml † |
 |---|---|---|---|
 | `Runtime error: overflow` | `7766279631452241920` | `100000000000000000000` | `-1457092405402533888` |
 
 Four engines, four answers, two of them plausible-looking numbers a program
 would accept without complaint.
+
+> † `zyml`, the OCaml engine, was **retired on 2026-08-17** — it could not run
+> 131 of the 599 corpus files and diverged on 15 more, and the register VM beat
+> it 3.4× on the largest real workload
+> ([DEPRECATED.md](https://github.com/zymbol-lang/zyml/blob/main/DEPRECATED.md)).
+> There are three engines now. The table above stays because it is the argument
+> this repository was built on, and because a fourth answer is exactly what made
+> the disagreement undeniable — see `corpus/arity/` and `corpus/loops/labels/`,
+> which exist because of that engine.
 
 That was the first reason. The second is worse. Each engine had its own suite,
 its own copy of the corpus and its own idea of which files it was allowed to
@@ -59,8 +68,9 @@ make
 ./zyq show corpus/path/to/case.zy    # what each engine said about one file
 ```
 
-No dune, no opam switch, no external libraries — `ocamlopt` and `unix`, the same
-as [zyml](../zyml). No `python3` either, which is the point: the typed golden
+No dune, no opam switch, no external libraries — `ocamlopt` and `unix`, the
+approach inherited from [zyml](https://github.com/zymbol-lang/zyml) (archived;
+the build style outlived the engine). No `python3` either, which is the point: the typed golden
 wildcards used to be Python regexes that silently degraded to a plain glob when
 it was missing.
 
@@ -217,39 +227,54 @@ desc = "..."
 
 ## Current state
 
-Measured on v0.0.9, 585 files.
+Measured 2026-08-17 on v0.0.9, 599 files, three engines.
 
 **Consensus** — `./zyq consensus`:
 
 | engines | agree | diverge |
 |---|---|---|
-| `zytw, zyvm` | **583** | 0 |
-| all four | 480 | 103 |
+| `zytw, zyvm` | **597** | 0 |
+| all three (`+ zyjs`) | **597** | 0 |
 
-Of the 103: **90 with the browser engine alone, 12 with zyml alone, 1 with
-both — and none where the tree-walker or the VM is the outlier.** zyml declines
-to compile 130 files, reported as *unsupported* rather than as a wrong answer.
 Two files are excused for every engine: a module with no output of its own, and
 `manual_check.zy`, an interactive tool that shells out and waits for a person.
+The browser engine declines 40 more by declared rule — no terminal, no
+filesystem, no shell — reported as *unsupported* rather than as a wrong answer.
 
-That number was 117 an hour before this was written. The difference was a
-duplicated JavaScript driver in this repository that skipped the static-check
-pass `web/tests/run_one.mjs` already did, so a rejected program printed its
-diagnostic on **stdout** and exited **0**. Deleting the duplicate and using
-web's driver fixed 14 files and removed a harness nobody was maintaining.
+**Read the zero for what it is.** It is not the same zero as a fixed bug. On
+2026-08-16 the four-engine sweep was 582 agree / 15 diverge, and **all 15 were
+zyml**, which was retired the next day. Removing an engine removes its
+divergences by removing the engine. What makes this zero worth stating is where
+those 15 sat: on almost all of them the Rust engines were the *stricter* side and
+zyml the permissive one — it ran `scope_underscore_inner_error.zy` and printed
+`42` where both Rust engines refuse the access — so retiring it did not bury a
+tree-walker or VM bug behind a smaller number.
 
-**Goldens** — `./zyq expect`: **583 of 583 match, nothing unchecked.** That last
-part is new. Five goldens used to sit in the corpus with no engine able to
-produce them — four benchmarks and one file held out by a stale skip marker.
-`zyq audit` reported them rather than letting them read as passes; moving the
-benchmarks to `bench/` and deleting the stale marker removed the category
-instead of the symptom.
+It did not bury the ones that go the other way either, because those were never
+here: `Divergente_ES/` in the main workspace holds the probes where zyml was
+*right* and a Rust engine wrong — DM-01, integer overflow going unchecked in the
+tree-walker when the operand is a variable rather than a literal, is still open
+and still the tree-walker's bug. A retired engine's findings outlive it only if
+they were written down somewhere it does not own.
 
-**Rejections** — `./zyq reject`: **0 of 4 refused everywhere.** The browser
-engine runs `m[1][2] = 77`, changes nothing and exits 0. The CLI rejects it with
-five errors. A silent no-op is worse than a program that does not compile, and
-no suite in the project could see it, because consensus compares what programs
-print and a refused program prints nothing.
+Before that, the historical figure: on 585 files with all four engines it was
+480 agree / 103 diverge — 90 the browser engine alone, 12 zyml alone, 1 both,
+and none where the tree-walker or the VM was the outlier. The browser engine's
+90 are now declared rules rather than divergences.
+
+**Goldens** — `./zyq expect`: **576 of 576 match via `run`, 21 of 21 via
+`check`, nothing unchecked.** That last part matters. Five goldens used to sit in
+the corpus with no engine able to produce them — four benchmarks and one file
+held out by a stale skip marker. `zyq audit` reported them rather than letting
+them read as passes; moving the benchmarks to `bench/` and deleting the stale
+marker removed the category instead of the symptom.
+
+**Rejections** — `./zyq reject`: **6 of 9 forms refused everywhere, 3 accepted
+somewhere.** Every one of the three is the browser engine: it runs
+`m[1][2] = 77` and `x[k]$~ v` as a statement, changes nothing and exits 0, where
+the CLI rejects the first with five errors. A silent no-op is worse than a
+program that does not compile, and no consensus suite can see it, because
+consensus compares what programs print and a refused program prints nothing.
 
 ## Grading the grader
 
