@@ -3,8 +3,8 @@ p = (x: 10, y: 20, z: 30)
 >> p.x ¶
 >> p.y ¶
 >> p.z ¶
->> p[1] ¶
->> p[2] ¶
+>> p["x"] ¶
+>> p["y"] ¶
 
 person = (name: "Bob", age: 30, active: #1)
 >> person.name ¶

@@ -1,0 +1,15 @@
+30
+Ana
+Ana
+7
+(nombre: Ana, edad: 30, dos palabras: 7, ciudad: Lima)
+#1
+#0
+##Key capturado
+  alfa = 10
+  beta = 20
+  gamma = 30
+(alfa: 10, gamma: 30)
+localhost
+8080
+web

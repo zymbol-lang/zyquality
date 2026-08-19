@@ -1,0 +1,16 @@
+// Test: the left operand of && guards the right one.
+//
+// This is the idiomatic form in every language that has short-circuiting —
+// "not empty AND its first element qualifies" — and it is only safe because
+// the right side is never reached when the left is false. Without it the index
+// runs on an empty array and the program dies.
+vacio = []
+? vacio$# > 0 && vacio[1] > 5 {
+    >> "no debe entrar" ¶
+}
+>> "guard ok" ¶
+
+lleno = [9]
+? lleno$# > 0 && lleno[1] > 5 {
+    >> "entra con datos" ¶
+}

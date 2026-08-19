@@ -18,7 +18,7 @@
     }
 
     poner(a<~, i, v, hechos<~) {
-        a[i] = v
+        a[i]$~ v
         hechos = hechos + 1
         <~ 0
     }

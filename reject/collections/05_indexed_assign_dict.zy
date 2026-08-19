@@ -1,0 +1,14 @@
+// @reject: decision 6 reaches the dictionary too — the rule is for all three
+// @reject: collections, not just the array. `u["nombre"] = "Beto"` names
+// @reject: nothing: it reaches inside a structure and changes a part, which is
+// @reject: not what `=` means. The form that exists is `u["nombre"]$~ "Beto"`,
+// @reject: and it says what it does.
+// @reject: Worth recording because the fix nearly went the other way. While
+// @reject: building decision 7 — the named tuple IS the dictionary, and a
+// @reject: dictionary is mutable — the tree-walker's guard was narrowed so a
+// @reject: named tuple would stop being refused, and that let `u["k"] = v`
+// @reject: through in both Rust engines. Mutable is not the same as
+// @reject: assignable-by-index: what makes a dictionary mutable is `$~`.
+u = (nombre: "Ana")
+u["nombre"] = "Beto"
+>> u ¶

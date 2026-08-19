@@ -1,0 +1,9 @@
+// @reject: a tuple is immutable — GUIDE.md § 12 documents this exact error, and
+// @reject: the whole design leans on it: if a tuple can change, `(q, r) = f()`
+// @reject: stops being safe and an array of tuples stops being a fixed record.
+// @reject: The tree-walker and the browser engine both refuse it; the register
+// @reject: VM returns (99, 2, 3). The corpus could never see that, because it
+// @reject: compares the output of programs that finish — and here the correct
+// @reject: outcome is a failure. This is DM-16.
+t = (1, 2, 3)
+t[1] = 99

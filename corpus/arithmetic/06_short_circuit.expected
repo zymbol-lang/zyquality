@@ -1,0 +1,4 @@
+and-false:#0
+and-true:R#1
+or-true:#1
+or-false:R#1

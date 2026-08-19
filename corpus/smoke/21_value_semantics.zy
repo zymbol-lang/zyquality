@@ -6,14 +6,14 @@
 // original, a chain of three names, and a function argument.
 a = [1, 2, 3]
 b = a
-a[1] = 99
+a[1]$~ 99
 >> "1. plano   a=" a " b=" b ¶
 
 // Nested aliasing: pulling a row out must copy it, not alias into the grid.
 m = [[1, 2], [3, 4]]
 n = m
 fila = m[1]
-fila[2] = 77
+fila[2]$~ 77
 >> "2. fila    m=" m " n=" n " fila=" fila ¶
 
 // Replacing a whole row must leave the source grid alone
@@ -24,18 +24,18 @@ d2 = d1[1]$~ [9, 9]
 // Write through the copy instead of the original
 r = [1, 2, 3]
 s = r
-s[2] = 88
+s[2]$~ 88
 >> "4. inverso r=" r " s=" s ¶
 
 // Chain of three names
 t = [1, 2]
 u = t
 v = u
-t[1] = 7
+t[1]$~ 7
 >> "5. cadena  t=" t " u=" u " v=" v ¶
 
 // Functions take arguments by value
-f(x) { x[1] = 42  <~ x }
+f(x) { x[1]$~ 42  <~ x }
 w = [1, 2]
 z = f(w)
 >> "6. función w=" w " z=" z ¶
@@ -58,6 +58,6 @@ grid = []
 @ _i:1..3 { grid = grid$+ [0, 0] }
 keep = grid
 fila2 = grid[2]
-fila2[1] = 5
+fila2[1]$~ 5
 grid = grid[2]$~ fila2
 >> "10. grid  grid=" grid " keep=" keep ¶

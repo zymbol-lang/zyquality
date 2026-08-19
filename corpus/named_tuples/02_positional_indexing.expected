@@ -1,5 +1,6 @@
-✓ Positional index [1] works
-✓ Positional index [2] works
-✓ Positional index [3] works
-✓ Field and index return same value
+✓ key access works
+✓ any value type
+✓ dot and bracket agree
+✓ computed key works
+✓ a key the dot cannot spell
 Test 2 PASSED

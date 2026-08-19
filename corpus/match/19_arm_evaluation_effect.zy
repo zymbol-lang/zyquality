@@ -1,0 +1,33 @@
+// Test: `??` evaluates its subject once, and only the matching arm's body.
+//
+// Every other file under match/ checks which arm won, which a returned value
+// already tells you. It cannot tell an engine that re-evaluates the subject for
+// each arm test from one that evaluates it once, and it cannot tell a
+// non-matching arm that was skipped from one that ran and had its value thrown
+// away. Both need an effect.
+sujeto() {
+    >> "[subject]"
+    <~ 3
+}
+
+rama(n) {
+    >> "[arm" n "]"
+    <~ n
+}
+
+r = ?? sujeto() {
+    1 => rama(1)
+    2 => rama(2)
+    3 => rama(3)
+    _ => rama(0)
+}
+>> "r:" r ¶
+
+// The wildcard arm is the one that runs here, and the three above it must not.
+r2 = ?? 9 {
+    1 => rama(1)
+    2 => rama(2)
+    3 => rama(3)
+    _ => rama(0)
+}
+>> "r2:" r2 ¶

@@ -1,0 +1,10 @@
+// @reject: `$+` on a tuple as a bare statement would have to modify it,
+// @reject: and a tuple does not change. The functional form
+// @reject: `otro = t$+ 3` is the one that exists — it derives a new
+// @reject: tuple, as (1,2) + (3,) does in Python.
+// @reject: Built 2026-08-18 with decision 12: a bare `$` edit statement
+// @reject: modifies its receiver, and the receiver check refuses a
+// @reject: positional tuple whatever the operator — immutability is a
+// @reject: property of the value, not an exception inside each `$`.
+t = (1, 2)
+t$+ 3

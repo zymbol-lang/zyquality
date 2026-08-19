@@ -1,0 +1,20 @@
+// @reject: `??` compares; it does not bind. A pattern element names a *value* to
+// @reject: compare against — `?? codigo { umbral => … }` tests codigo against the
+// @reject: value of umbral (corpus/match/13_ident_scalar.zy) — and no pattern
+// @reject: ever creates a name: `?? [1,2,3] { [a,b,c] => a }` is
+// @reject: `undefined variable 'a' in match pattern` in all three engines.
+// @reject: So `*x` here has nothing to bind the rest to. The only thing it could
+// @reject: contribute is "and some more elements", which is a length test
+// @reject: written in the notation of destructuring — and the length test
+// @reject: already exists: `?? xs$# { >=3 => … }`.
+// @reject: The browser engine was the only one that accepted it, and it appeared
+// @reject: to work only because an identifier inside a list pattern degraded to
+// @reject: a wildcard there (reject/patterns/04). `[a, *x]` was measuring a
+// @reject: named wildcard, not a rest. This is DM-25.
+// @reject: The rest pattern that DOES exist is the destructuring one, and it has
+// @reject: its case: corpus/collections/35_rest_pattern.zy.
+r = ?? [1,2,3] {
+    [a, *x] => "un resto"
+    _       => "otro"
+}
+>> r ¶

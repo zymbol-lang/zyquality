@@ -1,0 +1,13 @@
+// @reject: imports precede every statement in an executable file. The rule is
+// @reject: what both Rust parsers always enforced — the loop that reads the
+// @reject: leading run of `<#` stops at the first statement — but it was written
+// @reject: in no document, and the browser engine accepted an import anywhere
+// @reject: because it parsed `Import` as an ordinary statement. So a program
+// @reject: that broke the rule ran in exactly one engine of three, and nothing
+// @reject: said which was right (DM-12).
+// @reject: The rule now has a message that names it instead of naming the token
+// @reject: (it used to be `unexpected token: ModuleImport`), and it is written in
+// @reject: REFERENCE.md L40 and GUIDE.md.
+>> "antes" ¶
+<# std/json => js
+>> js::encode((a: 1)) ¶

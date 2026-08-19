@@ -1,5 +1,0 @@
-// @reject: '$~' returns a new collection; dropping the result makes the line a
-// @reject: no-op.  A program that reads as a mutation and does nothing is worse
-// @reject: than one that does not compile.
-a = [1,2,3]
-a[1]$~ 9

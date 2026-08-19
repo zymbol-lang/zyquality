@@ -1,0 +1,12 @@
+// @reject: decision 15 — `[…]` is homogeneous and gets checked; a deliberate mix
+// @reject: is declared with `#[…]`, which is the same type and is not checked.
+// @reject: Both Rust engines refuse this today ("array element 2 has type
+// @reject: String"); the browser engine accepts it (DM-04), so a program written
+// @reject: in the playground fails outside it.
+// @reject: Closed 2026-08-18, and the order was the point: `#[…]` had to EXIST
+// @reject: first, or the language would have refused the mix with nowhere to put
+// @reject: it. The declared form is corpus/collections/37_declared_mixed_array.zy.
+// @reject: The browser engine checked nothing at all; the two Rust engines had
+// @reject: checked since always.
+m = [1, "dos", 3.0]
+>> m ¶

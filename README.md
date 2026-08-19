@@ -78,9 +78,9 @@ it was missing.
 
 | | |
 |---|---|
-| `corpus/` | 585 `.zy` files, 583 with a `.expected` golden |
+| `corpus/` | 614 `.zy` files, 612 with a `.expected` golden |
 | `corpus.toml` | which engine may be judged on which file, and why not |
-| `reject/` | forms every engine must refuse |
+| `reject/` | 23 forms every engine must refuse — `@reject:` for a live bug, `@reject-pending:` for a rule decided and not yet built |
 | `engines.toml` | how to run each engine |
 | `suites.toml` | the script suites, so `zyq suite` runs them too |
 | `fmt/` | formatter properties P1–P4, and its baseline |

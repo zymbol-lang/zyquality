@@ -1,0 +1,8 @@
+// @reject: decision 20 — modifying requires a destination with a NAME. As a
+// @reject: statement, `f()[1]$~ 5` would modify a temporary nobody holds: the
+// @reject: array the call returned is discarded on the next line, so the edit is
+// @reject: unobservable by construction.
+// @reject: The two Rust engines already refuse it while parsing; the browser
+// @reject: engine runs it and says nothing, which is the silent no-op again.
+f() { <~ [1, 2, 3] }
+f()[1]$~ 5

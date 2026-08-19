@@ -1,0 +1,96 @@
+// Test: leaving the integer range is a ##Range error when the operands are
+// *variables*, not only when they are literals.
+//
+// This is the twin 12_integer_overflow.zy should have had. That file checks the
+// same six operations with literal operands, and every one of them is
+// constant-folded before execution — so it verified the folder and reported that
+// as coverage of the i53 model. The default engine meanwhile wrapped: its
+// identifier-OP-literal, identifier-OP-identifier and `x = x OP n` fast paths
+// used wrapping_add/sub/mul and skipped the range check the slow path performs.
+// `n = 9007199254740991` then `n + 1` answered 9007199254740992 in `zymbol run`
+// and raised in `zymbol run --vm` — same program, two answers, the silent one in
+// the default engine (DM-01).
+//
+// The loop iterator is `_i` on purpose: an unused `i` warns in the Rust engines
+// and not in the browser one (DM-07), and a case that fails for that reason
+// would not be measuring overflow.
+
+// Identifier + literal — the fast path that answered 9007199254740992.
+techo = 9007199254740991
+!? {
+    >>(techo + 1) ¶
+} :! ##Range {
+    >> "var add caught" ¶
+}
+
+// Identifier * literal.
+!? {
+    >>(techo * 2) ¶
+} :! ##Range {
+    >> "var mul caught" ¶
+}
+
+// Identifier - literal, off the bottom of the range.
+suelo = -9007199254740991
+!? {
+    >>(suelo - 1) ¶
+} :! ##Range {
+    >> "var sub caught" ¶
+}
+
+// Identifier OP identifier — the other fast path, with nothing to fold.
+a = 9007199254740000
+b = 9007199254740000
+!? {
+    >>(a + b) ¶
+} :! ##Range {
+    >> "two vars add caught" ¶
+}
+
+mil = 1000
+!? {
+    >>(a * mil) ¶
+} :! ##Range {
+    >> "two vars mul caught" ¶
+}
+
+// `x = x OP n` — the self-assign fast path, and the scenario REFERENCE.md names:
+// an accumulator over a long loop. It crossed the range in silence.
+!? {
+    s = 9007199254740000
+    @ _i:1..5 {
+        s = s + 1000000
+    }
+    >> s ¶
+} :! ##Range {
+    >> "accumulator caught" ¶
+}
+
+// Same path, multiplying.
+!? {
+    p = 3
+    @ _i:1..40 {
+        p = p * 3
+    }
+    >> p ¶
+} :! ##Range {
+    >> "accumulating product caught" ¶
+}
+
+// The check must not fire one step early: the last integer in range is a value,
+// and reaching it through a variable is not an error.
+!? {
+    borde = 9007199254740990
+    >>(borde + 1) ¶
+} :! ##Range {
+    >> "WRONG: the boundary itself must be reachable" ¶
+}
+
+// Negation stays total by the symmetry of the bounds — the one operation that
+// can never raise.
+>>(-techo) ¶
+
+// Execution continues normally after every catch.
+seis = 6
+siete = 7
+>>(seis * siete) ¶
