@@ -1,0 +1,60 @@
+// Test: a leading unary in `>>` is a term, so `*`, `/`, `%` and `^` still apply
+// to it — and the answer is the one the expression grammar gives outside `>>`.
+//
+// It used not to be. The output-item parser returned as soon as it saw `-`, so
+// the argument closed on the spot: `>> 7 % 3 ¶` printed 1 and `>> -7 % 3 ¶` was
+// `error: expected expression, found Percent`. `-5 / 2`, `-3 * 4`, `-2 * -3` and
+// `-2 ^ 2` failed the same way. The rule that came out of it — `%` works, but
+// not after a minus — is not one anybody could learn, and `>>` is the first line
+// anyone writes (DI-03).
+//
+// Each property is printed twice: once through `>>` and once through a variable
+// assigned by the ordinary expression parser. The pairs are the assertion — a
+// value that differs by which parser saw it is the bug returning.
+//
+// No string label sits in front of a leading `-`: `>> "mod:" -7 % 3 ¶` is a
+// *subtraction* of `"mod:"` minus `1`, because the `+`/`-` level of the output
+// grammar joins two arguments. That is its own trap and not this one's subject.
+
+// -7 % 3   (the sign follows the dividend, as in C and JavaScript)
+>> -7 % 3 ¶
+m = -7 % 3
+>> m ¶
+
+// 7 % -3
+>> 7 % -3 ¶
+m2 = 7 % -3
+>> m2 ¶
+
+// -5 / 2   (integer division truncates)
+>> -5 / 2 ¶
+d = -5 / 2
+>> d ¶
+
+// -3 * 4
+>> -3 * 4 ¶
+u = -3 * 4
+>> u ¶
+
+// -2 * -3  (a unary on both sides of the product)
+>> -2 * -3 ¶
+u2 = -2 * -3
+>> u2 ¶
+
+// -2 ^ 2   the unary binds tighter than `^`, so this is (-2)^2 = 4, not -(2^2).
+// Python answers -4 and JavaScript refuses the form outright; Zymbol answers 4,
+// and the point of this pair is that `>>` answers it too.
+>> -2 ^ 2 ¶
+w = -2 ^ 2
+>> w ¶
+
+// `^` stays right-associative through the output parser: 2^(3^2) = 512.
+>> 2 ^ 3 ^ 2 ¶
+a = 2 ^ 3 ^ 2
+>> a ¶
+
+// What must not change: juxtaposition, the `+`/`-` join, `!`, and a bare unary.
+>> "items:" 1 " " 2 " " 3 ¶
+>> -5 -3 ¶
+>> !#1 ¶
+>> -5 ¶

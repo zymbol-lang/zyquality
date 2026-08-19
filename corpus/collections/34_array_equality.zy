@@ -1,0 +1,58 @@
+// Test: `==` and `<>` between arrays, element by element and at every depth.
+//
+// corpus/bugs/bug_vm_tuple_equality.zy covers the same question for *tuples*,
+// and has since v0.0.5 — which is why nobody noticed that arrays were never
+// covered. `Value::equals` and `cmp_direct` in the VM had a Tuple arm and no
+// Array arm, so `[1,2,3] == [1,2,3]` fell through to "not equal" and answered #0
+// while both other engines answered #1 (DM-02). A silent wrong answer: the
+// comparison responds, and responds wrongly, so a `?` on it takes the opposite
+// branch — which is the last line of this file.
+
+a = [1, 2, 3]
+b = [1, 2, 3]
+c = [1, 2, 4]
+d = [1, 2]
+e = []
+f = []
+
+>> (a == b) ¶
+>> (a == c) ¶
+>> (a == d) ¶
+>> (e == f) ¶
+>> (a == e) ¶
+
+// The inverse operator has to answer the inverse.
+>> (a <> b) ¶
+>> (a <> c) ¶
+
+// Nested: the relation applies at every depth, not just the top one.
+n = [[1, 2], [3, 4]]
+m = [[1, 2], [3, 4]]
+o = [[1, 2], [3, 5]]
+>> (n == m) ¶
+>> (n == o) ¶
+
+// Element equality is the *same relation* as scalar equality, so it promotes:
+// `1 == 1.0` is #1, therefore `[1] == [1.0]` must be #1 too. The VM and the
+// browser engine both said #0 here, each for its own reason.
+g = [1, 2.0, 3]
+>> (1 == 1.0) ¶
+>> (a == g) ¶
+
+// Mixed content and strings.
+h = ["a", "b"]
+i = ["a", "b"]
+j = ["a", "c"]
+>> (h == i) ¶
+>> (h == j) ¶
+
+// An array is not a tuple with the same contents.
+t = (1, 2, 3)
+>> (a == t) ¶
+
+// Where the silent failure bites: the branch, not the printed value.
+? a == b {
+    >> "branch taken" ¶
+} _ {
+    >> "branch NOT taken" ¶
+}

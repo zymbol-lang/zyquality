@@ -1,27 +1,45 @@
-// Test 2: Positional Indexing on Named Tuples (Backward Compatibility)
-// Expected: Named tuples support both field and index access
+// Test 2: a dictionary is addressed by KEY — positional access was withdrawn.
+//
+// This file used to be called "Positional Indexing on Named Tuples (Backward
+// Compatibility)" and asserted that `person[1]`, `person[2]` and `person[3]`
+// worked. Decision 11 of Divergente_ES/forma/README.md withdrew exactly that:
+// in a mutable dictionary a positional index is fragile, because adding a key
+// changes what sits at each position and a program that depended on it stops
+// being correct with nothing to say so.
+//
+// The refusal itself is pinned in reject/collections/02_positional_read_dict.zy.
+// What is kept here is the half that survives: the dot and the bracket reach the
+// same value, and the bracket also reaches keys the dot cannot spell.
+//
+// The POSITIONAL tuple keeps `t[1]` in full — there the index is the only
+// address there is, and the size is fixed. That is corpus/collections/, not here.
 
 person = (name: "Alice", age: 25, city: "Madrid")
 
-// Test positional access
-? person[1] == "Alice" {
-    >> "✓ Positional index [1] works" ¶
+? person["name"] == "Alice" {
+    >> "✓ key access works" ¶
 }
 
-? person[2] == 25 {
-    >> "✓ Positional index [2] works" ¶
+? person["age"] == 25 {
+    >> "✓ any value type" ¶
 }
 
-? person[3] == "Madrid" {
-    >> "✓ Positional index [3] works" ¶
+// The dot and the bracket are the same lookup.
+? person.name == person["name"] {
+    >> "✓ dot and bracket agree" ¶
 }
 
-// Mix field and index access
-name_field = person.name
-name_index = person[1]
+// A computed key — the piece that made this a dictionary rather than a record.
+k = "city"
+? person[k] == "Madrid" {
+    >> "✓ computed key works" ¶
+}
 
-? name_field == name_index {
-    >> "✓ Field and index return same value" ¶
+// The bracket reaches keys the dot cannot: any string is a key.
+raro = (nombre: "Ana")
+raro["dos palabras"]$~ 7
+? raro["dos palabras"] == 7 {
+    >> "✓ a key the dot cannot spell" ¶
 }
 
 >> "Test 2 PASSED" ¶

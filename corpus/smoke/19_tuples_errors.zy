@@ -3,8 +3,8 @@ person = (name: "Alice", age: 25, active: #1)
 >> person ¶
 >> person.name ¶
 >> person.age ¶
->> person[1] ¶
->> person[2] ¶
+>> person["name"] ¶
+>> person["age"] ¶
 >> person#? ¶
 pos = (x: 10, y: 20)
 p = (pos: pos, label: "origin")
@@ -12,7 +12,7 @@ p = (pos: pos, label: "origin")
 >> p.pos.x ¶
 >> p ¶
 older = person["age"]$~ 26
-upper = person[1]$~ "ALICE"
+upper = person["name"]$~ "ALICE"
 >> person.age ¶
 >> older.age ¶
 >> upper.name ¶

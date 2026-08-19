@@ -1,0 +1,15 @@
+// Test: && and || must not evaluate the right side when the left decides.
+//
+// 03_logical_ops.zy already checks the truth table, and it passed in every
+// engine while the tree-walker evaluated both sides regardless — a truth table
+// cannot tell short-circuiting from full evaluation, because the answer is the
+// same either way. Only an observable effect on the right-hand side can.
+efecto() {
+    >> "R"
+    <~ #1
+}
+
+>> "and-false:" (#0 && efecto()) ¶
+>> "and-true:" (#1 && efecto()) ¶
+>> "or-true:" (#1 || efecto()) ¶
+>> "or-false:" (#0 || efecto()) ¶

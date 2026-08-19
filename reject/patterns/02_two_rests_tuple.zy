@@ -1,0 +1,6 @@
+// @reject: the same ambiguity in a positional-tuple pattern, refused for the
+// @reject: same reason. An engine that refuses one shape and accepts the other
+// @reject: has not implemented the rule, it has special-cased it — the argument
+// @reject: reject/assignment/02 makes about depth.
+(a, *r, *s, z) = (1,2,3,4,5)
+>> a " " r " " s " " z ¶

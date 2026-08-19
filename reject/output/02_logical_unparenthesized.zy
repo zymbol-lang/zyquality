@@ -1,0 +1,5 @@
+// @reject: the same cut, on the logical operators. `&&` and `||` are above
+// @reject: comparison, so they are further outside `>>` than `==` is, and an
+// @reject: engine that accepted one would have to accept this.
+// @reject: `>> (#1 && #0) ¶` is the form that works.
+>> #1 && #0 ¶

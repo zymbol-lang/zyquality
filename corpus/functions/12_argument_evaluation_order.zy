@@ -1,0 +1,30 @@
+// Test: call arguments are evaluated left to right, exactly once each.
+//
+// Nothing in functions/ could see this: the callee receives the same values in
+// the same slots whatever order they were computed in, and a function that is
+// called twice returns the same answer the second time. Only an argument whose
+// evaluation prints separates the cases.
+uno() {
+    >> "[1]"
+    <~ 1
+}
+
+dos() {
+    >> "[2]"
+    <~ 2
+}
+
+tres() {
+    >> "[3]"
+    <~ 3
+}
+
+suma(a, b, c) {
+    <~ a + b + c
+}
+
+>> "total:" suma(uno(), dos(), tres()) ¶
+
+// Twice in one call: an engine that caches by expression shape would print
+// `[1]` once.
+>> "doble:" suma(uno(), uno(), dos()) ¶

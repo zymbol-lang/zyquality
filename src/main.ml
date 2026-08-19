@@ -469,6 +469,50 @@ let cmd_expect o =
     if !fail > 0 then 1 else 0
   end
 
+(* The two classes of rejection, and why the report has to tell them apart.
+
+   `// @reject:` is a form the language refuses *today*: an engine that runs it
+   is a live bug, and the gate must go red.  `// @reject-pending:` is a form
+   already decided and not yet built — the decision exists, the code does not.
+   Both belong under `reject/`, because the alternative is keeping the decision
+   in somebody's head until the day somebody implements it.
+
+   What they cannot share is the exit code.  A red that does not distinguish a
+   regression from a backlog item is a red that gets learned and ignored, and
+   this suite was already carrying four of the second kind against one of the
+   first.
+
+   The pending marker also has to be able to expire: a `@reject-pending` that
+   every engine now refuses is *built*, and leaving it pending would keep a
+   backlog entry alive for work already done.  That check needs engine results,
+   so it lives here rather than in `audit`; promoting it is a one-word edit, so
+   it fails rather than warns. *)
+type reject_class = Live | Pending
+
+let reject_prefix = function
+  | Live -> "// @reject:"
+  | Pending -> "// @reject-pending:"
+
+(* Which class a file declares, and the reasons it gives.  The reason lives in
+   the file so the report can quote it instead of keeping a second copy that
+   drifts.  `// @reject-pending:` does not start with `// @reject:` — the
+   character after `@reject` is `-`, not `:` — so the two never cross-match. *)
+let reject_declaration file =
+  let lines = String.split_on_char '\n' (Toml.read_file file) in
+  let scan cls =
+    let p = reject_prefix cls in
+    let n = String.length p in
+    List.filter_map (fun l ->
+        let l = String.trim l in
+        if String.length l > n && String.sub l 0 n = p
+        then Some (String.trim (String.sub l n (String.length l - n)))
+        else None)
+      lines
+  in
+  match scan Pending with
+  | _ :: _ as rs -> Some (Pending, rs)
+  | [] -> (match scan Live with [] -> None | rs -> Some (Live, rs))
+
 (* Forms every engine must refuse.
 
    Consensus cannot see these: it compares what programs *print*, and a
@@ -484,9 +528,16 @@ let cmd_reject o =
   Printf.printf "%s %d forms × %d engines (%s)\n"
     (Report.bold "reject") (List.length files) (List.length engines)
     (String.concat ", " (List.map (fun (e : Engine.engine) -> e.id) engines));
-  let bad = ref 0 and checked = ref 0 in
+  let bad = ref 0 and pending = ref 0 and stale = ref 0 and checked = ref 0 in
   List.iter (fun file ->
       let rel = relative_to root file in
+      (* A file with no marker at all is reported by `audit`, which reads the
+         tree without running anything.  Here it counts as `Live`: a rejection
+         nobody wrote a reason for is not a licence to accept the form. *)
+      let cls, reasons =
+        match reject_declaration file with
+        | Some (c, rs) -> c, rs
+        | None -> Live, [] in
       let results = Engine.run_all ~timeout:o.timeout engines ~file in
       let accepted =
         List.filter (fun (r : Engine.result) ->
@@ -507,33 +558,47 @@ let cmd_reject o =
       let ran = List.filter (fun (r : Engine.result) ->
           r.status <> Engine.Unavailable) results in
       if ran <> [] then incr checked;
+      let quote_why () =
+        List.iter (fun why ->
+            Printf.printf "    %s %s\n" (Report.dim "why|") why) reasons in
       if accepted <> [] then begin
-        incr bad;
-        Printf.printf "\n%s %s\n" (Report.red "ACCEPTED") (Report.bold rel);
+        let tag, paint, what = match cls with
+          | Live ->
+            incr bad;
+            "ACCEPTED", Report.red,
+            "ran it and exited 0; it must be refused"
+          | Pending ->
+            incr pending;
+            "PENDING ", Report.yellow,
+            "ran it and exited 0; declared, not built yet" in
+        Printf.printf "\n%s %s\n" (paint tag) (Report.bold rel);
         List.iter (fun (r : Engine.result) ->
-            Printf.printf "    %-8s %s\n" r.eid
-              (Report.dim "ran it and exited 0; it must be refused")) accepted;
-        (* The reason is in the file, so the report can quote it rather than
-           keeping a second copy that drifts. *)
-        List.iter (fun l ->
-            let l = String.trim l in
-            let p = "// @reject:" in
-            if String.length l > String.length p
-            && String.sub l 0 (String.length p) = p then
-              Printf.printf "    %s %s\n" (Report.dim "why|")
-                (String.trim (String.sub l (String.length p)
-                                (String.length l - String.length p))))
-          (String.split_on_char '\n' (Toml.read_file file))
+            Printf.printf "    %-8s %s\n" r.eid (Report.dim what)) accepted;
+        quote_why ()
+      end else if cls = Pending && ran <> [] then begin
+        (* Refused everywhere while still marked pending: the work is done, and
+           the marker is the only thing left claiming it is not. *)
+        incr stale;
+        Printf.printf "\n%s %s\n" (Report.red "PROMOTE ") (Report.bold rel);
+        Printf.printf "    %s\n"
+          (Report.dim "every engine refuses it: change @reject-pending: to @reject:");
+        quote_why ()
       end else if o.verbose then
         Printf.printf "  %s %s\n" (Report.green "refused ") rel)
     files;
   Printf.printf "\n%s\n" Report.rule;
-  Printf.printf "%s     %d forms: %s refused everywhere, %s accepted somewhere\n"
+  Printf.printf "%s     %d forms: %s refused everywhere, %s accepted somewhere"
     (Report.bold "reject")
     (List.length files)
-    (Report.green (string_of_int (!checked - !bad)))
+    (Report.green (string_of_int (!checked - !bad - !pending)))
     ((if !bad > 0 then Report.red else Report.green) (string_of_int !bad));
-  if !bad > 0 then 1 else 0
+  if !pending > 0 then
+    Printf.printf ", %s pending (declared, not built)"
+      (Report.yellow (string_of_int !pending));
+  if !stale > 0 then
+    Printf.printf ", %s to promote" (Report.red (string_of_int !stale));
+  print_newline ();
+  if !bad > 0 || !stale > 0 then 1 else 0
 
 (* ------------------------------------------------------------ script suites *)
 
@@ -627,6 +692,20 @@ let cmd_audit o =
     end
   in
   walk root;
+
+  (* A rejection with no reason is indistinguishable from a program that
+     happens to fail today — the same argument corpus.toml makes about an
+     exclusion nobody justified.  The check is static, so it belongs here
+     rather than in `reject`, which has to start every engine to say anything;
+     the complementary rule — a `@reject-pending` every engine already refuses
+     — needs those results and lives there. *)
+  let reject_root = Engine.under o.reject_dir in
+  List.iter (fun f ->
+      if reject_declaration f = None then
+        note "no reason    "
+          (Printf.sprintf "%s/%s — needs `// @reject:` or `// @reject-pending:`"
+             o.reject_dir (relative_to reject_root f)))
+    (zy_files reject_root);
 
   (* A .zy with no golden is only checked by consensus, which is blind to all
      engines drifting together.  Informational, not a failure — some files are

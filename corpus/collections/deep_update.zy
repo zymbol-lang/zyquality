@@ -29,9 +29,15 @@ t2 = t[2]$~ 999
 >> t ¶
 >> t2 ¶
 
-// Deep update into an array nested inside a named tuple field (by position)
+// Deep update into an array nested inside a dictionary key.
+//
+// Written as a chain rather than as a nav path: `reg[2>3]$~ 0` addressed the
+// key by POSITION, which decision 11 withdrew, and `reg["datos">3]` is not a
+// path — the `>` reads as a comparison there. How a KEY is spelled inside a nav
+// path is the one thing forma/diccionarios.zy § 6 still leaves open, so this
+// case deliberately does not depend on it.
 reg = (id: 7, datos: [100, 200, 300])
-reg2 = reg[2>3]$~ 0
+reg2 = reg["datos"]$~ (reg.datos[3]$~ 0)
 >> reg2.datos ¶
 >> reg.datos ¶
 

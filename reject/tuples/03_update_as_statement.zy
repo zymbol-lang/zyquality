@@ -1,0 +1,11 @@
+// @reject: a tuple does not change, so `t[1]$~ 99` as a bare statement —
+// @reject: which under decision 12 means "modify in place" — has to be an
+// @reject: error on a tuple. The functional form `u = t[1]$~ 99` is the
+// @reject: one that exists and derives a second tuple.
+// @reject: Built 2026-08-18 with decision 12. Immutability was already
+// @reject: enforced for `t[1] = 99` by reject/tuples/01; this is the same
+// @reject: rule reaching the statement form, which until then did not
+// @reject: even parse in the two Rust engines.
+t = (1, 2, 3)
+t[1]$~ 99
+>> t ¶

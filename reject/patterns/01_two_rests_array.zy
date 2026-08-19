@@ -1,0 +1,16 @@
+// @reject: two `*rest` in one pattern are ambiguous by definition — nothing says
+// @reject: where the first ends and the second begins. No engine refused the
+// @reject: form, and each invented a different split of the same input:
+// @reject:   zytw  a=1 r=[2, 3, 4] s=[5]    z=##_
+// @reject:   zyvm  a=1 r=[2, 3]    s=[3]    z=5     ← the 3 comes out TWICE
+// @reject:   zyjs  a=1 r=[2, 3]    s=[4, 5] z=##_
+// @reject: An answer that repeats an element cannot be right under any reading
+// @reject: of what a rest is. Python refuses the same form: `SyntaxError:
+// @reject: multiple starred expressions in assignment`. This is DM-17,
+// @reject: decision 26 of Divergente_ES/forma/README.md.
+// @reject: The legitimate single rest is corpus/collections/35_rest_pattern.zy,
+// @reject: which worked identically in all three engines — which is why nobody
+// @reject: noticed the two-rest case for so long.
+arr = [1,2,3,4,5]
+[a, *r, *s, z] = arr
+>> a " " r " " s " " z ¶

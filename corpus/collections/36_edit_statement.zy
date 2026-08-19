@@ -1,0 +1,59 @@
+// Test: decision 12 of Divergente_ES/forma/README.md — the rule of the result.
+//
+//   · a `$` edit whose result is USED builds, and the original is untouched;
+//   · a `$` edit that IS the whole statement modifies in place.
+//
+// The two cases are disjoint and are told apart by looking at the syntax. And
+// discarding the result has no other possible use: if you were going to throw it
+// away, you meant to modify.
+//
+// Before this, a bare `arr$+ 3` ran and did nothing at all, with no warning
+// (DI-01), and `arr[2]$~ 99` as a statement did not even parse in the two Rust
+// engines — so with `arr[i] = v` on its way out there was NO way to change an
+// element in place. That is why this rule comes before the withdrawal.
+
+// ── the result is used: builds, original intact ──────────────────────────────
+a = [1, 2, 3]
+b = a$+ 4
+>> a " · " b ¶
+
+c = a[2]$~ 99
+>> a " · " c ¶
+
+// ── the result is discarded: modifies in place ───────────────────────────────
+d = [1, 2, 3]
+d$+ 4
+>> d ¶
+
+d[2]$~ 99
+>> d ¶
+
+d$-[1]
+>> d ¶
+
+d$++ 7 8
+>> d ¶
+
+// The deep form modifies too, through the same navigation.
+m = [[1, 2], [3, 4]]
+m[1>2]$~ 77
+>> m ¶
+
+// ── the dictionary is mutable, and this is how it is modified ────────────────
+// Decisions 7-11: the named tuple has the dictionary model. The tree-walker used
+// to refuse this — it guarded named tuples as immutable — while the VM allowed
+// it (DM-21); the tree-walker is the one that came into line.
+u = (nombre: "Ana", edad: 30)
+u["edad"]$~ 31
+>> u ¶
+
+// ── a positional tuple does not change, whatever the operator ────────────────
+// Refusals are pinned in reject/tuples/01, 02 and 03. What belongs here is the
+// other half: the functional forms still build, exactly as (1,2) + (3,) does in
+// Python.
+t = (1, 2)
+t2 = t$+ 3
+>> t " · " t2 ¶
+
+t3 = t[1]$~ 9
+>> t " · " t3 ¶

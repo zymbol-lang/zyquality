@@ -1,0 +1,16 @@
+// @reject: an identifier inside a list pattern is a value to compare, so naming
+// @reject: nothing is an error — exactly as it already was at the top of a
+// @reject: pattern, where all three engines refused `?? 5 { noexiste => … }`.
+// @reject: Inside a list the rule was enforced by the tree-walker alone: the VM
+// @reject: emitted nothing for the element (a catch-all in the structural path)
+// @reject: and the browser engine ran `env.def(name, value)`, so both TOOK THE
+// @reject: BRANCH with a, b and c undefined.
+// @reject: A pattern that matches when it should raise is the worst way to be
+// @reject: wrong: a `??` with a typo in a constant's name takes that branch every
+// @reject: time, in the engine that is going to be the default, and says nothing.
+// @reject: This is DM-26.
+r = ?? [9,8,7] {
+    [a, b, c] => "casó"
+    _         => "no casó"
+}
+>> r ¶

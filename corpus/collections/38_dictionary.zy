@@ -1,0 +1,77 @@
+// Test: the dictionary — decisions 7 to 11 of Divergente_ES/forma/README.md.
+//
+// The named tuple HAS the dictionary model. There is no new type and no new
+// notation: `(clave: valor)` stays, and what changed is the vocabulary — it
+// stops being called a tuple, because a tuple is immutable by definition and
+// this is not. `(1, 2)` is still a positional tuple; the colon is the only thing
+// that separates the two.
+//
+// Before this it was a RECORD, not a dictionary: readable only when the program
+// already knew what it held. Five things were missing, and each one alone was
+// enough to keep a JSON built piece by piece from being built at all.
+
+u = (nombre: "Ana", edad: 30)
+
+// ── the key may be COMPUTED — the piece that made it a dictionary (DM-09) ────
+// It used to be `array index must be Int, got String` in both Rust engines and
+// an empty line in the browser one, which was the worst of the three.
+k = "edad"
+>> u[k] ¶
+>> u["nombre"] ¶
+
+// The dot and the bracket are the same lookup; the bracket reaches keys the dot
+// cannot spell, which is what JSON needs.
+>> u.nombre ¶
+u["dos palabras"]$~ 7
+>> u["dos palabras"] ¶
+
+// ── a key that is NOT there gets added (decision 7) ─────────────────────────
+// Note the contrast with the array, where `arr[7]$~ v` fails (decision 13). The
+// two are not inconsistent: an array is addressed by POSITION, so writing past
+// the end would leave a hole; a dictionary is addressed by KEY and has none.
+u["ciudad"]$~ "Lima"
+>> u ¶
+
+// ── ask before reading (decision 10) ────────────────────────────────────────
+// On a dictionary `$?` asks about the KEY, as `in` does in Python and in JS.
+// Reading an absent key is an error, so without this there is no way to consult
+// a dictionary built piece by piece.
+>> (u$? "ciudad") ¶
+>> (u$? "sueldo") ¶
+
+// ── an absent key is ##Key, not ##_ and not an empty value ──────────────────
+// Python's KeyError, not JavaScript's undefined — coherent with `a[0]`, which is
+// also an error rather than a silently wrong answer.
+!? {
+    >> u["sueldo"] ¶
+} :! ##Key {
+    >> "##Key capturado" ¶
+}
+
+// ── walked by KEY, in insertion order (decision 8) ──────────────────────────
+// `for k in d`, as Python spells it. With `d[k]` available the key is enough to
+// reach the value, so no destructuring pattern has to enter `@`.
+d = (alfa: 10, beta: 20, gamma: 30)
+@ clave:d {
+    >> "  " clave " = " d[clave] ¶
+}
+
+// ── a key is removed by its ADDRESS (decision 9) ────────────────────────────
+// `$-[…]` already means "remove by address" for the array (`arr$-[1]`, by
+// position). In a dictionary the address IS the key, so it is the same operator
+// with the same sense — and `$- valor` stays free to mean "by value" in both.
+d$-["beta"]
+>> d ¶
+
+// ── nesting: this is already JSON, which is why no new type was needed ──────
+config = (
+    servidor: (host: "localhost", puerto: 8080),
+    etiquetas: ["web", "api"]
+)
+>> config.servidor.host ¶
+>> config["servidor"]["puerto"] ¶
+>> config.etiquetas[1] ¶
+
+// The positional read `d[2]` was withdrawn (decision 11) — see
+// reject/collections/02_positional_read_dict.zy. The POSITIONAL tuple keeps
+// `t[1]` in full: there the index is the only address there is.

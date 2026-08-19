@@ -1,4 +1,0 @@
-// @reject: same as 03, through the deep-navigation form: the result of '$~'
-// @reject: has to be assigned.
-m = [[1,2],[3,4]]
-m[1>2]$~ 9

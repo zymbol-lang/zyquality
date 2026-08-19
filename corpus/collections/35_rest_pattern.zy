@@ -1,0 +1,36 @@
+// Test: the single `*rest` in a destructuring pattern — array and positional
+// tuple, in every position.
+//
+// This is the half of the rest pattern that always worked, identically in all
+// three engines, and its working is exactly why nobody noticed that *two* rests
+// produced three different answers, one of which repeated an element (DM-17,
+// now reject/patterns/01 and 02). This file is what keeps the refusal from
+// growing teeth it should not have: a fix that rejected one rest as well would
+// pass the rejection suite and break every program.
+
+// Rest in the middle: the names on both sides bind first.
+[a0, *aR, a9] = [0,1,2,3,4,5,6,7,8,9]
+>> a0 " " aR " " a9 ¶
+
+// Rest at the end.
+[b0, b1, *bR] = [10, 20, 30, 40]
+>> b0 " " b1 " " bR ¶
+
+// Rest at the start.
+[*cR, c8, c9] = [1, 2, 3, 4]
+>> cR " " c8 " " c9 ¶
+
+// Deliberately absent: `[d0, *dR, d9] = [1, 2]`, where the pattern asks for more
+// elements than the array has. The three engines disagree — the VM gives
+// `dR=[] d9=2` and the other two give `dR=[2] d9=` — so the rest absorbs the
+// tail's element in two of them. That is DM-24, and it belongs to whoever
+// decides what an under-length destructure means, not to this file.
+
+// The tuple form keeps the shape: the rest of a tuple is a tuple, not an array,
+// and it carries mixed element types through unchanged.
+(t0, *tR, t9) = (0,1,2,"3",'4')
+>> t0 " " tR " " t9 ¶
+
+// Rest combined with the `_` discard.
+[e0, _, *eR] = [1, 2, 3, 4, 5]
+>> e0 " " eR ¶

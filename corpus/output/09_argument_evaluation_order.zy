@@ -1,0 +1,24 @@
+// Test: the order in which `>>` evaluates its juxtaposed arguments, and when
+// their effects reach the output relative to their values.
+//
+// Every other file under output/ checks what `>>` prints. None can see *when*
+// it evaluated what, because a value looks the same whenever it was computed.
+// An argument that prints while being evaluated is the only way to tell an
+// engine that evaluates the whole line first from one that evaluates and emits
+// one item at a time — and to tell left-to-right from any other order.
+uno() {
+    >> "[1]"
+    <~ "a"
+}
+
+dos() {
+    >> "[2]"
+    <~ "b"
+}
+
+>> uno() dos() ¶
+>> "sep" ¶
+
+// The same question with the arguments nested inside an expression, where an
+// engine that reorders for a fast path would show it.
+>> uno() " y " dos() ¶

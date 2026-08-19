@@ -1,0 +1,19 @@
+// @reject: decision 6 of Divergente_ES/forma/README.md — the indexed
+// @reject: assignment is withdrawn. `=` means "this NAME now holds this
+// @reject: value", and `arr[2] = 99` names nothing: it reaches inside a
+// @reject: structure and changes a part. Two different operations under
+// @reject: one sign. Modifying is `arr[2]$~ 99`.
+// @reject: This is the invariant the project has held since the start,
+// @reject: and the deliberate divergence from Python, JS and Swift.
+// @reject: Built 2026-08-18, and the ORDER was the whole difficulty: this
+// @reject: could not be withdrawn until `arr[2]$~ 99` worked as a statement
+// @reject: (decision 12), because until then that form did not even parse in
+// @reject: the two Rust engines — prohibiting this one first would have left
+// @reject: the language with no way at all to change an element.
+// @reject: Migration: 24 sites — 13 in corpus/, 8 in web/examples/, 3 in
+// @reject: aprende_zymbol/, ZERO in the six applications. All 609 goldens
+// @reject: matched afterwards, so the rewrite `x[i] = v` → `x[i]$~ v`
+// @reject: preserved behaviour exactly.
+arr = [1, 2, 3]
+arr[2] = 99
+>> arr ¶

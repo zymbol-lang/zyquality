@@ -1,0 +1,52 @@
+// Test: a function declared at the top level is callable from anywhere at the
+// top level, including above its own declaration — and that the hoisting stops
+// at the top level.
+//
+// Nobody had decided this; the architecture decided it, differently per engine.
+// The register VM compiles the file before running it and so registered every
+// name first, while the tree-walker and the browser engine bound each name as
+// its statement executed. `>> f(2) ¶` written above `f(x) { <~ x * 10 }` printed
+// 20 under `--vm` and was `undefined function: 'f'` in the default engine (DM-03)
+// — and `zymbol check` passed it in both, because zymbol-semantic had already
+// taken the hoisting side. The analyzer promised what one engine in three kept.
+
+// 1. Called before it is declared.
+>> diez(2) ¶
+
+diez(x) {
+    <~ x * 10
+}
+
+// 2. Still callable after, which is the ordinary case.
+>> diez(3) ¶
+
+// 3. Mutual recursion between two functions declared in the order that needs
+//    hoisting: `par` calls `impar`, which is declared below it.
+>> par(4) ¶
+>> par(7) ¶
+
+par(n) {
+    ? n == 0 { <~ #1 }
+    <~ impar(n - 1)
+}
+
+impar(n) {
+    ? n == 0 { <~ #0 }
+    <~ par(n - 1)
+}
+
+// 4. The limit, upwards: inside a block, a top-level function declared *below*
+//    the block is visible, because that one is hoisted.
+? #1 {
+    >> tardia(5) ¶
+}
+
+tardia(x) {
+    <~ x - 5
+}
+
+// Hoisting is top level only, matching what the VM's compiler already did. A
+// function declared *inside* a block is not covered here on purpose: the
+// semantic analyzer never collected those declarations, so calling one is
+// `undefined function` even from inside its own block — while the program runs
+// anyway and exits 0. That is DM-23, and it predates this file.

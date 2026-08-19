@@ -1,101 +1,47 @@
-// Test: $[start:count] and $-[start:count] on named tuples
-// 1-based indexing. Each :count case is paired with its ..end equivalent —
-// outputs must match.
+// Test: the positional family has no meaning on a dictionary — decision 11.
+//
+// This file used to be "$[start:count] and $-[start:count] on named tuples" and
+// asserted that a dictionary could be sliced and trimmed by position. The whole
+// family went with the withdrawal of `d[2]`, because the reasoning is the same
+// one: in a mutable dictionary a position is not a stable address — adding a key
+// changes what sits at each one. There is no principled line between "the second
+// key" and "the first two keys", and a positional WRITE (`d[2]$~ v`, `d$-[2]`)
+// is strictly worse than a positional read, since it corrupts data rather than
+// returning the wrong value.
+//
+// This is Python's position: `dict` has no indexing and no slicing. The slice
+// gets NO key-based replacement, and that is deliberate — "the first two keys"
+// is not a question a dictionary should answer.
+//
+// The refusals are pinned in reject/collections/02. What this file keeps is the
+// half that survives: the same operators on an ARRAY and on a POSITIONAL tuple,
+// where the index is the only address there is and the size is fixed.
 
-rec = (id: 1, name: "Ana", age: 25, mail: "ana@x.com", role: "user")
+// ── Array: the whole family still works ─────────────────────────────────────
+arr = [10, 20, 30, 40, 50]
+>> arr$[1:2] ¶
+>> arr$[1..2] ¶
+>> arr$[2:2] ¶
+>> arr$[2..3] ¶
+>> arr$-[2] ¶
+>> arr$-[1:2] ¶
+>> arr$-[1..2] ¶
+>> arr[2] ¶
+>> (arr[2]$~ 99) ¶
 
-// ── Slice: first 2 fields ─────────────────────────────────────────────────────
-s1  = rec$[1:2]
-s1b = rec$[1..2]
->> s1$# ¶
->> s1b$# ¶
->> s1[1] ¶
->> s1b[1] ¶
+// ── Positional tuple: the same, and the index is its only address ───────────
+t = (10, 20, 30, 40, 50)
+>> t$[1:2] ¶
+>> t$[2..3] ¶
+>> t$-[2] ¶
+>> t[2] ¶
+>> (t[2]$~ 99) ¶
 
-// ── Slice: middle 2 fields (name + age) ──────────────────────────────────────
-s2  = rec$[2:2]
-s2b = rec$[2..3]
->> s2$# ¶
->> s2b$# ¶
->> s2[1] ¶
->> s2b[1] ¶
-
-// ── Slice: last 2 fields ──────────────────────────────────────────────────────
-s3  = rec$[4:2]
-s3b = rec$[4..5]
->> s3$# ¶
->> s3b$# ¶
->> s3[1] ¶
->> s3b[1] ¶
-
-// ── Slice: single field ───────────────────────────────────────────────────────
-s4  = rec$[3:1]
-s4b = rec$[3..3]
->> s4$# ¶
->> s4b$# ¶
->> s4[1] ¶
->> s4b[1] ¶
-
-// ── Slice: count = 0 → empty ──────────────────────────────────────────────────
-s5  = rec$[2:0]
-s5b = rec$[2..1]
->> s5$# ¶
->> s5b$# ¶
-
-// ── Slice: full named tuple ───────────────────────────────────────────────────
-s6  = rec$[1:5]
-s6b = rec$[1..5]
->> s6$# ¶
->> s6b$# ¶
-
-// ── Remove: strip last 2 fields (mail + role) ─────────────────────────────────
-r1  = rec$-[4:2]
-r1b = rec$-[4..5]
->> r1$# ¶
->> r1b$# ¶
->> r1[3] ¶
->> r1b[3] ¶
-
-// ── Remove: single field (age) ────────────────────────────────────────────────
-r2  = rec$-[3:1]
-r2b = rec$-[3..3]
->> r2$# ¶
->> r2b$# ¶
-
-// ── Remove: first field ───────────────────────────────────────────────────────
-r3  = rec$-[1:1]
-r3b = rec$-[1..1]
->> r3$# ¶
->> r3b$# ¶
->> r3[1] ¶
->> r3b[1] ¶
-
-// ── Remove: count = 0 → no-op ─────────────────────────────────────────────────
-r4  = rec$-[3:0]
-r4b = rec$-[3..2]
->> r4$# ¶
->> r4b$# ¶
-
-// ── Remove: all fields ────────────────────────────────────────────────────────
-r5  = rec$-[1:5]
-r5b = rec$-[1..5]
->> r5$# ¶
->> r5b$# ¶
-
-// ── Variable indices ──────────────────────────────────────────────────────────
-from = 2
-cnt  = 3
-
-vs  = rec$[from:cnt]
-vsb = rec$[2..4]
->> vs$# ¶
->> vsb$# ¶
->> vs[1] ¶
->> vsb[1] ¶
-
-vr  = rec$-[from:cnt]
-vrb = rec$-[2..4]
->> vr$# ¶
->> vrb$# ¶
->> vr[1] ¶
->> vrb[1] ¶
+// ── Dictionary: addressed by key, and only by key ───────────────────────────
+d = (id: 1, name: "Ana", age: 25)
+>> d["id"] ¶
+>> d["name"] ¶
+>> (d["age"]$~ 26) ¶
+>> (d$-["name"]) ¶
+>> (d$? "id") ¶
+>> d$# ¶

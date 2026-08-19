@@ -75,7 +75,7 @@ does is anywhere else.
 ```text
 zyquality/
     zyq                 the differential runner (OCaml, no dependencies)
-    corpus/             585 .zy, 583 with a .expected golden
+    corpus/             614 .zy, 612 with a .expected golden
     corpus.toml         who may be judged on what, and why not
     reject/             forms every engine must refuse
     suites.toml         the script suites, so `zyq suite` runs them too
@@ -161,6 +161,20 @@ read the diff:
 git diff corpus/
 ```
 
+**A case has to make observable what it measures.** This is the one rule that
+cost the most to learn. `corpus/arithmetic/03_logical_ops.zy` checked the whole
+truth table of `&&` and `||`, passed in every engine for as long as it existed,
+and all the while the tree-walker was evaluating both sides of both operators: a
+truth table cannot tell short-circuiting from evaluating everything, because the
+answer is the same either way. Only a right-hand side with an *effect* separates
+them, which is what `06_short_circuit.zy` does and why it caught `DM-19`.
+
+So when a case is about how something is evaluated — order, laziness, aliasing,
+copying — the thing being measured has to reach stdout. A case that records the
+final answer measures the answer; a case that prints from the operand measures
+the behaviour. When a bug survives a case that looked like it covered it, the
+case was not written badly: it was measuring the result instead of the conduct.
+
 **An exclusion.** A `[[rule]]` in `corpus.toml`, with a reason. The reason is
 required: an exclusion nobody wrote a reason for is indistinguishable from a bug
 somebody hid. If the file lives in another repository, put a `// @zyq-skip:`
@@ -172,28 +186,67 @@ so — a missing feature must be reported apart from a wrong answer.
 
 **A rejection.** A `.zy` under `reject/` whose first lines say `// @reject: why`.
 Earn its place: it has to be a form the language deliberately refuses, not
-merely one that happens to fail today.
+merely one that happens to fail today. `zyq audit` fails a file under `reject/`
+that carries no reason at all — the same argument `corpus.toml` makes about an
+exclusion nobody justified.
+
+There are **two markers**, because there are two reasons a rejection can be red
+and they are not the same news:
+
+| Marker | Means | Effect on the gate |
+| --- | --- | --- |
+| `// @reject:` | The language refuses this **today**. Some engine implements the rule | An engine that runs it is a live bug: red, exit 1 |
+| `// @reject-pending:` | The rule is **decided and not built**. No engine refuses it yet | Reported apart, does not fail the gate |
+
+The test that survives contact with the files is *is the rule built anywhere?* If
+some engines refuse the form and one runs it, the rule exists and that engine has
+a defect — `@reject:`. If **no** engine refuses it, nothing has regressed, and
+the entry is a decision waiting for an implementation — `@reject-pending:`.
+
+The distinction exists because a red that cannot tell a regression from a backlog
+item is a red that gets learned and ignored, and this suite was carrying one of
+each with no way to see which was which.
+
+`@reject-pending:` expires. A pending form that every engine now refuses is
+*built*, and `zyq reject` fails with `PROMOTE` until the marker is changed to
+`@reject:` — otherwise the backlog entry outlives the work. That check needs
+engine results, so it lives in `reject`; the missing-reason check is static and
+lives in `audit`.
+
+A third case exists and deliberately has no marker: a rejection that a pending
+*decision* will **retire** rather than promote — `assignment/03` and `04` state
+today's `$~`-as-a-statement rule, which decision 12 reverses. Those stay
+`@reject:`, because the rule is real until it is not, and each says so in its own
+reason. Inventing a marker for it would be encoding a schedule in the gate.
 
 ## What a red gate means
 
 `zyq suite` is red today, and honestly so:
 
-- `expect` — 584 of 584 goldens match, nothing unchecked.
-- `reject` — 4 of 7 forms are refused everywhere. The three that are not are the
-  `$~`-as-a-statement family, which the browser engine still runs. The three
-  loop-specifier forms were added and closed in the same change; the fourth
-  assignment form closed with them, for a reason worth recording: the browser
-  engine *did* refuse it, but `runZymbol` catches its own errors so the
-  playground can render them, and `tests/run_one.mjs` never read the result — so
-  a refused program exited 0 and the gate scored it as accepted. A rejection
-  suite that cannot see a rejection was measuring the runner, not the engine.
-- `consensus` — 103 of 586 files diverge; **none where the tree-walker or the VM
-  is the outlier.**
-- `project` — two of Zofia's eleven suites error where their goldens record
-  numbers: `forward_pass.zy` and `matmul.zy` now say *cannot access underscore
-  variable from inner scope*. Those goldens were recorded when the programs
-  worked. The per-project runners could not see it — they grep the output for
-  `FAIL`, and a program that errors prints neither.
+Measured 2026-08-18, `zymbol 0.0.9`:
+
+- `expect` — 607 goldens (586 via `run`, 21 via `check`): all match, nothing
+  unchecked, nothing stale.
+- `reject` — 17 forms: 13 refused everywhere, **3 accepted somewhere**, 1 pending.
+  All three live ones are the browser engine, and all three are the same family:
+  `m[i][j] = v` at one level and at three (`assignment/01`, `02`) and `$~` dropped
+  as a statement (`03`). The pending one is `t$+ 3` as a bare statement, decision
+  12, refused by nobody yet.
+
+  Recorded because it cost a suite: the three loop-specifier forms were added and
+  closed in the same change, and the fourth assignment form closed with them for a
+  reason worth keeping — the browser engine *did* refuse it, but `runZymbol`
+  catches its own errors so the playground can render them, and
+  `tests/run_one.mjs` never read the result, so a refused program exited 0 and the
+  gate scored it as accepted. A rejection suite that cannot see a rejection was
+  measuring the runner, not the engine.
+- `consensus` — 609 files: 607 agree, **0 diverge**, 2 with too few engines. The
+  browser engine declines 40 (shell-out, `std/db`, timing); the two Rust engines
+  decline 2 each.
+- `project` — two of Zofia's eleven goldens are stale: `forward_pass.zy` and
+  `matmul.zy` now say *cannot access underscore variable*. They were recorded when
+  the programs worked. The per-project runners cannot see it — they grep the
+  output for `FAIL`, and a program that errors prints neither.
 
 Each repository's own wrapper is scoped to its own engine, on purpose. A gate
 that goes red for a defect in another repository is a gate its owner learns to

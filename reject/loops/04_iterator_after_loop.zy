@@ -1,0 +1,15 @@
+// @reject: the loop iterator does not outlive its loop. Reading it afterwards is
+// @reject: `undefined variable`, raised by static analysis before anything runs,
+// @reject: in all three engines.
+// @reject: Recorded because the opposite was written down and believed. DM-20
+// @reject: claimed the two Rust engines left it alive (`zytw 3 · zyvm 3`) and
+// @reject: only the browser engine refused it, and a decision was very nearly
+// @reject: taken on that basis. It is not reproducible: measured 2026-08-18
+// @reject: against zymbol 0.0.9, all three refuse. The same document's
+// @reject: `Descartadas` table said "does not survive in any engine" and was
+// @reject: right; nothing in the corpus could tell which half to believe.
+// @reject: That is what this file is for.
+@ i:1..3 {
+    _x = i
+}
+>> i ¶

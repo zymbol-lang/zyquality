@@ -1,0 +1,18 @@
+// @reject: decision 11 — a dictionary is addressed by key, never by
+// @reject: position. `d[2]` is fragile in a mutable dictionary: adding a
+// @reject: key changes what sits at each position, and a program that
+// @reject: depended on it stops being correct with nothing to say so.
+// @reject: The POSITIONAL tuple keeps `t[1]` in full — there the index is
+// @reject: the only address there is, and the size is fixed.
+// @reject: Built 2026-08-18, and the order mattered again: `d["clave"]` had to
+// @reject: work first — a computed key was `array index must be Int, got String`
+// @reject: in both Rust engines — or the withdrawal would have left a dictionary
+// @reject: with no way to read it at all.
+// @reject: Migration: 18 sites, and one corpus file existed ONLY to assert this
+// @reject: feature (named_tuples/02_positional_indexing.zy, "Backward
+// @reject: Compatibility"); it now tests what replaced it. The deep nav step
+// @reject: `d[2>3]` is a separate matter and is still open: how a KEY is spelled
+// @reject: inside a nav path is the one thing forma/diccionarios.zy § 6 leaves
+// @reject: undecided.
+u = (a: 1, b: 2)
+>> u[2] ¶

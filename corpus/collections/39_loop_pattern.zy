@@ -1,0 +1,58 @@
+// Test: `@ (k, v):x { … }` — a destructuring pattern where a single name goes.
+//
+// It binds each element exactly as `(k, v) = par` binds one, because it IS the
+// same pattern language. What it removes is a line whose only job was to unpack:
+//
+//   @ par:pares {          @ (k, v):pares {
+//       (k, v) = par   →       >> k "=" v ¶
+//       >> k "=" v ¶       }
+//   }
+//
+// That line was in forma/tuplas.zy § 7 for every walk over an array of tuples —
+// 68 of them in the project — and it is what made `@ k:d` name the dictionary
+// twice.
+//
+// `@ (` was already taken: `@ (n + 1) { }` is a valid count loop. The
+// disambiguator is the `:` after the `)`, the same kind of scan the parser
+// already does to tell `(a, b) = f()` from a parenthesised expression.
+
+// ── an array of tuples: the case that loses a line ──────────────────────────
+pares = [("a", 1), ("b", 2), ("c", 3)]
+@ (k, v):pares {
+    >> k "=" v " " ¶
+}
+
+// ── a dictionary: the pattern form is what asks for both halves ─────────────
+// `@ k:d` still yields KEYS (decision 8) and the value comes from `d[k]`. The
+// pattern form hands over `(clave, valor)` pairs — the pair being the language's
+// own answer to "several values that travel together" (decision 24).
+d = (alfa: 10, beta: 20, gamma: 30)
+@ (clave, valor):d {
+    >> clave " → " valor " " ¶
+}
+@ clave:d {
+    >> clave " " ¶
+}
+
+// ── the rest absorbs, exactly as in an assignment (decision 22) ─────────────
+filas = [(1, "uno", "I"), (2, "dos", "II")]
+@ (n, *resto):filas {
+    >> n ":" resto " " ¶
+}
+
+// ── the wildcard discards, exactly as in an assignment ──────────────────────
+@ (_, texto, _):filas {
+    >> texto " " ¶
+}
+
+// ── an array pattern works too, over an array of arrays ────────────────────
+matriz = [[1, 2], [3, 4]]
+@ [a, b]:matriz {
+    >> a "+" b "=" (a + b) " " ¶
+}
+
+// ── and the count loop it had to be told apart from still parses ───────────
+n = 2
+@ (n + 1) {
+    >> "x" ¶
+}

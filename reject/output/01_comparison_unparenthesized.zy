@@ -1,0 +1,12 @@
+// @reject: `>>` does not take the whole expression language, and the limit is
+// @reject: deliberate: arguments are juxtaposed, so the parser has to decide
+// @reject: where one ends, and `<` and `>` are the same characters that open
+// @reject: `<#` and `<~` and close `>>|`. Comparison and the logical operators
+// @reject: sit above the cut; arithmetic sits below it.
+// @reject: `>> (1 == 1) ¶` is the form that works, in every engine.
+// @reject: Recorded because the browser engine used to accept this — it called
+// @reject: the full expression parser — so a program written in the playground
+// @reject: could fail to parse outside it (DM-06). Narrowing the call was not
+// @reject: enough on its own: the loop then started a new argument and the
+// @reject: leftover `==` fell through in silence, printing `11`.
+>> 1 == 1 ¶
