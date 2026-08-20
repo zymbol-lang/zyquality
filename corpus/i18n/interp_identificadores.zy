@@ -5,7 +5,7 @@
 // narrower than the identifier rule the rest of the language uses. Kanji are
 // Unicode category Lo and pass; Private Use Area glyphs are category Co and do
 // not. A program written in pIqaD — Klingon script, U+F8D0–F8FF — therefore had
-// identifiers that were valid everywhere except inside "{ }". Found in
+// identifiers that were valid everywhere except inside "\{ \}". Found in
 // zyKlingonGalaxy, where a locale had to render numbers as pIqaD digits.
 //
 // Scripts exercised: Latin, kanji, Hangul, Cyrillic, Greek, Devanagari,

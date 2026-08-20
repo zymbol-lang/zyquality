@@ -1,0 +1,15 @@
+// @reject: asking a variable its type is not an exception to "defined before
+// @reject: use". `nonexistent#?` on a name that was never created is an error,
+// @reject: decided 2026-08-19.
+// @reject: The three ways of asking used to give two answers: the LSP flagged
+// @reject: it — `undefined variable 'nonexistent'`, which is what the editor
+// @reject: showed — while `zymbol check` said "No errors or warnings" and
+// @reject: `zymbol run` answered `(##_, 0, ())`. The cause was one line:
+// @reject: `infer_expr` matched `Expr::TypeMetadata(_)` and returned the tuple
+// @reject: type WITHOUT inferring the operand, so the name was never looked up.
+// @reject: This retires the `("##_", 0, Unit)` answer for an undefined name.
+// @reject: `##_` keeps its other meanings — the generic error type, and the Unit
+// @reject: a rest pattern leaves when it runs out.
+>> "=== inspecting a name that was never created ===" ¶
+info = nonexistent#?
+>> "Type symbol: " info[1] ¶

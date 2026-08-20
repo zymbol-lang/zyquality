@@ -15,7 +15,7 @@ s5 = "result: {foo}!"  // → result: bar!
 
 // $ before escaped brace — critical for bash ${var} injection via BashExec
 s6 = "$\{foo\}"        // → ${foo}  (not $bar)
-s7 = "$\{foo/_/ }"     // → ${foo/_/ }
+s7 = "$\{foo/_/ \}"     // → ${foo/_/ }
 
 // $ before unescaped brace — $ is literal, {foo} interpolates
 s8 = "${foo}"          // → $bar

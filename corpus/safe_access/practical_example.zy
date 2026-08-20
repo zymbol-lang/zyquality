@@ -1,93 +1,56 @@
-// PRACTICAL EXAMPLE: Safe variable access patterns
+// PRACTICAL EXAMPLE: what "safe access" is, now that a name must exist
+//
+// This file used to be built on a pattern that was retired on 2026-08-19: create
+// a variable inside a block and then ask `variable#?` whether it exists. Asking
+// a name its type is not an exception to "defined before use", so that is an
+// error now, and the LSP had been saying so all along while the CLI stayed quiet
+// (reject/variables/01_inspect_undefined.zy).
+//
+// What replaces it is not a workaround, it is the same idea written where the
+// reader can see it: give the name a value first, and let the branch change it.
+// The default stops being implicit in "the variable was never created" and
+// becomes a line you can read.
 
->> "=== Example 1: Conditional variable creation ===" ¶
+>> "=== Example 1: a value that a branch may replace ===" ¶
 
-create_optional = #1  // Change to #0 to skip creation
+create_optional = #1        // change to #0 to take the other branch
+optional_var = ""           // the default, stated
 
 ? create_optional {
     optional_var = "This variable exists!"
 }
 
-// Safe check before using
-check = optional_var#?
-is_defined = !(check[1] == "##_")
-
-? is_defined {
-    >> "Using optional variable: " check[3] ¶
+? optional_var$# > 0 {
+    >> "Using optional variable: " optional_var ¶
 }
 _{
-    >> "Optional variable not created, using default" ¶
+    >> "Optional variable not set, using default" ¶
 }
-
 ¶
 
->> "=== Example 2: Default values pattern ===" ¶
+>> "=== Example 2: a default value ===" ¶
 
-// Variable might be created in some condition
-condition = #0
-
-? condition {
-    user_choice = 100
-}
-
-// Get value or use default
-choice_check = user_choice#?
-final_value = #0
-is_choice_defined = !(choice_check[1] == "##_")
-
-? is_choice_defined {
-    final_value = choice_check[3]
-    >> "Using user choice: " final_value ¶
+user_choice = 0             // 0 means "the user chose nothing"
+? user_choice > 0 {
+    >> "Using user choice: " user_choice ¶
 }
 _{
-    final_value = 50  // Default
-    >> "Using default value: " final_value ¶
+    >> "Using default value: 50" ¶
 }
-
 ¶
 
->> "=== Example 3: Safe cleanup check ===" ¶
+>> "=== Example 3: #? still inspects — of a name that exists ===" ¶
 
-// Create and process data in a block
-? #1 {
-    temp_data = [1, 2, 3, 4, 5]
-    >> "Processing temporary data..." ¶
-}
+// `#?` is for asking what a value IS, which is a different question from
+// whether a name was ever created. On a name that exists it answers the type
+// symbol, the element count and the value itself.
+dato = [1, 2, 3]
+info = dato#?
+>> "  symbol: " info[1] ¶
+>> "  count:  " info[2] ¶
 
-// Verify it was cleaned up
-cleanup_check = temp_data#?
-is_cleaned = cleanup_check[1] == "##_"
-
-? is_cleaned {
-    >> "✅ Temporary data was properly cleaned up" ¶
-}
-_{
-    >> "❌ WARNING: Temporary data still exists (memory leak)" ¶
-}
-
+texto = "hola"
+>> "  string: " texto#? ¶
 ¶
 
->> "=== Example 4: Variable existence validation ===" ¶
-
-// Initialize result variable in outer scope
-result = ""
-process_flag = #1
-
-// Process might update result or leave it empty
-? process_flag {
-    result = "Processing complete"
-}
-
-// Validate result was actually set (not empty)
-validation = result#?
-is_valid = result == "Processing complete"
-
-? is_valid {
-    >> "SUCCESS: " result ¶
-}
-_{
-    >> "ERROR: Processing did not complete" ¶
-}
-
-¶
 >> "=== All practical examples completed ===" ¶

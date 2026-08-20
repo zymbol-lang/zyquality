@@ -1,0 +1,37 @@
+// Test: two dictionaries are equal when they hold the same keys with the same
+// values — DM-22, decided 2026-08-19.
+//
+// Both Rust engines answered `#0` here and the browser engine `#1`, and `#0` was
+// indefensible: every other collection compares by value, and a dictionary that
+// never equals another cannot be tested, deduplicated or asserted on.
+//
+// Key ORDER is not part of it. Insertion order is preserved for walking, as in
+// Python's dict, but two dictionaries built in a different order still hold the
+// same thing.
+
+p = (x: 1, y: 2)
+q = (x: 1, y: 2)
+r = (a: 1, b: 2)
+s = (x: 1, y: 99)
+o = (y: 2, x: 1)          // same content, other insertion order
+t = (1, 2)                // a POSITIONAL tuple is a different thing
+
+>> "same keys and values: " (p == q) ¶
+>> "different keys:       " (p == r) ¶
+>> "same keys, one value: " (p == s) ¶
+>> "order does not count: " (p == o) ¶
+>> "positional vs dict:   " (t == p) ¶
+>> "different length:     " (p == (x: 1)) ¶
+
+// `<>` is the negation, and has to agree
+>> "negation agrees:      " ((p <> q) == #0) ¶
+
+// Nested, and mixed value types
+a = (id: 1, tags: ["x", "y"], meta: (ok: #1))
+b = (id: 1, tags: ["x", "y"], meta: (ok: #1))
+c = (id: 1, tags: ["x", "z"], meta: (ok: #1))
+>> "nested equal:         " (a == b) ¶
+>> "nested differs deep:  " (a == c) ¶
+
+// Equality is the same relation as scalar equality, so 1 == 1.0 carries through
+>> "Int/Float promotion:  " ((k: 1) == (k: 1.0)) ¶

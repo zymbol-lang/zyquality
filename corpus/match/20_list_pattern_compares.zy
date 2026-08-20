@@ -14,34 +14,78 @@
 // is corpus/collections/35_rest_pattern.zy.
 
 // An exact literal list.
->> (?? [1,2,3] { [1, 2, 3] => "exacto"  _ => "otro" }) ¶
+r = ?? [1,2,3] {
+    [1, 2, 3] => "exacto"
+    _ => "otro"
+}
+>> r ¶
 
 // Arity: a three-element pattern does not match a two-element array.
->> (?? [1,2]   { [_, _, _] => "tres"    _ => "otro" }) ¶
->> (?? [1,2,3] { [_, _, _] => "tres"    _ => "otro" }) ¶
+r = ?? [1,2] {
+    [_, _, _] => "tres"
+    _ => "otro"
+}
+>> r ¶
+r = ?? [1,2,3] {
+    [_, _, _] => "tres"
+    _ => "otro"
+}
+>> r ¶
 
 // A partial literal: fix one position, accept anything in the rest.
->> (?? [1,9,9] { [1, _, _] => "empieza por 1"  _ => "otro" }) ¶
->> (?? [2,9,9] { [1, _, _] => "empieza por 1"  _ => "otro" }) ¶
+r = ?? [1,9,9] {
+    [1, _, _] => "empieza por 1"
+    _ => "otro"
+}
+>> r ¶
+r = ?? [2,9,9] {
+    [1, _, _] => "empieza por 1"
+    _ => "otro"
+}
+>> r ¶
 
 // An identifier inside the list is the VALUE of that variable, compared
 // element-wise — this is the case no engine but the tree-walker checked.
 uno = 1
 dos = 2
 tres = 3
->> (?? [1,2,3] { [uno, dos, tres] => "casa por valor"  _ => "otro" }) ¶
->> (?? [1,2,9] { [uno, dos, tres] => "casa por valor"  _ => "otro" }) ¶
+r = ?? [1,2,3] {
+    [uno, dos, tres] => "casa por valor"
+    _ => "otro"
+}
+>> r ¶
+r = ?? [1,2,9] {
+    [uno, dos, tres] => "casa por valor"
+    _ => "otro"
+}
+>> r ¶
 
 // Mixed: an identifier next to a literal and a wildcard.
->> (?? [1,5,9] { [uno, _, 9] => "mixto"  _ => "otro" }) ¶
+r = ?? [1,5,9] {
+    [uno, _, 9] => "mixto"
+    _ => "otro"
+}
+>> r ¶
 
 // A list pattern against a SCALAR subject is a membership test, not a shape.
 x = 2
->> (?? x { [1, 2, 3] => "pertenece"  _ => "no" }) ¶
+r = ?? x {
+    [1, 2, 3] => "pertenece"
+    _ => "no"
+}
+>> r ¶
 y = 7
->> (?? y { [1, 2, 3] => "pertenece"  _ => "no" }) ¶
+r = ?? y {
+    [1, 2, 3] => "pertenece"
+    _ => "no"
+}
+>> r ¶
 
 // The length test that `*rest` looked like it was for, written the way it is
 // actually written.
 xs = [1,2,3,4]
->> (?? xs$# { >=3 => "al menos tres"  _ => "menos" }) ¶
+r = ?? xs$# {
+    >=3 => "al menos tres"
+    _ => "menos"
+}
+>> r ¶
