@@ -22,5 +22,5 @@ datos = j::decode("[1, null, 3]")
 >> datos ¶
 
 // Nested object with null field
-obj = j::decode("\{\"x\": null, \"y\": 5}")
+obj = j::decode("\{\"x\": null, \"y\": 5\}")
 >> obj ¶

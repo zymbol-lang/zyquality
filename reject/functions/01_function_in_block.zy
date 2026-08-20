@@ -1,0 +1,15 @@
+// @reject: a function is free in a script or part of a module — never of a
+// @reject: block. DM-23, decided 2026-08-19.
+// @reject: Both Rust engines already refused it, but only at the CALL, and with
+// @reject: `undefined function: 'dentro'` about a function that is plainly
+// @reject: there — a message that describes the symptom and hides the rule. The
+// @reject: browser engine RAN it, so a program written in the playground failed
+// @reject: outside it.
+// @reject: Now all three refuse the declaration itself, with the rule spelled
+// @reject: out: move it to the top level of the script, or into a module.
+? #1 {
+    dentro(x) {
+        <~ x + 100
+    }
+    >> dentro(1) ¶
+}

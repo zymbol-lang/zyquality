@@ -1,10 +1,9 @@
-=== Example 1: Conditional variable creation ===
-Optional variable not created, using default
-=== Example 2: Default values pattern ===
+=== Example 1: a value that a branch may replace ===
+Using optional variable: This variable exists!
+=== Example 2: a default value ===
 Using default value: 50
-=== Example 3: Safe cleanup check ===
-Processing temporary data...
-✅ Temporary data was properly cleaned up
-=== Example 4: Variable existence validation ===
-SUCCESS: Processing complete
+=== Example 3: #? still inspects — of a name that exists ===
+  symbol: ##]
+  count:  3
+  string: (##", 4, hola)
 === All practical examples completed ===

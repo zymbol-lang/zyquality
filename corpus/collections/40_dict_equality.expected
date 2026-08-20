@@ -1,0 +1,10 @@
+same keys and values: #1
+different keys:       #0
+same keys, one value: #0
+order does not count: #1
+positional vs dict:   #0
+different length:     #0
+negation agrees:      #1
+nested equal:         #1
+nested differs deep:  #0
+Int/Float promotion:  #1
