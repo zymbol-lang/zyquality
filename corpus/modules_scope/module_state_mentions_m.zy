@@ -1,0 +1,49 @@
+// Module for module_state_mentions.zy — the ways a function body can name a
+// module binding.
+//
+// A module function frame is given a copy of the module's state on entry, and
+// only the bindings the body actually names are copied in (REFERENCE L44). The
+// mention walk has to see every one of these forms; a name it missed would come
+// out as "undefined variable", which is what this file is here to catch.
+
+# module_state_mentions_m {
+    #> {
+        directo, anidado, interpolado, escrito, ver, en_lambda, indirecto
+    }
+
+    saludo = "hola"
+    contador = 0
+    tabla = (es: "hola", en: "hi")
+
+    // Named straight in the body.
+    directo() { <~ saludo }
+
+    // Named only inside a nested block.
+    anidado(n) {
+        r = ""
+        @ _i:1..n {
+            ? (n > 0) { r = saludo }
+        }
+        <~ r
+    }
+
+    // Named only inside a string interpolation.
+    interpolado() { <~ "dice: {saludo}" }
+
+    // Written, not read — the write must still travel back to module state.
+    escrito() { contador = contador + 1 }
+    ver() { <~ contador }
+
+    // Named only inside a lambda body.
+    en_lambda() {
+        f = () -> saludo
+        <~ f()
+    }
+
+    // Named only as a computed key's receiver, inside a condition.
+    indirecto(k) {
+        c = k
+        ? (tabla$? c) { <~ tabla[c] }
+        <~ "?"
+    }
+}

@@ -1,0 +1,16 @@
+// Every way a module function body can name a module binding still reaches it.
+
+<# ./module_state_mentions_m => m
+
+>> m::directo() ¶
+>> m::anidado(2) ¶
+>> m::interpolado() ¶
+>> m::en_lambda() ¶
+>> m::indirecto("en") ¶
+>> m::indirecto("de") ¶
+
+// A write from a function that never reads the binding still persists.
+>> m::ver() ¶
+m::escrito()
+m::escrito()
+>> m::ver() ¶

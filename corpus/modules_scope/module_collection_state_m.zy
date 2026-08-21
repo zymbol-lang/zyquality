@@ -1,0 +1,48 @@
+// Module for module_collection_state.zy — the three collections as module
+// state, which E013 used to refuse.
+//
+// `is_literal_expr` accepted only a scalar, optionally signed, so `[1,2,3]`
+// and `(a: 1)` were rejected as "variable initializer in module must be a
+// literal" even though they name a value rather than computing one. The
+// browser engine never had that restriction, so this file also closes a
+// three-engine divergence.
+//
+// A collection literal is recursive here: 目録 nests a dictionary inside a
+// dictionary, which is the shape of a decoded JSON object.
+
+# module_collection_state_m {
+    #> {
+        LADOS, TABLA,
+        lado, etiqueta, guardar, privado, anidado
+    }
+
+    // Exported constants (`:=`) reachable as m.NAME from the caller.
+    LADOS := [10, 20, 30]
+    TABLA := (a: 1, b: 2)
+
+    // Private mutable state, read and written across calls.
+    tabla = (uno: "primero", dos: "segundo")
+    目録 = (es: (saludo: "hola"), en: (saludo: "hi"))
+
+    lado(i) { <~ LADOS[i] }
+
+    etiqueta(k) {
+        c = k
+        ? (tabla$? c) { <~ tabla[c] }
+        <~ "(sin traducir)"
+    }
+
+    // Inserting a key into module state, which has to survive the call.
+    guardar(k, v) {
+        c = k
+        tabla[c]$~ v
+    }
+
+    privado() { <~ tabla }
+
+    anidado(idioma) {
+        c = idioma
+        sub = 目録[c]
+        <~ sub.saludo
+    }
+}

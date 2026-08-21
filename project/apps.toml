@@ -70,3 +70,8 @@ desc = "neural-network library — activations, gradients, attention, forward pa
 id = "zyaudit"
 dir = "../ZyAudit/测试"
 desc = "code auditor, written in Chinese — parsing, metrics, reports, translation"
+
+[[app]]
+id = "zybank"
+dir = "../ZyBank/pruebas"
+desc = "ZyBank, personal ledger in Spanish — money as integers with a per-currency exponent, SQLite through std/db, four locales, two digit scripts"

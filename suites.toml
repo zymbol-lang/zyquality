@@ -51,6 +51,18 @@ needs = ["zymbol", "python3", "interpreter"]
 gate = false
 
 [[suite]]
+id = "lsp"
+cmd = ["python3", "lsp/lsp_parity.py"]
+desc = "the corpus through the language server, against `zymbol check` — the editor's answer and the command line's"
+needs = ["zymbol", "zymbol-lsp", "python3"]
+# Not a gate, and the reason is the whole point of the suite: the commonest way
+# this goes red is that somebody's *editor* is running a language server started
+# before the last build, which is not a defect in anything committed. Run it to
+# tell that apart from a real divergence — clean here while the editor is not
+# means the editor's server is stale.
+gate = false
+
+[[suite]]
 id = "project"
 cmd = ["bash", "project/run.sh"]
 desc = "the real programs written in Zymbol: a go engine, two TUI games, a neural-network library, a code auditor"
