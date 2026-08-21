@@ -1,0 +1,8 @@
+// @reject: the module refused by 02_computed_module_initializer.zy — its own
+// @reject: initialiser computes, so loading it is the error wherever it is
+// @reject: loaded from.
+# 02_computed_module_initializer_m {
+    #> { ver }
+    x = 1 + 2
+    ver() { <~ x }
+}

@@ -1,0 +1,15 @@
+// @reject: a module binding is initialised with a LITERAL — a scalar, a scalar
+// @reject: carrying a sign, or a collection literal built only out of those.
+// @reject: The module body runs nothing, which is what E013 is for, so an
+// @reject: initialiser that COMPUTES has no moment at which to run.
+// @reject: Both Rust engines have always refused this at parse time. The
+// @reject: browser engine checked only the statement's *type* — `VarAssign` is
+// @reject: allowed in a module body — and never looked at the value, so
+// @reject: `x = 1 + 2` ran there and printed 3 while the other two refused to
+// @reject: parse the file at all. The gate could not see it: a file two engines
+// @reject: reject has no golden for the third to disagree with, which is the
+// @reject: same blind spot that hid L41 in the other direction.
+// @reject: A collection literal IS accepted — see
+// @reject: corpus/modules_scope/module_collection_state.zy.
+<# ./02_computed_module_initializer_m => m
+>> m::ver() ¶

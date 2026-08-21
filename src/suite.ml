@@ -70,6 +70,12 @@ let missing ~(root : string) (need : string) : string option =
     let b = env_or "ZYMBOL_BIN" "zymbol" in
     if on_path b || Sys.file_exists b then None else Some ("zymbol (" ^ b ^ ")")
   | "python3" -> if on_path "python3" then None else Some "python3"
+  | "zymbol-lsp" ->
+    (* The language server is a separate binary from the CLI and is overridden
+       separately, the same way engines.toml overrides an engine.  A suite that
+       asks the editor's question cannot be answered without it. *)
+    let b = env_or "ZYMBOL_LSP_BIN" "zymbol-lsp" in
+    if on_path b || Sys.file_exists b then None else Some ("zymbol-lsp (" ^ b ^ ")")
   | "tty" ->
     (* The pty is allocated by the script; what has to exist here is the
        ability to allocate one at all, which on this platform means python3

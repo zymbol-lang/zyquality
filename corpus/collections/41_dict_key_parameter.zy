@@ -1,0 +1,34 @@
+// A parameter used as a dictionary key is a String, not an Int.
+//
+// The bracket addresses two different things — a POSITION in an array and a
+// KEY in a dictionary — and the constraint collector declared every indexed
+// parameter an Int, from before the dictionary had a computed key at all. The
+// effect was that `busca(d, k) { <~ d[k] }`, the shape of every table lookup,
+// ran correctly in all three engines and was refused by `zymbol check` with
+// "argument 2 has type String, but function 'busca' expects Int".
+
+busca(d, k) { <~ d[k] }
+
+tabla = (es: "hola", en: "hi", ja: "こんにちは")
+>> busca(tabla, "es") ¶
+>> busca(tabla, "ja") ¶
+
+// The receiver decides: a local bound to an array literal still constrains
+// its index to an Int, and a local bound to a dictionary literal to a String.
+posicion(i) {
+    arr = [10, 20, 30]
+    <~ arr[i]
+}
+>> posicion(2) ¶
+
+clave(k) {
+    d = (uno: 1, dos: 2)
+    <~ d[k]
+}
+>> clave("dos") ¶
+
+// A key computed at run time, which is the whole point of the bracket.
+codigos = ["es", "en"]
+@ c : codigos {
+    >> c " → " busca(tabla, c) ¶
+}

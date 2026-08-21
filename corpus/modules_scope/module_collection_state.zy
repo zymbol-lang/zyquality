@@ -1,0 +1,24 @@
+// A module may hold the three collections as state — E013 used to allow only
+// scalars, which is why four applications wrote their translation tables as
+// `??` chains inside a function: it was the only way to put a table in a
+// module.
+
+<# ./module_collection_state_m => m
+
+// Exported collection constants, read from outside.
+>> m.LADOS ¶
+>> m.TABLA ¶
+>> m::lado(2) ¶
+
+// Private dictionary state, read by key.
+>> m::etiqueta("dos") ¶
+>> m::etiqueta("tres") ¶
+
+// A key added to module state stays added.
+m::guardar("tres", "tercero")
+>> m::etiqueta("tres") ¶
+>> m::privado() ¶
+
+// A dictionary nested inside a dictionary — the JSON shape.
+>> m::anidado("en") ¶
+>> m::anidado("es") ¶

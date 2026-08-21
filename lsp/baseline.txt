@@ -1,0 +1,46 @@
+# Disagreements between the language server and `zymbol check` that are correct.
+#
+# The two do not answer quite the same question. `zymbol check` analyses the
+# file it was given; the LSP additionally RESOLVES the file's imports from disk
+# and reports what it finds there, because an editor has the whole project in
+# front of it and a command line does not. So on a fixture whose whole point is
+# a bad import, the LSP says something and the CLI says nothing — and it is the
+# LSP that is right.
+#
+# Everything below is that case. A file appearing here that is NOT an import
+# fixture is a bug in one of the two.
+#
+# Format:  <path relative to zyquality/>  TAB  <kind>
+#   LSP-ONLY   the LSP reports an error the CLI does not
+#   CLI-ONLY   the CLI reports an error the LSP does not
+#   WORDING    both report, with different text
+#   NO-ANSWER  the LSP published no diagnostics at all
+
+# Deliberately circular imports — the fixtures for E004.
+corpus/errors/runtime/E004_circular.zy	LSP-ONLY
+corpus/errors/semantic/E004_mod_a.zy	LSP-ONLY
+corpus/errors/semantic/E004_mod_b.zy	LSP-ONLY
+corpus/modules_scope/circ_mod_a.zy	LSP-ONLY
+corpus/modules_scope/circ_mod_b.zy	LSP-ONLY
+corpus/modules_scope/circ_mod_c.zy	LSP-ONLY
+corpus/modules_scope/test_circular_modules.zy	LSP-ONLY
+
+# Reaching for something a module does not export — E006, E008, E010, E012.
+corpus/errors/runtime/E008_private_access.zy	LSP-ONLY
+corpus/errors/runtime/E012_no_export.zy	LSP-ONLY
+corpus/errors/semantic/E006_reexport_missing.zy	LSP-ONLY
+corpus/errors/semantic/E007_reexport_type.zy	LSP-ONLY
+corpus/errors/semantic/E010_reexport_private.zy	LSP-ONLY
+
+# The imported module is broken. The CLI reports the module's own errors; the
+# LSP reports that the import failed and quotes them in a note. Same fact, one
+# message against several.
+corpus/bugs/bug_mm4_module_const_guard.zy	WORDING
+corpus/i18n/test_http_api.zy	WORDING
+corpus/i18n/test_modulos_sistema.zy	WORDING
+
+# Module not found: the LSP says it twice, once as E002 and once from the
+# resolver. Worth tidying; not a divergence in what either believes.
+corpus/errors/runtime/module_not_found.zy	WORDING
+corpus/errors/semantic/E002_mod_not_found.zy	WORDING
+corpus/errors/semantic/E003_bad_path.zy	WORDING
