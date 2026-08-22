@@ -1,0 +1,50 @@
+// The module under test for estado_por_intermedia.zy. See that file.
+# .zyb_estado_intermedia {
+    #> { correr }
+
+    v = "viejo"
+    aviso = ""
+
+    _lee()   { >> "  lee=[" v "]" ¶ }
+    // Names nothing of the module's state: this is the link that broke.
+    _medio() { _lee() }
+    // Two levels of indirection, to check the fix is not depth-one only.
+    _lejos() { _medio() }
+
+    _pone(x) {
+        v = x
+        <~ #1
+    }
+
+    _decir() {
+        ? aviso <> "" { >> "  AVISO[" aviso "]" ¶ }
+    }
+    _pintar() { _decir() }
+    _poner_aviso() {
+        aviso = "puesto"
+        <~ #1
+    }
+
+    correr() {
+        v = "nuevo"
+        >> "escrito por el marco, leído:" ¶
+        _lee()
+        _medio()
+        _lejos()
+
+        >> "escrito por una función, leído:" ¶
+        _pone("de función")
+        _lee()
+        _medio()
+
+        // The shape ZyBank actually had: a loop that paints, clears, and a
+        // function that sets the notice. It must be painted exactly once.
+        >> "el aviso se pinta una vez y solo una:" ¶
+        @ i:1..4 {
+            _pintar()
+            aviso = ""
+            ? i == 2 { _poner_aviso() }
+        }
+        >> "fin" ¶
+    }
+}

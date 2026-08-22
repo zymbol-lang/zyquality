@@ -1,0 +1,18 @@
+// BUG-ZYB-005 — a function DEFINED IN a module, handed to another module.
+//
+// The mirror image of lambda_alias_cruzando.zy, and the pair is the finding:
+// each Rust engine broke a different one of the three ways to pass a function
+// between modules, so for a while there was no way to write a higher-order
+// call across modules that ran on both.
+//
+// The VM answered `'_mas_uno' is undefined — did you mean '_mas_uno°'?`,
+// pointing at hot definitions, which have nothing to do with it. Calling a
+// private sibling worked and passing it did not: the compiler consulted
+// `module_scope` when compiling a call and not when compiling the same name as
+// a value.
+//
+// Found by packaging, not by running: a `.zyp` defaults to `--vm`, so the first
+// run of the package was the first time the line met the VM at all.
+<# ./pasador => p
+
+>> "fn de módulo cruzando: " p::prueba() ¶

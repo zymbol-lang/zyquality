@@ -35,4 +35,31 @@ before that point is echoed by the terminal instead of reaching the program —
 which is what made the first version of this driver hang.
 
 `keys_blocking.zy` covers `<<|` and arrow decoding; `keys_polling.zy` covers
-`<<|?` inside a game loop, together with `>>!`, `>>~` and `@~`.
+`<<|?` inside a game loop, together with `>>!`, `>>~` and `@~`;
+`keys_control.zy` covers Ctrl+letter, Tab, Backspace, ESC, Enter and a
+multi-byte grapheme.
+
+## Agreement is not enough — cases may carry a golden
+
+A case with a `<base>.expected` beside it is compared against that file as well
+as against the other engines, and a mismatch is reported as **stale**, counted
+apart from a divergence and failing the suite just the same.
+
+Both checks are needed and they catch different things. A divergence means one
+engine is wrong. A stale golden means the engines still agree and what they
+agree on has changed — **the only way a fault both engines share can ever
+surface here.** BUG-ZYB-006 was exactly that: `<<|` handed back Ctrl+A as the
+letter `a`, and Tab and Backspace as one indistinguishable NUL, in the
+tree-walker *and* in the VM. This harness called that agreement for as long as
+it existed, and was right to: they did agree. Nobody was asking whether what
+they agreed on was true.
+
+Record one by running the case and reading the result before you keep it:
+
+```bash
+python3 tui/ptydrive.py zymbol run tui/keys_control.zy \
+    -- '\x01' '\x03' '\x08' '\x09' '\x7f' '\x1b' '\r' 'ñ' > tui/keys_control.expected
+```
+
+The keystrokes for a case live in `keys_for()` in `run.sh` — which keys, and in
+which order, is part of the test and not a detail of running it.

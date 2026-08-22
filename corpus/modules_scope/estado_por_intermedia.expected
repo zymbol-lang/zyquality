@@ -1,0 +1,10 @@
+escrito por el marco, leído:
+  lee=[nuevo]
+  lee=[nuevo]
+  lee=[nuevo]
+escrito por una función, leído:
+  lee=[de función]
+  lee=[de función]
+el aviso se pinta una vez y solo una:
+  AVISO[puesto]
+fin

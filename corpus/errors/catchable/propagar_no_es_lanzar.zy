@@ -1,0 +1,56 @@
+// `$!!` is an early return, not a throw.
+//
+// `GUIDE.md` § "Value flow" states it: «`$!!` … does not throw an exception, so
+// it cannot be caught with `!?/:!`». The register VM and the browser engine
+// followed the rule; the tree-walker did not — it looked inside a pending
+// return, and if the value there was an error it handed it to the catch clause.
+//
+// So a function propagating a failure upwards was intercepted by its own catch
+// clause whenever the `$!!` happened to sit inside a `!?`. The two flows the
+// language keeps apart on purpose — exceptions through `!?/:!`, values through
+// `$!`/`$!!` — met in the one place they must not.
+//
+// Found while writing a test for BUG-ZYB-007, not by looking for it: the
+// natural shape of "catch a database failure" put a `$!!` inside a `!?`, and
+// the three engines gave two different answers.
+riesgoso(i) {
+    !? { <~ [10, 20][i] } :! { <~ _err }
+}
+
+// `$!!` inside `!?`: returns from `propaga`, ignoring the catch clause.
+propaga(i) {
+    !? {
+        e = riesgoso(i)
+        ? e$! { e$!! }
+        <~ "sin error"
+    } :! {
+        <~ "CAPTURADO — no debería"
+    }
+}
+
+>> "hay elemento: " propaga(1) ¶
+>> "no lo hay:    " propaga(99) ¶
+
+// An ordinary `<~` of an error value is value flow too, and equally uncaught.
+devuelve() {
+    !? {
+        <~ riesgoso(99)
+    } :! {
+        <~ "CAPTURADO — no debería"
+    }
+}
+>> "devuelto:     " devuelve() ¶
+
+// What `:!` IS for: an exception raised inside the block.
+lanza() {
+    !? {
+        <~ [1, 2][99]
+    } :! {
+        <~ "capturado, y así debe ser"
+    }
+}
+>> "lanzado:      " lanza() ¶
+
+// A finally clause beside a returning try block is its own case, next door in
+// finally_con_retorno.zy — it was found while verifying this one, and the two
+// fixes are independent.

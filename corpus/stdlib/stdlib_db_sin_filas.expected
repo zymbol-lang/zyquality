@@ -1,0 +1,9 @@
+fila que existe: #0 uno
+sin filas:       #1
+y dice:          ##DB(query_one matched no rows)
+capturado con $!
+propagado:       #0 ##DB(query_one matched no rows)
+encontrado:      #1 hubo fila
+la fila existe:  #0
+la columna NULL: #0
+query_value:     #0

@@ -1,0 +1,8 @@
+yuxtaposición:   [X]
+tres trozos:     [pre-X-post]
+con paréntesis:  [X]
+aritmética:      [42]
+un solo valor:   [X]
+arreglo:         [1, 8, 3]
+anidado:         [[1, 14], [3, 4]]
+cadena en lista: [X!]

@@ -1,0 +1,13 @@
+// The third way of passing a function between modules, and the only one that
+// never broke: defined at FILE scope, which is precisely where an application's
+// code does not live.
+//
+// It is here to keep the fixes for BUG-ZYB-001 and BUG-ZYB-005 honest — the
+// case that already worked has to keep working.
+<# ./aplicador => a
+
+mas_uno(x) { <~ x + 1 }
+sin_alias = (x) -> x + 1
+
+>> "fn de archivo:      " a::aplicar(mas_uno, 5) ¶
+>> "lambda sin alias:   " a::aplicar(sin_alias, 5) ¶

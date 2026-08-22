@@ -1,0 +1,81 @@
+// BUG-ZYB-010 — a `:>` runs when the `!?` block returns.
+//
+// "Always runs" has to include the case where the try block returns, which is
+// the case a cleanup clause exists for. It did not:
+//
+//   - the register VM emitted the finally inline after the try/catch, so a
+//     `<~` returned from the function and jumped clean over those
+//     instructions — the finally never ran at all;
+//   - the tree-walker ran it with the pending return still set, and
+//     `execute_block` stops at the first statement while control flow is
+//     pending, so `>> "limpieza" ¶` printed the text and swallowed the
+//     newline. Half a statement, which is worse than none, because it looks
+//     like it worked.
+//
+// The browser engine was right all along, which is what made it a divergence
+// rather than a missing feature.
+//
+// Deliberately absent: a `<~` written INSIDE the `:>`. The two Rust engines
+// return from the finally (as Java and Python do) and the browser engine
+// carries on to the statement after the try. That one is still open, and a
+// case for it would make the consensus red rather than record anything.
+
+// Two levels: the inner cleanup first, then the outer.
+anidado() {
+    !? {
+        !? {
+            <~ "vuelvo"
+        } :> {
+            >> "interno "
+        }
+    } :> {
+        >> "externo "
+    }
+}
+>> anidado() ¶
+
+// The value is computed before the finally runs, so a finally touching the
+// same name cannot change what comes back.
+valor_fijado() {
+    v = "original"
+    !? {
+        <~ v
+    } :> {
+        v = "cambiado"
+    }
+}
+>> valor_fijado() ¶
+
+// Tail recursion inside a try with a finally: the tail call is suppressed —
+// a frame that still owes cleanup must not be replaced — so the finally runs
+// once per turn.
+cuenta(n) {
+    !? {
+        ? n <= 0 { <~ "fin" }
+        <~ cuenta(n - 1)
+    } :> {
+        >> "."
+    }
+}
+>> cuenta(3) ¶
+
+// A return from inside a catch clause owes the finally too.
+con_captura() {
+    !? {
+        <~ [1][99]
+    } :! {
+        <~ "capturado"
+    } :> {
+        >> "limpio "
+    }
+}
+>> con_captura() ¶
+
+// And tail recursion with no try at all keeps its tail call: 100000 frames
+// deep would not fit on the stack otherwise, so this line is the check that
+// the suppression above stayed inside the try.
+suma(n, acc) {
+    ? n <= 0 { <~ acc }
+    <~ suma(n - 1, acc + n)
+}
+>> suma(100000, 0) ¶

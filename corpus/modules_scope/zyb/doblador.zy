@@ -1,0 +1,5 @@
+// A module function to be named by a lambda defined somewhere else.
+# .zyb_doblador {
+    #> { doble }
+    doble(x) { <~ x * 2 }
+}

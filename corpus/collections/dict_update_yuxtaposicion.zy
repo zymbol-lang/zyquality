@@ -1,0 +1,47 @@
+// BUG-ZYB-002 — the value written by `$~` is a whole expression.
+//
+// `d[k]$~ "" v` used to assign `""` and drop `v` on the floor: three engines,
+// no error, no warning. The parser took one postfix expression as the value and
+// left the rest of the line to be parsed as a separate statement, where a bare
+// `v` is a statement with no effect and no diagnostic (ERROR-ZYB-001). The
+// three-piece form `d[k]$~ "pre" v "post"` did fail to parse, because a string
+// cannot begin a statement — so the two-piece case was the only silent one, and
+// the common one.
+//
+// It cost real work in ZyBank: configuration read from JSON arrived with every
+// value empty and the program started on its defaults as if the file were not
+// there. Finding it took longer than writing the module it was in.
+//
+// `d[k]$~ v` is an assignment — it is how a collection is written into — so its
+// right-hand side accepts what the right-hand side of `=` accepts.
+v = "X"
+n = 7
+
+d = (z: "")
+d["a"]$~ "" v
+>> "yuxtaposición:   [" d["a"] "]" ¶
+
+d["b"]$~ "pre-" v "-post"
+>> "tres trozos:     [" d["b"] "]" ¶
+
+d["c"]$~ ("" v)
+>> "con paréntesis:  [" d["c"] "]" ¶
+
+d["d"]$~ 40 + 2
+>> "aritmética:      [" d["d"] "]" ¶
+
+d["e"]$~ v
+>> "un solo valor:   [" d["e"] "]" ¶
+
+// The same for an array, and for a nested write.
+a = [1, 2, 3]
+a[2]$~ n + 1
+>> "arreglo:         " a ¶
+
+m = [[1, 2], [3, 4]]
+m[1>2]$~ n * 2
+>> "anidado:         " m ¶
+
+s = ["x"]
+s[1]$~ "" v "!"
+>> "cadena en lista: " s ¶

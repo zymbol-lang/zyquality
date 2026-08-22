@@ -1,0 +1,4 @@
+hay elemento: sin error
+no lo hay:    ##Index(array index out of bounds: index 99 for array of length 2)
+devuelto:     ##Index(array index out of bounds: index 99 for array of length 2)
+lanzado:      capturado, y así debe ser

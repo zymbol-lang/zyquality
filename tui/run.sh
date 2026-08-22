@@ -67,13 +67,17 @@ keys_for() {
     case "$1" in
         keys_blocking) printf '%s\n' 'x' '\x1b[A' 'z' ;;
         keys_polling)  printf '%s\n' 'a' '\x1b[B' 'q' ;;
+        # Ctrl+A, Ctrl+C, Ctrl+H, Tab, Backspace, ESC, Enter, ñ — the keys
+        # BUG-ZYB-006 was about, plus the three that already worked, so a fix
+        # that broke those would show up here too.
+        keys_control)  printf '%s\n' '\x01' '\x03' '\x08' '\x09' '\x7f' '\x1b' '\r' 'ñ' ;;
         *)             printf '%s\n' 'q' ;;
     esac
 }
 
 echo "${BOLD}tui${RESET} $(ls "$TUI_DIR"/*.zy | wc -l) cases × ${#NAMES[@]} engines (${NAMES[*]})"
 
-fail=0; total=0
+fail=0; stale=0; total=0
 for file in "$TUI_DIR"/*.zy; do
     base="$(basename "$file" .zy)"
     total=$((total + 1))
@@ -93,6 +97,25 @@ for file in "$TUI_DIR"/*.zy; do
         [[ "${outs[$i]}" == "${outs[0]}" ]] || same=0
     done
 
+    # A golden, when the case has one. Engine agreement cannot catch a fault
+    # both engines share, and BUG-ZYB-006 was exactly that: `<<|` handed back
+    # Ctrl+A as the letter `a` in the tree-walker AND in the VM, so this harness
+    # called it agreement for as long as it existed. Same split as everywhere
+    # else in zyquality — the goldens are the gate, the consensus is a finding.
+    golden="${file%.zy}.expected"
+    if [[ -f "$golden" ]]; then
+        for i in "${!NAMES[@]}"; do
+            if [[ "${outs[$i]}" != "$(cat "$golden")" ]]; then
+                stale=$((stale + 1))
+                echo ""
+                echo "${RED}GOLDEN${RESET}  ${BOLD}$base${RESET} ${DIM}(${NAMES[$i]})  keys: ${keys[*]}${RESET}"
+                diff <(printf '%s' "$(cat "$golden")") <(printf '%s' "${outs[$i]}") \
+                    | head -12 | cat -v | sed 's/^/    /'
+                break
+            fi
+        done
+    fi
+
     if [[ $same -eq 1 ]]; then
         [[ $VERBOSE -eq 1 ]] && echo "  ${GREEN}AGREE${RESET}  $base"
     else
@@ -108,9 +131,18 @@ done
 
 echo ""
 echo "${BOLD}─────────────────────────────────────────────${RESET}"
+# Stale goldens and divergences are counted apart, because they say different
+# things. A divergence means one engine is wrong; a stale golden means the
+# engines still agree and what they agree on has changed — which is the only
+# way a shared fault such as BUG-ZYB-006 can ever show up here.
+agree_line="${GREEN}$((total - fail)) agree${RESET}, "
 if [[ $fail -eq 0 ]]; then
-    echo "${BOLD}tui${RESET}        $total cases: ${GREEN}$total agree${RESET}, ${GREEN}0 diverge${RESET}"
+    agree_line="${GREEN}$total agree${RESET}, ${GREEN}0 diverge${RESET}"
 else
-    echo "${BOLD}tui${RESET}        $total cases: ${GREEN}$((total - fail)) agree${RESET}, ${RED}$fail diverge${RESET}"
+    agree_line+="${RED}$fail diverge${RESET}"
 fi
-[[ $fail -eq 0 ]] || exit 1
+if [[ $stale -gt 0 ]]; then
+    agree_line+=", ${RED}$stale stale${RESET}"
+fi
+echo "${BOLD}tui${RESET}        $total cases: $agree_line"
+[[ $fail -eq 0 && $stale -eq 0 ]] || exit 1
