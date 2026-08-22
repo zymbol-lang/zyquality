@@ -1,0 +1,7 @@
+// Applies whatever function it is handed. The generic half of every
+// higher-order pair in corpus/modules_scope/zyb/: what makes the cases below
+// interesting is not this module, it is what crosses INTO it.
+# .zyb_aplicador {
+    #> { aplicar }
+    aplicar(f, v) { <~ f(v) }
+}

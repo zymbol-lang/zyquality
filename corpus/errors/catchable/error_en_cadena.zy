@@ -1,0 +1,40 @@
+// BUG-ZYB-003 — a soft error has to reach a string.
+//
+// `>>` had always rendered one, and both the register VM and the browser
+// engine concatenated one; the tree-walker alone aborted with
+// `cannot juxtapose value of type Error(ErrorValue { … }) in string context`.
+//
+// The place it aborted is what made it serious. The ordinary way to pass a
+// failure upwards is to name it in a message:
+//
+//     r = puede_fallar()
+//     ? r$! { <~ (#0, "" r) }        // ← the tree-walker died HERE
+//
+// so a soft error turned into a hard one on the error-handling path — the one
+// path that must not acquire a second way to fail, and the one tests exercise
+// least. A program worked until the day something went wrong, and then failed
+// a second, worse way.
+//
+// The error is built here from an out-of-range index rather than from a file or
+// a database, so the message is the language's own and says the same thing on
+// every platform.
+riesgoso(arr, i) {
+    !? {
+        <~ arr[i]
+    } :! {
+        <~ _err
+    }
+}
+
+e = riesgoso([5, 10, 15], 99)
+
+>> "es error: " e$! ¶
+>> "impreso:  " e ¶
+
+s = "" e
+>> "en cadena: " s ¶
+>> "compuesto: [" e "]" ¶
+
+// The whole point: an error can now be carried inside a value that travels.
+envuelto = (#0, "" e)
+>> "envuelto: " envuelto[1] " / " envuelto[2] ¶

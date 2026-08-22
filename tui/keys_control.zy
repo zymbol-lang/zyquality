@@ -1,0 +1,18 @@
+// What `<<|` yields for the keys that are not letters.
+//
+// BUG-ZYB-006: Ctrl+A used to arrive as the letter `a`, Ctrl+C as `c`, and Tab
+// and Backspace as the same NUL — so a full-screen program could not offer a
+// single Ctrl shortcut (one would fire when the user typed that letter into a
+// text field) and could not tell Tab from Backspace (in a form, every jump
+// between fields would erase a character).
+//
+// This case needs a GOLDEN and not just engine agreement: both engines were
+// wrong in the same way, and a suite that only asks whether they agree cannot
+// see that. It is the same split zyquality draws everywhere — the goldens are
+// the gate, the consensus is a finding.
+>>| {
+    @ _i:1..8 {
+        <<| t
+        >> ##!t " "
+    }
+}

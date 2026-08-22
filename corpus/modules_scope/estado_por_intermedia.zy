@@ -1,0 +1,23 @@
+// BUG-ZYB-008 / MM-12 — module state read through a function that does not
+// name it.
+//
+// A write to module state reached the store only when the frame that made it
+// returned. Until then it was visible to that frame, and to whatever it called
+// *directly* — because the injection looks for a live copy in the caller's own
+// scope before falling back to the store. One function in between, one that
+// does not mention the variable and so has none of it injected, and the call
+// after that read the store, which had not heard about the write yet.
+//
+// This is the whole of it:
+//
+//     correr()  { v = "nuevo"  _lee()  _medio() }   // "nuevo", then "viejo"
+//     _medio()  { _lee() }                          // does not name `v`
+//
+// The register VM and the browser engine keep module state in one place and
+// never had the question. It reached ZyBank as a TUI repaint bug — a notice
+// painted, cleared, and painted again next turn from a store that never heard
+// about the clearing — and was filed as irreducible after six minimal cases
+// missed it, because every one of them called the reader directly.
+<# ./zyb/estado_intermedia => e
+
+e::correr()

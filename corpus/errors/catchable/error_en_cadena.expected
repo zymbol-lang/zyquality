@@ -1,0 +1,5 @@
+es error: #1
+impreso:  ##Index(array index out of bounds: index 99 for array of length 3)
+en cadena: ##Index(array index out of bounds: index 99 for array of length 3)
+compuesto: [##Index(array index out of bounds: index 99 for array of length 3)]
+envuelto: #0 / ##Index(array index out of bounds: index 99 for array of length 3)

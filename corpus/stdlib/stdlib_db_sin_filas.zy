@@ -1,0 +1,57 @@
+// BUG-ZYB-007 — `query_one` that matches no row.
+//
+// `GUIDE.md` describes it as "a single row (or soft error)", so the check the
+// documentation prescribes is `? fila$!`. It used to return `Unit` instead —
+// the same thing a `NULL` column returns — so `$!` said #0 whether the row
+// existed or not, the documented branch was dead code that read as live, and
+// the program broke several lines later with `Cannot access member 'x' on
+// non-tuple value`: a message about tuples, on a line that was written
+// correctly, nowhere near the query that had nothing to say.
+//
+// The two emptinesses are separate questions and this case keeps them apart:
+// no row is a soft error, a NULL column is still `Unit` (GAP-ZYB-009, open).
+//
+// Needs the SQLite ODBC driver — see README-odbc.md.
+<# std/db => db
+
+db::connect("c", "DSN=zymbol_sqlite;Database=zy_test_db_sin_filas.db;")
+db::exec("c", "DROP TABLE IF EXISTS ausentes")
+db::exec("c", "CREATE TABLE ausentes(cod INTEGER PRIMARY KEY, nombre TEXT, nota TEXT)")
+db::exec("c", "INSERT INTO ausentes(cod, nombre, nota) VALUES(1, 'uno', NULL)")
+
+hay = db::query_one("c", "SELECT cod, nombre FROM ausentes WHERE cod = ?", (1,))
+>> "fila que existe: " hay$! " " hay.nombre ¶
+
+no = db::query_one("c", "SELECT cod, nombre FROM ausentes WHERE cod = ?", (99,))
+>> "sin filas:       " no$! ¶
+>> "y dice:          " no ¶
+
+// The documented shape, which never fired before.
+? no$! {
+    >> "capturado con $!" ¶
+}
+
+// The error travels as a VALUE, which is the other half of what a soft error
+// promises: a function can hand it to its caller instead of dying on it.
+buscar(cod) {
+    f = db::query_one("c", "SELECT cod FROM ausentes WHERE cod = ?", (cod,))
+    ? f$! { <~ (#0, "" f) }
+    <~ (#1, "hubo fila")
+}
+(ok1, dicho1) = buscar(98)
+(ok2, dicho2) = buscar(1)
+>> "propagado:       " ok1 " " dicho1 ¶
+>> "encontrado:      " ok2 " " dicho2 ¶
+
+// A NULL column is NOT a soft error: it is Unit, and stays Unit.
+n = db::query_one("c", "SELECT nota FROM ausentes WHERE cod = ?", (1,))
+>> "la fila existe:  " n$! ¶
+>> "la columna NULL: " n.nota$! ¶
+
+// query_value keeps returning Unit for no rows: a scalar column may legitimately
+// be NULL, so the two cases are genuinely the same value there. Recorded as it
+// is, not as it ought to be.
+v = db::query_value("c", "SELECT nombre FROM ausentes WHERE cod = ?", (97,))
+>> "query_value:     " v$! ¶
+
+db::disconnect("c")

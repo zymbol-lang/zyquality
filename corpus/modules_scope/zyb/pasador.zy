@@ -1,0 +1,8 @@
+// A module that hands one of its OWN functions to a function in another
+// module — the shape BUG-ZYB-005 broke in the register VM.
+# .zyb_pasador {
+    <# ./aplicador => a
+    #> { prueba }
+    _mas_uno(x) { <~ x + 1 }
+    prueba() { <~ a::aplicar(_mas_uno, 5) }
+}

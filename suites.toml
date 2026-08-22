@@ -36,7 +36,7 @@ gate = true
 [[suite]]
 id = "tui"
 cmd = ["bash", "tui/run.sh"]
-desc = "key input and raw mode through a real pty, on both engines that have a terminal"
+desc = "key input and raw mode through a real pty: engines against each other, and against a golden where one is recorded"
 needs = ["zymbol", "python3", "tty"]
 gate = true
 

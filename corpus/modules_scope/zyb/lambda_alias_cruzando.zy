@@ -1,0 +1,25 @@
+// BUG-ZYB-001 — a lambda that names a module alias, invoked from inside
+// ANOTHER module.
+//
+// Three things have to meet before this breaks, which is why 614 corpus files
+// never did it: a lambda, an alias inside it, and a call from another module's
+// body. The tree-walker gave `undefined module alias: 'd'` while the register
+// VM and the browser engine printed 10 — a divergence in a language whose gate
+// declares zero.
+//
+// The cause was that a lambda carried no aliases of its own and read whichever
+// ones the call site had. That is the same map only while the lambda is called
+// from where it was written; hand it to a function in another module and it
+// looks up `d` in that module's imports, where nothing of the sort exists.
+//
+// It matters more than its rarity suggests: wrapping in a lambda is the natural
+// way around GAP-ZYB-005 (a module function is not a first-class value), so the
+// workaround for a gap landed inside a bug, and programs needed a workaround
+// for the workaround — a NAMED function doing the wrapping.
+<# ./aplicador => a
+<# ./doblador => d
+
+env = (x) -> d::doble(x)
+
+>> "en casa:   " env(5) ¶
+>> "cruzando:  " a::aplicar(env, 5) ¶
