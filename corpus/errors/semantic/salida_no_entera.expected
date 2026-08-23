@@ -1,0 +1,6 @@
+error: a top-level `<~` ends the program, so its value is the exit status and must be a whole number — this one is String
+  --> errors/semantic/salida_no_entera.zy:8:1
+   8 |
+   8 | <~ "no soy un número"
+     | ^^^^^^^^^^^^^^^^^^^^^
+  help: `<~ 0` for success and `<~ 1` (or another number) for failure; to print something before leaving, use `>>` on the line above

@@ -1,0 +1,8 @@
+// GAP-ZYB-006 — the exit status is a whole number, and `check` says so before
+// the program runs.
+//
+// The branch that exits is typically the branch that runs least, so a run-time
+// error here would surface on the day something already went wrong. It is
+// decidable without running, so it is decided without running.
+>> "algo" ¶
+<~ "no soy un número"
