@@ -1,0 +1,99 @@
+// Test: std/time — the clock and the civil calendar (GAP-ZYB-002).
+//
+// Until v0.0.9 the date came from outside the language, `<\ "date +%F" \>`,
+// which is not on Windows, is not in a browser, needs `#09#` forced first
+// because otherwise the shell's answer arrives in whatever script the numeral
+// mode selected, and answers no question beyond "what day is it" — "the last
+// thirty days" cannot be asked of a string.
+//
+// Every instant here is BUILT rather than read, so this file is comparable:
+// `now()` and `today()` answer something different every second and are
+// therefore in stdlib_time_clock.zy, which no golden can hold.
+<# std/time => t
+
+// ── an instant is UTC; a date is a reading of it in some zone ───────────────
+fijo = t::of(2026, 8, 23, 14, 5, 9)
+>> "epoch      " fijo ¶
+>> "%F         " t::format(fijo, "%F") ¶
+>> "%T         " t::format(fijo, "%T") ¶
+>> "todo       " t::format(fijo, "%Y-%m-%dT%H:%M:%S.%L%z") ¶
+
+// The same instant, read four hours west and ten hours east. Nothing about the
+// number changed — only where the person reading it is standing.
+>> "en -0400   " t::format(fijo, "%F %T %z", "-0400") ¶
+>> "en +1000   " t::format(fijo, "%F %T %z", "+1000") ¶
+>> "medianoche " t::format(t::of(2026, 8, 23), "%F %T") ¶
+
+// ── parts: the reading as a dictionary, in insertion order ──────────────────
+p = t::parts(fijo)
+>> "partes     " p ¶
+>> "campos     " p.year " " p.month " " p.day " semana " p.weekday ¶
+>> "desplazado " t::parts(fijo, "-0400").day ¶
+
+// ── below a day it is duration, from a day up it is calendar ────────────────
+>> "+90 min    " t::format(t::add(fijo, 90, "minute"), "%T") ¶
+>> "+1 día     " t::format(t::add(fijo, 1, "day"), "%F") ¶
+>> "-30 días   " t::format(t::add(fijo, -30, "day"), "%F") ¶
+>> "+2 semanas " t::format(t::add(fijo, 2, "week"), "%F") ¶
+
+// A month lands on the same day of the month, or on the last one there is:
+// one month after the 31st of January is the 28th of February, because there
+// is no 31st. Rolling into March would turn "next month" into the one after.
+>> "31 ene +1m " t::format(t::add(t::of(2026, 1, 31), 1, "month"), "%F") ¶
+>> "y bisiesto " t::format(t::add(t::of(2024, 1, 31), 1, "month"), "%F") ¶
+>> "+1 año     " t::format(t::add(fijo, 1, "year"), "%F") ¶
+
+// ── diff: whole units, truncated toward zero ────────────────────────────────
+a = t::of(2026, 8, 23)
+b = t::of(2026, 7, 24)
+>> "días       " t::diff(a, b, "day") ¶
+>> "al revés   " t::diff(b, a, "day") ¶
+>> "semanas    " t::diff(a, b, "week") ¶
+>> "horas      " t::diff(a, b, "hour") ¶
+
+// A whole month has not passed until the day of the month is reached.
+inicio = t::of(2026, 1, 15)
+>> "14 feb     " t::diff(t::of(2026, 2, 14), inicio, "month") ¶
+>> "15 feb     " t::diff(t::of(2026, 2, 15), inicio, "month") ¶
+
+// Two instants a minute apart across midnight are one DAY apart and zero
+// HOURS apart: the first is a calendar distance and the second is elapsed time.
+noche = t::of(2026, 8, 22, 23, 59, 0)
+madrugada = t::of(2026, 8, 23, 0, 0, 0)
+>> "un minuto  " t::diff(madrugada, noche, "day") " día  " t::diff(madrugada, noche, "hour") " horas" ¶
+
+// ── the calendar itself ─────────────────────────────────────────────────────
+>> "bisiesto   " t::format(t::of(2024, 2, 29), "%F") ¶
+>> "día 366    " t::format(t::of(2024, 12, 31), "%j") ¶
+>> "día 365    " t::format(t::of(2026, 12, 31), "%j") ¶
+>> "el epoch   " t::format(0, "%F %T %u") ¶
+>> "antes de él" t::format(-1, "%F %T") ¶
+
+// ── the digits are ALWAYS ASCII, whatever the numeral mode ──────────────────
+// A date is the one piece of text a program writes for a machine to read back.
+// `२०२६-०८-२३` is not ISO 8601, so `format` does not follow the mode; text for
+// a person is built from `parts`, whose numbers do.
+#०९#
+>> "modo devanagari activo, y el número " 2026 ¶
+>> "pero la fecha " t::format(fijo, "%F") ¶
+>> "y por partes  " p.year "-" p.month "-" p.day ¶
+#09#
+
+// ── bad data is a soft ##Time, catchable ────────────────────────────────────
+>> "mes 13     " t::of(2026, 13, 1) ¶
+>> "29 feb     " t::of(2026, 2, 29) ¶
+>> "hora 24    " t::of(2026, 1, 1, 24, 0, 0) ¶
+>> "unidad     " t::add(fijo, 1, "quincena") ¶
+>> "zona       " t::parts(fijo, "Marte") ¶
+>> "patrón     " t::format(fijo, "%Q") ¶
+// A soft error is a value, so the program decides what to do with it rather
+// than stopping: this is the shape a date read from outside — a form, a file,
+// a database column — has to be handled in.
+malo = t::of(2026, 2, 30)
+? malo$! {
+    >> "detectado  " malo ¶
+}
+bueno = t::of(2026, 2, 28)
+? !(bueno$!) {
+    >> "y el bueno " t::format(bueno, "%F") ¶
+}
