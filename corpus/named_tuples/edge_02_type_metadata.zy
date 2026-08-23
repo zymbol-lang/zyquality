@@ -1,7 +1,7 @@
 // Edge Case Test 2: Type Metadata on Named Tuples
 // Expected: #? operator returns correct type info
 
-person = (name: "Alice", age: 25)
+person = #(name: "Alice", age: 25)
 
 meta = person#?
 

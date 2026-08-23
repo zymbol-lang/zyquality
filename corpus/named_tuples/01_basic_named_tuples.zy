@@ -1,7 +1,7 @@
 // Test 1: Basic Named Tuple Creation and Access
 // Expected: All assertions pass
 space = ": "
-product = (id: 101, name: "Laptop", price: 999)
+product = #(id: 101, name: "Laptop", price: 999)
 
 // Test field access
 ? product.id == 101 {

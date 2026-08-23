@@ -14,7 +14,7 @@
 // The POSITIONAL tuple keeps `t[1]` in full — there the index is the only
 // address there is, and the size is fixed. That is corpus/collections/, not here.
 
-person = (name: "Alice", age: 25, city: "Madrid")
+person = #(name: "Alice", age: 25, city: "Madrid")
 
 ? person["name"] == "Alice" {
     >> "✓ key access works" ¶
@@ -36,7 +36,7 @@ k = "city"
 }
 
 // The bracket reaches keys the dot cannot: any string is a key.
-raro = (nombre: "Ana")
+raro = #(nombre: "Ana")
 raro["dos palabras"]$~ 7
 ? raro["dos palabras"] == 7 {
     >> "✓ a key the dot cannot spell" ¶

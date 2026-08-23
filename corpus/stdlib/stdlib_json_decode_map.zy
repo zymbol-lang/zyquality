@@ -4,23 +4,23 @@
 // Nested object: rename keys at every depth (Gemini-shaped payload)
 g = json::decode_map(
     "\{\"candidates\": [\{\"content\": \{\"parts\": [\{\"text\": \"hi\"\}]\}\}]\}",
-    (candidates: "候选", content: "内容", parts: "片段", text: "文本"))
+    #(candidates: "候选", content: "内容", parts: "片段", text: "文本"))
 >> g.候选[1].内容.片段[1].文本 ¶
 
 // Array of objects: rename applies inside each element
 m = json::decode_map("\{\"models\": [\{\"name\": \"a\"\}, \{\"name\": \"b\"\}]\}",
-                     (models: "型列", name: "名称"))
+                     #(models: "型列", name: "名称"))
 >> m.型列[1].名称 ¶
 >> m.型列[2].名称 ¶
 
 // Keys absent from the map are preserved verbatim
-p = json::decode_map("\{\"name\": \"ada\", \"age\": 36\}", (name: "名字"))
+p = json::decode_map("\{\"name\": \"ada\", \"age\": 36\}", #(name: "名字"))
 >> p.名字 ¶
 >> p.age ¶
 
 // Scalars/types survive the walk unchanged
 s = json::decode_map("\{\"flag\": true, \"score\": 9.5, \"tags\": [1, 2]\}",
-                     (flag: "标记", tags: "标签"))
+                     #(flag: "标记", tags: "标签"))
 >> s.标记 ¶
 >> s.score ¶
 >> s.标签[2] ¶
@@ -29,4 +29,4 @@ s = json::decode_map("\{\"flag\": true, \"score\": 9.5, \"tags\": [1, 2]\}",
 // The parser's own wording is engine-specific — the Rust engines use their
 // JSON parser and the browser uses JSON.parse — so this asserts the contract
 // (an Error value, not an abort) rather than the message text.
->> (json::decode_map("\{bad", (a: "b")))$! ¶
+>> (json::decode_map("\{bad", #(a: "b")))$! ¶

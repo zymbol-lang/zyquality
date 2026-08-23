@@ -22,17 +22,17 @@ pts = pts$+ t2
 
 // ── Named tuples — literal ────────────────────────────────────────────────────
 db = []
-db = db$+ (id: 1, name: "Ana",   age: 25, mail: "ana@corp.com")
-db = db$+ (id: 2, name: "Bob",   age: 30, mail: "bob@corp.com")
-db = db$+ (id: 3, name: "Carla", age: 28, mail: "carla@corp.com")
+db = db$+ #(id: 1, name: "Ana",   age: 25, mail: "ana@corp.com")
+db = db$+ #(id: 2, name: "Bob",   age: 30, mail: "bob@corp.com")
+db = db$+ #(id: 3, name: "Carla", age: 28, mail: "carla@corp.com")
 >> db$# ¶
 >> db[1].name ¶
 >> db[2].age ¶
 >> db[3].mail ¶
 
 // ── Named tuples — from variable ──────────────────────────────────────────────
-r1 = (id: 4, name: "Dan",  age: 35, mail: "dan@corp.com")
-r2 = (id: 5, name: "Eva",  age: 22, mail: "eva@corp.com")
+r1 = #(id: 4, name: "Dan",  age: 35, mail: "dan@corp.com")
+r2 = #(id: 5, name: "Eva",  age: 22, mail: "eva@corp.com")
 db = db$+ r1
 db = db$+ r2
 >> db$# ¶
@@ -43,7 +43,7 @@ db = db$+ r2
 // ── Mixed: positional and named in same array ─────────────────────────────────
 mixed = []
 mixed = mixed$+ (0, 0)
-mixed = mixed$+ (name: "origin", x: 0, y: 0)
+mixed = mixed$+ #(name: "origin", x: 0, y: 0)
 >> mixed$# ¶
 >> mixed[1][1] ¶
 >> mixed[2].name ¶
@@ -51,7 +51,7 @@ mixed = mixed$+ (name: "origin", x: 0, y: 0)
 // ── Build table in loop then query ────────────────────────────────────────────
 table = []
 @ i:0..4 {
-    table = table$+ (id: i, val: i * 10)
+    table = table$+ #(id: i, val: i * 10)
 }
 >> table$# ¶
 >> table[1].id ¶
@@ -60,8 +60,8 @@ table = []
 >> table[4].val ¶
 
 // ── Append and immediately slice ──────────────────────────────────────────────
-base = [(id: 1, name: "A"), (id: 2, name: "B")]
-extra = (id: 3, name: "C")
+base = [#(id: 1, name: "A"), #(id: 2, name: "B")]
+extra = #(id: 3, name: "C")
 full = base$+ extra
 page = full$[2:2]
 >> page$# ¶

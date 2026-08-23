@@ -36,7 +36,7 @@ t2 = t[2]$~ 999
 // path — the `>` reads as a comparison there. How a KEY is spelled inside a nav
 // path is the one thing forma/diccionarios.zy § 6 still leaves open, so this
 // case deliberately does not depend on it.
-reg = (id: 7, datos: [100, 200, 300])
+reg = #(id: 7, datos: [100, 200, 300])
 reg2 = reg["datos"]$~ (reg.datos[3]$~ 0)
 >> reg2.datos ¶
 >> reg.datos ¶

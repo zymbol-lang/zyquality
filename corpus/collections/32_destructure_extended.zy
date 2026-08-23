@@ -1,20 +1,20 @@
 // Test: destructuring — extended scenarios with named tuples, strings, and edge cases
 
 // ── Named tuple — many fields ────────────────────────────────────────────────
-product = (id: 42, name: "Widget", price: 9.99, stock: 100)
-(id: pid, name: pname, price: pprice, stock: pstock) = product
+product = #(id: 42, name: "Widget", price: 9.99, stock: 100)
+#(id: pid, name: pname, price: pprice, stock: pstock) = product
 >> pid ¶                         // → 42
 >> pname ¶                       // → Widget
 >> pprice ¶                      // → 9.99
 >> pstock ¶                      // → 100
 
 // ── Named tuple — partial extraction (only needed fields) ────────────────────
-(name: item, price: cost) = product
+#(name: item, price: cost) = product
 >> item ¶                        // → Widget
 >> cost ¶                        // → 9.99
 
 // ── Named tuple — rename fields freely ──────────────────────────────────────
-(id: code, name: label) = product
+#(id: code, name: label) = product
 >> code ¶                        // → 42
 >> label ¶                       // → Widget
 
@@ -59,21 +59,21 @@ minmax(nums) {
 
 // ── Named tuple from function ────────────────────────────────────────────────
 make_point(x, y) {
-    <~ (x: x, y: y)
+    <~ #(x: x, y: y)
 }
 
-(x: px, y: py) = make_point(3, 7)
+#(x: px, y: py) = make_point(3, 7)
 >> px ¶                          // → 3
 >> py ¶                          // → 7
 
 // ── Chained destructure — unpack array of named tuples ───────────────────────
 people = [
-    (name: "Ana",  score: 95),
-    (name: "Bob",  score: 80),
-    (name: "Cara", score: 88)
+    #(name: "Ana",  score: 95),
+    #(name: "Bob",  score: 80),
+    #(name: "Cara", score: 88)
 ]
 
-(name: best_name, score: best_score) = (people$^ (a, b -> a.score > b.score))[1]
+#(name: best_name, score: best_score) = (people$^ (a, b -> a.score > b.score))[1]
 >> best_name ¶                   // → Ana
 >> best_score ¶                  // → 95
 

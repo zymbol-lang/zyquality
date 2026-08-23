@@ -1,7 +1,7 @@
 // Test 5: Named Tuples in Expressions and Conditionals
 // Expected: Fields can be used in expressions and conditions
 
-config = (debug: #1, max_size: 100, timeout: 30)
+config = #(debug: #1, max_size: 100, timeout: 30)
 
 // Use in conditionals
 ? config.debug {

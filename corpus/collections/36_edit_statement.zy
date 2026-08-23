@@ -43,7 +43,7 @@ m[1>2]$~ 77
 // Decisions 7-11: the named tuple has the dictionary model. The tree-walker used
 // to refuse this — it guarded named tuples as immutable — while the VM allowed
 // it (DM-21); the tree-walker is the one that came into line.
-u = (nombre: "Ana", edad: 30)
+u = #(nombre: "Ana", edad: 30)
 u["edad"]$~ 31
 >> u ¶
 

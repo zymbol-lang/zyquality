@@ -10,4 +10,4 @@
 // @reject: REFERENCE.md L40 and GUIDE.md.
 >> "antes" ¶
 <# std/json => js
->> js::encode((a: 1)) ¶
+>> js::encode(#(a: 1)) ¶

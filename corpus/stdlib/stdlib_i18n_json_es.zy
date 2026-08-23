@@ -2,4 +2,4 @@
 <# ./json_es => js
 
 >> js::codificar(js::decodificar("[1, 2, 3]")) ¶
->> js::codificar((nombre: "ada", edad: 36)) ¶
+>> js::codificar(#(nombre: "ada", edad: 36)) ¶

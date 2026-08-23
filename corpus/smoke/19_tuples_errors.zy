@@ -1,13 +1,13 @@
 // Named tuples and try/catch/finally
-person = (name: "Alice", age: 25, active: #1)
+person = #(name: "Alice", age: 25, active: #1)
 >> person ¶
 >> person.name ¶
 >> person.age ¶
 >> person["name"] ¶
 >> person["age"] ¶
 >> person#? ¶
-pos = (x: 10, y: 20)
-p = (pos: pos, label: "origin")
+pos = #(x: 10, y: 20)
+p = #(pos: pos, label: "origin")
 >> p.label ¶
 >> p.pos.x ¶
 >> p ¶

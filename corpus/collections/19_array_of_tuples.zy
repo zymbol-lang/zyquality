@@ -5,11 +5,11 @@
 
 // ── Table setup ───────────────────────────────────────────────────────────────
 db = [
-    (id: 1, name: "Ana",   age: 25, mail: "ana@corp.com"),
-    (id: 2, name: "Bob",   age: 30, mail: "bob@corp.com"),
-    (id: 3, name: "Carla", age: 28, mail: "carla@corp.com"),
-    (id: 4, name: "Dan",   age: 35, mail: "dan@corp.com"),
-    (id: 5, name: "Eva",   age: 22, mail: "eva@corp.com")
+    #(id: 1, name: "Ana",   age: 25, mail: "ana@corp.com"),
+    #(id: 2, name: "Bob",   age: 30, mail: "bob@corp.com"),
+    #(id: 3, name: "Carla", age: 28, mail: "carla@corp.com"),
+    #(id: 4, name: "Dan",   age: 35, mail: "dan@corp.com"),
+    #(id: 5, name: "Eva",   age: 22, mail: "eva@corp.com")
 ]
 >> db$# ¶
 

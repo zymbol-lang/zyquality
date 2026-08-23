@@ -11,7 +11,7 @@
 // the VM starts, so a table is built once however many times it is read.
 
 LADOS := [10, 20, 30]
-TABLA := (es: "hola", en: "hi")
+TABLA := #(es: "hola", en: "hi")
 PAR   := (1, 2)
 
 lado(i) { <~ LADOS[i] }

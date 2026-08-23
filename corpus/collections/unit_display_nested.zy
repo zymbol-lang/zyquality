@@ -14,7 +14,7 @@ u = f()
 // Nested: visible as ()
 t = (1, u, 3)
 >> t ¶
-nt = (a: u, b: 2)
+nt = #(a: u, b: 2)
 >> nt ¶
 
 // JSON null decodes to Unit inside an array

@@ -1,7 +1,7 @@
 // Test: $~ funcional update sobre named tuples (G2)
 
 // Update por clave — el acceso posicional se retiró (decisión 11)
-p = (x: 1, y: 2, z: 3)
+p = #(x: 1, y: 2, z: 3)
 p2 = p["y"]$~ 99
 >> p2.x ¶
 >> p2.y ¶
@@ -23,7 +23,7 @@ p4 = p["z"]$~ 77
 >> p4.z ¶
 
 // Update encadenado (simula deep update en named tuple anidado)
-a = (val: 10, meta: (ok: #1, code: 0))
+a = #(val: 10, meta: #(ok: #1, code: 0))
 a2 = a["meta"]$~ (a.meta["code"]$~ 200)
 >> a2.meta.code ¶
 >> a2.meta.ok ¶

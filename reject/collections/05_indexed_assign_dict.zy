@@ -9,6 +9,6 @@
 // @reject: named tuple would stop being refused, and that let `u["k"] = v`
 // @reject: through in both Rust engines. Mutable is not the same as
 // @reject: assignable-by-index: what makes a dictionary mutable is `$~`.
-u = (nombre: "Ana")
+u = #(nombre: "Ana")
 u["nombre"] = "Beto"
 >> u ¶

@@ -10,9 +10,9 @@ cd = nums$^ (a, b -> a > b)
 
 // ── Named tuples — sort by age ascending ──────────────────────────────────
 people = [
-    (name: "Carla", age: 28),
-    (name: "Ana",   age: 25),
-    (name: "Bob",   age: 30)
+    #(name: "Carla", age: 28),
+    #(name: "Ana",   age: 25),
+    #(name: "Bob",   age: 30)
 ]
 by_age = people$^ (a, b -> a.age < b.age)
 >> by_age[1].name ¶
@@ -25,10 +25,10 @@ by_name = people$^ (a, b -> a.name < b.name)
 
 // ── Named tuples — multiple fields, extended ──────────────────────────────
 staff = [
-    (name: "Zara",  score: 88),
-    (name: "Inti",  score: 72),
-    (name: "Luna",  score: 95),
-    (name: "Mia",   score: 60)
+    #(name: "Zara",  score: 88),
+    #(name: "Inti",  score: 72),
+    #(name: "Luna",  score: 95),
+    #(name: "Mia",   score: 60)
 ]
 top = staff$^ (a, b -> a.score > b.score)
 >> top[1].name ¶

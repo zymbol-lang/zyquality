@@ -38,7 +38,7 @@ t = (10, 20, 30, 40, 50)
 >> (t[2]$~ 99) ¶
 
 // ── Dictionary: addressed by key, and only by key ───────────────────────────
-d = (id: 1, name: "Ana", age: 25)
+d = #(id: 1, name: "Ana", age: 25)
 >> d["id"] ¶
 >> d["name"] ¶
 >> (d["age"]$~ 26) ¶

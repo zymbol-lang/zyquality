@@ -1,16 +1,16 @@
 // Test: the dictionary — decisions 7 to 11 of Divergente_ES/forma/README.md.
 //
-// The named tuple HAS the dictionary model. There is no new type and no new
-// notation: `(clave: valor)` stays, and what changed is the vocabulary — it
-// stops being called a tuple, because a tuple is immutable by definition and
-// this is not. `(1, 2)` is still a positional tuple; the colon is the only thing
-// that separates the two.
+// The named tuple HAS the dictionary model. There is no new type — what changed
+// is the vocabulary, since a tuple is immutable by definition and this is not.
+// The notation came later, in the same release: `#(clave: valor)` is the
+// dictionary and `(1, 2)` the positional tuple, because the colon alone could
+// not tell an EMPTY one from the other (see dict_marcado.zy).
 //
 // Before this it was a RECORD, not a dictionary: readable only when the program
 // already knew what it held. Five things were missing, and each one alone was
 // enough to keep a JSON built piece by piece from being built at all.
 
-u = (nombre: "Ana", edad: 30)
+u = #(nombre: "Ana", edad: 30)
 
 // ── the key may be COMPUTED — the piece that made it a dictionary (DM-09) ────
 // It used to be `array index must be Int, got String` in both Rust engines and
@@ -51,7 +51,7 @@ u["ciudad"]$~ "Lima"
 // ── walked by KEY, in insertion order (decision 8) ──────────────────────────
 // `for k in d`, as Python spells it. With `d[k]` available the key is enough to
 // reach the value, so no destructuring pattern has to enter `@`.
-d = (alfa: 10, beta: 20, gamma: 30)
+d = #(alfa: 10, beta: 20, gamma: 30)
 @ clave:d {
     >> "  " clave " = " d[clave] ¶
 }
@@ -64,8 +64,8 @@ d$-["beta"]
 >> d ¶
 
 // ── nesting: this is already JSON, which is why no new type was needed ──────
-config = (
-    servidor: (host: "localhost", puerto: 8080),
+config = #(
+    servidor: #(host: "localhost", puerto: 8080),
     etiquetas: ["web", "api"]
 )
 >> config.servidor.host ¶

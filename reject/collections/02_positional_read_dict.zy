@@ -14,5 +14,5 @@
 // @reject: `d[2>3]` is a separate matter and is still open: how a KEY is spelled
 // @reject: inside a nav path is the one thing forma/diccionarios.zy § 6 leaves
 // @reject: undecided.
-u = (a: 1, b: 2)
+u = #(a: 1, b: 2)
 >> u[2] ¶
