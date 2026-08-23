@@ -1,0 +1,52 @@
+// Test: the half of std/time that reads a clock.
+//
+// `now()`, `today()` and the `"local"` zone answer something different on every
+// machine and at every moment, so nothing they return can be printed. What CAN
+// be printed is what has to hold about it whatever the answer was, which is the
+// only way a clock gets into a corpus that decides by comparing output.
+//
+// The instant is read ONCE into `ahora` and everything is derived from that:
+// two calls to `now()` are not the same value, and a file that assumed they
+// were would fail once in a very long while, which is worse than failing always.
+<# std/time => t
+
+ahora = t::now()
+
+// ── it is milliseconds, and it is this century ──────────────────────────────
+// The unit is the assertion: seconds would be ~1.7e9 and land below the floor,
+// nanoseconds ~1.7e18 and not even fit in the integer.
+>> "de este siglo   " (ahora > t::of(2020, 1, 1)) " " (ahora < t::of(2100, 1, 1)) ¶
+
+// ── today() is an ISO 8601 date ─────────────────────────────────────────────
+hoy = t::today()
+>> "hoy mide 10     " (hoy$# == 10) ¶
+>> "y son 3 campos  " ((hoy $/ "-")$# == 3) ¶
+
+// ── the calendar answers about the instant the clock gave ───────────────────
+p = t::parts(ahora)
+>> "mes válido      " (p.month >= 1 && p.month <= 12) ¶
+>> "día válido      " (p.day >= 1 && p.day <= 31) ¶
+>> "semana válida   " (p.weekday >= 1 && p.weekday <= 7) ¶
+>> "UTC no desplaza " (p.offset == 0) ¶
+
+// ── arithmetic on it is exact even though the value is not known ────────────
+mañana = t::add(ahora, 1, "day")
+>> "mañana es 1 día " (t::diff(mañana, ahora, "day") == 1) ¶
+>> "y 0 meses       " (t::diff(mañana, ahora, "month") == 0) ¶
+>> "hace 30 días    " (t::diff(ahora, t::add(ahora, -30, "day"), "day") == 30) ¶
+
+// ── the local zone: the one thing the machine alone knows ───────────────────
+// Read at an instant, because a zone that observes daylight saving is two
+// different offsets in the same year.
+desfase = t::parts(ahora, "local").offset
+>> "desfase real    " (desfase > -1441 && desfase < 1441) ¶
+>> "%z son 5 signos " (t::format(ahora, "%z", "local")$# == 5) ¶
+>> "y la fecha 10   " (t::format(ahora, "%F", "local")$# == 10) ¶
+
+// The same instant read in two zones is the same instant: the difference
+// between the two readings is exactly the offset, by construction.
+utc = t::parts(ahora)
+loc = t::parts(ahora, "local")
+minutos_utc = utc.hour * 60 + utc.minute
+minutos_loc = loc.hour * 60 + loc.minute
+>> "misma cuenta    " (((minutos_loc - minutos_utc - desfase) % 1440) == 0) ¶
