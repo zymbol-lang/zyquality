@@ -2,9 +2,9 @@
 // Expected: Arrays can contain named tuples and iterate over them
 
 users = [
-    (id: 1, name: "Alice", role: "Admin"),
-    (id: 2, name: "Bob", role: "User"),
-    (id: 3, name: "Charlie", role: "Moderator")
+    #(id: 1, name: "Alice", role: "Admin"),
+    #(id: 2, name: "Bob", role: "User"),
+    #(id: 3, name: "Charlie", role: "Moderator")
 ]
 
 // Access array elements

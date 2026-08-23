@@ -36,7 +36,7 @@ t3 = t$-[-2]      // removes second-to-last (40) → (10, 20, 30, 50)
 >> t3[-2] ¶       // → 30
 
 // ── Dictionary — by key; positional access was withdrawn (decision 11) ──────
-person = (id: 1, name: "Ana", age: 25, city: "Lima")
+person = #(id: 1, name: "Ana", age: 25, city: "Lima")
 >> person["city"] ¶   // → Lima
 >> person["age"] ¶    // → 25
 >> person["id"] ¶     // → 1

@@ -44,7 +44,7 @@ g1 = [1, 2, 3]
 g2 = g1[2]$~ 9
 >> "7. dolar~  g1=" g1 " g2=" g2 ¶
 
-nt1 = (x: 1, y: 2)
+nt1 = #(x: 1, y: 2)
 nt2 = nt1
 nt3 = nt1["x"]$~ 9
 >> "8. ntupla  nt1=" nt1 " nt2=" nt2 " nt3=" nt3 ¶

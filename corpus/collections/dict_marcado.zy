@@ -1,0 +1,41 @@
+// GAP-ZYB-003 and GAP-ZYB-004 — the dictionary has a notation of its own.
+//
+// `(1, 2)` and `(a: 1)` shared the parentheses and not the semantics. The colon
+// was the whole of what told them apart, which COLLECTIONS.md accepted
+// deliberately — the alternative was a notation of its own, and `{}` is the
+// block delimiter of the entire language.
+//
+// The EMPTY one is what forced it. `()` would have to be both the empty tuple
+// and the empty dictionary, and they are not the same value: one takes
+// `d["k"]$~ v`, the other answers "tuples are immutable". The empty dictionary
+// was reachable and unwritable, so a program that built one at run time started
+// it with an invented key and took it out afterwards.
+//
+// `#` is the meta/type mark, the same one `#[…]` uses to declare an array's
+// mix: saying which of the two a pair of parentheses opens is a statement about
+// its type. The bare form is refused — see reject/collections/06_dict_sin_marca.zy.
+d = #(a: 1, b: 2)
+>> "normal:      " d ¶
+
+// The empty dictionary, which could not be written at all.
+v = #()
+>> "vacío:       " v "  largo " v$# ¶
+v["nueva"]$~ 9
+>> "y admite:    " v ¶
+
+// A string key: `d["gasto.alimentación"]$~ v` always added one, and only the
+// literal could not spell it — which left out exactly the keys a program
+// needs: the ones from a database, from JSON, with a domain prefix.
+c = #("gasto.alimentación": "Alimentación", "ingreso.sueldo": "Sueldo")
+>> "clave cadena:" c["gasto.alimentación"] ¶
+>> "y la otra:   " c["ingreso.sueldo"] ¶
+
+// Nested, and mixed with the tuple it is no longer confused with.
+anidado = #(pos: #(x: 1, y: 2), nombre: "p")
+>> "anidado:     " anidado["pos"]["y"] ¶
+t = (1, 2)
+>> "tupla:       " t "  sigue siendo una tupla" ¶
+
+// The pattern spells it the way the literal does.
+#(a: uno, b: dos) = d
+>> "destructura: " uno " " dos ¶

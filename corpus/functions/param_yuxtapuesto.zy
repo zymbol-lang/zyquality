@@ -24,7 +24,7 @@ etiquetar(v) { <~ "[" v "]" }
 >> etiquetar(#1) ¶
 >> etiquetar('z') ¶
 >> etiquetar([1, 2]) ¶
->> etiquetar((x: 1)) ¶
+>> etiquetar(#(x: 1)) ¶
 
 // Two parameters, one of each, and the juxtaposition in the middle.
 unir(a, b) { <~ a " y " b }

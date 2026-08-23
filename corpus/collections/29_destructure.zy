@@ -1,5 +1,5 @@
 // Test: destructuring assignment
-// [a, b] = arr / (a, b) = tuple / (name: n, age: a) = named_tuple
+// [a, b] = arr / (a, b) = tuple / #(name: n, age: a) = dictionary
 
 // ── Array destructuring ─────────────────────────────────────────────────────
 [a, b, c] = [10, 20, 30]
@@ -20,7 +20,7 @@
 >> z ¶                           // → 300
 
 // ── Named tuple destructuring ───────────────────────────────────────────────
-(name: n, age: a) = (name: "Ana", age: 25)
+#(name: n, age: a) = #(name: "Ana", age: 25)
 >> n ¶                           // → Ana
 >> a ¶                           // → 25
 

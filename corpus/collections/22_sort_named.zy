@@ -1,10 +1,10 @@
 // Named tuple sort — extended
 people = [
-    (name: "Zara",  age: 22, score: 88),
-    (name: "Inti",  age: 35, score: 72),
-    (name: "Luna",  age: 22, score: 95),
-    (name: "Omar",  age: 29, score: 72),
-    (name: "Mia",   age: 35, score: 60)
+    #(name: "Zara",  age: 22, score: 88),
+    #(name: "Inti",  age: 35, score: 72),
+    #(name: "Luna",  age: 22, score: 95),
+    #(name: "Omar",  age: 29, score: 72),
+    #(name: "Mia",   age: 35, score: 60)
 ]
 
 // Sort by age ascending

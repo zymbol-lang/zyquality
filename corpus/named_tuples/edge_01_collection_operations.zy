@@ -1,7 +1,7 @@
 // Edge Case Test 1: Collection Operations on Named Tuples
 // Expected: $# operator works on named tuples
 
-product = (id: 1, name: "Item", price: 100, stock: 50)
+product = #(id: 1, name: "Item", price: 100, stock: 50)
 
 len = product$#
 ? len == 4 {
@@ -9,7 +9,7 @@ len = product$#
 }
 
 // Named tuple in array
-items = [(id: 1, name: "A"), (id: 2, name: "B")]
+items = [#(id: 1, name: "A"), #(id: 2, name: "B")]
 arr_len = items$#
 
 ? arr_len == 2 {

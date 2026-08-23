@@ -9,7 +9,7 @@
 
 busca(d, k) { <~ d[k] }
 
-tabla = (es: "hola", en: "hi", ja: "こんにちは")
+tabla = #(es: "hola", en: "hi", ja: "こんにちは")
 >> busca(tabla, "es") ¶
 >> busca(tabla, "ja") ¶
 
@@ -22,7 +22,7 @@ posicion(i) {
 >> posicion(2) ¶
 
 clave(k) {
-    d = (uno: 1, dos: 2)
+    d = #(uno: 1, dos: 2)
     <~ d[k]
 }
 >> clave("dos") ¶

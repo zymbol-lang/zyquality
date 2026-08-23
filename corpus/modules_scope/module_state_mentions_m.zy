@@ -13,7 +13,7 @@
 
     saludo = "hola"
     contador = 0
-    tabla = (es: "hola", en: "hi")
+    tabla = #(es: "hola", en: "hi")
 
     // Named straight in the body.
     directo() { <~ saludo }

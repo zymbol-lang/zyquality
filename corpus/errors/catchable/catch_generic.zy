@@ -1,5 +1,5 @@
 // Named tuple field access is a runtime error — caught by generic :!
-t = (name: "Alice", age: 30)
+t = #(name: "Alice", age: 30)
 
 !? {
     x = t.salary

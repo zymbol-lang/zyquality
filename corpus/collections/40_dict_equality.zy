@@ -9,11 +9,11 @@
 // Python's dict, but two dictionaries built in a different order still hold the
 // same thing.
 
-p = (x: 1, y: 2)
-q = (x: 1, y: 2)
-r = (a: 1, b: 2)
-s = (x: 1, y: 99)
-o = (y: 2, x: 1)          // same content, other insertion order
+p = #(x: 1, y: 2)
+q = #(x: 1, y: 2)
+r = #(a: 1, b: 2)
+s = #(x: 1, y: 99)
+o = #(y: 2, x: 1)          // same content, other insertion order
 t = (1, 2)                // a POSITIONAL tuple is a different thing
 
 >> "same keys and values: " (p == q) ¶
@@ -21,17 +21,17 @@ t = (1, 2)                // a POSITIONAL tuple is a different thing
 >> "same keys, one value: " (p == s) ¶
 >> "order does not count: " (p == o) ¶
 >> "positional vs dict:   " (t == p) ¶
->> "different length:     " (p == (x: 1)) ¶
+>> "different length:     " (p == #(x: 1)) ¶
 
 // `<>` is the negation, and has to agree
 >> "negation agrees:      " ((p <> q) == #0) ¶
 
 // Nested, and mixed value types
-a = (id: 1, tags: ["x", "y"], meta: (ok: #1))
-b = (id: 1, tags: ["x", "y"], meta: (ok: #1))
-c = (id: 1, tags: ["x", "z"], meta: (ok: #1))
+a = #(id: 1, tags: ["x", "y"], meta: #(ok: #1))
+b = #(id: 1, tags: ["x", "y"], meta: #(ok: #1))
+c = #(id: 1, tags: ["x", "z"], meta: #(ok: #1))
 >> "nested equal:         " (a == b) ¶
 >> "nested differs deep:  " (a == c) ¶
 
 // Equality is the same relation as scalar equality, so 1 == 1.0 carries through
->> "Int/Float promotion:  " ((k: 1) == (k: 1.0)) ¶
+>> "Int/Float promotion:  " (#(k: 1) == #(k: 1.0)) ¶

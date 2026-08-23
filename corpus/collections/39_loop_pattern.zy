@@ -26,7 +26,7 @@ pares = [("a", 1), ("b", 2), ("c", 3)]
 // `@ k:d` still yields KEYS (decision 8) and the value comes from `d[k]`. The
 // pattern form hands over `(clave, valor)` pairs — the pair being the language's
 // own answer to "several values that travel together" (decision 24).
-d = (alfa: 10, beta: 20, gamma: 30)
+d = #(alfa: 10, beta: 20, gamma: 30)
 @ (clave, valor):d {
     >> clave " → " valor " " ¶
 }

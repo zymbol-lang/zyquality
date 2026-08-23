@@ -16,7 +16,7 @@
 // The register VM and the browser engine never had the split. This is the
 // tree-walker catching up to them, and to its own `>>`.
 a = [1, 2, 3]
-t = (x: 1, y: "dos")
+t = #(x: 1, y: "dos")
 p = (10, 20)
 
 s = "" a

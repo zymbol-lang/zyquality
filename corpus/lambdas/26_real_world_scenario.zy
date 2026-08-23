@@ -42,7 +42,7 @@ process_order(order) {
     original_price = order[4]
     discounted_price = apply_discount(order)
     shipping = calculate_shipping(order)
-    <~ (id: order_id, orig: original_price, disc: discounted_price, ship: shipping, total: discounted_price + shipping)
+    <~ #(id: order_id, orig: original_price, disc: discounted_price, ship: shipping, total: discounted_price + shipping)
 }
 
 // Process all orders: extract relevant data

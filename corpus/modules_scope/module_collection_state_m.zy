@@ -18,11 +18,11 @@
 
     // Exported constants (`:=`) reachable as m.NAME from the caller.
     LADOS := [10, 20, 30]
-    TABLA := (a: 1, b: 2)
+    TABLA := #(a: 1, b: 2)
 
     // Private mutable state, read and written across calls.
-    tabla = (uno: "primero", dos: "segundo")
-    目録 = (es: (saludo: "hola"), en: (saludo: "hi"))
+    tabla = #(uno: "primero", dos: "segundo")
+    目録 = #(es: #(saludo: "hola"), en: #(saludo: "hi"))
 
     lado(i) { <~ LADOS[i] }
 

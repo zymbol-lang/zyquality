@@ -20,7 +20,7 @@
 }
 
 // Generic: named tuple field not found (runtime error)
-t = (name: "Alice")
+t = #(name: "Alice")
 !? {
     _w = t.nonexistent
 } :! {
