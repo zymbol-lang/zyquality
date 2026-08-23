@@ -1,0 +1,39 @@
+// GAP-ZYB-006 — a `<~` at the top level ends the program, and its value is the
+// exit status.
+//
+// No new symbol was needed, which is the point. SYMBOLS.md § 17 rule 1 says
+// derive rather than invent: `<~` hands a value back to whoever called, and a
+// program is called by the operating system, so a value handed back at the top
+// level IS the exit status. Rule 7 asks for the iconic form over the
+// conventional one, and this is the same return arrow the reader already knows.
+//
+// It also closed a live divergence nobody had reported, because nobody writes
+// `<~` in a file body: the register VM and the browser engine already stopped
+// the program there, and the tree-walker walked past and ran the rest of the
+// file. The same program printed different things under `--vm`.
+//
+// Why it had never come up: every suite in this project decides by comparing
+// output. A project that only ever tests by golden never misses an exit code.
+//
+// The `<~` here is inside a `?`, which is where it belongs — a program that
+// always exits at the same place has nothing to report.
+codigo = 0
+
+>> "empieza" ¶
+
+? codigo == 99 {
+    >> "no se toma" ¶
+    <~ 1
+}
+
+>> "sigue" ¶
+
+// A value that is not a whole number is refused before the program runs — the
+// exit status is a number for the operating system, and a text turned into one
+// in silence is the kind of conversion this language avoids. See
+// errors/semantic/salida_no_entera.zy.
+
+// Falling off the end is exit 0, unchanged, and this file does exactly that:
+// a corpus case has to be comparable, and a non-zero exit would make the
+// runner report the program as failed.
+>> "termina" ¶
