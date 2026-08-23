@@ -1,0 +1,6 @@
+warning: ambiguous lifetime for 'i'
+  --> errors/semantic/bucle_con_aviso_real.zy:12:10
+  = note: variable is modified inside a loop
+  = help: consider using explicit lifetime annotation
+
+Checked with 1 warning(s)

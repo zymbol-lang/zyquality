@@ -1,3 +1,3 @@
-error: E001: Module name 'totally_wrong_name' does not match file name 'E001_mismatch_mod'
+error: E001: module 'totally_wrong_name' should be named 'E001_mismatch_mod' for its path
   --> errors/semantic/E001_mismatch_mod.zy:1:1
-  = help: The module name must match the filename (without .zy extension)
+  = help: a bare name matches the file stem (`# util` in util.zy); a leading dot names the whole path, joined with `_` (`# .lib_util` in lib/util.zy). See DOT_CONVENTION.md

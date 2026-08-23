@@ -15,10 +15,8 @@
 // The browser engine was right all along, which is what made it a divergence
 // rather than a missing feature.
 //
-// Deliberately absent: a `<~` written INSIDE the `:>`. The two Rust engines
-// return from the finally (as Java and Python do) and the browser engine
-// carries on to the statement after the try. That one is still open, and a
-// case for it would make the consensus red rather than record anything.
+// A `<~` written INSIDE the `:>` is covered too, at the foot of this file:
+// it is discarded (BUG-ZYB-011).
 
 // Two levels: the inner cleanup first, then the outer.
 anidado() {
@@ -79,3 +77,47 @@ suma(n, acc) {
     <~ suma(n - 1, acc + n)
 }
 >> suma(100000, 0) ¶
+
+// BUG-ZYB-011 — a `:>` is cleanup, and cleanup does not decide what comes back.
+//
+// A `<~` inside the finally evaluates its expression and is then discarded; the
+// return the try block was carrying continues. Java and Python let the finally
+// win and both warn against relying on it in their own style guides — Zymbol
+// takes the warning instead of the feature, so a reader can trust that the
+// value coming back is the one at the `<~` they can see.
+//
+// The three engines gave two answers before this: the Rust pair returned from
+// the finally, the browser engine carried on.
+solo_limpieza() {
+    !? {
+        _x = 1
+    } :> {
+        <~ "desde el finally"
+    }
+    <~ "después del try"
+}
+>> solo_limpieza() ¶
+
+// The return the try block carries survives the finally untouched.
+con_retorno() {
+    !? {
+        <~ "del try"
+    } :> {
+        <~ "del finally"
+    }
+}
+>> con_retorno() ¶
+
+// And the expression still runs, for whatever it does on the way.
+marca(x) {
+    >> "  evaluado: " x ¶
+    <~ x
+}
+efecto() {
+    !? {
+        <~ "del try"
+    } :> {
+        <~ marca("!")
+    }
+}
+>> efecto() ¶

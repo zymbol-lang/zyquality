@@ -1,0 +1,54 @@
+// ERROR-ZYB-003 — `@ x:coleccion` in a file body is not an ambiguous lifetime.
+//
+// Every one of these used to produce
+//
+//     warning: ambiguous lifetime for 'c'
+//       = note: variable is modified inside a loop
+//       = help: consider using explicit lifetime annotation
+//
+// about a variable nothing modifies, in the most ordinary construct the
+// language has. It fired only in a file body — not inside a function, not
+// inside a module — which is why the six earlier LDV projects never saw one:
+// their code lives in functions and modules, and what goes in a file body is
+// scripts and test suites, which is what ZyBank had.
+//
+// The cause was not a bad heuristic. A loop iterator is excluded from the
+// automatic destruction schedule because the loop owns its lifetime, and that
+// exclusion was implemented by setting the SAME flag the analyzer reports to
+// the programmer. One flag, two jobs. They are separate now: `loop_bound`
+// excludes it from destruction and says nothing to anyone.
+//
+// The help made it worse — it suggested an explicit lifetime annotation, and
+// the form that would need (`@ c°:l`) does not parse. The only thing that
+// silenced the warning was renaming `c` to `_c`, the prefix for *unused*:
+// lying in the code to quiet a warning that was itself a lie.
+//
+// This file's golden is its `check` output, and it must stay empty.
+l = ["a", "b"]
+@ c:l {
+    >> c ¶
+}
+
+@ i:1..3 {
+    >> i ¶
+}
+
+@ x:["z"] {
+    >> x ¶
+}
+
+d = (k: 1)
+@ par:d {
+    >> par ¶
+}
+
+nums() { <~ [7, 8] }
+@ n:nums() {
+    >> n ¶
+}
+
+// A real ambiguous lifetime still warns — the finding this analyzer exists for.
+// It lives next door in bucle_con_aviso_real.zy: mixing the two here would make
+// this golden unable to say which of them it was watching. Both files are
+// needed, and the pair is the point — the first fix for this went too far and
+// silenced the real one too, which the analyzer's own unit test caught.

@@ -1,0 +1,36 @@
+// Juxtaposing a parameter does not make it a String.
+//
+// The analyzer recorded `CompatibleWith(String)` for any parameter that
+// appeared in a juxtaposition, resolved it to String, and then rejected every
+// other type at the call site:
+//
+//     g(b) { <~ "[" b "]" }
+//     >> g(42) ¶      // error: argument 1 has type Int, but 'g' expects String
+//
+// one line away from `>> "[" n "]" ¶` with the same 42, which printed `[42]`.
+// Both Rust engines refused a correct program; the browser engine ran it. A
+// divergence that REJECTS rather than mis-runs, so no golden could see it —
+// only a program that failed to compile in two engines out of three.
+//
+// Any function that builds a message out of a number was affected, which is
+// most functions that build a message. ZyBank hit it and the report blamed
+// juxtaposition in call arguments (GAP-ZYB-007); that part was never true —
+// `f("a" resto)` has always worked.
+etiquetar(v) { <~ "[" v "]" }
+
+>> etiquetar("texto") ¶
+>> etiquetar(42) ¶
+>> etiquetar(3.5) ¶
+>> etiquetar(#1) ¶
+>> etiquetar('z') ¶
+>> etiquetar([1, 2]) ¶
+>> etiquetar((x: 1)) ¶
+
+// Two parameters, one of each, and the juxtaposition in the middle.
+unir(a, b) { <~ a " y " b }
+>> unir("uno", 2) ¶
+>> unir(1, "dos") ¶
+
+// The arithmetic constraint still holds: this one really is numeric.
+doblar(n) { <~ n * 2 }
+>> doblar(21) ¶
