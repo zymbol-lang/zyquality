@@ -1,0 +1,11 @@
+ascii:      7
+devanagari: 7
+árabe:      3
+canarés:    9
+bengalí:    5
+tailandés:  8
+letra:      z
+punto:      .
+es_digito('७') = #1
+es_digito('z') = #0
+por cadena: 7
