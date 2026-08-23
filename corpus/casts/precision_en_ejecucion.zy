@@ -1,0 +1,44 @@
+// GAP-ZYB-001 — the decimal count can be computed, not only written.
+//
+// `#,.N|…|` and its family took a literal, so a formatter whose precision
+// arrives at run time could not use them at all. For money the count IS
+// configuration: the Chilean peso has no minor unit in circulation (exponent
+// 0), the euro and the dollar have two, the Kuwaiti dinar three. The exponent
+// belongs to the CURRENCY, not to the program, so ZyBank wrote forty lines of
+// integer arithmetic — separate the sign, divide by 10^exponent, pad the
+// remainder, group the thousands — and `zyquality/bench/lib_time.zy` had
+// patched the same hole in the small, padding milliseconds with a three-branch
+// chain. Two unrelated programs writing the same workaround is the sign that
+// something is missing from the language and not from the programs.
+//
+// A written count keeps its fast path: the VM still encodes it as an immediate
+// operand, and only a computed one costs a register.
+n = 2
+e = 3
+
+>> "escrito:    " #,.2|10.5| ¶
+>> "calculado:  " #,.n|10.5| ¶
+>> "otro:       " #,.e|1234.5678| ¶
+
+// The whole family takes it.
+>> "redondear:  " #.n|10.567| ¶
+>> "truncar:    " #!n|10.567| ¶
+>> "científico: " #^.n|12345.678| ¶
+
+// A name and not a general expression, deliberately: the `|` that opens the
+// value is also how bitwise-or is spelled, and the browser engine lexes this
+// count inside the token. Compute it into a name first if it is more than one.
+ancho = n + 1
+>> "calculado2: " #,.ancho|10.5| ¶
+
+// And it reads a parameter, which is the case that matters: the count comes
+// from the currency the function was handed.
+formatear(importe, exp) { <~ #,.exp|importe| }
+>> "peso:       " formatear(25990, 0) ¶
+>> "euro:       " formatear(25.99, 2) ¶
+>> "dinar:      " formatear(25.99, 3) ¶
+
+// Zero decimals is a count like any other, and not "no count".
+>> "cero:       " #,.0|1234.9| ¶
+c = 0
+>> "cero calc.: " #,.c|1234.9| ¶

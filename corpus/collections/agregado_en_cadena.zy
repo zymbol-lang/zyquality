@@ -1,0 +1,39 @@
+// GAP-ZYB-008 — an aggregate juxtaposes into a string, exactly as `>>` prints it.
+//
+// The tree-walker kept a whitelist for juxtaposition and `>>` did not use it,
+// so the same juxtaposition of the same value gave two answers depending on
+// where it was written:
+//
+//     >> "arr: " a ¶      // arr: [1, 2, 3]
+//     s = "" a            // Runtime error: cannot juxtapose value of type Array
+//
+// An array could be printed, once, and never kept: not in a log line, not in an
+// error message, not in a value to store, not in a test comparison. ZyBank's
+// `verificación_dinero.zy` wanted to check the shape of a split by comparing
+// `"" d::repartir(10000, 3)` against `"[3334, 3333, 3333]"` and had to compare
+// element by element instead.
+//
+// The register VM and the browser engine never had the split. This is the
+// tree-walker catching up to them, and to its own `>>`.
+a = [1, 2, 3]
+t = (x: 1, y: "dos")
+p = (10, 20)
+
+s = "" a
+>> "arreglo:     " s ¶
+>> "mismo que >> " a ¶
+
+>> "diccionario: " ("" t) ¶
+>> "tupla:       " ("" p) ¶
+
+// Inside a longer string, which is the point: it can be carried.
+msg = "el reparto fue " a " y sobra 0"
+>> msg ¶
+
+// Nested, and through a function.
+m = [[1, 2], [3, 4]]
+describir(v) { <~ "<" v ">" }
+>> describir(m) ¶
+
+// And it compares as text, which is what a suite wants.
+>> (("" a) == "[1, 2, 3]") ¶
