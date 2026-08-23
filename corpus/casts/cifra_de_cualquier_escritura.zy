@@ -1,0 +1,38 @@
+// GAP-ZYB-012 — reading a digit back, in any of the 69 scripts the language
+// already writes.
+//
+// `#|…|` is the safe conversion to a number, and it knew every digit script
+// already — but only through a String. The same character written as a Char
+// came back untouched: `#|"७"|` was 7 and `#|'७'|` was `७`. Even `#|'7'|`
+// handed back the Char rather than the number. One operator, one character,
+// two answers depending on which of the two ways it had been written — the
+// asymmetry with no written rule that also cost BUG-ZYB-002 and GAP-ZYB-008.
+//
+// The report said the language "writes 69 scripts and cannot read any", and
+// that a program had to declare the zero of every script it accepted. It does
+// not: `#|c|` gives the value. The probe had used `##!` — the code point —
+// which is a different question, and is the fifth finding in this log to
+// have tested the operator NEXT TO the one that answers.
+//
+// `<<|` delivers a Char, so this is the shape a keyboard actually produces.
+valor(c) { <~ #|c| }
+es_digito(c) { <~ ((#|c|)#?)[1] == "###" }
+
+>> "ascii:      " valor('7') ¶
+>> "devanagari: " valor('७') ¶
+>> "árabe:      " valor('٣') ¶
+>> "canarés:    " valor('೯') ¶
+>> "bengalí:    " valor('৫') ¶
+>> "tailandés:  " valor('๘') ¶
+
+// Not a digit: handed back untouched, which is what "safe conversion" already
+// meant for a string.
+>> "letra:      " valor('z') ¶
+>> "punto:      " valor('.') ¶
+
+>> "es_digito('७') = " es_digito('७') ¶
+>> "es_digito('z') = " es_digito('z') ¶
+
+// And the String form still reads the same, which is the point of the fix.
+s = "७"
+>> "por cadena: " #|s| ¶
