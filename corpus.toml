@@ -232,24 +232,6 @@ engines = ["zyjs"]
 tag = "TUI"
 reason = "raw mode and key input need a real terminal"
 
-[[rule]]
-match = "gaps/gap_hot_def_double_hot_error.zy"
-engines = ["zyjs"]
-tag = "HOT_DEF"
-reason = "the browser engine does not detect the HOT_DEF warning"
-
-[[rule]]
-match = "gaps/gap_hot_def_error_in_output.zy"
-engines = ["zyjs"]
-tag = "HOT_DEF"
-reason = "the browser engine does not detect the HOT_DEF warning"
-
-[[rule]]
-match = "gaps/gap_hot_def_scope_postfix_loops.zy"
-engines = ["zyjs"]
-tag = "HOT_DEF"
-reason = "the browser engine does not detect the HOT_DEF warning"
-
 # ── golden ────────────────────────────────────────────────────────────────
 # How a `.expected` file was recorded, and therefore how it has to be checked.
 # The last matching entry wins, so write the general case first.
