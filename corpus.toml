@@ -257,12 +257,6 @@ tag = "HOT_DEF"
 reason = "the browser engine does not detect the HOT_DEF warning"
 
 [[rule]]
-match = "analysis/p5d_fn_capture_asymmetry.zy"
-engines = ["zyjs"]
-tag = "FEATURE_GAP"
-reason = "a NAMED function taken as a value does not capture in the browser engine; the lambda's snapshot semantics were closed 2026-08-24 and this is the half that remains"
-
-[[rule]]
 match = "gaps/gap_hot_def_scope_postfix_loops.zy"
 engines = ["zyjs"]
 tag = "HOT_DEF"
