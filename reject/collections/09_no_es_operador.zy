@@ -1,0 +1,17 @@
+// @reject: `!=` no es un operador de Zymbol. La desigualdad es `<>`.
+// @reject:
+// @reject: Los dos motores Rust lo rechazan en el lexer desde siempre; el del
+// @reject: navegador lo dejaba pasar, y lo que salía era PEOR que un error:
+// @reject:
+// @reject:     n$| (x -> x % 2 != 0)   →  [1, 3]#10
+// @reject:
+// @reject: donde el programa correcto —con `<>`— imprime `[1, 3]`. El `!` se
+// @reject: leía como negación lógica y el resto como dos valores más que
+// @reject: yuxtaponer, así que la respuesta salía con una cola que nadie pidió.
+// @reject: Una respuesta silenciosamente equivocada, que es la peor clase.
+// @reject:
+// @reject: Cerrado el 2026-08-24. `!` unario, `!?`, `$!` y `$!!` no se tocan:
+// @reject: la regla es solo `!` seguido de `=`.
+n = [1, 2, 3, 4]
+odds = n$| (x -> x % 2 != 0)
+>> odds ¶
