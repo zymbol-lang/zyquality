@@ -1,0 +1,22 @@
+// Helper for funcion_de_modulo_valor.zy — GAP-ZYB-005.
+//
+// It exports three things and each one answers a different half of the
+// question: the function itself (callable as `b::doble(x)`), an accessor that
+// hands the function OUT as a value, and a higher-order function that takes one
+// IN. Nothing here is unusual — that is the point of the case.
+# .funcion_de_modulo_valor_m {
+
+    #> { doble, dame, aplica_aqui, interno }
+
+    doble(x) { <~ x * 2 }
+
+    // The accessor. Inside the module a bare function name is an ordinary
+    // value, so this is the whole of what "hand out a module function" costs.
+    dame() { <~ doble }
+
+    // A module receiving a function from outside.
+    aplica_aqui(f, v) { <~ f(v) }
+
+    // And a module using its own as a value, without leaving the module at all.
+    interno(v) { <~ aplica_aqui(doble, v) }
+}

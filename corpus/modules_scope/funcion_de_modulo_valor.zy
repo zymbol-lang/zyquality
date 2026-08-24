@@ -1,0 +1,49 @@
+// Test: a function that lives in a module IS a first-class value — GAP-ZYB-005,
+// which said the opposite and was wrong.
+//
+// The finding read "a module function is not a first-class value; a local one
+// is", and concluded that in a modular application 90% of the functions cannot
+// be passed. What it had actually found is that `b::doble` is not an expression
+// — and that is not a limit on functions, it is what `::` MEANS. `::` is the
+// call syntax for a module function (`module::function(args)`); it is not a
+// member access that yields a value, because a module is not a class and
+// `b::doble` is not a method reference. It is a call with its arguments
+// missing, and the parser says so: `expected '(' for module function call`.
+//
+// Everything the finding wanted works, and this file is the proof. It is the
+// fourth entry in that log to fail the same way — GAP-007, 010 and 011 were
+// also true statements about the operator NEXT TO the one that answers.
+//
+// What remains true, and is much smaller: naming a module's function from
+// OUTSIDE costs the module an exported accessor. A capability question became
+// an ergonomics one.
+<# ./funcion_de_modulo_valor_m => b
+
+aplicar(f, v) { <~ f(v) }
+local(x) { <~ x + 1 }
+
+// ── the baseline the finding compared against ───────────────────────────────
+>> "local como valor      " aplicar(local, 5) ¶
+
+// ── a module hands its own function out, and it is a real function ──────────
+h = b::dame()
+>> "devuelta por el módulo" h(5) ¶
+>> "su tipo               " (h#?)[1] ¶
+>> "pasada a una HOF      " aplicar(h, 5) ¶
+
+// ── and it travels in every direction across the boundary ───────────────────
+>> "lambda hacia el módulo" b::aplica_aqui((x -> x + 100), 5) ¶
+>> "local hacia el módulo " b::aplica_aqui(local, 5) ¶
+>> "ida y vuelta          " b::aplica_aqui(b::dame(), 5) ¶
+
+// ── inside the module the bare name needs no ceremony at all ────────────────
+// This is the case that matters most, and the one the finding never tried: a
+// module's own generic code injecting its own operation.
+>> "HOF interna al módulo " b::interno(5) ¶
+
+// Two calls to the accessor give two usable functions. Whether they compare
+// EQUAL is deliberately not asserted here: the three engines disagree about
+// comparing any two functions, including two names for the same local one, and
+// that is its own finding rather than a fact about modules.
+otra = b::dame()
+>> "otra vez, y funciona  " otra(5) ¶
