@@ -1,0 +1,38 @@
+// Test: los dos marcadores `°` anclan en sitios distintos, y por eso son dos.
+//
+// Este archivo fija el lado que FUNCIONA; los tres que se rechazan están en
+// `gaps/gap_hot_def_*`, porque un programa rechazado no imprime nada que un
+// golden pueda comparar.
+//
+// La regla, que es la razón entera de que haya dos grafías:
+//
+//   °x   prefijo   ancla en el límite de función o en la raíz — SOBREVIVE al
+//                  bucle donde se escribió
+//   x°   sufijo    ancla en el `@` más cercano — MUERE cuando ese bucle acaba
+//
+// El motor del navegador anclaba las dos en el límite, así que un `x°`
+// sobrevivía a su bucle y dos bucles que acumulaban cada uno en su propio `x°`
+// compartían uno en silencio. Cerrado el 2026-08-24.
+
+// ── el prefijo sobrevive ────────────────────────────────────────────────────
+@ i:1..3 { °suma += i }
+>> "prefijo tras el bucle " suma ¶
+
+// Y sigue vivo para un segundo bucle, que es para lo que existe.
+@ j:1..2 { °suma += j }
+>> "y sigue acumulando    " suma ¶
+
+// ── el sufijo vive dentro de su bucle ───────────────────────────────────────
+// Se lee dentro, que es donde está definido. Leerlo fuera es
+// `undefined variable`, y eso lo fija gap_hot_def_scope_postfix_loops.zy.
+@ k:1..3 {
+    parcial° += k
+    ? k == 3 { >> "sufijo dentro         " parcial ¶ }
+}
+
+// ── y cada bucle tiene el suyo ──────────────────────────────────────────────
+// Si el sufijo sobreviviera, el segundo bucle empezaría en 6 y no en 0.
+@ m:1..2 {
+    otra° += m
+    ? m == 2 { >> "otro bucle, otra vida " otra ¶ }
+}
