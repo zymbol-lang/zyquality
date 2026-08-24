@@ -1,0 +1,43 @@
+// Test: qué captura una lambda, y cuándo — los tres motores.
+//
+// La captura es una FOTO tomada al crear la lambda, y **cada llamada recibe una
+// copia fresca de ella**. De ahí salen tres consecuencias que hay que fijar por
+// separado, porque el motor del navegador se equivocaba en dos de las tres:
+// leía la variable viva en vez de la foto, y escribía hacia fuera a través de
+// ella. Estaba declarado en `corpus.toml` como «closure snapshot semantics …
+// are not implemented in the browser engine»; se cerró el 2026-08-24.
+
+// ── 1. la foto es del momento de crear la lambda ───────────────────────────
+base = 1
+lee = (x -> x + base)
+>> "recién creada  " lee(0) ¶
+base = 50
+>> "y tras cambiar " lee(0) ¶
+
+// ── 2. una escritura dentro no persiste entre llamadas ─────────────────────
+// Cada llamada copia la foto, así que la tercera empieza donde la primera.
+cont = 0
+suma = (x -> { cont = cont + x
+<~ cont })
+>> "tres llamadas  " suma(5) " " suma(5) " " suma(5) ¶
+
+// ── 3. y no sale fuera ──────────────────────────────────────────────────────
+>> "y fuera vale   " cont ¶
+
+// ── lo que sí atraviesa: las funciones ─────────────────────────────────────
+// Se alcanzan por el ámbito global en la llamada, no por la captura, así que
+// una función definida DESPUÉS de la lambda también se ve.
+usa = (x -> x + tres())
+tres() { <~ 3 }
+>> "llama a una fn " usa(1) ¶
+
+// ── y los parámetros de quien la creó ──────────────────────────────────────
+// El caso que rompía: `f` y `g` son parámetros de `compose`, y la lambda que
+// devuelve los lee desde dentro. El nombre de una llamada se guarda como
+// cadena y no como identificador, así que un recolector de nombres libres que
+// solo mire identificadores los pierde y la lambda sale sin ellos.
+compose(f, g) { <~ x -> f(g(x)) }
+inc(n) { <~ n + 1 }
+doble(n) { <~ n * 2 }
+compuesta = compose(doble, inc)
+>> "composición    " compuesta(4) ¶
