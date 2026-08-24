@@ -1,8 +1,18 @@
-// Variables inside functions cannot access outer scope (isolated scope)
-outer = "I exist outside"
+// Test: un nombre que no existe en ninguna parte sigue siendo un error.
+//
+// Este archivo decía lo contrario hasta v0.0.9: «las variables dentro de una
+// función no pueden acceder al ámbito exterior (ámbito aislado)», y probaba que
+// leer una variable del archivo desde una función reventaba en ejecución.
+//
+// Esa regla se retiró (ERROR-ZYB-002): una función con nombre CAPTURA lo que su
+// cuerpo lee del archivo, igual que una lambda. Lo que queda —y es lo que este
+// archivo prueba ahora— es que un nombre que no existe **en ningún sitio** se
+// rechaza antes de ejecutar nada, que es la mitad que siempre estuvo bien y la
+// que cierra la clase de fallos donde una errata se propaga como `undefined`.
+existe = "yo existo"
 
-access_outer() {
-    >> outer ¶
-}
+lee() { <~ existe }
+>> lee() ¶
 
-access_outer()
+usa_lo_que_no_hay() { <~ jamas_definida }
+>> usa_lo_que_no_hay() ¶

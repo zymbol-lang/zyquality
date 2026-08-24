@@ -7,10 +7,16 @@
 base = 10
 saludo = "hola"
 
-adder(n) { <~ n + base }   // 'base' is not visible in the isolated fn scope
+// The failure used to be `adder(n) { <~ n + base }` — a function reading a file
+// variable, which was `'base' is undefined` while a direct call was isolated.
+// That is no longer an error: a named function CAPTURES the file's variables
+// (ERROR-ZYB-002, v0.0.9), so this file needed another way to make a function
+// fail at run time. A division by zero is one, and it is what the two cases
+// below already used.
+falla(n) { <~ 10 / n }
 
 !? {
-    _x = adder(5)          // fails: 'base' undefined inside adder
+    _x = falla(0)          // fails inside the called frame
 } :! {
     >> "caught" ¶
 }

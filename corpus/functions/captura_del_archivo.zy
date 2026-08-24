@@ -1,0 +1,53 @@
+// Test: una función con nombre CAPTURA lo que su cuerpo lee del archivo.
+//
+// Hasta v0.0.9 el mismo cuerpo significaba dos cosas según cómo se alcanzara:
+//
+//     adder(5)              // error: 'base' is undefined  — aislada
+//     f = adder ; f(5)      // 15                          — capturaba
+//
+// Dos reglas para una función, y ninguna escrita en ninguna parte como tal.
+// Ahora hay una sola, y es la de la lambda: **por valor, con la escritura
+// aislada** (ERROR-ZYB-002). `GUIDE.md` § 10b, que documentaba el aislamiento
+// como deliberado, se retiró con ella.
+
+base = 10
+
+// ── lee el archivo, llamada directamente ───────────────────────────────────
+lee() { <~ base }
+>> "1 llamada directa " lee() ¶
+
+// ── y tomada como valor, que es como ya funcionaba ─────────────────────────
+f = lee
+>> "2 como valor      " f() ¶
+
+// ── la escritura de dentro NO sale ─────────────────────────────────────────
+// Es la mitad que separa capturar de compartir: el estado de módulo sí sale,
+// esto no. Un script no tiene estado compartido, y esa es la diferencia.
+escribe() { base = 777
+<~ base }
+>> "3 dentro vale     " escribe() ¶
+>> "4 y fuera sigue   " base ¶
+
+// ── ni se acumula entre llamadas ───────────────────────────────────────────
+>> "5 otra vez        " escribe() " y fuera " base ¶
+
+// ── a cualquier profundidad ────────────────────────────────────────────────
+// El ámbito del archivo tiene que ser alcanzable desde un marco que ya no lo
+// tiene delante: el tree-walker intercambia la pila entera en cada llamada.
+hondo() { <~ lee() }
+>> "6 a dos niveles   " hondo() ¶
+
+// ── y se lee al LLAMAR, no al declarar ─────────────────────────────────────
+base = 50
+>> "7 tras cambiar    " lee() ¶
+
+// ── un parámetro tapa a la captura ─────────────────────────────────────────
+tapa(base) { <~ base }
+>> "8 el parámetro    " tapa(1) ¶
+
+// ── no es ámbito dinámico: se lee del ARCHIVO, no de quien llama ───────────
+// `intermedia` tiene su propio `base` local, y `lee()` sigue viendo el del
+// archivo. Si capturara del llamante, esto diría 999.
+intermedia() { base = 999
+<~ lee() }
+>> "9 no es dinámico  " intermedia() ¶

@@ -1,4 +1,6 @@
-=== Testing function access to external variable ===
-Calling function that tries to access external_var...
-Runtime error: 'external_var' is undefined — did you mean 'external_var°' (hot definition)?
-Trying to access: 
+=== una función lee el archivo ===
+  lee: soy del archivo
+#1
+  dentro: cambiada dentro
+#1
+  fuera:  soy del archivo
