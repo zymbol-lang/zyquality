@@ -1,16 +1,35 @@
-// TEST: Function trying to access external variable
-// This SHOULD cause a runtime error
+// Test: una función lee una variable del archivo, y eso es correcto.
+//
+// Este archivo se llamaba «function trying to access external variable» y su
+// última línea decía «If you see this, there's a problem!». Era verdad hasta
+// v0.0.9: leer una variable del archivo desde una función reventaba en
+// ejecución, y el archivo existía para fijar ese reventón.
+//
+// La regla se retiró (ERROR-ZYB-002). Una función con nombre CAPTURA lo que su
+// cuerpo lee del archivo, exactamente como una lambda: por valor y con la
+// escritura aislada. El mismo cuerpo dejó de significar dos cosas según se
+// llamara directamente o se pasara como valor.
+//
+// Lo que este archivo prueba ahora es esa captura de punta a punta, y su última
+// línea sigue siendo la que decide: si la escritura de dentro saliera, `externa`
+// valdría otra cosa.
 
->> "=== Testing function access to external variable ===" ¶
+>> "=== una función lee el archivo ===" ¶
 
-external_var = "I am external"
+externa = "soy del archivo"
 
-bad_function() {
-    // This should cause an error: undefined variable
-    >> "Trying to access: " external_var ¶
+lee() {
+    >> "  lee: " externa ¶
     <~ #1
 }
 
->> "Calling function that tries to access external_var..." ¶
-bad_function()
->> "If you see this, there's a problem!" ¶
+>> lee() ¶
+
+escribe() {
+    externa = "cambiada dentro"
+    >> "  dentro: " externa ¶
+    <~ #1
+}
+
+>> escribe() ¶
+>> "  fuera:  " externa ¶

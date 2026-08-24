@@ -1,1 +1,6 @@
-Runtime error: 'outer' is undefined — did you mean 'outer°' (hot definition)?
+[1m[31merror[39m[0m: undefined variable 'jamas_definida'
+  [1m[34m-->[39m[0m errors/runtime/undefined_var.zy:17:26
+[1m[34m  17[39m[0m [34m|[39m
+[1m[34m  17[39m[0m [34m|[39m usa_lo_que_no_hay() { <~ jamas_definida }
+[34m     |[39m [1m[31m                         ^^^^^^^^^^^^^^[39m[0m
+  [1m[32mhelp:[39m[0m variables must be defined before use
