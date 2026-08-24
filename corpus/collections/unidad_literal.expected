@@ -1,0 +1,19 @@
+literal        ##_
+sin <~         #1
+<~ ##_         #1
+y de un null   #1
+suelto        []
+yuxtapuesto   []
+en tupla       (1, ())
+en dicc.       (x: 1, y: ())
+en un #[…]     [1, (), 3]
+== cadena vacía#0
+== cero        #0
+== #0          #0
+$! ¿es error?  #0
+encode         null
+decode         ##_
+y dentro       [1,null,3]
+atrapa         ##Index(array index out of bounds: index 9 for array of length 1)
+cuentas iguales0 0 0 0
+y comparar     #1 #0 #0 #0
