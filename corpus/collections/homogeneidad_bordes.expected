@@ -5,6 +5,8 @@ distinto largo  [[1, 2], [3]]
 y en profundidad[[[1]], [[2]]]
 declarado       [1, dos, 3.5]
 y sigue igual   #1
-$++    [1, 2, tres] ##[
-$+[i]  [x, 1, 2] ##[
-[i]$~  [x, 2] ##[
+$++ compatible  [1, 2, 3, 4]
+$+[i] compatible[9, 1, 2]
+[i]$~ compatible[9, 2]
+declarado $++   [1, dos, 3.5]
+declarado [i]$~ [#1, dos]

@@ -31,19 +31,26 @@ m = #[1, "dos"]
 >> "declarado       " (m $+ 3.5) ¶
 >> "y sigue igual   " ([1, 2] == #[1, 2]) ¶
 
-// ── EL AGUJERO: tres operaciones que no comprueban nada ────────────────────
-// `$+` sí comprueba, en los tres motores. `$++`, `$+[i]` y `[i]$~` no, también
-// en los tres. Así que un `[…]` se vuelve heterogéneo sin que nadie lo declare
-// y sin que nadie avise, y `#?` contesta `##[` — una lista que nadie escribió.
+// ── la regla vale para la familia ENTERA (L46, cerrado 2026-08-24) ─────────
+// Hasta v0.0.9 se comprobaba el literal y `$+`, y nada más: `$++`, `$+[i]` y
+// `[i]$~` volvían heterogéneo un `[…]` sin que nadie lo declarara y sin que
+// nadie avisara, en los TRES motores, y `#?` contestaba `##[` — una lista que
+// nadie escribió. Un `[…]` no era homogéneo: era «homogéneo cuando lo
+// escribes». Las tres formas rechazadas están en `reject/collections/10`.
 //
-// Está aquí y no en `reject/` porque hoy se acepta: es un agujero de la regla,
-// no un desacuerdo entre motores, y cerrarlo rechazaría programas que corren.
+// Lo que sí se acepta es meter algo que encaja, y eso es lo que va aquí.
 b = [1, 2]
-c = b $++ "tres"
->> "$++    " c " " (c#?)[1] ¶
+c = b $++ 3 4
+>> "$++ compatible  " c ¶
 d = [1, 2]
-e = d $+[1] "x"
->> "$+[i]  " e " " (e#?)[1] ¶
+e = d $+[1] 9
+>> "$+[i] compatible" e ¶
 f = [1, 2]
-g = f[1]$~ "x"
->> "[i]$~  " g " " (g#?)[1] ¶
+g = f[1]$~ 9
+>> "[i]$~ compatible" g ¶
+
+// Y en un `#[…]` declarado entra cualquier cosa, por las tres vías.
+m = #[1, "dos"]
+>> "declarado $++   " (m $++ 3.5) ¶
+n = #[1, "dos"]
+>> "declarado [i]$~ " (n[1]$~ #1) ¶
