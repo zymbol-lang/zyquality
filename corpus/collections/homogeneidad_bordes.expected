@@ -1,0 +1,10 @@
+mezcla numérica [1, 2.5, 3]
+y anidada       [[1], [2.5]]
+y al agregar    [1, 2, 3.5]
+distinto largo  [[1, 2], [3]]
+y en profundidad[[[1]], [[2]]]
+declarado       [1, dos, 3.5]
+y sigue igual   #1
+$++    [1, 2, tres] ##[
+$+[i]  [x, 1, 2] ##[
+[i]$~  [x, 2] ##[

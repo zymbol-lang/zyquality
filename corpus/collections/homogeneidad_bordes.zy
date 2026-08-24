@@ -1,0 +1,49 @@
+// Test: dónde llega la regla de homogeneidad y dónde NO llega.
+//
+// Decisión 15: `[…]` es homogéneo y se comprueba; `#[…]` declara la mezcla y no.
+// Este archivo fija los bordes por el lado que SÍ se acepta — las formas que se
+// rechazan están en `reject/collections/04`, `07` y `08`, porque un programa
+// rechazado no imprime nada que un golden pueda comparar.
+//
+// El borde importa porque la regla tiene un agujero declarado, y está al final.
+
+// ── Int y Float se mezclan libremente, a cualquier profundidad ──────────────
+// No es una excepción: es que en toda posición aritmética se promocionan, y
+// `1.0 == 1` es `#1`.
+// Se ligan a un nombre antes de imprimirlos: un `[…]` pegado a una cadena se
+// lee como un índice, que es lo que `>> "x" [1,2]` significa.
+num = [1, 2.5, 3]
+anid = [[1], [2.5]]
+>> "mezcla numérica " num ¶
+>> "y anidada       " anid ¶
+a = [1, 2]
+>> "y al agregar    " (a $+ 3.5) ¶
+
+// ── dos arreglos concuerdan cuando concuerdan sus elementos ────────────────
+// El tamaño no es parte del tipo: `[Int]` de dos y `[Int]` de uno concuerdan.
+largos = [[1, 2], [3]]
+hondo = [[[1]], [[2]]]
+>> "distinto largo  " largos ¶
+>> "y en profundidad" hondo ¶
+
+// ── el `#[…]` declarado admite lo que sea, y sigue siendo el mismo tipo ─────
+m = #[1, "dos"]
+>> "declarado       " (m $+ 3.5) ¶
+>> "y sigue igual   " ([1, 2] == #[1, 2]) ¶
+
+// ── EL AGUJERO: tres operaciones que no comprueban nada ────────────────────
+// `$+` sí comprueba, en los tres motores. `$++`, `$+[i]` y `[i]$~` no, también
+// en los tres. Así que un `[…]` se vuelve heterogéneo sin que nadie lo declare
+// y sin que nadie avise, y `#?` contesta `##[` — una lista que nadie escribió.
+//
+// Está aquí y no en `reject/` porque hoy se acepta: es un agujero de la regla,
+// no un desacuerdo entre motores, y cerrarlo rechazaría programas que corren.
+b = [1, 2]
+c = b $++ "tres"
+>> "$++    " c " " (c#?)[1] ¶
+d = [1, 2]
+e = d $+[1] "x"
+>> "$+[i]  " e " " (e#?)[1] ¶
+f = [1, 2]
+g = f[1]$~ "x"
+>> "[i]$~  " g " " (g#?)[1] ¶

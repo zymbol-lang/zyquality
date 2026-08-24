@@ -1,0 +1,20 @@
+// @reject: decision 15, on the EDIT side — appending to a `[…]` keeps it
+// @reject: homogeneous. `#[…]` declares the mix, and `a $+ 3.5` on an `[Int]`
+// @reject: is fine because Int and Float mix freely everywhere.
+// @reject:
+// @reject: The two Rust engines have always refused this; the browser engine
+// @reject: accepted it, so `[1, 2] $+ "x"` ran in the playground and failed
+// @reject: outside it. That is the same shape as DM-04 — the LITERAL, closed in
+// @reject: reject/collections/04_heterogeneous_literal.zy — one operation later.
+// @reject: Closed 2026-08-24, and it needed the checker to remember an array's
+// @reject: element type: the form that appears in real code is a variable, not
+// @reject: a literal with an operator hanging off it.
+// @reject:
+// @reject: `$++`, `$+[i]` and `[i]$~` can each still turn a `[…]` heterogeneous
+// @reject: with nobody complaining, in ALL THREE engines. That is one hole and
+// @reject: not a disagreement, and it is written down rather than closed here:
+// @reject: refusing them would newly reject programs that run today, which is a
+// @reject: decision and not a parity fix.
+a = [1, 2]
+b = a $+ "x"
+>> b ¶
