@@ -1,0 +1,23 @@
+// @reject: la homogeneidad vale para la familia de edición ENTERA (L46).
+// @reject:
+// @reject: La decisión 15 dice que `[…]` es homogéneo Y SE COMPRUEBA. Hasta
+// @reject: v0.0.9 se comprobaba el literal y `$+`, y nada más — así que `$++`,
+// @reject: `$+[i]` y `[i]$~` volvían heterogéneo un `[…]` sin que nadie lo
+// @reject: declarara y sin que nadie avisara, en los TRES motores, y `#?`
+// @reject: contestaba `##[`: una lista que nadie escribió. Un `[…]` no era
+// @reject: homogéneo, era «homogéneo cuando lo escribes».
+// @reject:
+// @reject: Cerrado el 2026-08-24. El analizador ya sabía el tipo de elemento
+// @reject: allí donde sabe algo —es lo que hacía comprobable `$+`—, así que es
+// @reject: la misma comparación en las otras tres.
+// @reject:
+// @reject: Superficie medida antes de cerrarlo: 27 sitios de `$+[i]` y 186 de
+// @reject: `[i]$~` en 61 archivos del corpus y de las aplicaciones. **Ninguno**
+// @reject: mezclaba tipos: el único archivo que dejó de pasar fue el que
+// @reject: documentaba el agujero. La comprobación solo dispara sobre el fallo.
+// @reject:
+// @reject: Los dos escapes siguen: `#[…]` admite lo que sea, e Int y Float se
+// @reject: mezclan libremente, aquí como en toda posición aritmética.
+a = [1, 2]
+b = a[1]$~ "x"
+>> b ¶
