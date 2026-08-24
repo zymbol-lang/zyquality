@@ -1,0 +1,64 @@
+// Test: `##_` — el literal de Unit (GAP-ZYB-009).
+//
+// Unit era el ÚNICO tipo del lenguaje cuyo valor no se podía escribir. Era
+// alcanzable de sobra —una función sin `<~` lo devuelve, `json::decode("null")`
+// lo produce, una columna `NULL` llega así— y no había manera de nombrar lo que
+// había llegado. Es exactamente la forma que tenía el diccionario vacío antes
+// de `#()`: un valor que el programa podía tener y no podía escribir.
+//
+// No es marca nueva. `##_` ya era el símbolo de tipo de Unit y ya era la marca
+// de «cualquier clase» en `:! ##_`, y las dos son la lectura que `_` tiene en
+// todo el lenguaje: lo que no se especifica.
+//
+// Lo que obligó a cerrarlo es que preguntar «¿vino NULL?» exigía destructurar
+// la reflexión de tipo, y la forma evidente de hacerlo está MAL: la cuenta de
+// `#?` vale 0 para cuatro valores distintos, no uno. Ver el final del archivo.
+<# std/json => js
+
+nada() { }
+devuelve() { <~ ##_ }
+
+// ── el literal, y que es el mismo valor que ya existía ──────────────────────
+u = ##_
+>> "literal        " (u#?)[1] ¶
+>> "sin <~         " (u == nada()) ¶
+>> "<~ ##_         " (u == devuelve()) ¶
+>> "y de un null   " (u == js::decode("null")) ¶
+
+// ── un Unit suelto no se imprime; dentro de una colección es `()` ───────────
+// `[1, , 3]` parecería una errata, así que anidado se ve.
+>> "suelto        [" u "]" ¶
+>> "yuxtapuesto   [" ("" u) "]" ¶
+>> "en tupla       " (1, u) ¶
+>> "en dicc.       " #(x: 1, y: ##_) ¶
+>> "en un #[…]     " #[1, ##_, 3] ¶
+
+// ── y sigue sin ser ninguna de las cosas que se le parecen ──────────────────
+>> "== cadena vacía" (u == "") ¶
+>> "== cero        " (u == 0) ¶
+>> "== #0          " (u == #0) ¶
+>> "$! ¿es error?  " (u$!) ¶
+
+// ── es el null del lenguaje, en las dos direcciones ─────────────────────────
+>> "encode         " js::encode(u) ¶
+>> "decode         " (js::decode("null")#?)[1] ¶
+>> "y dentro       " js::encode(#[1, ##_, 3]) ¶
+
+// ── `:! ##_` sigue atrapando cualquier clase ───────────────────────────────
+// El mismo token en las dos posiciones, y la misma lectura.
+!? {
+    x = [1][9]
+} :! ##_ {
+    >> "atrapa         " _err ¶
+}
+
+// ── por qué el rodeo estaba mal ─────────────────────────────────────────────
+// La cuenta de `#?` vale 0 para Unit, para la cadena vacía, para el arreglo
+// vacío y para el diccionario vacío. Un `es_nulo` escrito sobre ella contesta
+// que sí a los cuatro, y una columna TEXT con `''` es cosa de todos los días.
+cuenta(v) { <~ (v#?)[2] }
+>> "cuentas iguales" cuenta(##_) " " cuenta("") " " cuenta([]) " " cuenta(#()) ¶
+
+// La comparación, en cambio, solo dice que sí a uno.
+es_nulo(v) { <~ v == ##_ }
+>> "y comparar     " es_nulo(##_) " " es_nulo("") " " es_nulo([]) " " es_nulo(#()) ¶
