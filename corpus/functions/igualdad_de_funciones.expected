@@ -1,0 +1,13 @@
+misma, dos nombres    #1
+y contra sí misma     #1
+mismo cuerpo, distinta#0
+distinta de verdad    #0
+y `<>` está de acuerdo#1
+misma lambda          #1
+dos lambdas iguales   #0
+dos vueltas del bucle #0
+y cada una es sí misma#1
+función contra lambda #0
+función contra entero #0
+recibida en una HOF   #1
+y la otra no lo es    #0

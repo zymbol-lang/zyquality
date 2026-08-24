@@ -41,9 +41,11 @@ h = b::dame()
 // module's own generic code injecting its own operation.
 >> "HOF interna al módulo " b::interno(5) ¶
 
-// Two calls to the accessor give two usable functions. Whether they compare
-// EQUAL is deliberately not asserted here: the three engines disagree about
-// comparing any two functions, including two names for the same local one, and
-// that is its own finding rather than a fact about modules.
+// Two calls to the accessor hand out THE SAME function, not two copies of it.
+// This line could not be written when the file was first recorded: comparing
+// two functions had no defined answer, and asking would have decided by
+// accident what nobody had decided. It is BUG-ZYB-012, settled since —
+// `==` on a function is identity — so the question now has one.
 otra = b::dame()
 >> "otra vez, y funciona  " otra(5) ¶
+>> "y es la misma función " (h == otra) ¶
