@@ -1,0 +1,71 @@
+// Test: the type symbols `#?` answers with — the whole table, in one file.
+//
+// Ten spellings, each `##` and one character, and for the collections the rule
+// is that the UNMARKED one takes the closing delimiter and the MARKED one the
+// opening delimiter:
+//
+//   [1, 2]      ##]   arreglo        (1, 2)      ##)   tupla
+//   #[1, "a"]   ##[   lista          #(a: 1)     ##(   diccionario
+//
+// `##(` is a TYPE: a dictionary carries its keys, takes `d["k"]$~ v` and is
+// mutable, so calling it a tuple was false from the day `#(…)` landed.
+//
+// `##[` is a READING. `#[…]` and `[…]` are one type — decided so that
+// `json::decode`'s heterogeneous array had somewhere to land — and the mark on
+// the literal is a compile-time declaration that leaves no trace on the value.
+// So the mix is read from what the array HOLDS when asked, which is also the
+// question a caller actually has.
+
+<# std/json => js
+
+// ── the scalars ─────────────────────────────────────────────────────────────
+>> "entero     " (42#?)[1] ¶
+>> "decimal    " (3.5#?)[1] ¶
+>> "cadena     " ("hola"#?)[1] ¶
+>> "carácter   " ('a'#?)[1] ¶
+>> "booleano   " (#1#?)[1] ¶
+
+// ── the four collections ────────────────────────────────────────────────────
+>> "arreglo    " ([1, 2, 3]#?)[1] ¶
+>> "lista      " (#[1, "dos", 3.0]#?)[1] ¶
+>> "tupla      " ((1, 2)#?)[1] ¶
+>> "diccionario" (#(a: 1)#?)[1] ¶
+
+// The empty ones. `#()` is where the old symbol was unusable: there is no `()`
+// to confuse it with, because that form does not parse at all.
+>> "arr. vacío " ([]#?)[1] ¶
+>> "dicc vacío " (#()#?)[1] ¶
+
+// ── the mix is read from the value, not from the literal ────────────────────
+uno = [1]
+>> "uno solo   " (uno#?)[1] ¶
+
+// Elements are compared by their own BASE type, so an array of arrays is
+// uniform whatever those inner arrays hold: this describes one level, and two
+// arrays are the same type as each other.
+anidado = [[1, 2], #[3, "a"]]
+>> "anidado    " (anidado#?)[1] ¶
+
+// Take the mix out of a declared one and it answers `##]`, because a single Int
+// is not a mix — the mark did not survive, and nothing pretends it did.
+quitada = #[1, "dos"]$-[2]
+>> "sin mezcla " quitada " " (quitada#?)[1] ¶
+
+// And the case the reading exists for: an array nobody wrote. `json::decode`
+// hands back a heterogeneous array and there is no `#[` anywhere in the program
+// — the mark cannot be the source of the answer, because there is no mark.
+leída = js::decode("[1, \"dos\", 3.5]")
+uniforme = js::decode("[1, 2, 3]")
+>> "de JSON    " (leída#?)[1] " y uniforme " (uniforme#?)[1] ¶
+
+// A tuple and a dictionary in the same array now disagree, which they could not
+// while both answered `##)`.
+mezcla_agregados = #[(1, 2), #(a: 1)]
+>> "agregados  " (mezcla_agregados#?)[1] ¶
+dos_dicc = [#(a: 1), #(a: 2)]
+>> "dos dicc.  " (dos_dicc#?)[1] ¶
+
+// ── and they are still one type ─────────────────────────────────────────────
+// Everything above is about what `#?` reports. Nothing about the type changed:
+// the two spellings are equal and every operator behaves the same.
+>> "iguales    " ([1, 2] == #[1, 2]) ¶
