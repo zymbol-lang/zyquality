@@ -1,10 +1,16 @@
 // Test: `#[…]` — an array whose mix of element types is DECLARED.
 //
 // Decision 15 of Divergente_ES/forma/README.md: `[…]` is homogeneous and gets
-// checked; `#[…]` declares the mix and does not. **They are the same type** —
-// `#?` answers `##]` for both and every operator behaves the same. The `#` is
-// the meta/type mark and `##]` is already the array type's symbol, so declaring
+// checked; `#[…]` declares the mix and does not. **They are the same type** and
+// every operator behaves the same. The `#` is the meta/type mark, so declaring
 // that an array has an open element type is a statement about its type.
+//
+// `#?` tells them apart from v0.0.9 — `##]` when the elements are all one type
+// and `##[` when they are not — and that is NOT a second type. It is read from
+// what the array HOLDS when asked, never from how the literal was written, and
+// the difference shows up twice below: an array built by `json::decode` answers
+// `##[` with no mark anywhere in the program, and taking the mix out of a
+// `#[…]` leaves an array that answers `##]`, because one Int is not a mix.
 //
 // This is what closes the hole the rule used to leave: `json::decode` hands back
 // a heterogeneous array, and until now there was no way to WRITE one — the
@@ -21,10 +27,21 @@ m = #[#0, 1, '2', "tres", 4.0]
 >> m ¶
 >> m$# ¶
 
-// The type is the array type, not a new one — this is the whole of decision 15.
+// `#?` reports the mix; the TYPE is still the array type, which is what every
+// line after this one demonstrates.
 >> m#? ¶
 h = [1, 2, 3]
 >> h#? ¶
+
+// Read from the contents and not from the literal: take the mix out and it is
+// an array again, mark or no mark.
+sin_mezcla = #[1, "dos"]$-[2]
+>> sin_mezcla " " (sin_mezcla#?)[1] ¶
+
+// And they are still equal, still the same type, still one collection.
+>> ([1, 2] == #[1, 2]) ¶
+uniforme_marcado = #[1, 2]
+>> (uniforme_marcado#?)[1] ¶
 
 // Every operator behaves the same on both.
 >> (m$? 1) ¶

@@ -1,27 +1,50 @@
-// Edge Case Test 2: Type Metadata on Named Tuples
-// Expected: #? operator returns correct type info
-
+// Test: `#?` on a dictionary — it is `##(`, and not the tuple's `##)`.
+//
+// This file used to assert the opposite, and was right to: while the dictionary
+// was spelled `(a: 1)` and called a named tuple, the two shared a symbol on
+// purpose. Two things ended that. The notation, `#(…)`, made them different to
+// write; and the empty one made them different values — `#()` takes
+// `d["k"]$~ v` and `()` answers that tuples are immutable. A type symbol that
+// cannot tell them apart is a type symbol that lies to every generic function
+// that asks.
+//
+// The rule for the collections: the unmarked one takes the CLOSING delimiter,
+// the marked one the OPENING one.
+//
+//   [1, 2]      ##]        (1, 2)      ##)
+//   #[1, "a"]   ##[        #(a: 1)     ##(
 person = #(name: "Alice", age: 25)
 
 meta = person#?
-
 type_symbol = meta[1]
 count = meta[2]
 
-? type_symbol == "##)" {
-    >> "✓ Type symbol for named tuple is ##)" ¶
+? type_symbol == "##(" {
+    >> "✓ el símbolo del diccionario es ##(" ¶
 }
 
 ? count == 2 {
-    >> "✓ Count returns number of fields" ¶
+    >> "✓ la cuenta son las claves" ¶
 }
 
-// Compare with positional tuple
+// The positional tuple keeps `##)`, and the empty dictionary is a dictionary:
+// asking the type of `#()` is exactly where the old symbol was unusable, since
+// there is no `()` to confuse it with — that form does not parse.
 pos_tuple = (10, 20)
 pos_meta = pos_tuple#?
-
 ? pos_meta[1] == "##)" {
-    >> "✓ Positional and named tuples have same type symbol" ¶
+    >> "✓ la tupla posicional sigue en ##)" ¶
+}
+
+vacío = #()
+vacío_meta = vacío#?
+? vacío_meta[1] == "##(" {
+    >> "✓ el diccionario vacío también es ##(" ¶
+}
+
+// And the two no longer answer the same, which is the whole point.
+? type_symbol <> pos_meta[1] {
+    >> "✓ diccionario y tupla ya no comparten símbolo" ¶
 }
 
 >> "Edge Test 2 PASSED" ¶

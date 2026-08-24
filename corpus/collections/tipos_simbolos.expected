@@ -1,0 +1,18 @@
+entero     ###
+decimal    ##.
+cadena     ##"
+carácter   ##'
+booleano   ##?
+arreglo    ##]
+lista      ##[
+tupla      ##)
+diccionario##(
+arr. vacío ##]
+dicc vacío ##(
+uno solo   ##]
+anidado    ##]
+sin mezcla [1] ##]
+de JSON    ##[ y uniforme ##]
+agregados  ##[
+dos dicc.  ##]
+iguales    #1

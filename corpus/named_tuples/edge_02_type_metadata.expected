@@ -1,4 +1,6 @@
-✓ Type symbol for named tuple is ##)
-✓ Count returns number of fields
-✓ Positional and named tuples have same type symbol
+✓ el símbolo del diccionario es ##(
+✓ la cuenta son las claves
+✓ la tupla posicional sigue en ##)
+✓ el diccionario vacío también es ##(
+✓ diccionario y tupla ya no comparten símbolo
 Edge Test 2 PASSED
