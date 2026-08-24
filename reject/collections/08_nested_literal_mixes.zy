@@ -1,0 +1,15 @@
+// @reject: decision 15 reaches all the way down: the elements of `[…]` must
+// @reject: agree, and two arrays agree when THEIR elements do. `[[1], ["x"]]` is
+// @reject: an array of `[Int]` and `[String]`, which is a mix.
+// @reject:
+// @reject: `[[1, 2], [3]]` is fine — both are `[Int]`, and length is not part of
+// @reject: a type — and so is `[[1], [2.5]]`, because Int and Float mix freely at
+// @reject: any depth.
+// @reject:
+// @reject: The two Rust engines say `array element 2 has type [String], but
+// @reject: expected [Int]`. The browser engine decided element types from
+// @reject: scalar literals only, so it saw two arrays, could not name either,
+// @reject: and said nothing. A nested table built in the playground failed
+// @reject: outside it. Closed 2026-08-24 by making that decision recursive.
+a = [[1], ["x"]]
+>> a ¶
