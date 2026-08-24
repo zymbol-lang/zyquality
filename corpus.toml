@@ -221,18 +221,6 @@ tag = "ANSI_FORMAT"
 reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
 
 [[rule]]
-match = "named_tuples/error_01_field_not_found.zy"
-engines = ["zyjs"]
-tag = "ANSI_FORMAT"
-reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
-
-[[rule]]
-match = "named_tuples/error_02_member_on_positional.zy"
-engines = ["zyjs"]
-tag = "ANSI_FORMAT"
-reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
-
-[[rule]]
 match = "manual/tui/05_key_input.zy"
 engines = ["zyjs"]
 tag = "TUI"
