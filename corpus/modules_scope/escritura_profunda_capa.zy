@@ -1,0 +1,17 @@
+// Re-export layer over escritura_profunda_m — the I18N.md pattern 3 shape.
+//
+// A deep write must behave the same whether it is reached directly or through
+// a layer that only renames: the write happens in the ORIGIN module's frame,
+// and BUG-ZYB-001 was exactly a re-exported function losing that origin.
+
+# escritura_profunda_capa {
+    <# ./escritura_profunda_m => base
+
+    #> {
+        base::pon_punto     => fija_alto
+        base::pon_hondo     => fija_saludo
+        base::añade         => agrega
+        base::lee           => consulta
+        base::todo          => estado
+    }
+}

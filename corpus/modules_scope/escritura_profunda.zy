@@ -1,0 +1,45 @@
+// Deep writes into module state, direct and through a re-export layer.
+//
+// Every spelling of a path reaches the same place, and the write survives the
+// call — which is the part that is not obvious: module state only reaches the
+// store when the frame returns, so a deep write travels the same way a shallow
+// one does. `lee` reads it back WITHOUT naming what it returns, the shape that
+// caught MM-12 (BUG-ZYB-008).
+
+<# ./escritura_profunda_m => m
+<# ./escritura_profunda_capa => capa
+
+>> "--- el estado de partida ---" ¶
+>> m::todo() ¶
+
+>> "--- las cuatro grafías escriben el mismo sitio ---" ¶
+m::pon_punto(11)
+>> m::lee("limites", "alto") ¶
+m::pon_mixto(12)
+>> m::lee("limites", "alto") ¶
+m::pon_navegador(13)
+>> m::lee("limites", "alto") ¶
+
+>> "--- tres niveles de hondura ---" ¶
+m::pon_hondo("buenas")
+>> m::lee("idioma", "es") ¶
+
+>> "--- una edición que no es \$~ vuelve a su sitio ---" ¶
+m::añade(3)
+>> m::todo() ¶
+
+>> "--- y todo lo demás sigue ahí ---" ¶
+>> m::lee("limites", "bajo") ¶
+>> m::lee("idioma", "en") ¶
+
+>> "--- lo mismo a través de la capa de reexportación ---" ¶
+capa::fija_alto(21)
+>> capa::consulta("limites", "alto") ¶
+capa::fija_saludo("qué tal")
+>> capa::consulta("idioma", "es") ¶
+capa::agrega(4)
+>> capa::estado() ¶
+
+>> "--- la capa y el original son el MISMO estado ---" ¶
+>> m::lee("limites", "alto") ¶
+>> m::todo() ¶

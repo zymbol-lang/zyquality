@@ -1,0 +1,42 @@
+// Module for escritura_profunda.zy — deep writes into module state, through
+// every spelling of a path.
+//
+// This is where the write forms and MM-12 meet. A module's state is the only
+// shared mutable state the language has, and a write to it only reaches the
+// store when the frame returns; a deep write is still one write, so it has to
+// travel the same way. Reading it back through a function that does not name
+// the state is what caught BUG-ZYB-008.
+
+# escritura_profunda_m {
+    #> {
+        pon_punto, pon_mixto, pon_navegador, pon_hondo,
+        añade, lee, todo
+    }
+
+    // The shape of a decoded JSON object: dictionaries nested three deep, with
+    // an array at one of the leaves.
+    config = #(
+        idioma: #(es: #(saludo: "hola", desp: "adiós"), en: #(saludo: "hi", desp: "bye")),
+        limites: #(alto: 10, bajo: 1),
+        lista: [1, 2]
+    )
+
+    // The same place, written four ways.
+    pon_punto(v)     { config.limites.alto $~ v }
+    pon_mixto(v)     { config.limites["alto"] $~ v }
+    pon_navegador(v) { config["limites">"alto"] $~ v }
+    pon_hondo(v)     { config.idioma["es"].saludo $~ v }
+
+    // An edit that is not `$~`: the receiver is inside the state, so it is put
+    // back where it came from instead of replacing the whole state.
+    añade(v) { config.lista $+ v }
+
+    // Read through a function that does NOT name what it returns, which is the
+    // shape that caught MM-12.
+    lee(a, b) {
+        sub = config[a]
+        <~ sub[b]
+    }
+
+    todo() { <~ config }
+}

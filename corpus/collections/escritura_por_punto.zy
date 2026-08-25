@@ -6,13 +6,18 @@
 // por qué. La asimetría no se decidió: se heredó.
 //
 // Ahora `d.k$~ v` es exactamente `d["k"]$~ v` — el mismo sitio, la misma regla
-// del resultado, la misma clave nueva si no existía. Lo que el punto no hace es
-// llegar hondo: para eso está el navegador, y es la única forma de hacerlo.
+// del resultado, la misma clave nueva si no existía. Y el punto COMPONE: una
+// ruta puede mezclarlo con corchetes en cualquier orden.
+//
+// Lo único que no se admite es un corchete justo detrás de otro corchete:
+// `d["x"]["y"]` es el navegador escrito dos veces, y la forma es `d["x">"y"]`.
+// El punto no es una segunda grafía de nada — es otra sintaxis—, así que
+// compone sin ser redundante.
 //
 // El `::` queda fuera a propósito: direcciona el espacio de nombres de un
 // módulo, y eso no es un sitio donde escribir.
 
-d = #(a: 1, x: #(y: 2))
+d = #(a: 1, x: #(y: 2), lista: [1, 2])
 
 >> "--- leer, que ya valía de las dos formas ---" ¶
 >> d.a ¶
@@ -29,9 +34,25 @@ d.nueva $~ "añadida"
 >> d ¶
 >> (d$? "nueva") ¶
 
->> "--- hondo sigue siendo cosa del navegador ---" ¶
+>> "--- una ruta mezcla las dos sintaxis, en cualquier orden ---" ¶
 d["x">"y"] $~ 5
->> d ¶
+>> "navegador   " d ¶
+d.x["y"] $~ 6
+>> "punto+corch " d ¶
+d["x"].y $~ 7
+>> "corch+punto " d ¶
+d.x.y $~ 8
+>> "punto+punto " d ¶
+
+>> "--- y no solo `$~`: la familia entera vuelve a su sitio ---" ¶
+// El receptor está DENTRO de `d`, así que lo editado se devuelve a su ruta en
+// vez de sustituir a `d`. Antes de la v0.0.9 esto dejaba `d` valiendo la lista.
+d.lista $+ 3
+>> "punto       " d ¶
+d["lista"] $+ 4
+>> "corchete    " d ¶
+d.lista[1] $~ 99
+>> "un elemento " d ¶
 
 >> "--- la regla del resultado no cambia ---" ¶
 // Con el resultado USADO construye y deja el original en paz; descartado,
