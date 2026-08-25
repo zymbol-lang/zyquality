@@ -5,6 +5,10 @@
 //        floats/decimals, exponentiation, large numbers,
 //        output-mode switch, hex literals, and booleans.
 //
+// Arabic is the one script that encodes its own numeric separators, so under an
+// active mode a float is written ۴٫۷۵, not ۴.۷۵ (U+066B ARABIC DECIMAL
+// SEPARATOR). Reading accepts both.
+//
 // Values used:  a=8  b=4  c=3  f=3.5  g=1.25  h=100  exponent=2
 //
 // Expected output:
@@ -41,12 +45,12 @@
 // -۸
 // -۴
 // -۳۲
-// ۴.۷۵
-// ۲.۲۵
-// ۴.۳۷۵
-// ۲.۸
-// ۱۲.۲۵
-// -۱.۲۵
+// ۴٫۷۵
+// ۲٫۲۵
+// ۴٫۳۷۵
+// ۲٫۸
+// ۱۲٫۲۵
+// -۱٫۲۵
 // ۱۰۸
 // ۴۰۰
 // ۲۵۵

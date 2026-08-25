@@ -1,0 +1,81 @@
+// Los separadores siguen a la escritura, y el par del lenguaje no se invierte.
+//
+// El modo numeral ya decidía cómo se escriben las CIFRAS. Los separadores son
+// el mismo eje —cómo se escribe un número— y hasta la v0.0.9 no lo seguían: un
+// programa en árabe imprimía cifras árabes con un punto ASCII en medio.
+//
+// La regla, en dos mitades que hay que leer juntas:
+//
+//   · El LENGUAJE fija el par: `,` agrupa los miles y `.` divide los decimales.
+//     Nunca se invierte, en ninguna escritura. Un programa que quiera ver
+//     `100.000,00` con cifras latinas se lo construye; el motor no lo hace.
+//
+//   · La ESCRITURA elige la grafía de ese par, cuando tiene una propia. El
+//     listón es que Unicode nombre el carácter separador numérico DE esa
+//     escritura, y solo el árabe lo pasa: U+066B ARABIC DECIMAL SEPARATOR y
+//     U+066C ARABIC THOUSANDS SEPARATOR, para sus dos bloques de cifras.
+//     Devanagari, tailandés y las otras 66 escrituras escriben `.` y `,`.
+//
+// Leer es ciego a la escritura, escribir no: `٤٫٧٥` y `٤.٧٥` son el mismo
+// número, y solo el modo activo decide cuál se escribe. Eso es lo que mantiene
+// en pie la regla de `numeral_mode_round_trip.zy` — lo que el programa escribe,
+// el programa lo puede leer.
+
+n = 1234567
+f = 1234567.89
+
+>> "--- ASCII: el par del lenguaje ---" ¶
+>> f ¶
+>> #,|n| ¶
+>> #,.2|f| ¶
+>> #^|f| ¶
+
+#٠٩#
+>> "--- árabe-índico: escritura con separadores propios ---" ¶
+>> f ¶
+>> #,|n| ¶
+>> #,.2|f| ¶
+>> #.2|f| ¶
+>> #^|f| ¶
+
+#۰۹#
+>> "--- árabe-índico extendido: los mismos ---" ¶
+>> f ¶
+>> #,.2|f| ¶
+
+#०९#
+>> "--- devanagari: sin separadores propios, ASCII ---" ¶
+>> f ¶
+>> #,.2|f| ¶
+
+#๐๙#
+>> "--- tailandés: igual ---" ¶
+>> f ¶
+>> #,|n| ¶
+
+#09#
+>> "--- lo escrito se lee de vuelta ---" ¶
+>> #|"٤٫٧٥"| ¶
+>> #|"٤.٧٥"| ¶
+>> #|"4.75"| ¶
+
+// Un literal admite el separador de su propia escritura, no el de otra.
+lit = ٣٫٥
+>> lit ¶
+>> (lit + ١) ¶
+>> lit#? ¶
+
+// El separador de miles no tiene lector, en ninguna escritura: `#,` es el único
+// operador cuyo resultado es texto, y su salida se devuelve tal cual.
+>> #|"1,234"| ¶
+>> #|"١٬٢٣٤"| ¶
+
+// Una coma nunca es un punto decimal, ni al leer ni al escribir.
+>> ("1,5" == "1.5") ¶
+
+// Lo que rodea al número no se toca: solo se mapea el número, no el texto.
+#٠٩#
+>> "total: " f " (" n ")" ¶
+>> [1, 2, 3] ¶
+>> (7, 8) ¶
+#09#
