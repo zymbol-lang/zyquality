@@ -1,0 +1,15 @@
+// @reject: una edición necesita un sitio donde escribir, y `d.x["y"]` no lo es:
+// @reject: `d.x` produce un valor y el corchete escribe en ÉL, no en `d`.
+// @reject:
+// @reject: Es la decisión 20, que el comentario de `in_place_edit_target` llevaba
+// @reject: prometiendo desde que se escribió —«is refused rather than silently
+// @reject: doing nothing»— sin que nada la aplicara: la sentencia caía a
+// @reject: `Statement::Expr`, se evaluaba y tiraba el resultado. El motor del
+// @reject: navegador SÍ la rechazaba, así que era además una divergencia viva.
+// @reject:
+// @reject: El mensaje distingue las dos causas: una cadena que arranca en un
+// @reject: nombre quería el navegador `>`; cualquier otra cosa quería una
+// @reject: variable.
+d = #(a: 1, x: #(y: 2))
+d.x["y"] $~ 9
+>> d ¶
