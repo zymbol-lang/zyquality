@@ -1,0 +1,33 @@
+--- receptor: el nombre entero ---
+[3, 1, 2, 1, 9]
+[0, 3, 1, 2, 1, 9]
+[0, 3, 2, 1, 9]
+[0, 3, 2, 9]
+[3, 2, 9]
+[3, 2, 9, 7, 8]
+[2, 3, 7, 8, 9]
+[9, 8, 7, 3, 2]
+--- receptor: dentro del nombre, por punto ---
+[3, 1, 2, 1, 9]
+[0, 3, 1, 2, 1, 9]
+[1, 2, 1, 9]
+[1, 2, 1, 9, 7]
+[1, 1, 2, 7, 9]
+--- receptor: dentro del nombre, por corchete ---
+[1, 1, 2, 7, 9, 100]
+[100, 9, 7, 2, 1, 1]
+--- receptor: dos niveles, por el navegador ---
+[5, 4, 9]
+[0, 5, 4, 9]
+[0, 4, 5, 9]
+--- receptor: dos niveles, mezclando las dos sintaxis ---
+[0, 4, 5, 9, 7]
+[4, 5, 9, 7]
+[9, 7, 5, 4]
+--- y el resto del dato sigue entero ---
+banana
+#1
+#1
+--- la regla del resultado no cambia: usado construye ---
+construida [1, 2, 3]
+original   [1, 2]

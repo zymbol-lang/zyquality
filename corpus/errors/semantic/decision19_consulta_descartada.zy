@@ -1,0 +1,35 @@
+// Decisión 19: descartar una consulta es código muerto, y ahora se dice.
+//
+// La familia `$` tiene dos mitades (COLLECTIONS.md § 1). La de EDICIÓN modifica
+// cuando su resultado se descarta —esa es la decisión 12, la regla del
+// resultado—. La de CONSULTA construye siempre, así que una sentencia que solo
+// es una consulta tira lo que acaba de construir.
+//
+// Estaba documentado y no lo aplicaba nadie: `s$~~["a":"X"]` en su línea se
+// ejecutaba, no cambiaba nada, y ninguno de los tres motores decía una palabra.
+// Es la misma forma que hizo silencioso a BUG-ZYB-002, y la misma que ya se
+// cerró para el identificador suelto (ERROR-ZYB-001).
+//
+// El operador es puro, así que el aviso vale también con una llamada dentro:
+// el efecto de la llamada ocurre igual, y el `$#` que la envuelve sigue
+// sobrando. El aviso señala al operador, no a la llamada.
+
+a = [1, 2, 3]
+s = "banana"
+
+a$#
+a$? 2
+a$?? 2
+a$[1..2]
+a$> (x -> x * 2)
+a$| (x -> x > 1)
+a$< (0, (ac, x -> ac + x))
+s$/ "n"
+s$* 2
+s$~~["a":"X"]
+
+// La otra mitad NO avisa: modificar en su sitio es lo que se espera de ella.
+a$+ 4
+a$^+
+>> a ¶
+>> s ¶

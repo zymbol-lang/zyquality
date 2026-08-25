@@ -1,0 +1,41 @@
+warning: this statement does nothing: `$#` builds a value and it is discarded
+  --> errors/semantic/decision19_consulta_descartada.zy:20:1
+  = help: remove it, or use the result — assign it, print it, or pass it on
+
+warning: this statement does nothing: `$?` builds a value and it is discarded
+  --> errors/semantic/decision19_consulta_descartada.zy:21:1
+  = help: remove it, or use the result — assign it, print it, or pass it on
+
+warning: this statement does nothing: `$??` builds a value and it is discarded
+  --> errors/semantic/decision19_consulta_descartada.zy:22:1
+  = help: remove it, or use the result — assign it, print it, or pass it on
+
+warning: this statement does nothing: `$[..]` builds a value and it is discarded
+  --> errors/semantic/decision19_consulta_descartada.zy:23:1
+  = help: remove it, or use the result — assign it, print it, or pass it on
+
+warning: this statement does nothing: `$>` builds a value and it is discarded
+  --> errors/semantic/decision19_consulta_descartada.zy:24:1
+  = help: remove it, or use the result — assign it, print it, or pass it on
+
+warning: this statement does nothing: `$|` builds a value and it is discarded
+  --> errors/semantic/decision19_consulta_descartada.zy:25:1
+  = help: remove it, or use the result — assign it, print it, or pass it on
+
+warning: this statement does nothing: `$<` builds a value and it is discarded
+  --> errors/semantic/decision19_consulta_descartada.zy:26:1
+  = help: remove it, or use the result — assign it, print it, or pass it on
+
+warning: this statement does nothing: `$/` builds a value and it is discarded
+  --> errors/semantic/decision19_consulta_descartada.zy:27:1
+  = help: remove it, or use the result — assign it, print it, or pass it on
+
+warning: this statement does nothing: `$*` builds a value and it is discarded
+  --> errors/semantic/decision19_consulta_descartada.zy:28:1
+  = help: remove it, or use the result — assign it, print it, or pass it on
+
+warning: this statement does nothing: `$~~` builds a value and it is discarded
+  --> errors/semantic/decision19_consulta_descartada.zy:29:1
+  = help: remove it, or use the result — assign it, print it, or pass it on
+
+Checked with 10 warning(s)
