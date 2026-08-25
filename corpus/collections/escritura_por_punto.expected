@@ -1,0 +1,16 @@
+--- leer, que ya valía de las dos formas ---
+1
+1
+--- escribir, ahora también ---
+(a: 9, x: (y: 2))
+(a: 7, x: (y: 2))
+--- una clave que no estaba se AÑADE, como con el corchete ---
+(a: 7, x: (y: 2), nueva: añadida)
+#1
+--- hondo sigue siendo cosa del navegador ---
+(a: 7, x: (y: 5), nueva: añadida)
+--- la regla del resultado no cambia ---
+construida (n: 42)
+original   (n: 1)
+--- una clave con punto en el nombre solo la alcanza el corchete ---
+(con.puntos: 2)

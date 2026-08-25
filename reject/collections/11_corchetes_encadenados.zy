@@ -1,0 +1,18 @@
+// @reject: escribir hondo se hace con el navegador `>`, no encadenando
+// @reject: corchetes. Es la decisión que ya estaba tomada para `m[i][j] = v`
+// @reject: —rompe navegación e intención—, y hasta la v0.0.9 no se aplicaba a
+// @reject: `$~`.
+// @reject:
+// @reject: Lo que hacía antes NO era no hacer nada: DESTRUÍA el dato. La
+// @reject: sentencia azucara a `d = d["x"]["y"]$~ 9`, y la expresión devuelve el
+// @reject: receptor que actualizó —el diccionario interior—, así que `d` pasaba a
+// @reject: valer `(y: 9)` y las demás claves desaparecían. Código de salida 0, sin
+// @reject: diagnóstico, y los TRES motores de acuerdo, así que ningún consenso
+// @reject: podía verlo.
+// @reject:
+// @reject: La forma correcta está en corpus/collections/escritura_por_punto.zy.
+// @reject: Cero archivos del corpus, de las aplicaciones o de los ejemplos usaban
+// @reject: la encadenada, medido antes de cerrarla.
+d = #(a: 1, x: #(y: 2))
+d["x"]["y"] $~ 9
+>> d ¶

@@ -1,0 +1,48 @@
+// El punto escribe lo que el punto lee.
+//
+// `COLLECTIONS.md` documenta dos maneras de alcanzar una clave: `u.nombre`, que
+// llega a las claves que son identificadores, y `u["nombre"]`, que llega a
+// cualquiera. Las dos LEÍAN; solo una ESCRIBÍA, y en ningún sitio estaba dicho
+// por qué. La asimetría no se decidió: se heredó.
+//
+// Ahora `d.k$~ v` es exactamente `d["k"]$~ v` — el mismo sitio, la misma regla
+// del resultado, la misma clave nueva si no existía. Lo que el punto no hace es
+// llegar hondo: para eso está el navegador, y es la única forma de hacerlo.
+//
+// El `::` queda fuera a propósito: direcciona el espacio de nombres de un
+// módulo, y eso no es un sitio donde escribir.
+
+d = #(a: 1, x: #(y: 2))
+
+>> "--- leer, que ya valía de las dos formas ---" ¶
+>> d.a ¶
+>> d["a"] ¶
+
+>> "--- escribir, ahora también ---" ¶
+d.a $~ 9
+>> d ¶
+d["a"] $~ 7
+>> d ¶
+
+>> "--- una clave que no estaba se AÑADE, como con el corchete ---" ¶
+d.nueva $~ "añadida"
+>> d ¶
+>> (d$? "nueva") ¶
+
+>> "--- hondo sigue siendo cosa del navegador ---" ¶
+d["x">"y"] $~ 5
+>> d ¶
+
+>> "--- la regla del resultado no cambia ---" ¶
+// Con el resultado USADO construye y deja el original en paz; descartado,
+// modifica. Es la misma regla que el corchete, y el punto no la altera.
+base = #(n: 1)
+otra = base.n $~ 42
+>> "construida " otra ¶
+>> "original   " base ¶
+
+>> "--- una clave con punto en el nombre solo la alcanza el corchete ---" ¶
+// El punto llega a las claves que son identificadores; `"con.puntos"` no lo es.
+e = #("con.puntos": 1)
+e["con.puntos"] $~ 2
+>> e ¶
