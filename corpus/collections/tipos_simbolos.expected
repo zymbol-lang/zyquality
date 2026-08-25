@@ -3,6 +3,11 @@ decimal    ##.
 cadena     ##"
 carácter   ##'
 booleano   ##?
+unidad     ##_
+es cadena  (##", 3, ###)
+nombre     #1
+unidad val #1
+unidad nom #1
 arreglo    ##]
 lista      ##[
 tupla      ##)

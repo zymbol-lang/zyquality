@@ -24,6 +24,25 @@
 >> "cadena     " ("hola"#?)[1] ¶
 >> "carácter   " ('a'#?)[1] ¶
 >> "booleano   " (#1#?)[1] ¶
+>> "unidad     " (##_#?)[1] ¶
+
+// ── the symbol is a NAME, and the name is a String ───────────────────────────
+//
+// `#?` answers with the type's NAME, written in symbols instead of in Latin
+// letters: `###` is to Zymbol what `"Integer"` is to another language. So the
+// answer is a `##"`, and asking about a type is comparing names — which is what
+// every dynamically typed language does.
+//
+// `##_` is the one symbol that is ALSO syntax, and for a different need: to
+// write the Unit VALUE, so that `v == ##_` can be asked (GAP-ZYB-009). That
+// created no exception here — asked for its name, a Unit still answers with the
+// string `"##_"`. The two forms answer different questions, the value and the
+// name, and neither shadows the other.
+>> "es cadena  " ((42#?)[1])#? ¶
+>> "nombre     " ((42#?)[1] == "###") ¶
+u = ##_
+>> "unidad val " (u == ##_) ¶
+>> "unidad nom " ((u#?)[1] == "##_") ¶
 
 // ── the four collections ────────────────────────────────────────────────────
 >> "arreglo    " ([1, 2, 3]#?)[1] ¶
