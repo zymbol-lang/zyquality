@@ -1,0 +1,33 @@
+--- ASCII: el par del lenguaje ---
+1234567.89
+1,234,567
+1,234,567.89
+1.23456789e6
+--- árabe-índico: escritura con separadores propios ---
+١٢٣٤٥٦٧٫٨٩
+١٬٢٣٤٬٥٦٧
+١٬٢٣٤٬٥٦٧٫٨٩
+١٢٣٤٥٦٧٫٨٩
+١٫٢٣٤٥٦٧٨٩e٦
+--- árabe-índico extendido: los mismos ---
+۱۲۳۴۵۶۷٫۸۹
+۱٬۲۳۴٬۵۶۷٫۸۹
+--- devanagari: sin separadores propios, ASCII ---
+१२३४५६७.८९
+१,२३४,५६७.८९
+--- tailandés: igual ---
+๑๒๓๔๕๖๗.๘๙
+๑,๒๓๔,๕๖๗
+--- lo escrito se lee de vuelta ---
+4.75
+4.75
+4.75
+3.5
+4.5
+(##., 3, 3.5)
+1,234
+١٬٢٣٤
+#0
+total: ١٢٣٤٥٦٧٫٨٩ (١٢٣٤٥٦٧)
+[١, ٢, ٣]
+(٧, ٨)
