@@ -1,0 +1,34 @@
+// Test: los operadores de FORMATO escriben sus cifras en la escritura activa.
+//
+// `#,` y `#^` no lo hacían. Componían su texto con el formateador del anfitrión,
+// que escribe ASCII, así que bajo `#०९#` un programa imprimía `१२३४५६७.८९` con
+// `>>` y `1,234,567.89` una línea más abajo con `#,` — **dos escrituras de las
+// cifras dentro de la misma salida**.
+//
+// Lo mismo en los tres motores, así que ningún consenso podía verlo, y ningún
+// archivo del corpus imprimía `#,` con un modo activo. Corregido el 2026-08-25.
+//
+// Solo mapean las CIFRAS: los separadores no son dígitos ASCII y pasan tal
+// cual. Eso es lo que deja sitio para elegirlos aparte, que es otra cuestión.
+
+n = 1234567
+f = 1234567.89
+
+>> "── ASCII, el defecto ──" ¶
+>> "llano   " f ¶
+>> "#,      " #,|n| ¶
+>> "#,.2    " #,.2|f| ¶
+>> "#.2     " #.2|f| ¶
+>> "#^      " #^|f| ¶
+
+#०९#
+>> "── devanagari ──" ¶
+>> "llano   " f ¶
+>> "#,      " #,|n| ¶
+>> "#,.2    " #,.2|f| ¶
+>> "#.2     " #.2|f| ¶
+>> "#^      " #^|f| ¶
+#09#
+
+>> "── y de vuelta ──" ¶
+>> "#,      " #,|n| ¶
