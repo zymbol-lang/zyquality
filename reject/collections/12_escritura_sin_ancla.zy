@@ -1,5 +1,7 @@
-// @reject: una edición necesita un sitio donde escribir, y `d.x["y"]` no lo es:
-// @reject: `d.x` produce un valor y el corchete escribe en ÉL, no en `d`.
+// @reject: una edición necesita un sitio con NOMBRE donde escribir. `f()[1]$~ 5`
+// @reject: modifica lo que devolvió la llamada, y a eso no lo sujeta nadie: la
+// @reject: siguiente línea lo descarta, así que la edición es inobservable por
+// @reject: construcción.
 // @reject:
 // @reject: Es la decisión 20, que el comentario de `in_place_edit_target` llevaba
 // @reject: prometiendo desde que se escribió —«is refused rather than silently
@@ -7,9 +9,8 @@
 // @reject: `Statement::Expr`, se evaluaba y tiraba el resultado. El motor del
 // @reject: navegador SÍ la rechazaba, así que era además una divergencia viva.
 // @reject:
-// @reject: El mensaje distingue las dos causas: una cadena que arranca en un
-// @reject: nombre quería el navegador `>`; cualquier otra cosa quería una
-// @reject: variable.
-d = #(a: 1, x: #(y: 2))
-d.x["y"] $~ 9
->> d ¶
+// @reject: Un receptor DENTRO de un nombre sí vale, y escribe donde toca:
+// @reject: `d.x["y"]$~ 5` está en corpus/collections/escritura_por_punto.zy.
+f() { <~ [1, 2] }
+f()[1] $~ 5
+>> f() ¶
