@@ -1,0 +1,79 @@
+// El modelo de edición completo: cada operador × cada forma de receptor.
+//
+// La familia de EDICIÓN modifica cuando su resultado se descarta (decisión 12),
+// y desde la v0.0.9 lo hace EN LA RUTA DE SU RECEPTOR: el receptor puede ser el
+// nombre entero o vivir dentro de él, escrito con punto, con corchete, con el
+// navegador `>` o mezclando los tres.
+//
+// Antes de eso, cualquier receptor que no fuera el nombre desnudo DESTRUÍA el
+// dato: la sentencia azucara a `nombre = <la misma expresión>` y la expresión
+// devuelve el receptor que editó, así que `d["l"]$+ 3` dejaba `d` valiendo la
+// lista. Código de salida 0, sin diagnóstico, y los tres motores de acuerdo.
+//
+// Lo único que no se admite es un corchete justo detrás de otro corchete
+// (reject/collections/11): `d["a"]["b"]` es el navegador escrito dos veces.
+
+>> "--- receptor: el nombre entero ---" ¶
+a = [3, 1, 2, 1]
+a $+ 9
+>> a ¶
+a $+[1] 0
+>> a ¶
+a $- 1
+>> a ¶
+a $-- 1
+>> a ¶
+a $-[1]
+>> a ¶
+a $++ 7 8
+>> a ¶
+a $^+
+>> a ¶
+a $^-
+>> a ¶
+
+>> "--- receptor: dentro del nombre, por punto ---" ¶
+d = #(l: [3, 1, 2, 1], t: "banana", n: #(l: [5, 4]))
+d.l $+ 9
+>> d.l ¶
+d.l $+[1] 0
+>> d.l ¶
+d.l $-[1..2]
+>> d.l ¶
+d.l $++ 7
+>> d.l ¶
+d.l $^+
+>> d.l ¶
+
+>> "--- receptor: dentro del nombre, por corchete ---" ¶
+d["l"] $+ 100
+>> d.l ¶
+d["l"] $^-
+>> d.l ¶
+
+>> "--- receptor: dos niveles, por el navegador ---" ¶
+d["n">"l"] $+ 9
+>> d.n.l ¶
+d["n">"l"] $+[1] 0
+>> d.n.l ¶
+d["n">"l"] $^+
+>> d.n.l ¶
+
+>> "--- receptor: dos niveles, mezclando las dos sintaxis ---" ¶
+d.n["l"] $+ 7
+>> d.n.l ¶
+d["n"].l $-[1]
+>> d.n.l ¶
+d.n.l $^-
+>> d.n.l ¶
+
+>> "--- y el resto del dato sigue entero ---" ¶
+>> d.t ¶
+>> (d$? "l") ¶
+>> (d$? "n") ¶
+
+>> "--- la regla del resultado no cambia: usado construye ---" ¶
+base = #(l: [1, 2])
+otra = base.l $+ 3
+>> "construida " otra ¶
+>> "original   " base.l ¶
