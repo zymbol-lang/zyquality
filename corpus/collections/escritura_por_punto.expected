@@ -2,22 +2,22 @@
 1
 1
 --- escribir, ahora también ---
-(a: 9, x: (y: 2), lista: [1, 2])
-(a: 7, x: (y: 2), lista: [1, 2])
+#(a: 9, x: #(y: 2), lista: [1, 2])
+#(a: 7, x: #(y: 2), lista: [1, 2])
 --- una clave que no estaba se AÑADE, como con el corchete ---
-(a: 7, x: (y: 2), lista: [1, 2], nueva: añadida)
+#(a: 7, x: #(y: 2), lista: [1, 2], nueva: añadida)
 #1
 --- una ruta mezcla las dos sintaxis, en cualquier orden ---
-navegador   (a: 7, x: (y: 5), lista: [1, 2], nueva: añadida)
-punto+corch (a: 7, x: (y: 6), lista: [1, 2], nueva: añadida)
-corch+punto (a: 7, x: (y: 7), lista: [1, 2], nueva: añadida)
-punto+punto (a: 7, x: (y: 8), lista: [1, 2], nueva: añadida)
+navegador   #(a: 7, x: #(y: 5), lista: [1, 2], nueva: añadida)
+punto+corch #(a: 7, x: #(y: 6), lista: [1, 2], nueva: añadida)
+corch+punto #(a: 7, x: #(y: 7), lista: [1, 2], nueva: añadida)
+punto+punto #(a: 7, x: #(y: 8), lista: [1, 2], nueva: añadida)
 --- y no solo `$~`: la familia entera vuelve a su sitio ---
-punto       (a: 7, x: (y: 8), lista: [1, 2, 3], nueva: añadida)
-corchete    (a: 7, x: (y: 8), lista: [1, 2, 3, 4], nueva: añadida)
-un elemento (a: 7, x: (y: 8), lista: [99, 2, 3, 4], nueva: añadida)
+punto       #(a: 7, x: #(y: 8), lista: [1, 2, 3], nueva: añadida)
+corchete    #(a: 7, x: #(y: 8), lista: [1, 2, 3, 4], nueva: añadida)
+un elemento #(a: 7, x: #(y: 8), lista: [99, 2, 3, 4], nueva: añadida)
 --- la regla del resultado no cambia ---
-construida (n: 42)
-original   (n: 1)
+construida #(n: 42)
+original   #(n: 1)
 --- una clave con punto en el nombre solo la alcanza el corchete ---
-(con.puntos: 2)
+#(con.puntos: 2)

@@ -3,4 +3,4 @@
 [1m[34m   4[39m[0m [34m|[39m
 [1m[34m   4[39m[0m [34m|[39m @!
 [34m     |[39m [1m[31m^^[39m[0m
-  [1m[32mhelp:[39m[0m '@!' breaks the enclosing '@' loop; there is none here. A function or lambda body does not see the caller's loops.
+  [1m[32m= help:[39m[0m '@!' breaks the enclosing '@' loop; there is none here. A function or lambda body does not see the caller's loops.

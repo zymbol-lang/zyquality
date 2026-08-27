@@ -3,4 +3,4 @@ error: a top-level `<~` ends the program, so its value is the exit status and mu
    8 |
    8 | <~ "no soy un número"
      | ^^^^^^^^^^^^^^^^^^^^^
-  help: `<~ 0` for success and `<~ 1` (or another number) for failure; to print something before leaving, use `>>` on the line above
+  = help: `<~ 0` for success and `<~ 1` (or another number) for failure; to print something before leaving, use `>>` on the line above

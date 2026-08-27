@@ -14,7 +14,7 @@
 (10, 99, 30, 40, 50)
 1
 Ana
-(id: 1, name: Ana, age: 26)
-(id: 1, age: 25)
+#(id: 1, name: Ana, age: 26)
+#(id: 1, age: 25)
 #1
 3

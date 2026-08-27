@@ -3,4 +3,4 @@
 [1m[34m  23[39m[0m [34m|[39m
 [1m[34m  23[39m[0m [34m|[39m >> "Value: " match_var ¶
 [34m     |[39m [1m[31m             ^^^^^^^^^[39m[0m
-  [1m[32mhelp:[39m[0m variables must be defined before use
+  [1m[32m= help:[39m[0m variables must be defined before use
