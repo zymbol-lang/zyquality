@@ -8,25 +8,25 @@
 [1m[34m  49[39m[0m [34m|[39m
 [1m[34m  49[39m[0m [34m|[39m total = <\ "sqlite3 {database} "SELECT COUNT(*) FROM usuarios;" \>
 [34m     |[39m [1m[31m                                                             ^[39m[0m
-  [1m[32mhelp:[39m[0m expected statement (>>, <<, ?, ??, @, @!, @>, !?, <~, ¶, \\, or identifier)
+  [1m[32m= help:[39m[0m expected statement (>>, <<, ?, ??, @, @!, @>, !?, <~, ¶, \\, or identifier)
 [1m[31merror[39m[0m: unexpected token: Colon
   [1m[34m-->[39m[0m i18n/test_database.zy:50:25
 [1m[34m  50[39m[0m [34m|[39m
 [1m[34m  50[39m[0m [34m|[39m >> "   Total de usuarios: " total ¶
 [34m     |[39m [1m[31m                        ^[39m[0m
-  [1m[32mhelp:[39m[0m expected statement (>>, <<, ?, ??, @, @!, @>, !?, <~, ¶, \\, or identifier)
+  [1m[32m= help:[39m[0m expected statement (>>, <<, ?, ??, @, @!, @>, !?, <~, ¶, \\, or identifier)
 [1m[31merror[39m[0m: unexpected token: LBrace
   [1m[34m-->[39m[0m i18n/test_database.zy:52:23
 [1m[34m  52[39m[0m [34m|[39m
 [1m[34m  52[39m[0m [34m|[39m mayores = <\ "sqlite3 {database} \"SELECT nombre, edad FROM usuarios WHERE edad > 25;\"" \>
 [34m     |[39m [1m[31m                      ^[39m[0m
-  [1m[32mhelp:[39m[0m expected statement (>>, <<, ?, ??, @, @!, @>, !?, <~, ¶, \\, or identifier)
+  [1m[32m= help:[39m[0m expected statement (>>, <<, ?, ??, @, @!, @>, !?, <~, ¶, \\, or identifier)
 [1m[31merror[39m[0m: unexpected token: RBrace
   [1m[34m-->[39m[0m i18n/test_database.zy:52:32
 [1m[34m  52[39m[0m [34m|[39m
 [1m[34m  52[39m[0m [34m|[39m mayores = <\ "sqlite3 {database} \"SELECT nombre, edad FROM usuarios WHERE edad > 25;\"" \>
 [34m     |[39m [1m[31m                               ^[39m[0m
-  [1m[32mhelp:[39m[0m expected statement (>>, <<, ?, ??, @, @!, @>, !?, <~, ¶, \\, or identifier)
+  [1m[32m= help:[39m[0m expected statement (>>, <<, ?, ??, @, @!, @>, !?, <~, ¶, \\, or identifier)
 [1m[31merror[39m[0m: expected expression, found LBrace
   [1m[34m-->[39m[0m i18n/test_database.zy:66:21
 [1m[34m  66[39m[0m [34m|[39m
@@ -37,4 +37,4 @@
 [1m[34m  66[39m[0m [34m|[39m
 [1m[34m  66[39m[0m [34m|[39m dummy = <\ "rm "-f" {database}" \>
 [34m     |[39m [1m[31m                             ^[39m[0m
-  [1m[32mhelp:[39m[0m expected statement (>>, <<, ?, ??, @, @!, @>, !?, <~, ¶, \\, or identifier)
+  [1m[32m= help:[39m[0m expected statement (>>, <<, ?, ??, @, @!, @>, !?, <~, ¶, \\, or identifier)

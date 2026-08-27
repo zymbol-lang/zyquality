@@ -5,7 +5,7 @@ todo       2026-08-23T14:05:09.000+0000
 en -0400   2026-08-23 10:05:09 -0400
 en +1000   2026-08-24 00:05:09 +1000
 medianoche 2026-08-23 00:00:00
-partes     (year: 2026, month: 8, day: 23, hour: 14, minute: 5, second: 9, millisecond: 0, weekday: 7, offset: 0)
+partes     #(year: 2026, month: 8, day: 23, hour: 14, minute: 5, second: 9, millisecond: 0, weekday: 7, offset: 0)
 campos     2026 8 23 semana 7
 desplazado 23
 +90 min    15:35:09

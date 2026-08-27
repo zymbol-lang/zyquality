@@ -74,6 +74,13 @@ needs = ["zymbol"]
 gate = true
 
 [[suite]]
+id = "messages"
+cmd = ["python3", "messages/extract.py"]
+desc = "the diagnostic inventory: every message one engine defines and the other does not, against a recorded baseline"
+needs = ["python3"]
+gate = true
+
+[[suite]]
 id = "bench"
 cmd = ["bash", "bench/bench_gate.sh"]
 desc = "benchmarks against a recorded baseline"

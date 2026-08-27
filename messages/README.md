@@ -23,6 +23,48 @@ It cannot tell that two differently worded messages describe the same
 situation — that judgement is a person's. What it can do is put them side by
 side and be exhaustive about it, which is the part a person cannot do by hand.
 
+## En el gate desde el 2026-08-26, con línea base
+
+Estaba escrito y **no lo corría nadie**: `zyq suite` no lo conocía, y el script
+resolvía `interpreter/crates` literalmente, así que solo funcionaba desde la raíz
+del workspace y moría en cualquier otro sitio. Un medidor que nadie ejecuta se
+pudre; éste medía 1183 diferencias y llevaba meses callado.
+
+```bash
+python3 zyquality/messages/extract.py             # compara contra baseline.txt
+python3 zyquality/messages/extract.py --baseline  # regraba (deliberadamente)
+./zyq suite --only messages                       # lo mismo, dentro del gate
+```
+
+**La cifra que importa es la superficie COMPARTIDA.** Rust implementa cosas que
+`zymbol.js` no tiene ni debe tener —el CLI, el REPL, el empaquetador, el
+formateador, el LSP, el compilador, la VM— y un mensaje de ahí no es una
+divergencia. Sólo lexer, parser, semántico, intérprete, common, ast y error se
+comparan, y sólo un mensaje nuevo **ahí** pone el gate en rojo.
+
+Estado al registrarlo: **804 de un solo lado en superficie compartida** (741 sólo
+Rust, 63 sólo zyjs), más 381 en superficie que zyjs no implementa.
+
+### Lo que esta medida NO es
+
+Una lista de 804 bugs. Es el **denominador**: cuántos sitios hay donde los dos
+motores pueden discrepar y nadie ha mirado. Baja cuando se porta un mensaje;
+sube cuando alguien añade uno a un solo motor.
+
+⚠ **Cerca del 30 % de las entradas no tienen forma de frase.** Parte son
+mensajes reales que ningún filtro simple reconoce (`'§' was declared at §:§`),
+parte son fixtures de Zymbol dentro de doc-comments que `is_message` deja pasar.
+No rompe el trabajo del medidor —sigue siendo monótono y sigue cazando altas—
+pero el 804 está inflado en esa proporción. Afinar `is_message` **bajará** la
+línea base, y eso es una mejora, no una rotura.
+
+### Un tercer fallo del escáner, del mismo tipo que los dos de abajo
+
+`'"'` es un literal de carácter perfectamente normal en Rust, y el escáner leía
+su comilla interior como **apertura de cadena**, tragándose el código fuente
+hasta la siguiente. Un lexer está lleno de `'"'`, así que el crate más afectado
+era justo `zymbol-lexer`. Ahora los literales de carácter se saltan enteros.
+
 ## Two mistakes the script exists to not repeat
 
 **Anchoring on constructor names.** The first version harvested only literals

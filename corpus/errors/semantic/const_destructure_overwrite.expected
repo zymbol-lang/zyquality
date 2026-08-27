@@ -3,4 +3,4 @@ error: cannot reassign constant 'limit'
    5 |
    5 | [limit, _extra] = [200, 300]
      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  help: constants declared with ':=' cannot be modified — use a different name in the destructuring pattern
+  = help: constants declared with ':=' cannot be modified — use a different name in the destructuring pattern

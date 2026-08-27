@@ -1,6 +1,6 @@
 arreglo:     [1, 2, 3]
 mismo que >> [1, 2, 3]
-diccionario: (x: 1, y: dos)
+diccionario: #(x: 1, y: dos)
 tupla:       (10, 20)
 el reparto fue [1, 2, 3] y sobra 0
 <[[1, 2], [3, 4]]>

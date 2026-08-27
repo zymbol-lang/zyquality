@@ -1,1 +1,2 @@
-Runtime error: Cannot access field 'x' on positional tuple. Use positional indexing like tuple[1]
+Runtime error: a positional tuple is addressed by position, not by name: 'x'
+help: use t[1] — names live in a dictionary, #(key: value)

@@ -1,20 +1,20 @@
 --- el estado de partida ---
-(idioma: (es: (saludo: hola, desp: adiós), en: (saludo: hi, desp: bye)), limites: (alto: 10, bajo: 1), lista: [1, 2])
+#(idioma: #(es: #(saludo: hola, desp: adiós), en: #(saludo: hi, desp: bye)), limites: #(alto: 10, bajo: 1), lista: [1, 2])
 --- las cuatro grafías escriben el mismo sitio ---
 11
 12
 13
 --- tres niveles de hondura ---
-(saludo: buenas, desp: adiós)
+#(saludo: buenas, desp: adiós)
 --- una edición que no es $~ vuelve a su sitio ---
-(idioma: (es: (saludo: buenas, desp: adiós), en: (saludo: hi, desp: bye)), limites: (alto: 13, bajo: 1), lista: [1, 2, 3])
+#(idioma: #(es: #(saludo: buenas, desp: adiós), en: #(saludo: hi, desp: bye)), limites: #(alto: 13, bajo: 1), lista: [1, 2, 3])
 --- y todo lo demás sigue ahí ---
 1
-(saludo: hi, desp: bye)
+#(saludo: hi, desp: bye)
 --- lo mismo a través de la capa de reexportación ---
 21
-(saludo: qué tal, desp: adiós)
-(idioma: (es: (saludo: qué tal, desp: adiós), en: (saludo: hi, desp: bye)), limites: (alto: 21, bajo: 1), lista: [1, 2, 3, 4])
+#(saludo: qué tal, desp: adiós)
+#(idioma: #(es: #(saludo: qué tal, desp: adiós), en: #(saludo: hi, desp: bye)), limites: #(alto: 21, bajo: 1), lista: [1, 2, 3, 4])
 --- la capa y el original son el MISMO estado ---
 21
-(idioma: (es: (saludo: qué tal, desp: adiós), en: (saludo: hi, desp: bye)), limites: (alto: 21, bajo: 1), lista: [1, 2, 3, 4])
+#(idioma: #(es: #(saludo: qué tal, desp: adiós), en: #(saludo: hi, desp: bye)), limites: #(alto: 21, bajo: 1), lista: [1, 2, 3, 4])

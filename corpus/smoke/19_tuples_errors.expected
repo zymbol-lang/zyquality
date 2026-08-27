@@ -1,12 +1,12 @@
-(name: Alice, age: 25, active: #1)
+#(name: Alice, age: 25, active: #1)
 Alice
 25
 Alice
 25
-(##(, 3, (name: Alice, age: 25, active: #1))
+(##(, 3, #(name: Alice, age: 25, active: #1))
 origin
 10
-(pos: (x: 10, y: 20), label: origin)
+#(pos: #(x: 10, y: 20), label: origin)
 25
 26
 ALICE

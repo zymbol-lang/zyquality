@@ -3,4 +3,4 @@ error: E013: executable statement not allowed in module body
    6 |
    6 |     >> "this should not be allowed" ¶
      |     ^^
-  help: modules may only contain imports, exports, constants, variables, and function definitions
+  = help: modules may only contain imports, exports, constants, variables, and function definitions

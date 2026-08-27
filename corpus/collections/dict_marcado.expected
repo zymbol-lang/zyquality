@@ -1,6 +1,6 @@
-normal:      (a: 1, b: 2)
-vacío:       ()  largo 0
-y admite:    (nueva: 9)
+normal:      #(a: 1, b: 2)
+vacío:       #()  largo 0
+y admite:    #(nueva: 9)
 clave cadena:Alimentación
 y la otra:   Sueldo
 anidado:     2
