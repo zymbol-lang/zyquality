@@ -55,6 +55,7 @@ type opts = {
   mutable verbose : bool;
   mutable json : bool;
   mutable strict : bool;
+  mutable audit_exclusions : bool;
   mutable timeout : int;
   mutable mode : Compare.mode;
   mutable via : string option;       (* expect: force run | check *)
@@ -75,6 +76,7 @@ let default_opts () = {
   verbose = false;
   json = false;
   strict = false;
+  audit_exclusions = false;
   timeout = 10;
   mode = Compare.Exact;
   via = None;
@@ -122,6 +124,8 @@ let usage code =
   p "  --mode M         exact | lines | numeric   (default: exact)";
   p "  --tol T          numeric tolerance: '2ulp' or '1e-9'";
   p "  --strict         consensus: require the error text to match too";
+  p "  --audit-exclusions  consensus: run the excused engines too and report";
+  p "                   every exclusion that has stopped being true";
   p "  --timeout N      seconds per engine (default: 10)";
   p "  -v, --verbose    show agreeing files too";
   p "  --json           machine-readable output";
@@ -187,6 +191,7 @@ let parse_args argv =
     | "--only" :: v :: t -> o.only_suites <- o.only_suites @ split_commas v; go t
     | ("-v" | "--verbose") :: t -> o.verbose <- true; go t
     | "--strict" :: t -> o.strict <- true; go t
+    | "--audit-exclusions" :: t -> o.audit_exclusions <- true; go t
     | "--json" :: t -> o.json <- true; Report.use_colour := false; go t
     | "--no-colour" :: t -> Report.use_colour := false; go t
     | ("-h" | "--help") :: _ -> usage 0
@@ -332,14 +337,18 @@ let cmd_consensus o =
       (String.concat ", " (List.map (fun (e : Engine.engine) -> e.id) engines))
       (if o.strict then Report.dim "  [strict: error text must match]" else "");
   let tally = Report.new_tally () in
+  let stale = ref [] in
   let first = ref true in
   if o.json then print_string "{\"outcomes\":[";
   List.iter (fun file ->
       let rel = relative_to root file in
       let out =
-        Consensus.run ~timeout:o.timeout ~strict:o.strict ~mode:o.mode ~corpus
+        Consensus.run ~timeout:o.timeout ~strict:o.strict
+          ~audit_exclusions:o.audit_exclusions ~mode:o.mode ~corpus
           ~root engines ~file ~rel
       in
+      List.iter (fun (eid, (r : Corpus.rule)) ->
+          stale := (rel, eid, r) :: !stale) out.stale;
       Report.record tally out;
       if o.json then begin
         if not !first then print_string ",";
@@ -352,8 +361,26 @@ let cmd_consensus o =
     Printf.printf "],\"summary\":{\"total\":%d,\"agree\":%d,\"diverge\":%d,\"too_few\":%d}}\n"
       (List.length files) tally.agree tally.split tally.toofew
   else Report.print_summary tally (List.length files);
-  (* A divergence is a failure; an engine that could not run is not. *)
-  if tally.split > 0 then 1 else 0
+  (* An exclusion that has expired is a file nothing tests, wearing a reason
+     that used to be true.  Reported separately from divergences because it is
+     the opposite failure: not "the engines disagree" but "one of them was never
+     asked, and would have agreed". *)
+  if not o.json && !stale <> [] then begin
+    let stale = List.rev !stale in
+    Printf.printf "\n%s %d exclusion(s) that have stopped being true:\n"
+      (Report.yellow "stale exclusion") (List.length stale);
+    List.iter (fun (rel, eid, (r : Corpus.rule)) ->
+        Printf.printf "  %-9s %s\n      %s\n      %s\n"
+          (Report.bold eid) rel
+          (Report.dim (Printf.sprintf "excused by `%s` [%s]" r.pat r.tag))
+          (Report.dim (Printf.sprintf "reason: %s" r.reason)))
+      stale;
+    Printf.printf "  %s\n"
+      (Report.dim "the engine was run anyway and answered what the others answered")
+  end;
+  (* A divergence is a failure; an engine that could not run is not.  A stale
+     exclusion is: it is coverage that silently went away. *)
+  if tally.split > 0 || !stale <> [] then 1 else 0
 
 (* Re-record the goldens.  Separate from checking them on purpose: this is the
    one operation in zyq that writes to the corpus, and it must be impossible to
@@ -906,7 +933,12 @@ let cmd_suite o =
   let b = step "audit"     (fun () -> cmd_audit o) in
   let c = step "reject"    (fun () -> cmd_reject o) in
   let d = step "expect"    (fun () -> cmd_expect o) in
-  let e = step "consensus" (fun () -> cmd_consensus o) in
+  (* The gate audits its own exclusions.  Three extra seconds over 661 files —
+     only the excused engines are started, and only on the files that excuse
+     them — for the one failure `audit` structurally cannot see: a rule that
+     was true when it was written and has quietly stopped being, leaving a file
+     that nothing tests wearing a reason nobody rechecks. *)
+  let e = step "consensus" (fun () -> o.audit_exclusions <- true; cmd_consensus o) in
   (* The script suites last: they are the slowest, and by the time they run the
      differential answers are already on screen. *)
   let f = ("suites", cmd_script_suites o) in

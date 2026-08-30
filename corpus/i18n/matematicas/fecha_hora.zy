@@ -16,49 +16,49 @@
 
     // Obtener la fecha actual (formato: YYYY-MM-DD)
     fecha_actual() {
-        resultado = <\ date "+%Y-%m-%d" \>
+        resultado = <\ "date +%Y-%m-%d" \>
         <~ resultado
     }
 
     // Obtener la hora actual (formato: HH:MM:SS)
     hora_actual() {
-        resultado = <\ date "+%H:%M:%S" \>
+        resultado = <\ "date +%H:%M:%S" \>
         <~ resultado
     }
 
     // Obtener fecha y hora completa
     fecha_hora_completa() {
-        resultado = <\ date \>
+        resultado = <\ "date" \>
         <~ resultado
     }
 
     // Obtener timestamp Unix (segundos desde epoch)
     timestamp() {
-        resultado = <\ date "+%s" \>
+        resultado = <\ "date +%s" \>
         <~ resultado
     }
 
     // Obtener día de la semana (Monday, Tuesday, etc.)
     dia_semana() {
-        resultado = <\ date "+%A" \>
+        resultado = <\ "date +%A" \>
         <~ resultado
     }
 
     // Obtener el mes actual (nombre completo)
     mes() {
-        resultado = <\ date "+%B" \>
+        resultado = <\ "date +%B" \>
         <~ resultado
     }
 
     // Obtener el año actual
     año() {
-        resultado = <\ date "+%Y" \>
+        resultado = <\ "date +%Y" \>
         <~ resultado
     }
 
     // Obtener fecha en formato ISO 8601
     formato_iso() {
-        resultado = <\ date "+%Y-%m-%d" \>
+        resultado = <\ "date +%Y-%m-%d" \>
         <~ resultado
     }
 }

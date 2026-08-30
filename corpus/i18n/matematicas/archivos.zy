@@ -18,61 +18,61 @@
 
     // Leer contenido de README.md
     leer_readme() {
-        resultado = <\ cat "README.md" \>
+        resultado = <\ "cat README.md" \>
         <~ resultado
     }
 
     // Crear un archivo vacío
     crear_archivo_vacio() {
-        resultado = <\ touch "ejemplo_temporal.txt" && echo "Archivo creado" \>
+        resultado = <\ "touch ejemplo_temporal.txt && echo 'Archivo creado'" \>
         <~ resultado
     }
 
     // Crear un directorio
     crear_directorio() {
-        resultado = <\ mkdir "-p" "temp_dir" && echo "Directorio creado" \>
+        resultado = <\ "mkdir -p temp_dir && echo 'Directorio creado'" \>
         <~ resultado
     }
 
     // Eliminar archivo temporal
     eliminar_temporal() {
-        resultado = <\ rm "-f" "ejemplo_temporal.txt" && echo "Archivo eliminado" \>
+        resultado = <\ "rm -f ejemplo_temporal.txt && echo 'Archivo eliminado'" \>
         <~ resultado
     }
 
     // Verificar si calculator.zy existe
     existe_archivo() {
-        resultado = <\ test "-f" "calculator.zy" && echo "si" || echo "no" \>
+        resultado = <\ "test -f calculator.zy && echo si || echo no" \>
         <~ resultado
     }
 
     // Verificar si directorio matematicas existe
     existe_directorio() {
-        resultado = <\ test "-d" "matematicas" && echo "si" || echo "no" \>
+        resultado = <\ "test -d matematicas && echo si || echo no" \>
         <~ resultado
     }
 
     // Buscar archivos .zy
     buscar_zy() {
-        resultado = <\ find . "-maxdepth" 1 "-name" "*.zy" "-type" f \>
+        resultado = <\ "find . -maxdepth 1 -name '*.zy' -type f" \>
         <~ resultado
     }
 
     // Información de calculator.zy
     info_archivo() {
-        resultado = <\ ls "-lh" "calculator.zy" \>
+        resultado = <\ "ls -lh calculator.zy" \>
         <~ resultado
     }
 
     // Ver estructura de directorios
     estructura_directorios() {
-        resultado = <\ find . "-maxdepth" 2 "-type" d \>
+        resultado = <\ "find . -maxdepth 2 -type d" \>
         <~ resultado
     }
 
     // Listar archivos modificados recientemente
     archivos_recientes() {
-        resultado = <\ ls "-lt" | head "-n" 6 \>
+        resultado = <\ "ls -lt | head -n 6" \>
         <~ resultado
     }
 }

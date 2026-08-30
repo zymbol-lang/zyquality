@@ -16,55 +16,55 @@
 
     // Listar archivos del directorio actual
     listar() {
-        resultado = <\ ls \>
+        resultado = <\ "ls" \>
         <~ resultado
     }
 
     // Listar archivos con detalles
     listar_detalle() {
-        resultado = <\ ls "-lh" \>
+        resultado = <\ "ls -lh" \>
         <~ resultado
     }
 
     // Listar incluyendo archivos ocultos
     listar_ocultos() {
-        resultado = <\ ls "-la" \>
+        resultado = <\ "ls -la" \>
         <~ resultado
     }
 
     // Obtener directorio actual
     directorio_actual() {
-        resultado = <\ pwd \>
+        resultado = <\ "pwd" \>
         <~ resultado
     }
 
     // Obtener usuario actual
     usuario_actual() {
-        resultado = <\ whoami \>
+        resultado = <\ "whoami" \>
         <~ resultado
     }
 
     // Obtener nombre del host
     nombre_host() {
-        resultado = <\ hostname \>
+        resultado = <\ "hostname" \>
         <~ resultado
     }
 
     // Contar archivos en el directorio actual
     contar_archivos() {
-        resultado = <\ ls | wc "-l" \>
+        resultado = <\ "ls | wc -l" \>
         <~ resultado
     }
 
     // Mostrar espacio en disco
     espacio_disco() {
-        resultado = <\ df "-h" . \>
+        resultado = <\ "df -h ." \>
         <~ resultado
     }
 
     // Número de procesos activos
     procesos() {
-        resultado = <\ ps aux | wc "-l" \>
+        resultado = <\ "ps aux | wc -l" \>
         <~ resultado
     }
 }

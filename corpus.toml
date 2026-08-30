@@ -1,3 +1,12 @@
+# ── An exclusion has to keep being true ────────────────────────────────────
+#
+# `zyq consensus --audit-exclusions` starts the excused engines anyway and
+# reports every rule whose engine now answers what everybody else answers, in
+# the same words.  It runs inside `zyq suite`, so a rule that expires turns the
+# gate red instead of waiting for somebody to reread this file.
+#
+# `zyq audit` cannot ask it: audit is static and this needs the engines
+# started.  See GOVERNANCE.md, "An exclusion".
 # corpus.toml — what the corpus knows about itself.
 #
 # Every runner used to carry its own idea of which files it could not compare:
@@ -149,30 +158,6 @@ tag = "BASH_EXEC"
 reason = "`<\\ shell \\>` has no browser equivalent"
 
 [[rule]]
-match = "i18n/matematicas/archivos.zy"
-engines = ["zyjs"]
-tag = "BASH_EXEC"
-reason = "the CLI parser rejects the `<\\ pipe/dot \\>` forms as invalid tokens while the browser stub accepts everything silently, so the two can never agree on the diagnostic"
-
-[[rule]]
-match = "i18n/matematicas/db.zy"
-engines = ["zyjs"]
-tag = "BASH_EXEC"
-reason = "the CLI parser rejects the `<\\ pipe/dot \\>` forms as invalid tokens while the browser stub accepts everything silently"
-
-[[rule]]
-match = "i18n/matematicas/http.zy"
-engines = ["zyjs"]
-tag = "BASH_EXEC"
-reason = "the CLI parser rejects the `<\\ pipe/dot \\>` forms as invalid tokens while the browser stub accepts everything silently"
-
-[[rule]]
-match = "i18n/matematicas/sistema.zy"
-engines = ["zyjs"]
-tag = "BASH_EXEC"
-reason = "the CLI parser rejects the `<\\ pipe/dot \\>` forms as invalid tokens while the browser stub accepts everything silently"
-
-[[rule]]
 match = "scope04_match_block.zy"
 engines = ["zyjs"]
 tag = "ANSI_FORMAT"
@@ -262,6 +247,46 @@ by = "zytw"
 match = "errors/semantic/**"
 via = "check"
 by = "zytw"
+
+# ── The four shell-integration tests ──────────────────────────────────────
+#
+# `i18n/test_{archivos,database,http_api,modulos_sistema}.zy` were DEAD until
+# 2026-08-30: written in a `<\\ bare word \\>` form the language does not have,
+# so they never parsed under the CLI and their goldens recorded the parse error.
+# Rewritten to the documented `<\\ "cmd" \\>` form, they now run — and running
+# them is exactly why they cannot be graded:
+#
+#   · the output is the clock, the host and the working directory — `date`,
+#     `uname`, `whoami`, a file count, a process count;
+#   · and they WRITE INTO THE CORPUS. One run left `corpus/25`,
+#     `corpus/test_archivo.txt` and `corpus/test_zymbol.db` behind.
+#
+# A test that mutates the tree it is graded from cannot be part of a gate. They
+# stay because `zymbol check` still sweeps them, so a parse regression is caught
+# — which is more than they did before — and their four `matematicas/` modules
+# ARE graded now, by all three engines, as the module-file refusals they are.
+#
+# See ZyDDT HALLAZGOS/GLOBAL.md GLB-004 for the measurement.
+
+[[rule]]
+match = "i18n/test_archivos.zy"
+tag = "ENVIRONMENT"
+reason = "prints the clock, the host and the working directory, and writes files into the corpus"
+
+[[rule]]
+match = "i18n/test_database.zy"
+tag = "ENVIRONMENT"
+reason = "creates and drops a SQLite database in the corpus directory"
+
+[[rule]]
+match = "i18n/test_http_api.zy"
+tag = "ENVIRONMENT"
+reason = "the network answers, not the program"
+
+[[rule]]
+match = "i18n/test_modulos_sistema.zy"
+tag = "ENVIRONMENT"
+reason = "prints the clock, the host, the process count and the working directory"
 
 # ── redact ────────────────────────────────────────────────────────────────
 # Applied to every engine's output before comparing.  This is not a licence to

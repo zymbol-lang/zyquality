@@ -36,7 +36,7 @@ rust	rust-only	@~ requires non-negative ms, got §
 rust	rust-only	] }} [profile.release] opt-level = 3 lto = true strip = true codegen-units = 1
 rust	rust-only	```zymbol @ §:... ``` (loop iterator)
 rust	rust-only	a decimal count that is not negative
-rust	rust-only	a dependency lives above the entry's directory (§); archive root widened \ to §
+rust	rust-only	a dependency lives above the entry's directory (§); archive root widened to §
 rust	rust-only	a drive-letter path must be absolute
 rust	rust-only	a longer string beyond seven bytes
 rust	rust-only	a longer string, definitely heap
@@ -76,10 +76,10 @@ rust	rust-only	closing */ must keep relative offset from /*. formatted: §
 rust	rust-only	code action requested at §
 rust	rust-only	codepoint mismatch in piqad digit output
 rust	rust-only	collection update on non-index expr
-rust	rust-only	comment count changed: source has § comments, formatted output has \ § (file left unchanged)
+rust	rust-only	comment count changed: source has § comments, formatted output has § (file left unchanged)
 rust	rust-only	compile failed
 rust	rust-only	completion requested at §
-rust	rust-only	contains </ /> and is reachable from another [[script]] whose directory \ differs (§ vs §); only the first entry's resolution was packaged
+rust	rust-only	contains </ /> and is reachable from another [[script]] whose directory differs (§ vs §); only the first entry's resolution was packaged
 rust	rust-only	content-length value
 rust	rust-only	continuation must keep relative offset from /*. formatted: §
 rust	rust-only	continue label '§' not found
@@ -170,7 +170,7 @@ rust	rust-only	hover requested at §
 rust	rust-only	idempotent reformat
 rust	rust-only	identical inputs must produce a byte-identical archive
 rust	rust-only	implicit pipe must not emit (_): §
-rust	rust-only	import '§' is absolute or home-relative (/ or ~/) — \ not reproducible on another machine ($home); not packaged
+rust	rust-only	import '§' is absolute or home-relative (/ or ~/) — not reproducible on another machine ($home); not packaged
 rust	rust-only	imported module '§' has § error(s) and cannot be loaded
 rust	rust-only	imports std/db — not available in the web playground (requires odbc)
 rust	rust-only	initialize result must advertise capabilities, got: §
@@ -190,7 +190,7 @@ rust	rust-only	kept extraction directory: §
 rust	rust-only	keyboard shortcuts
 rust	rust-only	layer module must be indexed
 rust	rust-only	lex diagnostics: §
-rust	rust-only	lex/parse error — file is packaged anyway, but its own dependencies could \ not be traced: §
+rust	rust-only	lex/parse error — file is packaged anyway, but its own dependencies could not be traced: §
 rust	rust-only	lexer errors: §
 rust	rust-only	line § ends in whitespace: §
 rust	rust-only	long function call should break: §
@@ -217,7 +217,7 @@ rust	rust-only	no history\r
 rust	rust-only	no response with id § after 16 messages
 rust	rust-only	no script named '§' in this package
 rust	rust-only	no variables defined\r
-rust	rust-only	no zyp.toml found under §, and no --script given \ = help: pass --script <file.zy> (repeatable) to synthesize a manifest for this run
+rust	rust-only	no zyp.toml found under §, and no --script given = help: pass --script <file.zy> (repeatable) to synthesize a manifest for this run
 rust	rust-only	no-prompt input should not error
 rust	rust-only	non-int range in match
 rust	rust-only	non-negative int
@@ -226,11 +226,11 @@ rust	rust-only	numeric input should not error
 rust	rust-only	one blank line must still be present: §
 rust	rust-only	one function chunk expected, got: §
 rust	rust-only	only entry.zy itself, the absolute import is not packaged
-rust	rust-only	orphan.zy must not be in the closure (strict-closure policy); \ nested.zy must be, reached only via </ /> inside the module
+rust	rust-only	orphan.zy must not be in the closure (strict-closure policy); nested.zy must be, reached only via </ /> inside the module
 rust	rust-only	orphan.zy must produce a w008 warning
 rust	rust-only	p = #(name: "alice smith", age: 25, city: "new york")
 rust	rust-only	package '§' requires engine §, this interpreter is §
-rust	rust-only	package is § uncompressed bytes, above the 5 mb recommended ceiling — \ nothing was left out, this is informational
+rust	rust-only	package is § uncompressed bytes, above the 5 mb recommended ceiling — nothing was left out, this is informational
 rust	rust-only	parse diagnostics: §
 rust	rust-only	parser errors: §
 rust	rust-only	patch_jump called on non-jump instruction at §
@@ -265,7 +265,7 @@ rust	rust-only	roundtrip must be byte-identical
 rust	rust-only	safety gate: §
 rust	rust-only	same file as '§' (reached via a different path); kept once, as '§': §
 rust	rust-only	scope cleared.\r
-rust	rust-only	script '§' (§) is a module file (has a `#` module declaration) — \ modules are imported with <#, not run directly
+rust	rust-only	script '§' (§) is a module file (has a `#` module declaration) — modules are imported with <#, not run directly
 rust	rust-only	script '§' is declared in zyp.toml as '§', but that file is not in the archive
 rust	rust-only	script '§' not found: §
 rust	rust-only	semantic tokens requested: §
@@ -279,7 +279,7 @@ rust	rust-only	shutdown must succeed, got: §
 rust	rust-only	signature help requested at §
 rust	rust-only	spaces should be encoded: §
 rust	rust-only	starting zymbol language server
-rust	rust-only	statement structure changed: source has § statements, formatted output has § \ (file left unchanged)
+rust	rust-only	statement structure changed: source has § statements, formatted output has § (file left unchanged)
 rust	rust-only	std/* is synthetic, never a file to package
 rust	rust-only	std/db is not available in this build (compiled without odbc support)
 rust	rust-only	std/math does not export a function 'inventada'
@@ -298,7 +298,7 @@ rust	rust-only	the machine's local zone could not be read; use "utc" or an expli
 rust	rust-only	this is a note
 rust	rust-only	this needs § and got §
 rust	rust-only	three consecutive blank lines must collapse to one: §
-rust	rust-only	token stream changed at token #§: source has §, formatted output has § \ (the file uses syntax the formatter cannot yet reprint faithfully; file left unchanged)
+rust	rust-only	token stream changed at token #§: source has §, formatted output has § (the file uses syntax the formatter cannot yet reprint faithfully; file left unchanged)
 rust	rust-only	too many registers (>65535) in function '§'
 rust	rust-only	top-level /* must stay at col 0. formatted: §
 rust	rust-only	tui block should work on a real tty: §
@@ -314,13 +314,13 @@ rust	rust-only	unexpected tui error in headless mode: §
 rust	rust-only	unknown builtin id §
 rust	rust-only	unknown db builtin id §
 rust	rust-only	unknown stdlib function must be reported: §
-rust	rust-only	unsafe path in package: '§' — paths must be relative and stay inside the \ package (no '..', no leading '/', no drive letter, no backslash)
+rust	rust-only	unsafe path in package: '§' — paths must be relative and stay inside the package (no '..', no leading '/', no drive letter, no backslash)
 rust	rust-only	unsupported construct: §
 rust	rust-only	unsupported op § in comparison pattern
 rust	rust-only	unused variable
 rust	rust-only	unused variable 'x'
 rust	rust-only	up/down - navigate history\r
-rust	rust-only	uses <\ ... \> (shell exec) — its dependencies are dynamic expressions \ and cannot be tracked statically
+rust	rust-only	uses <\ ... \> (shell exec) — its dependencies are dynamic expressions and cannot be tracked statically
 rust	rust-only	variable '§' not found
 rust	rust-only	variable inspection
 rust	rust-only	variable is modified inside a loop
@@ -358,8 +358,8 @@ rust	rust-only	§ - list all defined variables\r
 rust	rust-only	§ - show command history\r
 rust	rust-only	§ - show this help\r
 rust	rust-only	§ - show type and value of variable\r
-rust	rust-only	§ .zy file(s) in the entry script(s)' directory are not reachable from any \ [[script]] and were not packaged: §
-rust	rust-only	§ cannot be combined with an existing zyp.toml (§) \ = help: these flags only apply when synthesizing a manifest; edit the \ zyp.toml instead, or point `zymbol package` at a directory without one
+rust	rust-only	§ .zy file(s) in the entry script(s)' directory are not reachable from any [[script]] and were not packaged: §
+rust	rust-only	§ cannot be combined with an existing zyp.toml (§) = help: these flags only apply when synthesizing a manifest; edit the zyp.toml instead, or point `zymbol package` at a directory without one
 rust	rust-only	§ file(s) would be packaged
 rust	rust-only	§ is callable but missing from zymbol_common::stdlib
 rust	rust-only	§ is in the table but the compiler has no builtins for it
@@ -422,16 +422,15 @@ rust	shared	$?? requires an array, tuple, or string, got §
 rust	shared	$~~ count must be an integer, got §
 rust	shared	$~~ pattern must be a string or char, got §
 rust	shared	$~~ replacement must be a string, got §
-rust	shared	'!=' is not a valid zymbol operator
 rust	shared	'# .core_board' must be accepted in core/board.zy
 rust	shared	'./../' is not a module path
-rust	shared	'<~' writes the change back into the caller's variable; there is \ nowhere to write an expression back to — assign it to a variable first
+rust	shared	'<~' writes the change back into the caller's variable; there is nowhere to write an expression back to — assign it to a variable first
 rust	shared	'§' is a constant of §, not a function
 rust	shared	'§' is a function of §, not a constant
 rust	shared	'§' is already defined — `°` initializer is redundant; remove it
-rust	shared	'§' is inside no loop at all. a function or lambda body does not \ see the caller's loops
+rust	shared	'§' is inside no loop at all. a function or lambda body does not see the caller's loops
 rust	shared	'§' was declared at §:§
-rust	shared	'§' §s the enclosing '@' loop; there is none here. \ a function or lambda body does not see the caller's loops
+rust	shared	'§' §s the enclosing '@' loop; there is none here. a function or lambda body does not see the caller's loops
 rust	shared	'§°' hot-initialized to 0 — '^' will always produce 0
 rust	shared	'°name' is only valid as an assignment target
 rust	shared	(year, month, day) or (year, month, day, hour, minute, second), each ###, plus an optional zone
@@ -447,17 +446,16 @@ rust	shared	>>~ slot expects int, got §
 rust	shared	@~ requires integer milliseconds, got §
 rust	shared	@~ requires non-negative duration, got §
 rust	shared	[log] x is greater than 5 [log] continuing
-rust	shared	`<~ 0` for success and `<~ 1` (or another number) for failure; \ to print something before leaving, use `>>` on the line above
+rust	shared	`<~ 0` for success and `<~ 1` (or another number) for failure; to print something before leaving, use `>>` on the line above
 rust	shared	`=>` import alias must be accepted
 rust	shared	`°` has no effect in output context — use `§`
 rust	shared	a - b must be one item
 rust	shared	a ^ b must be one item
-rust	shared	a bare name matches the file stem (`# util` in util.zy); a \ leading dot names the whole path, joined with `_` \ (`# .lib_util` in lib/util.zy). see dot_convention.md
 rust	shared	a dictionary is asked about a key, so `$?` needs a string, got §
 rust	shared	a dictionary is written #(key: value, key2: value2)
 rust	shared	a dictionary is written `#(…)`
 rust	shared	a function cannot be declared inside a block: '§' is free in a script or part of a module, not of a '?', '@' or function body
-rust	shared	a key is a name or a string: #(nombre: valor) or \ #("gasto.alimentación": valor)
+rust	shared	a key is a name or a string: #(nombre: valor) or #("gasto.alimentación": valor)
 rust	shared	a module file must contain only: # name §
 rust	shared	a module may only have one #> export block
 rust	shared	a navigation step is a position or a key, got §
@@ -466,16 +464,12 @@ rust	shared	add */ to close the comment
 rust	shared	add closing " to end the string
 rust	shared	adlam digit u+§
 rust	shared	all array elements must have the same type — write `#[…]` if the mix is deliberate
-rust	shared	all digits in a literal must belong to the same numeral system \ (e.g. all ascii or all devanagari)
+rust	shared	all digits in a literal must belong to the same numeral system (e.g. all ascii or all devanagari)
 rust	shared	alternatives always contains the first pattern
 rust	shared	an optional zone string
 rust	shared	arabic-indic digit u+§
 rust	shared	argument type § incompatible with function parameter §
 rust	shared	argument § has type §, but function '§' expects §
-rust	shared	argument § of '§' is an output parameter '<~' and needs a variable, \ not an expression
-rust	shared	argument § of '§' is an output parameter and must be marked '<~' \ at the call site
-rust	shared	argument § of '§' is marked '<~' but the function does not declare \ it as an output parameter
-rust	shared	arithmetic operation on non-numeric type: §
 rust	shared	array element § has type §, but expected § (same as first element)
 rust	shared	array index must be int, got §
 rust	shared	array indexing must use brackets: arr[index]
@@ -505,11 +499,6 @@ rust	shared	cannot access underscore variable '_value'
 rust	shared	cannot access underscore variable '§' from outer scope
 rust	shared	cannot append to § - only arrays, tuples, and strings support $+
 rust	shared	cannot compare
-rust	shared	cannot compare float § with string '§' using operator '§'
-rust	shared	cannot compare integer § with string '§' using operator '§'
-rust	shared	cannot compare string '§' with float § using operator '§'
-rust	shared	cannot compare string '§' with integer § using operator '§'
-rust	shared	cannot compare values with operator '§': § and §
 rust	shared	cannot convert string
 rust	shared	cannot convert string '§' to number for rounding
 rust	shared	cannot convert string '§' to number for truncation
@@ -567,7 +556,6 @@ rust	shared	did you mean '§::§'?
 rust	shared	divide by zero
 rust	shared	drop the '<~', or declare the parameter as an output in the signature
 rust	shared	duplicate export block in module
-rust	shared	e001: module '§' should be named '§' for its path
 rust	shared	e002: module '§' not found
 rust	shared	e003: failed to resolve path '§'
 rust	shared	e004: circular dependency detected: §
@@ -708,7 +696,6 @@ rust	shared	expected error for assigning to _value from outer scope
 rust	shared	expected error type name after '##'
 rust	shared	expected error value
 rust	shared	expected expression, found end of file
-rust	shared	expected expression, found §
 rust	shared	expected field name after '.'
 rust	shared	expected file path after </
 rust	shared	expected float
@@ -802,7 +789,6 @@ rust	shared	expected variable name after \
 rust	shared	expected variable name after key input operator
 rust	shared	expected variable name in input statement
 rust	shared	expected x to be destroyed after output
-rust	shared	expected § digits after base prefix
 rust	shared	expression is not callable
 rust	shared	expression statement
 rust	shared	extended arabic-indic
@@ -851,9 +837,7 @@ rust	shared	input: failed to restore raw mode: §
 rust	shared	insert syntax: collection$+[index] element
 rust	shared	install git for windows (which ships `sh.exe`), or set zymbol_sh to the full path of a posix shell
 rust	shared	int type metadata: §
-rust	shared	integer literal out of range: '§'
 rust	shared	integer overflow: 9007199254740991 + 1
-rust	shared	integers range from -9007199254740991 to 9007199254740991 (±2⁵³−1)
 rust	shared	internal: use of '§' after auto-destruction (string interpolation) — this is a bug in the last-use analyzer, please report it
 rust	shared	internal: use of '§' after auto-destruction — this is a bug in the last-use analyzer, please report it (workaround: add a later `>> §` mention or a `\ §` at the intended end of life)
 rust	shared	interpolation must be § — use \{ for a literal brace
@@ -886,11 +870,7 @@ rust	shared	legacy export rename separator
 rust	shared	lex errors: §
 rust	shared	lifetime end (\)
 rust	shared	logical and requires boolean operands, got §
-rust	shared	logical not on non-boolean type: §
-rust	shared	logical not requires boolean operand, got §
-rust	shared	logical operation on non-boolean type: §
 rust	shared	logical or requires boolean operands, got §
-rust	shared	logical § requires boolean operands, got §
 rust	shared	map lambda must have exactly 1 parameter, got §
 rust	shared	map operation requires a lambda, got §
 rust	shared	map requires array, got §
@@ -915,7 +895,6 @@ rust	shared	named tuple index out of bounds: index § for tuple of length §
 rust	shared	named tuple update index must be an integer or field name (string), got §
 rust	shared	navigation index must be an integer, got §
 rust	shared	need improvement
-rust	shared	negation requires numeric operand, got §
 rust	shared	negative indices: arr[-1], arr[-2>-1]
 rust	shared	nesting is navigated with '>', so this is '§[i>j]$~ value' — '=' gives a value to a name, '$~' changes part of a collection
 rust	shared	no hard error
@@ -950,7 +929,6 @@ rust	shared	pipe operator requires a callable function or lambda
 rust	shared	pipe syntax: value |> func(_)
 rust	shared	piped value type § incompatible with function parameter §
 rust	shared	positioned output (>>~)
-rust	shared	power operator requires numeric operands: §, §
 rust	shared	precision must be a non-negative integer
 rust	shared	processing order updating inventory
 rust	shared	provide a variable name: §
@@ -958,7 +936,6 @@ rust	shared	query_one matched no rows
 rust	shared	range bound `1..total` must count as a use of `total`, got: §
 rust	shared	range bounds must be integers, got § and §
 rust	shared	range component `§` must count as a use, got: §
-rust	shared	range direction is decided at runtime: if the end \ turns out to be lower than the start, this loop counts \ down instead of not running. guard the empty case
 rust	shared	range end must be an integer, got §
 rust	shared	range indices in nav path must be positive integers
 rust	shared	range pattern start must be int, float, or char, got §
@@ -1023,7 +1000,7 @@ rust	shared	syntax: string$~~[pattern:replacement] or string$~~[pattern:replacem
 rust	shared	term::width: expected a string or char, got §
 rust	shared	test source must parse
 rust	shared	the `°` marker is for initialization in assignments, not for reading
-rust	shared	the enclosing loops have no labels — write '@:§ §' on the one \ you mean to target
+rust	shared	the enclosing loops have no labels — write '@:§ §' on the one you mean to target
 rust	shared	the escape is symmetric — write \} for a literal brace, as \{ is for the opening one
 rust	shared	the folder part of the name must still be checked
 rust	shared	the item must be exported by the imported module
@@ -1044,11 +1021,10 @@ rust	shared	tuples must be enclosed in parentheses: (expr, expr, ...)
 rust	shared	two rests cannot be told apart: nothing says where the first ends
 rust	shared	type mismatch
 rust	shared	unary plus requires numeric operand, got §
-rust	shared	unary § on non-numeric type: §
 rust	shared	undefined module alias: '§'
 rust	shared	undefined variable in input prompt: '§'
-rust	shared	underscore variables are strictly local to their declaration block \ '§' was declared in an inner scope and is not accessible here
-rust	shared	underscore variables are strictly local to their declaration block \ '§' was declared in an outer scope and cannot be accessed from nested blocks
+rust	shared	underscore variables are strictly local to their declaration block '§' was declared in an inner scope and is not accessible here
+rust	shared	underscore variables are strictly local to their declaration block '§' was declared in an outer scope and cannot be accessed from nested blocks
 rust	shared	underscore variables should not be in destruction schedule
 rust	shared	unexpected '#(' at statement level
 rust	shared	unexpected '(' at statement level
@@ -1085,7 +1061,6 @@ rust	shared	use '#0' (or its unicode equivalent) for false, '#1' for true
 rust	shared	use '(a, b) = expr' for tuple destructuring
 rust	shared	use '.' syntax for constants: alias.constant
 rust	shared	use '::' syntax for functions: alias::function
-rust	shared	use '<>' for not-equal → a <> b
 rust	shared	use '=' to assign a value to a variable
 rust	shared	use '[a, b] = expr' for array destructuring
 rust	shared	use '_' (without '?') for an unconditional else branch
@@ -1103,21 +1078,20 @@ rust	shared	valid nav index: arr[1>2], arr[n>m], arr[(a)>(b)], arr[1>2..4]
 rust	shared	variable '§' is assigned but never read
 rust	shared	variable should only be scheduled for destruction once
 rust	shared	variable with non-literal initializer
-rust	shared	variables must be defined before use
 rust	shared	vm accepted a non-numeric string
 rust	shared	vm error: §
 rust	shared	vm outputpos
 rust	shared	vm terminal size
 rust	shared	warning: match expression returns values but result is unused
-rust	shared	write `#(` here: `#(nombre: valor)`. a bare `(…)` is a \ positional tuple, and `#()` is the empty dictionary — \ which `()` cannot be, since it would have to be the empty \ tuple as well
-rust	shared	write the argument as 'name<~' — the mark says the value comes back \ changed, so a reader does not have to open the function to find out
+rust	shared	write `#(` here: `#(nombre: valor)`. a bare `(…)` is a positional tuple, and `#()` is the empty dictionary — which `()` cannot be, since it would have to be the empty tuple as well
+rust	shared	write the argument as 'name<~' — the mark says the value comes back changed, so a reader does not have to open the function to find out
 rust	shared	write the count or the name of a variable holding it: §.2|value| or §.n|value|
 rust	shared	x = 5 /* unterminated comment
 rust	shared	x must be auto-freed
 rust	shared	x should be destroyed after final output
 rust	shared	x should not be destroyed after first output
 rust	shared	y must be auto-freed
-rust	shared	zymbol: no posix shell found (§); running `<\ \>` through cmd.exe. \ commands written in posix shell syntax will not work — install git for windows \ or set zymbol_sh to get the portable behaviour back
+rust	shared	zymbol: no posix shell found (§); running `<\ \>` through cmd.exe. commands written in posix shell syntax will not work — install git for windows or set zymbol_sh to get the portable behaviour back
 rust	shared	§ does not export a constant '§'
 rust	shared	§ does not export a function '§'
 rust	shared	§ is listed twice — two types cannot share a symbol
@@ -1125,7 +1099,6 @@ rust	shared	§ lexer error(s) in '§' §
 rust	shared	§ lexer errors in §
 rust	shared	§ parser errors in §
 zyjs	shared	$~ not supported on §
-zyjs	shared	'!=' is not a valid zymbol operator — use '<>' for not-equal
 zyjs	shared	'§' is not a function
 zyjs	shared	'§' is not an array
 zyjs	shared	), // and without it
@@ -1138,11 +1111,7 @@ zyjs	shared	a dictionary is written `#(…)`: write `#(` here, as in #(nombre: v
 zyjs	shared	a dictionary key cannot interpolate — use `d[…]$~ value` to add a computed key
 zyjs	shared	a top-level `<~` ends the program, so its value is the exit status and must be a whole number — this one is a collection
 zyjs	shared	ambiguous lifetime for '§'
-zyjs	shared	argument § of '§' is an output parameter '<~' and needs a variable, not an expression
-zyjs	shared	argument § of '§' is an output parameter and must be marked '<~' at the call site
-zyjs	shared	argument § of '§' is marked '<~' but the function does not declare it as an output parameter
 zyjs	shared	array element § has type §, but expected § (same as first element) = help: all array elements must have the same type — write `#[…]` if the mix is deliberate
-zyjs	shared	cannot compare § § with § § using operator '§'
 zyjs	shared	cannot convert string '§' to number for §
 zyjs	shared	cannot import '§': no module resolver available
 zyjs	shared	cannot iterate over §
@@ -1163,7 +1132,6 @@ zyjs	shared	failed to parse module: § semantic error(s) in '§' §
 zyjs	shared	indexed assignment does not exist: '§[…] =' is not a form of zymbol = help: nesting is navigated with '>', so this is '§[i>j]$~ value' — '=' gives a value to a name, '$~' changes part of a collection
 zyjs	shared	indexed assignment does not exist: '§[…] =' is not a form of zymbol = help: use '§[i]$~ value' to modify in place — '=' gives a value to a name, '$~' changes part of a collection
 zyjs	shared	infinite loop limit reached (§ iterations) — add @! to break
-zyjs	shared	integer literal out of range: '§' (integers range from § to §)
 zyjs	shared	loop step cannot be zero
 zyjs	shared	mat::§: incompatible argument type(s) [§]
 zyjs	shared	math sans-serif bold
@@ -1171,7 +1139,6 @@ zyjs	shared	n":1} — the half-escaped form — // printed happily while the sam
 zyjs	shared	no such file or directory (os error 2)
 zyjs	shared	only one '*rest' is allowed in a destructure pattern — two rests cannot be told apart: nothing says where the first ends
 zyjs	shared	program stopped
-zyjs	shared	range direction is decided at runtime: if the end turns out to be lower than the start, this loop counts down instead of not running. guard the empty case
 zyjs	shared	standard library module 'std/db' is not available in the web playground (requires odbc)
 zyjs	shared	standard library module '§' not found
 zyjs	shared	term::width: expected a string or char
@@ -1181,7 +1148,6 @@ zyjs	shared	unknown collection operator: §
 zyjs	shared	unknown nav spec kind: §
 zyjs	shared	unknown operator: §
 zyjs	shared	unused variable '§' = help: consider removing this variable or prefixing with '_' if intentionally unused
-zyjs	shared	warning: arithmetic operation on non-numeric type: §
 zyjs	shared	§ = help: §
 zyjs	shared	§ condition should be bool, got §
 zyjs	shared	§ not supported on §

@@ -107,6 +107,15 @@ def is_message(s):
 
 def norm(s):
     """Placeholders to one marker; case and trailing punctuation dropped."""
+    # Rust's line continuation: a backslash at the end of a line inside a string
+    # literal drops the newline AND the leading whitespace of the next line, so
+    # `"a \
+    #    b"` is `a b`. The scanner keeps the backslash (it keeps every escape
+    # pair verbatim), which made every multi-line Rust message normalise with a
+    # stray `\` in it and therefore never match the same message written on one
+    # line elsewhere. That is a difference in how the STRING WAS TYPED, which is
+    # exactly what this file must not report.
+    s = re.sub(r'\\\n\s*', ' ', s)
     s = re.sub(r'\$\{(?:[^{}]|\{[^{}]*\})*\}', '§', s)
     s = re.sub(r'\{(?:[^{}]|\{[^{}]*\})*\}', '§', s)
     for a, b in (('\\n', ' '), ('\\"', '"'), ("\\'", "'"), ('\\`', '`'), ('\\\\', '\\')):
