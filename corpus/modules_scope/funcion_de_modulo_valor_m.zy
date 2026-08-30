@@ -4,7 +4,7 @@
 // question: the function itself (callable as `b::doble(x)`), an accessor that
 // hands the function OUT as a value, and a higher-order function that takes one
 // IN. Nothing here is unusual — that is the point of the case.
-# .funcion_de_modulo_valor_m {
+# funcion_de_modulo_valor_m {
 
     #> { doble, dame, aplica_aqui, interno }
 

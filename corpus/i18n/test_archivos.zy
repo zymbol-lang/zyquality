@@ -21,12 +21,12 @@
 ¶
 
 >> "   Contenido de calculator.zy:" ¶
-contenido = <\ cat "calculator.zy" \>
+contenido = <\ "cat calculator.zy" \>
 >> contenido ¶
 ¶
 
 >> "   Primeras 3 líneas de README.md:" ¶
-primeras = <\ head "-n" 3 "README.md" \>
+primeras = <\ "head -n 3 README.md" \>
 >> primeras ¶
 ¶
 
@@ -35,20 +35,20 @@ primeras = <\ head "-n" 3 "README.md" \>
 ¶
 
 >> "   Creando archivo de prueba..." ¶
-crear = <\ echo "Hola desde Zymbol" > "test_archivo.txt" && echo "Creado" \>
+crear = <\ "echo 'Hola desde Zymbol' > test_archivo.txt && echo Creado" \>
 >> "   " crear ¶
 
 >> "   Verificando contenido:" ¶
-verificar = <\ cat "test_archivo.txt" \>
+verificar = <\ "cat test_archivo.txt" \>
 >> "   " verificar ¶
 ¶
 
 >> "   Agregando más contenido:" ¶
-agregar = <\ echo "Segunda linea" >> "test_archivo.txt" && echo "Agregado" \>
+agregar = <\ "echo 'Segunda linea' >> test_archivo.txt && echo Agregado" \>
 >> "   " agregar ¶
 
 >> "   Contenido completo:" ¶
-completo = <\ cat "test_archivo.txt" \>
+completo = <\ "cat test_archivo.txt" \>
 >> completo ¶
 ¶
 
@@ -81,15 +81,15 @@ estructura = arch::estructura_directorios()
 ¶
 
 >> "   Creando directorio temporal..." ¶
-mkdir_result = <\ mkdir "-p" "prueba_dir" && echo "Directorio creado" \>
+mkdir_result = <\ "mkdir -p prueba_dir && echo 'Directorio creado'" \>
 >> "   " mkdir_result ¶
 
 >> "   Creando archivo dentro..." ¶
-touch_result = <\ touch "prueba_dir/archivo.txt" && echo "Archivo creado" \>
+touch_result = <\ "touch prueba_dir/archivo.txt && echo 'Archivo creado'" \>
 >> "   " touch_result ¶
 
 >> "   Listando contenido:" ¶
-ls_dir = <\ ls "prueba_dir" \>
+ls_dir = <\ "ls prueba_dir" \>
 >> "   " ls_dir ¶
 ¶
 
@@ -98,15 +98,15 @@ ls_dir = <\ ls "prueba_dir" \>
 ¶
 
 >> "   Copiando test_archivo.txt..." ¶
-cp_result = <\ cp "test_archivo.txt" "copia.txt" && echo "Copiado" \>
+cp_result = <\ "cp test_archivo.txt copia.txt && echo Copiado" \>
 >> "   " cp_result ¶
 
 >> "   Moviendo la copia..." ¶
-mv_result = <\ mv "copia.txt" "prueba_dir/" && echo "Movido" \>
+mv_result = <\ "mv copia.txt prueba_dir/ && echo Movido" \>
 >> "   " mv_result ¶
 
 >> "   Verificando:" ¶
-verify = <\ ls "prueba_dir" \>
+verify = <\ "ls prueba_dir" \>
 >> "   " verify ¶
 ¶
 
@@ -114,10 +114,10 @@ verify = <\ ls "prueba_dir" \>
 >> "9. Limpieza:" ¶
 ¶
 
-clean1 = <\ rm "-f" "test_archivo.txt" && echo "Limpiado" \>
+clean1 = <\ "rm -f test_archivo.txt && echo Limpiado" \>
 >> "   " clean1 ¶
 
-clean2 = <\ rm "-rf" "prueba_dir" && echo "Directorio eliminado" \>
+clean2 = <\ "rm -rf prueba_dir && echo 'Directorio eliminado'" \>
 >> "   " clean2 ¶
 ¶
 

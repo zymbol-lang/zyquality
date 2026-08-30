@@ -39,6 +39,10 @@ type outcome = {
   verdict : verdict;
   results : Engine.result list;
   skipped : (string * why_out) list;
+  (* Exclusions that have stopped being true: the engine was run anyway and
+     answered what everybody else answered.  Empty unless ~audit_exclusions,
+     which is the only mode that pays to start an excused engine. *)
+  stale : (string * Corpus.rule) list;
 }
 
 (* Only engines that actually ran can vote.  An engine that is not installed,
@@ -71,7 +75,21 @@ let classify ~mode ~strict (votes : (string * vote) list) : verdict =
                (fun (_, a) (_, b) -> compare (List.length b) (List.length a)) cs)
   end
 
-let run ?(timeout = 10) ?(strict = false) ~(mode : Compare.mode)
+(* Is an exclusion still true?
+   ...
+   An exclusion is a claim — "this engine cannot be judged on this file, and
+   here is why".  Claims decay: `gaps/gap_key_input_type_check.zy` carried
+   `@vm-skip` from a version where the VM could not run it, and every engine
+   agrees on it now.  Nothing retires such a marker, because the mechanism that
+   honours it is the mechanism that never runs the engine — so the file simply
+   stops being tested, silently, for as long as the repository lives.
+   `audit` cannot see it either: `audit` is static, and this question needs the
+   engines started.  It is the same split that puts `@reject-pending` in
+   `reject` rather than in `audit`.
+   So: run the excused engine anyway, add its vote, and if the file still reads
+   as one answer, the exclusion has expired. *)
+let run ?(timeout = 10) ?(strict = false) ?(audit_exclusions = false)
+    ~(mode : Compare.mode)
     ~(corpus : Corpus.t) ~(root : string) (engines : Engine.engine list)
     ~(file : string) ~(rel : string) : outcome =
   let stdin_file = Filename.remove_extension file ^ ".input" in
@@ -86,6 +104,13 @@ let run ?(timeout = 10) ?(strict = false) ~(mode : Compare.mode)
   in
   let results =
     if judged = [] then [] else Engine.run_all ~timeout ?stdin_file judged ~file
+  in
+  (* The excused engines, run only when asked.  Their answers never enter the
+     verdict: an exclusion that is still true must not be able to turn a green
+     file red just because somebody asked whether it had expired. *)
+  let audited =
+    if not audit_exclusions || excused = [] then []
+    else Engine.run_all ~timeout ?stdin_file excused ~file
   in
   (* Where the corpus sits is not something the program decided, and under
      --strict a diagnostic quoting an absolute path would otherwise make every
@@ -108,4 +133,45 @@ let run ?(timeout = 10) ?(strict = false) ~(mode : Compare.mode)
         | None -> None)
       excused
   in
-  { file; rel; verdict = classify ~mode ~strict votes; results; skipped }
+  let verdict = classify ~mode ~strict votes in
+  (* An exclusion is stale when adding the excused engine's vote leaves the file
+     reading as one answer — which requires the file to agree WITHOUT it too, so
+     a split file never reports its exclusions as expired.
+     ...
+     Judged with `~strict:true` whatever the run asked for, and that is the
+     whole difficulty of this check.  The ordinary comparison reads stdout and
+     the verdict CATEGORY, not the diagnostic text — so two engines that refuse
+     a program for completely unrelated reasons look identical: `stdlib_db_type_err.zy`
+     is `db: expected String name` on the CLI and `std/db is not available in
+     the web playground` in the browser, and both are an empty stdout and a
+     runtime error.  Under the loose reading this reports "the exclusion has
+     expired" about an engine that still has no ODBC, and somebody deletes a
+     rule that was true.
+     An exclusion says the engine CANNOT BE JUDGED here.  Retiring it needs the
+     strong claim — same answer, same words — not the weak one. *)
+  let stale =
+    match verdict with
+    (* `Split` is excluded: what the excused engine would have said is not the
+       question while the engines that DID run disagree.
+       `TooFew` is included, and it is the case that matters most.  With two
+       engines and one excused there is no verdict at all, so requiring `Agree`
+       here would have made this check blind exactly where the markers it
+       audits come from — `@vm-skip` was born in `vm_compare.sh`, a two-engine
+       runner.  A file whose only exclusion has expired is a file NOTHING
+       tests, which is worse than one tested by a single engine. *)
+    | Agree _ | TooFew ->
+      List.filter_map (fun (r : Engine.result) ->
+          if r.status <> Engine.Completed then None
+          else
+            let v = { out = clean r.stdout; err = clean r.stderr;
+                      verdict = Engine.verdict_of r } in
+            match classify ~mode ~strict:true (votes @ [ (r.eid, v) ]) with
+            | Agree _ ->
+              (match Corpus.excused ~path:file corpus ~engine:r.eid ~rel with
+               | Some rule -> Some (r.eid, rule)
+               | None -> None)
+            | _ -> None)
+        audited
+    | _ -> []
+  in
+  { file; rel; verdict; results; skipped; stale }

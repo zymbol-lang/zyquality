@@ -180,6 +180,39 @@ required: an exclusion nobody wrote a reason for is indistinguishable from a bug
 somebody hid. If the file lives in another repository, put a `// @zyq-skip:`
 marker in the file instead, so the rule travels with it.
 
+**And an exclusion has to keep being true.** `zyq consensus --audit-exclusions`
+starts the excused engines anyway and reports every rule whose engine now
+answers what everybody else answers. It runs inside `zyq suite`, so a rule that
+expires turns the gate red rather than waiting for somebody to reread it: about
+three seconds over 661 files, because only the excused engines are started and
+only on the files that excuse them.
+
+`audit` cannot ask this. `audit` is static — it finds a rule matching no file —
+and whether a rule is still *true* needs the engines started. Same split that
+puts `@reject-pending` in `reject` rather than in `audit`.
+
+The bar for calling a rule expired is deliberately the strong one: same answer
+**and the same words**, whatever `--strict` the run asked for. The ordinary
+comparison reads stdout and the verdict category, so two engines that refuse a
+program for unrelated reasons look identical — `stdlib_db_type_err.zy` is
+`db: expected String name` on the CLI and `std/db is not available in the web
+playground` in the browser, and both are an empty stdout and a runtime error.
+Under the loose reading the tool tells you to delete a rule about an engine that
+still has no ODBC. Measured 2026-08-30: the loose bar reported 12 expired rules
+in the corpus and the strong bar reported **none**. All twelve were wrong.
+
+It also asks about a file **no engine is left to judge**. With two engines and
+one excused there is no verdict at all, so requiring agreement first would make
+the check blind exactly where the oldest markers come from — `@vm-skip` was born
+in `vm_compare.sh`, a two-engine runner. That is the case that found six dead
+markers in `Zofia/tests/`: the VM had caught up, nobody retired the marker, and
+six files had quietly stopped being compared at all.
+
+One inconsistency stands, named rather than tidied away: an in-file marker
+(`@vm-skip`, `@skip-parity`) carries **no reason**, while a `corpus.toml` rule
+requires one. So the report prints an empty reason for those, which is honest —
+there is nothing to print.
+
 **An engine.** A `[[engine]]` entry in `engines.toml`, never a patch to the
 runner. If it cannot run something, declare the stderr prefixes it uses to say
 so — a missing feature must be reported apart from a wrong answer.
