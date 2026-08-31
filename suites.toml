@@ -34,6 +34,25 @@ needs = ["zymbol"]
 gate = true
 
 [[suite]]
+id = "fmtcheck"
+cmd = ["../ZyFormatCheck/bin/zyfmtcheck"]
+desc = "ZyFormatCheck: the formatter moved things and changed nothing — over the LDV applications, in a copy, and run again"
+needs = ["zymbol", "python3"]
+# A gate, and it earned it on the first run: the two behaviours it found are
+# fixed, so green here is a fact rather than a hope.
+#
+# It asks what P1-P4 and the formatter's own gate structurally cannot. The token
+# gate compares `TokenKind`, which carries the VALUE and not the spelling, so
+# `४२` and `42` are one token — printing one for the other passed for four
+# releases with P1-P4 green throughout. This compares the code and the comments
+# and lets layout through.
+#
+# It lives in its own repository on purpose. The list of what the formatter may
+# do is a contract, and a contract that lives inside the thing it constrains is
+# not one.
+gate = true
+
+[[suite]]
 id = "tui"
 cmd = ["bash", "tui/run.sh"]
 desc = "key input and raw mode through a real pty: engines against each other, and against a golden where one is recorded"
