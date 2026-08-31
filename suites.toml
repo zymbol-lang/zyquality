@@ -35,8 +35,8 @@ gate = true
 
 [[suite]]
 id = "fmtcheck"
-cmd = ["../ZyFormatCheck/bin/zyfmtcheck"]
-desc = "ZyFormatCheck: the formatter moved things and changed nothing — over the LDV applications, in a copy, and run again"
+cmd = ["../ZyFmtCheck/bin/zyfmtcheck"]
+desc = "ZyFmtCheck: the formatter moved things and changed nothing — over the LDV applications, in a copy, and run again"
 needs = ["zymbol", "python3"]
 # A gate, and it earned it on the first run: the two behaviours it found are
 # fixed, so green here is a fact rather than a hope.
