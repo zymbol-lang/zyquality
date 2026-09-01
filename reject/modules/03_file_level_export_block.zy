@@ -1,0 +1,16 @@
+// @reject: loads export_block_at_file_level_m.zy, whose export block sits at file
+// @reject: top level instead of inside a `# name { … }` module block. The module
+// @reject: is the error, so importing it is an error too, wherever it is imported
+// @reject: from — the same shape as 02_computed_module_initializer.zy.
+// @reject: Both Rust engines: `failed to parse module: 2 parse error(s)`.
+// @reject: The browser engine prints 14.
+// @reject: NOTE — the imported file deliberately carries NO numeric prefix, and
+// @reject: renaming it to `03_…_m.zy` for tidiness would silently break this test.
+// @reject: A module path whose last component starts with a digit fails to lex in
+// @reject: every engine (`expected module path` in Rust, `Expected IDENT, got '0'`
+// @reject: in JS), so such a file is refused for the path and never reaches the
+// @reject: rule under test. 02_computed_module_initializer.zy has that defect
+// @reject: today: all three engines reject it at line 14 for its `./02_…` path,
+// @reject: not for the computed initialiser it claims to test. Found 2026-08-31.
+<# ./export_block_at_file_level_m => m
+>> m::publica() ¶
