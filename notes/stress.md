@@ -241,7 +241,9 @@ defining parameters before inferring the lambda body (commit: this session).
 | S3 | B6 | Bytecode VM compilation | all (~5-10x) | planned |
 | S3 | B7 | Match literal caching | bench_match | planned |
 
-See full roadmap: [`STRESS_OPTIMIZATION_ROADMAP.md`](../../STRESS_OPTIMIZATION_ROADMAP.md)
+See also [`STRESS_IMPROVEMENTS.md`](STRESS_IMPROVEMENTS.md), beside this file. The
+`STRESS_OPTIMIZATION_ROADMAP.md` this line used to point at does not exist in any
+repository — the link was already dead when these notes moved here.
 
 ## How to run all benchmarks
 

@@ -13,9 +13,9 @@
   <img src="https://img.shields.io/badge/version-v0.2.0-informational?style=flat-square"/>
   <img src="https://img.shields.io/badge/language-OCaml-e88b00?style=flat-square"/>
   <img src="https://img.shields.io/badge/license-AGPL--3.0-blue?style=flat-square"/>
-  <img src="https://img.shields.io/badge/corpus-585%20files-brightgreen?style=flat-square"/>
-  <img src="https://img.shields.io/badge/goldens-583-brightgreen?style=flat-square"/>
-  <img src="https://img.shields.io/badge/engines-4-brightgreen?style=flat-square"/>
+  <img src="https://img.shields.io/badge/corpus-661%20files-brightgreen?style=flat-square"/>
+  <img src="https://img.shields.io/badge/goldens-659-brightgreen?style=flat-square"/>
+  <img src="https://img.shields.io/badge/engines-3-brightgreen?style=flat-square"/>
 </p>
 
 ---
@@ -78,9 +78,9 @@ it was missing.
 
 | | |
 |---|---|
-| `corpus/` | 614 `.zy` files, 612 with a `.expected` golden |
+| `corpus/` | 661 `.zy` files, 659 with a `.expected` golden |
 | `corpus.toml` | which engine may be judged on which file, and why not |
-| `reject/` | 23 forms every engine must refuse — `@reject:` for a live bug, `@reject-pending:` for a rule decided and not yet built |
+| `reject/` | 34 forms every engine must refuse — `@reject:` for a live bug, `@reject-pending:` for a rule decided and not yet built |
 | `engines.toml` | how to run each engine |
 | `suites.toml` | the script suites, so `zyq suite` runs them too |
 | `fmt/` | formatter properties P1–P4, and its baseline |

@@ -1,0 +1,29 @@
+// @reject: an export block belongs INSIDE a module block. `#> { … }` written at
+// @reject: file top level, with no enclosing `# name { … }`, is not Zymbol: both
+// @reject: Rust parsers refuse it at parse time with `unexpected token:
+// @reject: ExportBlock`, and so does `zymbol check`.
+// @reject: The browser engine accepts it and runs the file. Running this module
+// @reject: on its own it emits only `warning: unused variable 'publica'`; loaded
+// @reject: by 03_file_level_export_block.zy it exports the name and prints 14,
+// @reject: where the other two engines refuse to parse the module at all.
+// @reject: The evidence that the Rust engines are right is the code that exists:
+// @reject: of the 83 module files across the six LDV applications, 83 write the
+// @reject: export block inside `# name { … }` and none at file level.
+// @reject: This is the JS-permissive direction, which is the worse one — a module
+// @reject: written in the playground runs there and fails to parse in the CLI.
+// @reject: Same class as 01_import_after_code.zy (DM-12): a rule both Rust
+// @reject: parsers always enforced, written down nowhere, that the browser engine
+// @reject: never checked. Found 2026-08-31 during the documentation audit.
+#> {
+    publica
+}
+
+TOPE := 7
+
+privada() {
+    <~ TOPE * 2
+}
+
+publica() {
+    <~ privada()
+}
