@@ -1,0 +1,110 @@
+// ============================================================================
+// ZYMBOL-LANG BENCHMARK: Reading one element — a[i], d.k, m[i][j]
+//
+// HLZ-012. What this measures is a SLOPE, not a time: the same 60 000 reads
+// against a 100-element array and against a 4 000-element one. Reading one
+// element must cost the same in both, and if it does not, the engine is copying
+// the collection to hand back one of its values.
+//
+// It cost exactly that until v0.0.9: the tree-walker evaluated the collection
+// with `eval_expr`, and for a name that is `get_variable(..).clone()`, so `a[7]`
+// cloned every element of `a` first. On a 4 000-element array the read block
+// below took 8.6 s against the 100-element one's 0.26 s — a 33x slope where the
+// register VM's was flat.
+//
+// Nothing in bench/ read an element by index before this: the collection
+// benchmarks go through `$>`, `$|`, `$<`, `$?` and slices, all of which consume
+// the whole collection anyway and so cannot tell a copy from a read. That is
+// the coverage hole the go engine fell into — a 19x19 board is 361 cells, and
+// `局面[点]` sits on every path it has.
+//
+// Run: zymbol run bench/bench_index_read.zy
+// ============================================================================
+
+<# ./lib_time => T
+
+>> "=== Zymbol Benchmark: Indexed reads ===" ¶
+
+t_total = T::now()
+
+// --- the same reads, against collections of different sizes ---------------
+chico = []
+@ i:1..100 { chico = chico$+ i }
+
+grande = []
+@ i:1..4000 { grande = grande$+ i }
+
+t = T::now()
+s = 0
+@ _k:1..60000 { s = s + chico[7] }
+>> "read_small:  n=100    sum = " s "  " T::elapsed(t) ¶
+
+t = T::now()
+s = 0
+@ _k:1..60000 { s = s + grande[7] }
+>> "read_large:  n=4000   sum = " s "  " T::elapsed(t) ¶
+
+// --- through a chain: the root is a name, the rest is not ------------------
+matriz = []
+@ i:1..200 {
+    fila = []
+    @ j:1..20 { fila = fila$+ (i + j) }
+    matriz = matriz$+ fila
+}
+
+t = T::now()
+s = 0
+@ _k:1..20000 { s = s + matriz[100][10] }
+>> "read_nested: 200x20   sum = " s "  " T::elapsed(t) ¶
+
+// --- a dictionary, by key and by dot ---------------------------------------
+//
+// Two sizes again, and both spellings of the read: `d["k"]` goes through
+// `eval_index` and `d.k` through `eval_member_access`, which had the same copy
+// and needed the same fix. On 300 keys the dot alone was 0.46 s against the
+// bracket's 0.045 s while only one of the two was fixed.
+chica = #(fin: 7)
+@ i:1..8 { clave = "k" i
+    chica[clave]$~ i }
+
+ancha = #(fin: 7)
+@ i:1..300 { clave = "k" i
+    ancha[clave]$~ i }
+
+t = T::now()
+s = 0
+@ _k:1..40000 { s = s + chica["fin"] }
+>> "key_small:   9 keys   sum = " s "  " T::elapsed(t) ¶
+
+t = T::now()
+s = 0
+@ _k:1..40000 { s = s + ancha["fin"] }
+>> "key_large:   301 keys sum = " s "  " T::elapsed(t) ¶
+
+t = T::now()
+s = 0
+@ _k:1..40000 { s = s + chica.fin }
+>> "dot_small:   9 keys   sum = " s "  " T::elapsed(t) ¶
+
+t = T::now()
+s = 0
+@ _k:1..40000 { s = s + ancha.fin }
+>> "dot_large:   301 keys sum = " s "  " T::elapsed(t) ¶
+
+// --- a read inside a function, which is where the go engine does its reads --
+//
+// This block is NOT measuring the read. It measures what it costs to hand the
+// collection over, which is a second copy in the same engine and was found by
+// this very line: the tree-walker cloned the whole array into the parameter on
+// every call — 2.165 s here against the register VM's 3 ms. Closing it (HLZ-014,
+// `Value` shares its aggregates behind an `Rc` and copies on write) brought this
+// line to 0.009 s. It stays, because a benchmark that only covers what is
+// already fast finds nothing.
+lee(tablero, punto) { <~ tablero[punto] }
+
+t = T::now()
+s = 0
+@ _k:1..5000 { s = s + lee(grande, 7) }
+>> "read_in_fn:  n=4000   sum = " s "  " T::elapsed(t) ¶
+
+>> "=== Done (" T::total(t_total) ") ===" ¶

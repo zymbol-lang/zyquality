@@ -63,7 +63,7 @@ fi
 
 BOLD=$'\e[1m'; RED=$'\e[0;31m'; GREEN=$'\e[0;32m'; YELLOW=$'\e[1;33m'; RESET=$'\e[0m'
 
-BENCHES=(stress bench_match bench_recursion bench_collections bench_strings bench_strings_stress bench_strings_modify)
+BENCHES=(stress bench_match bench_recursion bench_collections bench_strings bench_strings_stress bench_strings_modify bench_index_read)
 
 now_ms() { echo $(( $(date +%s%N) / 1000000 )); }
 
