@@ -1,0 +1,24 @@
+// @reject: a module that never says what it exports. The grammar marks `#>`
+// @reject: optional and said nothing about the omission, so the three engines
+// @reject: filled the silence three ways: the tree-walker exported everything,
+// @reject: the VM and the browser engine exported nothing, and `zymbol check`
+// @reject: said `No errors or warnings` about a module whose every call dies at
+// @reject: runtime in two engines of three (DM-27, REFERENCE.md L48).
+// @reject: Decided 2026-09-04: a module declares its public surface. The rule
+// @reject: lives in `zymbol-semantic` (E014), so all three engines inherit it
+// @reject: and `check` sees it — the module file is refused wherever it is read.
+// @reject: An empty `#> { }` is how a module says it exports nothing, out loud.
+// @reject: It was free to decide: of every module in the corpus and in the six
+// @reject: LDV applications, none omitted the block, so nothing depended on
+// @reject: either default.
+# 04_module_without_export_block_m {
+    TOPE := 7
+
+    privada() {
+        <~ TOPE * 2
+    }
+
+    publica() {
+        <~ privada()
+    }
+}

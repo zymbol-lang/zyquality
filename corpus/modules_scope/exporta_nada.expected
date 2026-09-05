@@ -1,0 +1,3 @@
+el módulo con el bloque vacío carga sin protestar
+y el de al lado exporta lo que declara: visible
+y lo que no se declara no se ve

@@ -1,0 +1,12 @@
+// The other half: a module that declares a surface and keeps the rest private.
+# exporta_nada_algo {
+    #> { visible }
+
+    visible() {
+        <~ "visible"
+    }
+
+    escondida() {
+        <~ "escondida"
+    }
+}

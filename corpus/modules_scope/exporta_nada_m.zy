@@ -1,0 +1,10 @@
+// A module whose public surface is empty, declared out loud (L48).
+# exporta_nada_m {
+    #> { }
+
+    TOPE := 7
+
+    privada() {
+        <~ TOPE * 2
+    }
+}
