@@ -1,0 +1,61 @@
+// HLZ-013 — a string literal that spans lines, where the line it sits on decides
+// the parse.
+//
+// A token belongs to the line it STARTS on. The browser engine recorded the
+// line of the CLOSING quote instead, so every rule that asks "is this still on
+// the operator's line?" read a multiline literal as belonging to a later one:
+// `<~` decided the return had no value and handed back Unit, with no error and
+// no warning. `>>` dropped whatever followed the literal.
+//
+// The corpus had no case of `<~` with a multiline literal at all, which is why
+// three engines disagreed and the gate said nothing. Every form below is here
+// because it reads the line number of a string.
+
+<# ./literal_multilinea_m => m
+
+// --- returned from a module function --------------------------------
+>> "[" m::una_linea() "]" ¶
+>> "[" m::dos_lineas() "]" ¶
+>> "[" m::interpolada(7) "]" ¶
+>> "[" m::escapada() "]" ¶
+
+// --- returned from a loose function ---------------------------------
+suelta() {
+    <~ "dos
+líneas"
+}
+>> "[" suelta() "]" ¶
+
+// The juxtaposition continues where the literal ENDED, not where it began.
+pegada() {
+    <~ "tres
+líneas" "y cola"
+}
+>> "[" pegada() "]" ¶
+
+// --- bound to a name ------------------------------------------------
+texto = "cuatro
+líneas"
+>> "[" texto "]" ¶
+
+unida = "cinco
+líneas" "y cola"
+>> "[" unida "]" ¶
+
+// --- printed directly -----------------------------------------------
+>> "seis
+líneas" ¶
+
+// What follows the literal on ITS last line still belongs to the output.
+eco(s) { <~ s }
+>> "[" eco("siete
+líneas") "]" "y cola" ¶
+
+// --- as an operand ---------------------------------------------------
+cuenta = "ocho
+líneas"$#
+>> "cuenta=" cuenta ¶
+
+lista = ["nueve
+líneas", "corta"]
+>> "[" lista[1] "]" ¶
