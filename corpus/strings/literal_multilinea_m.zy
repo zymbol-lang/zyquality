@@ -1,0 +1,24 @@
+// Module for literal_multilinea.zy — HLZ-013.
+//
+// The bug was found here first: a module function whose `<~` carried a
+// multiline literal returned Unit in the browser engine, silently. The go
+// program builds its kifu header this way, so the record came out complete on a
+// terminal and with no header at all in the playground.
+
+# literal_multilinea_m {
+    #> { una_linea, dos_lineas, interpolada, escapada }
+
+    una_linea() { <~ "sin salto" }
+
+    dos_lineas() {
+        <~ "con
+salto"
+    }
+
+    interpolada(x) {
+        <~ "con {x}
+interpolación"
+    }
+
+    escapada() { <~ "con\nsalto escapado" }
+}
