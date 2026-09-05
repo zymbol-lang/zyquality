@@ -454,7 +454,6 @@ rust	shared	a ^ b must be one item
 rust	shared	a dictionary is asked about a key, so `$?` needs a string, got §
 rust	shared	a dictionary is written #(key: value, key2: value2)
 rust	shared	a dictionary is written `#(…)`
-rust	shared	a function cannot be declared inside a block: '§' is free in a script or part of a module, not of a '?', '@' or function body
 rust	shared	a key is a name or a string: #(nombre: valor) or #("gasto.alimentación": valor)
 rust	shared	a module file must contain only: # name §
 rust	shared	a module may only have one #> export block
@@ -574,7 +573,6 @@ rust	shared	each group must be wrapped: [path] or [path1, path2]
 rust	shared	each item can only be exported once
 rust	shared	else-if condition should be bool, got §
 rust	shared	empty interpolation
-rust	shared	empty string interpolation §
 rust	shared	ensure the path is valid and does not go above the root
 rust	shared	equal not equal
 rust	shared	error at 0 1 error at 2
@@ -820,7 +818,6 @@ rust	shared	git for windows
 rust	shared	grouped expressions must be enclosed in parentheses: (expr)
 rust	shared	hello alice! hello bob!
 rust	shared	if condition should be bool, got §
-rust	shared	imports must come before any statement
 rust	shared	index 0 is invalid — zymbol uses 1-based indexing
 rust	shared	index must be an integer, got §
 rust	shared	index out of bounds
@@ -890,7 +887,6 @@ rust	shared	module-level constants must use literal values, not expressions or f
 rust	shared	module-level variables must use literal values, not expressions or function calls
 rust	shared	modules may only contain imports, exports, constants, variables, and function definitions
 rust	shared	move the declaration to the top level of the script or into a module
-rust	shared	move this `<#` above the first statement in the file
 rust	shared	named tuple index out of bounds: index § for tuple of length §
 rust	shared	named tuple update index must be an integer or field name (string), got §
 rust	shared	navigation index must be an integer, got §
@@ -931,7 +927,6 @@ rust	shared	piped value type § incompatible with function parameter §
 rust	shared	positioned output (>>~)
 rust	shared	precision must be a non-negative integer
 rust	shared	processing order updating inventory
-rust	shared	provide a variable name: §
 rust	shared	query_one matched no rows
 rust	shared	range bound `1..total` must count as a use of `total`, got: §
 rust	shared	range bounds must be integers, got § and §
@@ -1026,9 +1021,6 @@ rust	shared	undefined variable in input prompt: '§'
 rust	shared	underscore variables are strictly local to their declaration block '§' was declared in an inner scope and is not accessible here
 rust	shared	underscore variables are strictly local to their declaration block '§' was declared in an outer scope and cannot be accessed from nested blocks
 rust	shared	underscore variables should not be in destruction schedule
-rust	shared	unexpected '#(' at statement level
-rust	shared	unexpected '(' at statement level
-rust	shared	unexpected '[' at statement level
 rust	shared	unexpected char '§' (u+§) in float output
 rust	shared	unexpected character: '§'
 rust	shared	unexpected end of file
@@ -1056,13 +1048,10 @@ rust	shared	unused variable 'otra'
 rust	shared	unused variable 'total'
 rust	shared	unused variable '§'
 rust	shared	update operator ($~) requires a place to write like arr[i]$~ val, arr[i>j]$~ val or d.key$~ val
-rust	shared	use '#(name: n) = expr' to destructure a dictionary
 rust	shared	use '#0' (or its unicode equivalent) for false, '#1' for true
-rust	shared	use '(a, b) = expr' for tuple destructuring
 rust	shared	use '.' syntax for constants: alias.constant
 rust	shared	use '::' syntax for functions: alias::function
 rust	shared	use '=' to assign a value to a variable
-rust	shared	use '[a, b] = expr' for array destructuring
 rust	shared	use '_' (without '?') for an unconditional else branch
 rust	shared	use '_' to indicate where the piped value should go
 rust	shared	use '§[i]$~ value' to modify in place — '=' gives a value to a name, '$~' changes part of a collection
@@ -1102,10 +1091,7 @@ zyjs	shared	$~ not supported on §
 zyjs	shared	'§' is not a function
 zyjs	shared	'§' is not an array
 zyjs	shared	), // and without it
-zyjs	shared	); // consume closing | const finalcast = cast ?? { kind: typed ?
-zyjs	shared	, prompt, varname: vartok.value, cast: finalcast, line }; } // typed-input typespec after <<: // ##.(t,d) → decimal, ##. → float, ###(n)/##!(n) → int, ##"(n) → text, ##
 zyjs	shared	>>~ position has at most 5 slots
-zyjs	shared	] `$++` then a leftover `[…]` // by_age = people$^+ (a, b -> …) `$^+` sorts; `$^` is the one // that takes a comparator // // in both, the parser finishes the expression early and what remains starts // the next statement — which is exactly the shape a stray operator makes. if (t.type === 'lbracket' || t.type === 'lparen' || t.type === 'hash_lparen') { const shown = t.type === 'lbracket' ? '[' : (t.type === 'lparen' ? '(' : '#('); const hint = t.type === 'lbracket' ?
 zyjs	shared	`°` has no effect in output context — use `>> x ¶`
 zyjs	shared	a dictionary is written `#(…)`: write `#(` here, as in #(nombre: valor). a bare `(…)` is a positional tuple, and `#()` is the empty dictionary — which `()` cannot be, since it would have to be the empty tuple as well
 zyjs	shared	a dictionary key cannot interpolate — use `d[…]$~ value` to add a computed key
