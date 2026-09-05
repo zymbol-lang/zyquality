@@ -1,0 +1,9 @@
+// @reject: imports 04_module_without_export_block_m.zy, which declares no `#>`.
+// @reject: The module is the error, so importing it is an error too, wherever it
+// @reject: is imported from — the same shape as 03_file_level_export_block.zy.
+// @reject: This is the half that the reader MEETS: before L48 the tree-walker
+// @reject: printed 14 here and the other two said the *function* was not
+// @reject: exported, which names the wrong cause and taught the invalid
+// @reject: file-level `#>` that 03 refuses.
+<# ./04_module_without_export_block_m => m
+>> m::publica() ¶

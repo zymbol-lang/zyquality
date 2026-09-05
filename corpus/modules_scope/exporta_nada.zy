@@ -1,0 +1,22 @@
+// L48 — the empty export block, which is how a module says it exports nothing.
+//
+// The rule that a module declares its public surface (E014, DM-27) needs a way
+// to declare an EMPTY one, or "exports nothing" would be unsayable and the rule
+// would forbid a legitimate module: one that exists to be a namespace, or one
+// mid-refactor whose surface is not decided yet.
+//
+// `#> { }` is that way. It loads, it holds its state, and every name in it stays
+// private — which is what the omission used to mean in two engines of three,
+// except that now it is written down instead of guessed.
+
+<# ./exporta_nada_m => nada
+<# ./exporta_nada_algo => algo
+
+>> "el módulo con el bloque vacío carga sin protestar" ¶
+>> "y el de al lado exporta lo que declara: " algo::visible() ¶
+
+// What a module keeps private stays private: `exporta_nada_m` holds a constant
+// and a function and hands out neither, and the program that imports it still
+// runs. That is the difference the empty block makes — it is a module with no
+// public surface, not a module with no rule.
+>> "y lo que no se declara no se ve" ¶
