@@ -52,6 +52,28 @@ the timings, so they say something a benchmark should say: that the program did
 the same amount of work, not merely that it finished. `zyq bench` (phase 4) is
 where they get read.
 
+## What `bench_index_read.zy` measures, and why it is not a time
+
+Every other benchmark here reports a wall time and is judged against a baseline
+recorded on one machine. `bench_index_read.zy` reports a **slope**: the same
+60 000 reads against a 100-element array and against a 4 000-element one, and the
+same 40 000 against a 9-key dictionary and a 301-key one, in both spellings
+(`d["k"]` and `d.k`, which take different paths and had the same defect). Each
+pair has to give the same number, on any machine, in any engine — reading one
+element cannot cost more because the collection is bigger.
+
+They were not. Until v0.0.9 the tree-walker cloned the collection to hand back
+one of its values (HLZ-012), so the array pair read 0.26 s and 8.59 s and the
+301-key dot read 0.46 s against the bracket's 0.045 s. Nothing
+in `bench/` could see it: the collection benchmarks go through `$>`, `$|`, `$<`,
+`$?` and slices, which consume the whole collection anyway and so cannot tell a
+copy from a read.
+
+Its last line, `read_in_fn`, found a second copy in the same engine: handing the
+collection to a function cloned it too (HLZ-014). It read 2.165 s and now reads
+0.009 s. It stays — a benchmark that only covers what is already fast finds
+nothing.
+
 ## Adding one
 
 Drop the `.zy` here and add it to `BENCHES=(…)` in `bench_gate.sh`, then
