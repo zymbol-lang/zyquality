@@ -93,6 +93,19 @@ needs = ["zymbol"]
 gate = true
 
 [[suite]]
+id = "addressing"
+cmd = ["python3", "addressing/harness.py"]
+desc = "the bracket rule as a product: every action after a chained receiver refused, after a navigator receiver agreed"
+needs = ["python3", "zymbol"]
+# A gate, and the one suite here that makes a CLAIM rather than asking a
+# question. It has to: the hole it exists to close was three engines wrongly
+# ACCEPTING the same program, which a consensus run cannot see — they agreed
+# perfectly. `reject/` makes the same kind of claim one hand-written file at a
+# time; this one crosses the receiver with the whole action vocabulary, so a
+# form nobody thought of is asked anyway.
+gate = true
+
+[[suite]]
 id = "messages"
 cmd = ["python3", "messages/extract.py"]
 desc = "the diagnostic inventory: every message one engine defines and the other does not, against a recorded baseline"

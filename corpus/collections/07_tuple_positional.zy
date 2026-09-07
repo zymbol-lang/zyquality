@@ -5,8 +5,8 @@ p = (10, 20)
 
 // Tuple in array
 points = [(1, 2), (3, 4), (5, 6)]
->> points[1][1] ¶
->> points[2][2] ¶
+>> points[1>1] ¶
+>> points[2>2] ¶
 
 // Function returning tuple
 make_pair(a, b) { <~ (a, b) }

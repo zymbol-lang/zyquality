@@ -1,0 +1,17 @@
+// @reject: la cadena se rechaza mire lo que mire detrás. `arr[1][1]$~ 0` es
+// @reject: corchete tras corchete igual que `>> arr[1][1]`, y la acción que
+// @reject: venga después no la vuelve legal: es una regla sobre CÓMO se
+// @reject: direcciona, no sobre qué se hace con lo direccionado.
+// @reject:
+// @reject: Estas dos formas corrieron durante el propio cierre de la lectura
+// @reject: (2026-09-07), y por eso están aquí. El primer intento dejó pasar `$~`
+// @reject: para que `d["x"]["y"]$~ 9` siguiera dando su mensaje de siempre
+// @reject: (reject/collections/11), y esa excepción abrió dos puertas: la
+// @reject: sentencia de abajo y `x = arr[1][1]$~ 0`, que TIENEN dónde poner el
+// @reject: resultado y por eso nunca llegaban al rechazo que debía cazarlas.
+// @reject: Devolvían `[0, 2, 3]` sin decir nada, en los tres motores.
+// @reject:
+// @reject: La forma es `arr[1>1]$~ 0`, en corpus/collections/edicion_modelo_completo.zy.
+arr = [[1,2,3],[4,5,6],[7,8,9]]
+arr[1][1] $~ 0
+>> arr ¶

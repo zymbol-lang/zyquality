@@ -1,0 +1,22 @@
+// @reject: leer hondo se hace con el navegador `>`, no encadenando corchetes.
+// @reject: Es la misma decisión que ya estaba tomada para la ESCRITURA —`m[i][j]
+// @reject: = v` (reject/assignment/01) y `d["x"]["y"]$~ v`
+// @reject: (reject/collections/11)—, aplicada por fin a la mitad que faltaba.
+// @reject:
+// @reject: La lectura llevaba deprecada desde la v0.0.4 y seguía parseando: la
+// @reject: GUÍA decía «still works, deprecated» y «a semantic warning may be
+// @reject: added in a future version», y ningún motor decía nada. Una
+// @reject: deprecación que solo vive en la prosa no es una deprecación: deja el
+// @reject: lenguaje con dos maneras de escribir el mismo acceso y sin nada que
+// @reject: las distinga, que es exactamente lo que se le reprochó a la
+// @reject: escritura.
+// @reject:
+// @reject: A diferencia de la escritura, la lectura encadenada NO destruía el
+// @reject: dato: daba el valor correcto en los tres motores. Lo que se retira es
+// @reject: la segunda grafía, no un resultado equivocado.
+// @reject:
+// @reject: La forma es `m[2>3]`, y un grupo de corchetes direcciona UN elemento
+// @reject: por hondo que esté. Sigue valiendo indexar lo que no es un acceso:
+// @reject: `[1,2,3][2]`, `f()[2]`, `m[[1>2]][1]`.
+m = [[1,2,3], [4,5,6], [7,8,9]]
+>> m[2][3] ¶

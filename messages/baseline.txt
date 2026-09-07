@@ -515,6 +515,7 @@ rust	shared	cannot use function in bash command interpolation
 rust	shared	cannot § § to §: type mismatch
 rust	shared	catch blocks start with :! § or :! ##type §
 rust	shared	caught error
+rust	shared	chained index does not exist: '§[…][…]' is not a form of zymbol
 rust	shared	char type metadata: §
 rust	shared	character code must be in range 0..0x10ffff, got §
 rust	shared	check that the item is defined in the module
@@ -893,6 +894,7 @@ rust	shared	navigation index must be an integer, got §
 rust	shared	need improvement
 rust	shared	negative indices: arr[-1], arr[-2>-1]
 rust	shared	nesting is navigated with '>', so this is '§[i>j]$~ value' — '=' gives a value to a name, '$~' changes part of a collection
+rust	shared	nesting is navigated with '>', so this is '§[i>j]' — one bracket group addresses one element, however deep it lies
 rust	shared	no hard error
 rust	shared	no pattern matched in match expression
 rust	shared	no shell found — `<\ \>` and `</ />` run their commands through one. tried: §
@@ -1106,6 +1108,7 @@ zyjs	shared	cannot subscript §
 zyjs	shared	cannot use bool as array index
 zyjs	shared	cannot write § to [§]: type mismatch — expected element of type §
 zyjs	shared	cannot § § to [§]: type mismatch — expected element of type §
+zyjs	shared	chained index does not exist: '§[…][…]' is not a form of zymbol = help: nesting is navigated with '>', so this is '§[i>j]' — one bracket group addresses one element, however deep it lies
 zyjs	shared	checksource: analysis failed
 zyjs	shared	collection op
 zyjs	shared	deep update ($~) not supported on §

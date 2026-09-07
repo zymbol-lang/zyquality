@@ -1,0 +1,13 @@
+// @reject: la otra puerta que abrió la excepción de `$~`, y la más silenciosa de
+// @reject: las dos: aquí el resultado SÍ se guarda, así que no hay ni edición
+// @reject: perdida ni sentencia sospechosa que mirar. `x` valía `[0, 2, 3]` —la
+// @reject: fila primera con su primer elemento cambiado— y `arr` quedaba intacto.
+// @reject: Un valor plausible, obtenido por una forma que no existe.
+// @reject:
+// @reject: Es `arr[1>1]$~ 0` cuando el resultado se usa, que construye y deja el
+// @reject: original quieto. La regla del resultado (COLLECTIONS.md § 1) es
+// @reject: ortogonal a esta: dice qué hace un `$` según se use o se tire lo que
+// @reject: devuelve, no con qué se le permite escribir el receptor.
+arr = [[1,2,3],[4,5,6],[7,8,9]]
+x = arr[1][1] $~ 0
+>> x ¶

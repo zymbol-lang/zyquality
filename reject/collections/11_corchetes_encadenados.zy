@@ -13,6 +13,15 @@
 // @reject: La forma correcta está en corpus/collections/escritura_por_punto.zy.
 // @reject: Cero archivos del corpus, de las aplicaciones o de los ejemplos usaban
 // @reject: la encadenada, medido antes de cerrarla.
+// @reject:
+// @reject: 2026-09-07: el mensaje cambió de «this edit has nothing to write into»
+// @reject: a «chained index does not exist», porque al cerrarse la LECTURA
+// @reject: encadenada (reject/collections/13) el corchete tras corchete se
+// @reject: rechaza ya al leerlo, antes de mirar qué viene detrás. Es la causa
+// @reject: primera y no la consecuencia: lo que está mal aquí es encadenar, y de
+// @reject: ahí se sigue que la edición no tenga destino. `f()[1]$~ 5`
+// @reject: (reject/collections/12) SÍ conserva el suyo — ahí no hay cadena, hay
+// @reject: una llamada que nadie sujeta.
 d = #(a: 1, x: #(y: 2))
 d["x"]["y"] $~ 9
 >> d ¶

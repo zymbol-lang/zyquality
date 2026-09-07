@@ -69,7 +69,7 @@ config = #(
     etiquetas: ["web", "api"]
 )
 >> config.servidor.host ¶
->> config["servidor"]["puerto"] ¶
+>> config["servidor">"puerto"] ¶
 >> config.etiquetas[1] ¶
 
 // The positional read `d[2]` was withdrawn (decision 11) — see

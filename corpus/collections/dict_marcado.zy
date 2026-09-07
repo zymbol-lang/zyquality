@@ -32,7 +32,7 @@ c = #("gasto.alimentación": "Alimentación", "ingreso.sueldo": "Sueldo")
 
 // Nested, and mixed with the tuple it is no longer confused with.
 anidado = #(pos: #(x: 1, y: 2), nombre: "p")
->> "anidado:     " anidado["pos"]["y"] ¶
+>> "anidado:     " anidado["pos">"y"] ¶
 t = (1, 2)
 >> "tupla:       " t "  sigue siendo una tupla" ¶
 
