@@ -1,5 +1,15 @@
 
 // Test simple de interpolación de variables en bash
+//
+// Este fichero NO compila, y esa es su función: `{var}` no se interpola dentro
+// de `<\ … \>`, y el golden guarda lo que el motor dice de cada línea que lo
+// intenta.
+//
+// El golden pasó de 16 diagnósticos a 13 el 2026-09-07 (GLB-007). Los tres que
+// se fueron eran el TERCER error de una línea con DOS interpolaciones: el
+// primero señala la llave que abre, el segundo la que cierra, y el tercero era
+// la recuperación tropezando con la segunda pareja. Cada línea mala conserva su
+// diagnóstico en su sitio; lo que se retiró es el resto que dejaba la anterior.
 
 >> "=== Test Interpolacion Bash ===" ¶
 ¶

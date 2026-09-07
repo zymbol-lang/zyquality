@@ -6,8 +6,8 @@ arr = []
 arr = arr$+ (1, 2, 3)
 arr = arr$+ (4, 5, 6)
 >> arr$# ¶
->> arr[1][1] ¶
->> arr[2][3] ¶
+>> arr[1>1] ¶
+>> arr[2>3] ¶
 
 // ── Positional tuples — from variable ─────────────────────────────────────────
 t1 = (10, 20)
@@ -16,9 +16,9 @@ pts = []
 pts = pts$+ t1
 pts = pts$+ t2
 >> pts$# ¶
->> pts[1][1] ¶
->> pts[1][2] ¶
->> pts[2][1] ¶
+>> pts[1>1] ¶
+>> pts[1>2] ¶
+>> pts[2>1] ¶
 
 // ── Named tuples — literal ────────────────────────────────────────────────────
 db = []
@@ -45,7 +45,7 @@ mixed = []
 mixed = mixed$+ (0, 0)
 mixed = mixed$+ #(name: "origin", x: 0, y: 0)
 >> mixed$# ¶
->> mixed[1][1] ¶
+>> mixed[1>1] ¶
 >> mixed[2].name ¶
 
 // ── Build table in loop then query ────────────────────────────────────────────

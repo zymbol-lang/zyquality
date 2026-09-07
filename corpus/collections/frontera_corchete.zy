@@ -1,0 +1,31 @@
+// Where the chained-index rule stops.
+//
+// `arr[i][j]` is refused (reject/collections/13, 14, 15): both groups walk down
+// the same structure, which is what `>` does in one step. A bracket after
+// something that is NOT itself an access is one group and not a chain, and this
+// file is the record of which is which — the rule was stated in prose first, and
+// prose is what a deprecation lived in for five versions.
+m = [[1,2,3], [4,5,6], [7,8,9]]
+
+// One group, over a value that was just built or written out. All legal.
+>> [1,2,3][2] ¶
+
+f() { <~ [10,20,30] }
+>> f()[2] ¶
+
+// An extraction does not descend into `m`: it collects from several paths and
+// builds a collection that was nowhere inside it. Indexing that is the same act
+// as indexing what `f()` returned.
+esquinas = m[[1>1, 1>3] ; [3>1, 3>3]]
+>> esquinas ¶
+>> esquinas[1] ¶
+>> m[[1>1, 1>3] ; [3>1, 3>3]][1] ¶
+
+// The navigator, for contrast: one group, however deep.
+>> m[2>3] ¶
+>> m[1>1] ¶
+
+// A dot composes with a bracket — different syntax, not a second spelling.
+q = #(a: #(b: 7))
+>> q["a"].b ¶
+>> q.a["b"] ¶

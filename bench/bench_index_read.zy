@@ -54,7 +54,7 @@ matriz = []
 
 t = T::now()
 s = 0
-@ _k:1..20000 { s = s + matriz[100][10] }
+@ _k:1..20000 { s = s + matriz[100>10] }
 >> "read_nested: 200x20   sum = " s "  " T::elapsed(t) ¶
 
 // --- a dictionary, by key and by dot ---------------------------------------

@@ -97,18 +97,18 @@ pts  = coords$[2:3]
 ptsb = coords$[2..4]
 >> pts$# ¶
 >> ptsb$# ¶
->> pts[1][1] ¶
->> ptsb[1][1] ¶
->> pts[3][2] ¶
->> ptsb[3][2] ¶
+>> pts[1>1] ¶
+>> ptsb[1>1] ¶
+>> pts[3>2] ¶
+>> ptsb[3>2] ¶
 
 // Remove first 2 points
 c2  = coords$-[1:2]
 c2b = coords$-[1..2]
 >> c2$# ¶
 >> c2b$# ¶
->> c2[1][1] ¶
->> c2b[1][1] ¶
+>> c2[1>1] ¶
+>> c2b[1>1] ¶
 
 // ── Cross: slice rows then access nested field ────────────────────────────────
 win  = db$[2:3]

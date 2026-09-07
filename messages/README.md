@@ -51,6 +51,22 @@ Una lista de 804 bugs. Es el **denominador**: cuántos sitios hay donde los dos
 motores pueden discrepar y nadie ha mirado. Baja cuando se porta un mensaje;
 sube cuando alguien añade uno a un solo motor.
 
+### La línea base subió a propósito el 2026-09-06 — 1137 → 1140
+
+`arr[i][j]` pasó de deprecada a error, y eso son **tres** entradas nuevas en
+superficie compartida: Rust registra la cabecera y el `help:` por separado, zyjs
+los concatena en una sola cadena. No es un mensaje que un motor tenga y el otro
+no —los tres motores lo imprimen palabra por palabra igual, y así lo prueba
+`reject/collections/13`—; es el medidor no sabiendo aparear una cabecera con dos
+piezas contra la misma cabecera con las dos pegadas.
+
+El precedente ya estaba en la línea base con la misma forma: `this edit has
+nothing to write into` figura como `rust shared …` y `zyjs shared … = help: §`,
+en las líneas 1004 y 1132 de la versión anterior. Un mensaje nuevo con `help:`
+sube esta cuenta en tres aunque los motores coincidan; lo que la baja de verdad
+es aparear cabecera y `help:`, que es trabajo del escáner y no de quien añade un
+diagnóstico.
+
 ⚠ **Cerca del 30 % de las entradas no tienen forma de frase.** Parte son
 mensajes reales que ningún filtro simple reconoce (`'§' was declared at §:§`),
 parte son fixtures de Zymbol dentro de doc-comments que `is_message` deja pasar.
