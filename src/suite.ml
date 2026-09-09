@@ -85,6 +85,16 @@ let missing ~(root : string) (need : string) : string option =
   | "interpreter" ->
     let d = Filename.concat root "../interpreter" in
     if Sys.file_exists d then None else Some "the interpreter/ checkout"
+  (* A suite that lives in a sibling repository.  Without this its runner is
+     simply not there, the shell answers 127, and the suite is reported as a
+     FAILURE — which reads as "the formatter broke" when what happened is that
+     nobody cloned it.  Absent is absent: skipped, and said so. *)
+  | "zyfmtcheck" ->
+    let d = Filename.concat root "../ZyFmtCheck/bin/zyfmtcheck" in
+    if Sys.file_exists d then None else Some "the ZyFmtCheck/ checkout"
+  | "zyddt" ->
+    let d = Filename.concat root "../ZyDDT/bin/zyddt" in
+    if Sys.file_exists d then None else Some "the ZyDDT/ checkout"
   | other -> Some ("unknown requirement `" ^ other ^ "`")
 
 let unmet ~root (s : spec) = List.filter_map (missing ~root) s.needs
