@@ -21,6 +21,10 @@
 #              zymbol | python3           a program on PATH (or via *_BIN)
 #              tty                        allocates a pty
 #              interpreter                the sibling interpreter/ checkout
+#              zyfmtcheck | zyddt         the sibling repository that holds the
+#                                         runner — without it the shell answers
+#                                         127 and a missing clone reads as a
+#                                         broken formatter
 #   gate     true  = a failure makes `zyq suite` red
 #            false = reported, but does not fail the gate.  For suites that
 #                    measure something machine-dependent, or that grade a
@@ -37,7 +41,7 @@ gate = true
 id = "fmtcheck"
 cmd = ["../ZyFmtCheck/bin/zyfmtcheck"]
 desc = "ZyFmtCheck: the formatter moved things and changed nothing — over the LDV applications, in a copy, and run again"
-needs = ["zymbol", "python3"]
+needs = ["zymbol", "python3", "zyfmtcheck"]
 # A gate, and it earned it on the first run: the two behaviours it found are
 # fixed, so green here is a fact rather than a hope.
 #
@@ -121,3 +125,27 @@ needs = ["zymbol"]
 # the machine that recorded it. Enforce it in CI by running `zyq suite --only
 # bench` on the runner that owns the baseline.
 gate = false
+
+[[suite]]
+id = "zyddt"
+cmd = ["../ZyDDT/bin/zyddt", "suite"]
+desc = "ZyDDT: the declared matrix — every engine asked the same cell, and the pins that name a finding"
+needs = ["zymbol", "python3", "zyddt"]
+# A gate. It asks what a corpus of whole programs structurally cannot: a cell is
+# one point in a crossed matrix, so a form nobody thought to write a file for is
+# asked anyway. The first crossing of `operator` — 14 operators × 18 type pairs
+# — was 150 red cells on its first run and six real findings behind them, none
+# of which the 666-file corpus could see, because the engines agreed with each
+# other about every program anybody had bothered to write down.
+#
+# It also grades the two surfaces this repository has no engine for: the
+# playground's highlighter and the VS Code grammar. They never run a program, so
+# consensus has nothing to compare — they are asked what they left unmarked.
+#
+# On the layering: ZyDDT's CHARTER declares it the successor to this repository,
+# not a suite inside it. Registering it here is about the command, not the
+# hierarchy — `zyq suite` has to mean "run the tests", and a layer that has to be
+# remembered separately is a layer that gets forgotten before a release. It runs
+# from its own checkout, with its own runner and its own exit codes; nothing here
+# knows how it works.
+gate = true
