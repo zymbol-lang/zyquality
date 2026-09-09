@@ -88,7 +88,11 @@ def collect_expected(code: str) -> list[str]:
             # Quitar sufijos explicativos tras separadores visuales
             cleaned = re.sub(r'\s+(←|—|--)\s.*$', '', raw)
             cleaned = re.sub(r'\s{2,}\(.*$', '', cleaned)
-            cleaned = re.sub(r'\s\((?!.*\).*\().*\)$', '', cleaned)
+            # A value that is itself parenthesised -- a tuple, `(##), 2, (1, x))` --
+            # is a value and not a value plus a gloss.  Stripping its tail on the
+            # single-space rule below truncated it to `(##), 2,`.
+            if not (cleaned.startswith('(') and cleaned.endswith(')')):
+                cleaned = re.sub(r'\s\((?!.*\).*\().*\)$', '', cleaned)
             lines.append(cleaned.strip())
     return lines
 
