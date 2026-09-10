@@ -91,14 +91,12 @@ rust	rust-only	ctrl+left/right - move by word\r
 rust	rust-only	ctrl+w - delete word before cursor\r
 rust	rust-only	ctrl+x - cut selection\r
 rust	rust-only	default = true desc =
-rust	rust-only	did you mean 'm::sqrt'?
 rust	rust-only	dimensions must be positive, got: §
 rust	rust-only	document changed: §
 rust	rust-only	document closed: §
 rust	rust-only	document opened: §
 rust	rust-only	document saved: §
 rust	rust-only	document symbols requested: §
-rust	rust-only	does not export a function 'inventada'
 rust	rust-only	double space after the arrow in §: §
 rust	rust-only	duplicate [[script]] name '§' in zyp.toml
 rust	rust-only	dynamic range in match
@@ -130,7 +128,6 @@ rust	rust-only	failed to format file: §
 rust	rust-only	failed to format input
 rust	rust-only	failed to parse
 rust	rust-only	failed to parse '§' as base-§ number
-rust	rust-only	failed to parse module: §
 rust	rust-only	failed to read file: §
 rust	rust-only	failed to read from stdin
 rust	rust-only	failed to read script '§': §
@@ -157,15 +154,12 @@ rust	rust-only	formatting must succeed
 rust	rust-only	formatting requested: §
 rust	rust-only	fresh harness should have no variables
 rust	rust-only	func("very long argument one", "very long argument two", "three")
-rust	rust-only	function expects § argument(s), got §
-rust	rust-only	function expects § arguments, got §
 rust	rust-only	gate passed but output is not idempotent
 rust	rust-only	generic catch must follow typed catch }} on same line. result: §
 rust	rust-only	go to definition at §
 rust	rust-only	handled above
 rust	rust-only	hello bytecode
 rust	rust-only	hello from mock
-rust	rust-only	hello world
 rust	rust-only	hover requested at §
 rust	rust-only	idempotent reformat
 rust	rust-only	identical inputs must produce a byte-identical archive
@@ -191,7 +185,6 @@ rust	rust-only	keyboard shortcuts
 rust	rust-only	layer module must be indexed
 rust	rust-only	lex diagnostics: §
 rust	rust-only	lex/parse error — file is packaged anyway, but its own dependencies could not be traced: §
-rust	rust-only	lexer errors: §
 rust	rust-only	line § ends in whitespace: §
 rust	rust-only	long function call should break: §
 rust	rust-only	long named tuple should break: §
@@ -295,7 +288,6 @@ rust	rust-only	test error without span
 rust	rust-only	textdocumentsync must be advertised, got: §
 rust	rust-only	the <\ "echo hi" \> in entry.zy must produce a w003 warning
 rust	rust-only	the machine's local zone could not be read; use "utc" or an explicit offset like "-0400"
-rust	rust-only	this is a note
 rust	rust-only	this needs § and got §
 rust	rust-only	three consecutive blank lines must collapse to one: §
 rust	rust-only	token stream changed at token #§: source has §, formatted output has § (the file uses syntax the formatter cannot yet reprint faithfully; file left unchanged)
@@ -305,7 +297,6 @@ rust	rust-only	tui block should work on a real tty: §
 rust	rust-only	type help for commands, exit to quit\r
 rust	rust-only	typed catch must follow }} on same line. result: §
 rust	rust-only	undefined function index §
-rust	rust-only	undefined variable '§' in match pattern
 rust	rust-only	undefined variable should produce an error
 rust	rust-only	unexpected <<| error message: §
 rust	rust-only	unexpected error: §
@@ -364,9 +355,7 @@ rust	rust-only	§ file(s) would be packaged
 rust	rust-only	§ is callable but missing from zymbol_common::stdlib
 rust	rust-only	§ is in the table but the compiler has no builtins for it
 rust	rust-only	§ is in the table but the tree-walker has no such module
-rust	rust-only	§ parse error(s) in '§' §
 rust	rust-only	§ requires a numeric value, got §
-rust	rust-only	§ semantic error(s) in '§' §
 rust	rust-only	§ should be refused
 rust	rust-only	§: constant names in zymbol_common::stdlib differ from the tree-walker's
 rust	rust-only	§: expected exactly one § diagnostic, got §
@@ -551,9 +540,11 @@ rust	shared	db::tx: statements must be an array
 rust	shared	decimal typespec syntax: ##.(total, decimals)
 rust	shared	destructure assignment
 rust	shared	devanagari digit u+§
+rust	shared	did you mean 'm::sqrt'?
 rust	shared	did you mean 't::width'?
 rust	shared	did you mean '§::§'?
 rust	shared	divide by zero
+rust	shared	does not export a function 'inventada'
 rust	shared	drop the '<~', or declare the parameter as an output in the signature
 rust	shared	duplicate export block in module
 rust	shared	e002: module '§' not found
@@ -794,6 +785,7 @@ rust	shared	extended arabic-indic
 rust	shared	failed to enable raw mode: §
 rust	shared	failed to enter alternate screen: §
 rust	shared	failed to parse '§' as § number
+rust	shared	failed to parse module: §
 rust	shared	failed to run `§`: §
 rust	shared	file not found
 rust	shared	file not found: §
@@ -812,12 +804,15 @@ rust	shared	function '§::§' expects § argument(s), but § were provided
 rust	shared	function call as initializer should fail
 rust	shared	function call syntax: expr(arg1, arg2, ...)
 rust	shared	function call syntax: name(arg1, arg2, ...)
+rust	shared	function expects § argument(s), got §
+rust	shared	function expects § arguments, got §
 rust	shared	function syntax: name(params) §
 rust	shared	functions must be defined before use, or imported with a module alias (e.g. `math::cos`)
 rust	shared	genuinely unused `otra` must still warn, got: §
 rust	shared	git for windows
 rust	shared	grouped expressions must be enclosed in parentheses: (expr)
 rust	shared	hello alice! hello bob!
+rust	shared	hello world
 rust	shared	if condition should be bool, got §
 rust	shared	index 0 is invalid — zymbol uses 1-based indexing
 rust	shared	index must be an integer, got §
@@ -866,6 +861,7 @@ rust	shared	lambda syntax: x -> expr
 rust	shared	lambda syntax: x -> expr or (a, b) -> expr
 rust	shared	legacy export rename separator
 rust	shared	lex errors: §
+rust	shared	lexer errors: §
 rust	shared	lifetime end (\)
 rust	shared	logical and requires boolean operands, got §
 rust	shared	logical or requires boolean operands, got §
@@ -1005,6 +1001,7 @@ rust	shared	this /* is not a comment */
 rust	shared	this `#[…]` has no mixed types: every element is §
 rust	shared	this edit has nothing to write into
 rust	shared	this edits what the expression produced, and nothing holds it — assign the result to a name first
+rust	shared	this is a note
 rust	shared	transaction already active (use savepoints to nest)
 rust	shared	truncate expression syntax: #!n|expr|
 rust	shared	truncate expressions only work with numbers or numeric strings, got §
@@ -1019,6 +1016,7 @@ rust	shared	two rests cannot be told apart: nothing says where the first ends
 rust	shared	type mismatch
 rust	shared	unary plus requires numeric operand, got §
 rust	shared	undefined module alias: '§'
+rust	shared	undefined variable '§' in match pattern
 rust	shared	undefined variable in input prompt: '§'
 rust	shared	underscore variables are strictly local to their declaration block '§' was declared in an inner scope and is not accessible here
 rust	shared	underscore variables are strictly local to their declaration block '§' was declared in an outer scope and cannot be accessed from nested blocks
@@ -1088,7 +1086,9 @@ rust	shared	§ does not export a function '§'
 rust	shared	§ is listed twice — two types cannot share a symbol
 rust	shared	§ lexer error(s) in '§' §
 rust	shared	§ lexer errors in §
+rust	shared	§ parse error(s) in '§' §
 rust	shared	§ parser errors in §
+rust	shared	§ semantic error(s) in '§' §
 zyjs	shared	$~ not supported on §
 zyjs	shared	'§' is not a function
 zyjs	shared	'§' is not an array

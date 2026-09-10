@@ -128,13 +128,24 @@ def harvest(paths, quotes):
         src = io.open(p, encoding='utf-8', errors='replace').read()
         for t in all_literals(src, quotes):
             if is_message(t):
-                out.setdefault(norm(t), (t, p))
+                # EVERY file the message appears in, not just the first one
+                # walked. A message defined in two crates used to be filed under
+                # whichever `os.walk` reached first, and that order is the
+                # filesystem's, not this program's: the same tree classified
+                # eight messages one way on a workstation and another way on a
+                # CI runner, so the gate disagreed with itself across machines.
+                # A message is not "in a crate"; it is in all of them.
+                out.setdefault(norm(t), (t, []))[1].append(p)
     return out
 
 def rust_files(root):
-    for d, _, fs in os.walk(root):
+    # Sorted, so that two machines walk the same tree in the same order. It no
+    # longer decides anything — see harvest — but a listing that reorders itself
+    # per filesystem is a bad foundation for anything downstream.
+    for d, ds, fs in sorted(os.walk(root)):
+        ds.sort()
         if '/target/' in d: continue
-        for fn in fs:
+        for fn in sorted(fs):
             if fn.endswith('.rs') and not fn.startswith('test'):
                 yield os.path.join(d, fn)
 
@@ -185,7 +196,10 @@ def main():
     rows = set()
     n_shared = 0
     for k in only_r:
-        shared = crate_of(R[k][1]) in SHARED
+        # ANY shared crate puts the message on the shared surface, even when it
+        # also lives in one zyjs has no counterpart for. The question is whether
+        # a user can walk into it, and one reachable definition is enough.
+        shared = any(crate_of(p) in SHARED for p in R[k][1])
         n_shared += shared
         rows.add('%s\t%s\t%s' % ('rust', 'shared' if shared else 'rust-only', k))
     for k in only_j:
@@ -200,7 +214,7 @@ def main():
 
     if '--only-js' in sys.argv:
         print('\n── sólo en zyjs ──')
-        for k in only_j: print('   ', J[k][0].replace('\\n', ' ⏎ ')[:104])
+        for k in only_j: print("   ", J[k][0].replace('\\n', ' ⏎ ')[:104])
     if '--only-rust' in sys.argv:
         print('\n── sólo en Rust ──')
         for k in only_r: print('   ', R[k][0].replace('\\n', ' ⏎ ')[:104])
