@@ -149,3 +149,26 @@ needs = ["zymbol", "python3", "zyddt"]
 # from its own checkout, with its own runner and its own exit codes; nothing here
 # knows how it works.
 gate = true
+
+[[suite]]
+id = "cost"
+cmd = ["./cost/run.py"]
+desc = "the cost gate: auto-free measured against a control, and complexity measured against itself"
+needs = ["zymbol", "python3"]
+# The only suite here that asserts a RATIO rather than a value. Two things it
+# sees that nothing else does:
+#
+#   · auto-free. It is required to be invisible — same output with and without
+#     it — so no consensus run, no golden and no cell can observe it at all. Its
+#     only trace is peak memory, and the only way to read that is against a
+#     control whose values may not be released.
+#   · a change of complexity. `bench/` runs each program at one size and compares
+#     ms against a machine-specific baseline, so linear-turned-quadratic reads as
+#     "slower" until the input grows and it reads as a hang. This runs the same
+#     program at N and 4N; the limit sits between linear and quadratic.
+#
+# No baseline, deliberately: a baseline must be re-recorded per machine, and
+# re-recording is the move that absorbs a regression. A case that fails while
+# naming an `open_finding` is reported as KNOWN and does not turn the gate red —
+# declared debt is not a regression, and a gate that is permanently red stops
+# meaning anything.

@@ -1,0 +1,3 @@
+<# ./mod/almacen => A
+A::llenar(«N»)
+>> A::cuanto() ¶

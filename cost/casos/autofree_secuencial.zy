@@ -1,0 +1,8 @@
+// Two aggregates, used one after the other: the first is dead before the
+// second is built, so auto-free may release it. Peak should be ~one array.
+a = []
+@ i:1..2000000 { a$+ i }
+>> a$# ¶
+b = []
+@ i:1..2000000 { b$+ i }
+>> b$# ¶
