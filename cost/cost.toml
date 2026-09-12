@@ -1,0 +1,118 @@
+# What a program may cost, stated as a RATIO and never as a number.
+#
+# ── Why not a baseline ───────────────────────────────────────────────────────
+#
+# `bench/baseline.txt` records milliseconds and says so in its own header:
+# "machine-specific … host=zymbol". That is the right instrument for "did this
+# get slower", and the wrong one for "does this mechanism still work": the
+# number has to be re-recorded on every machine, and a re-recording is exactly
+# the move that makes a regression disappear.
+#
+# Every case here carries its own control, measured in the same run, on the same
+# machine, within seconds of the subject. What is asserted is the RATIO between
+# them. A ratio needs no baseline, survives a faster laptop, and cannot be
+# quietly re-recorded — to move it you have to change the number in this file,
+# where it is read as what it is.
+#
+# ── The two kinds ────────────────────────────────────────────────────────────
+#
+#   peak-ratio    subject vs control, peak RSS.  Auto-free is required to be
+#                 INVISIBLE — same output with and without it — so memory is the
+#                 only place it can be observed at all. The pair differs in the
+#                 LIFETIMES of its values and in nothing else: same allocations,
+#                 same loops, same output shape.
+#
+#   growth-ratio  the same program at N and at N × factor, wall time. Detects a
+#                 change of COMPLEXITY, which no single measurement can: linear
+#                 is `factor`, quadratic is `factor²`, and the limit sits
+#                 between them. This is what `bench/` structurally cannot see —
+#                 it runs each program at one size.
+
+# ── `open_finding` ───────────────────────────────────────────────────────────
+#
+# A case that names one is KNOWN rather than FAILED: it is reported, in full,
+# with the finding's id, and it does not turn the gate red. Debt that has been
+# written down is not a regression, and a gate that is permanently red stops
+# meaning anything — which is the whole value of `zyquality`'s green baseline.
+#
+# It is keyed BY ENGINE, because a finding belongs to an engine: writing it for
+# the case made the runner announce "ZYJS-014 now passes" every time zytw met
+# the limit, which is an engine reporting on another engine's bug.
+#
+# It is not an exclusion and it is not a skip: the case still RUNS and its ratio
+# is still printed, so the number moves in the report as the work progresses.
+# And the day it passes, the runner says so and asks for the finding to be
+# closed — a `open_finding` that nobody removes is the way debt becomes
+# permanent.
+
+[defaults]
+runs_time = 3          # median; memory is deterministic enough to take once
+min_base_ms = 40       # a growth ratio whose base run is faster than this is
+                       # measuring process startup, not the program: reported as
+                       # NO VERDICT rather than as a pass nobody should trust
+engines   = ["zytw", "zyvm"]
+
+# ── Auto-free ────────────────────────────────────────────────────────────────
+
+[[case]]
+id       = "autofree/two-aggregates"
+kind     = "peak-ratio"
+subject  = "casos/autofree_secuencial.zy"
+control  = "casos/autofree_solapado.zy"
+max_ratio = 0.70
+what     = "two aggregates used one after the other must not cost two aggregates"
+# Measured 2026-09-12: zytw 237/465 = 0.51, zyvm 38.7/70.4 = 0.55. The limit is
+# 0.70, which leaves room for allocator noise and still fails loudly: with
+# auto-free off the subject IS the control and the ratio is 1.00.
+why      = "if the ratio approaches 1, the first aggregate is surviving its last use"
+
+[[case]]
+id       = "autofree/scale"
+kind     = "peak-ratio"
+subject  = "casos/autofree_secuencial.zy"
+control  = "casos/autofree_uno.zy"
+max_ratio = 1.25
+what     = "two aggregates used in sequence cost about the same as one"
+# The sharper half. Measured 2026-09-12: zytw 1.00, zyvm 1.03.
+why      = "states the mechanism positively: the second array reuses the first one's ground"
+
+# ── Cost curves ──────────────────────────────────────────────────────────────
+
+# `n_by_engine` — one question, asked at the size each engine can answer it at.
+#
+# The sizes cannot be shared: at 5 000 the Rust engines spend most of the run
+# starting a process (a ratio of two startup times measures the startup, which
+# is what `min_base_ms` refuses), and at 200 000 the browser engine needs
+# minutes. Splitting this into two cases would make it two questions, and the
+# day one is fixed nobody would notice the other still asks the same thing.
+
+[[case]]
+id        = "growth/append-local"
+kind      = "growth-ratio"
+template  = "casos/append_local.zy.in"
+# 600 000 and not less: the VM builds 200 000 in 16 ms, which is under the
+# floor — the faster the engine, the larger the case has to be for its own ratio
+# to mean anything.
+n         = 600000
+n_by_engine = { zyjs = 5000, zyvm = 1200000 }
+factor    = 4
+max_ratio = 6.0
+what      = "building an array element by element is linear in its length"
+# Linear would be 4.0; quadratic 16.0. Measured 2026-09-12: zyjs 13.2.
+why       = "an aggregate rebuilt on every append is quadratic in its length"
+engines   = ["zytw", "zyvm", "zyjs"]
+open_finding = { zyjs = "ZYJS-014" }
+
+[[case]]
+id        = "growth/append-module-state"
+kind      = "growth-ratio"
+template  = "casos/append_modulo.zy.in"
+n         = 400000
+n_by_engine = { zyvm = 8000 }
+factor    = 4
+max_ratio = 6.0
+what      = "accumulating into a module's own state is linear, like a local"
+# Measured 2026-09-12: zytw 1.2, zyvm 18.0 — ZYVM-003, open. The VM is the
+# future default engine and a module that accumulates is an ordinary module.
+why       = "two owners of one Rc across a load/store make every append copy the vector"
+open_finding = { zyvm = "ZYVM-003" }
