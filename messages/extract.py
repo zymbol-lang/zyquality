@@ -122,10 +122,48 @@ def norm(s):
         s = s.replace(a, b)
     return re.sub(r'\s+', ' ', s).strip().rstrip('.:;— -').lower()
 
+def strip_test_modules(src):
+    """Drop every `#[cfg(test)] mod … { … }` block.
+
+    A test's assertion message is not a message to a user of the language, and
+    this inventory exists to compare what the ENGINES say. The rule used to be
+    "skip files whose name starts with test", which misses everything in this
+    workspace: the tests live in the file they test, behind `#[cfg(test)]`. The
+    strings that leaked through read exactly like diagnostics — `test source
+    must parse` sat in the recorded baseline as a shared message — and any test
+    written with a descriptive assertion failed the gate for saying so.
+
+    Brace counting, not a parser: the attribute is always followed by a `mod`
+    whose body is balanced, and a brace inside a string literal within a test
+    module would have to be unbalanced to fool it.
+    """
+    out, i = [], 0
+    while True:
+        j = src.find('#[cfg(test)]', i)
+        if j < 0:
+            out.append(src[i:])
+            return ''.join(out)
+        out.append(src[i:j])
+        k = src.find('{', j)
+        if k < 0:
+            return ''.join(out)
+        depth, k = 0, k
+        while k < len(src):
+            if src[k] == '{': depth += 1
+            elif src[k] == '}':
+                depth -= 1
+                if depth == 0:
+                    k += 1
+                    break
+            k += 1
+        i = k
+
 def harvest(paths, quotes):
     out = {}
     for p in paths:
         src = io.open(p, encoding='utf-8', errors='replace').read()
+        if p.endswith('.rs'):
+            src = strip_test_modules(src)
         for t in all_literals(src, quotes):
             if is_message(t):
                 # EVERY file the message appears in, not just the first one
