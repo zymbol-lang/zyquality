@@ -11,8 +11,11 @@
 // que cierra la clase de fallos donde una errata se propaga como `undefined`.
 existe = "yo existo"
 
-lee() { <~ existe }
->> lee() ¶
+// El valor cruza por parámetro (MEM-2, restaurada el 2026-09-13): leerlo del
+// archivo desde dentro de la función es ahora otro error, y tiene su propio
+// archivo en `errors/semantic/funcion_lee_el_archivo.zy`.
+lee(v) { <~ v }
+>> lee(existe) ¶
 
 usa_lo_que_no_hay() { <~ jamas_definida }
 >> usa_lo_que_no_hay() ¶

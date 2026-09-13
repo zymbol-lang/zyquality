@@ -1,17 +1,31 @@
-// P5-D: Named function capture asymmetry — first-class snapshot
-// P5-D: Named function capture asymmetry — first-class snapshot
-// When used as a value, the function captures the outer scope at assignment time.
-// Subsequent changes to the outer variable do not affect the captured snapshot.
+// P5-D: la asimetría de captura ya no existe — y este archivo es su acta.
+//
+// Lo que probaba hasta hoy: una función con nombre, TOMADA COMO VALOR, sacaba
+// una instantánea del ámbito del archivo, mientras que llamarla directamente
+// no veía nada. El mismo cuerpo, dos significados, decididos por cómo se
+// alcanzaba — y nada en el código lo decía. Era `DI-02` en `Divergente_ES` y se
+// convirtió en `ERROR-ZYB-002` cuando ZyBank tropezó con él.
+//
+// Se unificó dos veces: hacia capturar el 2026-08-24, hacia aislar el
+// 2026-09-13 (MEM-2). Lo que queda probado aquí es que **los dos caminos se
+// comportan igual**, que era el fondo del hallazgo: cualquiera de las dos
+// unificaciones lo arreglaba, y la asimetría era el defecto.
 
 base = 10
-adder(n) { <~ n + base }
+adder(n, b) { <~ n + b }
 
-f = adder           // captures: base = 10
->> f(5) ¶           // 15
+// ── llamada directa ────────────────────────────────────────────────────────
+>> adder(5, base) ¶          // 15
 
+// ── y tomada como valor: el mismo resultado, no una instantánea ────────────
+f = adder
+>> f(5, base) ¶              // 15
+
+// ── cambiar el archivo cambia lo que se pasa, porque se pasa al llamar ─────
 base = 99
->> f(5) ¶           // 15 — snapshot, not live binding
->> base ¶           // 99 — outer scope updated
+>> f(5, base) ¶              // 104
+>> adder(5, base) ¶          // 104 — idéntico por los dos caminos
 
-g = adder           // re-captured: base = 99
->> g(5) ¶           // 104
+// ── y no hay instantánea que re-capturar ──────────────────────────────────
+g = adder
+>> g(5, base) ¶              // 104
