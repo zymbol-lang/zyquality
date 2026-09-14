@@ -87,7 +87,7 @@ todo	diagnostic	C12-io-tui	input: failed to disable raw mode: {}	zymbol-interpre
 todo	diagnostic	C12-io-tui	input: failed to restore raw mode: {}	zymbol-interpreter/src/io.rs:98	
 todo	diagnostic	C12-io-tui	io error: {0}	zymbol-interpreter/src/lib.rs:50	
 todo	diagnostic	C12-io-tui	undefined variable in input prompt: '{}'	zymbol-interpreter/src/io.rs:63	
-todo	diagnostic	C8-match-patterns	  --> consider assigning to a variable: `result = ?? expr {{ ... }}`	zymbol-interpreter/src/match_stmt.rs:36	
+cell	diagnostic	C8-match-patterns	  --> consider assigning to a variable: `result = ?? expr {{ ... }}`	zymbol-interpreter/src/match_stmt.rs:36	runtime-match-patterns/match-with-values-used-as-a-statement — reach.py cannot count it: a `-->` continuation line is not a diagnostic line
 todo	diagnostic	C13-operators-variables-internal	'{}' is undefined — did you mean '{}°' (hot definition)?	zymbol-compiler/src/lib.rs:2139	
 todo	diagnostic	C13-operators-variables-internal	cannot compare float {} with string '{}' using operator '{:?}'	zymbol-interpreter/src/arithmetic_ops.rs:412	
 todo	diagnostic	C13-operators-variables-internal	cannot compare string '{}' with float {} using operator '{:?}'	zymbol-interpreter/src/arithmetic_ops.rs:395	
@@ -225,12 +225,12 @@ cell	diagnostic	C7-functions-hof	reduce requires array, got {:?}	zymbol-interpre
 cell	diagnostic	C7-functions-hof	reduce requires lambda function	zymbol-interpreter/src/collection_ops.rs:728	runtime-functions-hof/reduce-requires-lambda-function
 unreachable	diagnostic	C7-functions-hof	sort comparator must be a lambda (a, b) -> Bool	zymbol-interpreter/src/collection_ops.rs:782	unreachable: the parser requires a lambda literal after $^ (zymbol-parser collection_ops.rs:463), so the comparator is always a function
 cell	diagnostic	C7-functions-hof	sort requires an array, got {:?}	zymbol-interpreter/src/collection_ops.rs:814	runtime-functions-hof/sort-requires-an-array-got
-todo	diagnostic	C8-match-patterns	array pattern '[ … ]' requires an array, got {}	zymbol-interpreter/src/lib.rs:1828	
-todo	diagnostic	C8-match-patterns	comparison pattern did not produce a boolean	zymbol-interpreter/src/match_stmt.rs:183	
-todo	diagnostic	C8-match-patterns	no pattern matched in match expression	zymbol-interpreter/src/match_stmt.rs:75	
-todo	diagnostic	C8-match-patterns	tuple pattern '( … )' requires a tuple, got {}	zymbol-interpreter/src/lib.rs:1841	
-todo	diagnostic	C8-match-patterns	warning: match expression returns values but result is unused	zymbol-interpreter/src/match_stmt.rs:35	
-todo	internal?	C8-match-patterns	unsupported operator in comparison pattern: {:?}	zymbol-interpreter/src/match_stmt.rs:175	
+cell	diagnostic	C8-match-patterns	array pattern '[ … ]' requires an array, got {}	zymbol-interpreter/src/lib.rs:1828	runtime-match-patterns/array-pattern-requires-an-array
+unreachable	diagnostic	C8-match-patterns	comparison pattern did not produce a boolean	zymbol-interpreter/src/match_stmt.rs:183	unreachable: compare_values only ever returns Ok(Bool) or an error, and == / <> build a Bool directly
+cell	diagnostic	C8-match-patterns	no pattern matched in match expression	zymbol-interpreter/src/match_stmt.rs:75	runtime-match-patterns/no-pattern-matched-in-match-expression
+cell	diagnostic	C8-match-patterns	tuple pattern '( … )' requires a tuple, got {}	zymbol-interpreter/src/lib.rs:1841	runtime-match-patterns/tuple-pattern-requires-a-tuple
+cell	diagnostic	C8-match-patterns	warning: match expression returns values but result is unused	zymbol-interpreter/src/match_stmt.rs:35	runtime-match-patterns/match-with-values-used-as-a-statement
+unreachable	internal?	C8-match-patterns	unsupported operator in comparison pattern: {:?}	zymbol-interpreter/src/match_stmt.rs:175	unreachable: the parser builds a comparison pattern only with < > <= >= == <>, and all six are handled
 todo	diagnostic	C9-modules-scripts	cannot use function in bash command interpolation	zymbol-interpreter/src/script_exec.rs:183	
 todo	diagnostic	C9-modules-scripts	circular dependency detected	zymbol-interpreter/src/lib.rs:62	
 todo	diagnostic	C9-modules-scripts	constant '{}' not exported from module '{}'	zymbol-interpreter/src/lib.rs:2150	
