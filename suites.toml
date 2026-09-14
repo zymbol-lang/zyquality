@@ -117,6 +117,25 @@ needs = ["python3"]
 gate = true
 
 [[suite]]
+id = "reach"
+cmd = ["python3", "messages/reach.py"]
+desc = "the other half of the inventory: which of the diagnostics the engines define does any program actually provoke"
+needs = ["python3", "zymbol"]
+gate = false
+# `messages` reads the source and answers WHAT EXISTS. This answers WHAT IS
+# REACHED, and the gap is the point: measured 2026-09-14, the engines define 742
+# diagnostics in the layers a `.zy` can reach and 1281 corpus files plus 661
+# failing ones provoke 131 of them. Eight of every nine exist only in the source.
+#
+# `gate = false` because it runs the corpus twice over — 2603 processes, minutes
+# — and the precedent is `coverage/`, outside the gate for the same reason and
+# with that reason written in its own header. What is gated is its BASELINE: the
+# count may only go down, so a diagnostic added with nothing to reach it shows up
+# the day it is written instead of at the next manual sweep.
+#
+#   python3 messages/reach.py --list ejecución    # the work queue for a layer
+
+[[suite]]
 id = "bench"
 cmd = ["bash", "bench/bench_gate.sh"]
 desc = "benchmarks against a recorded baseline"
