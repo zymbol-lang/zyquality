@@ -98,7 +98,7 @@ todo	diagnostic	C13-operators-variables-internal	modulo by zero	zymbol-interpret
 todo	diagnostic	C13-operators-variables-internal	negation requires numeric operand, got {}	zymbol-interpreter/src/expressions.rs:280	
 todo	diagnostic	C13-operators-variables-internal	this needs {expected} and got {got}	zymbol-vm/src/lib.rs:536	
 todo	diagnostic	C13-operators-variables-internal	unary plus requires numeric operand, got {:?}	zymbol-interpreter/src/expressions.rs:290	
-todo	internal?	C9-modules-scripts	Module '{}' not loaded	zymbol-interpreter/src/expr_eval.rs:156	
+unreachable	internal?	C9-modules-scripts	Module '{}' not loaded	zymbol-interpreter/src/expr_eval.rs:156	unreachable: an alias is registered only after its module loaded (modules.rs:75, :319), so the lookup cannot miss
 todo	internal?	C13-operators-variables-internal	ZyStr requires a 64-bit platform	zymbol-vm/src/zy_str.rs:31	
 todo	internal?	C13-operators-variables-internal	internal: use of '{}' after auto-destruction (string interpolation) — this is a bug in the last-use analyzer, please report it	zymbol-interpreter/src/literals.rs:60	
 todo	internal?	C13-operators-variables-internal	internal: use of '{}' after auto-destruction — this is a bug in the last-use analyzer, please report it (workaround: add a later `>> {}` mention or a `\\ {}` at the intended end of life)	zymbol-interpreter/src/lib.rs:1362	
@@ -231,17 +231,17 @@ cell	diagnostic	C8-match-patterns	no pattern matched in match expression	zymbol-
 cell	diagnostic	C8-match-patterns	tuple pattern '( … )' requires a tuple, got {}	zymbol-interpreter/src/lib.rs:1841	runtime-match-patterns/tuple-pattern-requires-a-tuple
 cell	diagnostic	C8-match-patterns	warning: match expression returns values but result is unused	zymbol-interpreter/src/match_stmt.rs:35	runtime-match-patterns/match-with-values-used-as-a-statement
 unreachable	internal?	C8-match-patterns	unsupported operator in comparison pattern: {:?}	zymbol-interpreter/src/match_stmt.rs:175	unreachable: the parser builds a comparison pattern only with < > <= >= == <>, and all six are handled
-todo	diagnostic	C9-modules-scripts	cannot use function in bash command interpolation	zymbol-interpreter/src/script_exec.rs:183	
-todo	diagnostic	C9-modules-scripts	circular dependency detected	zymbol-interpreter/src/lib.rs:62	
-todo	diagnostic	C9-modules-scripts	constant '{}' not exported from module '{}'	zymbol-interpreter/src/lib.rs:2150	
-todo	diagnostic	C9-modules-scripts	error executing {}: {:?}	zymbol-interpreter/src/script_exec.rs:89	
-todo	diagnostic	C9-modules-scripts	failed to run `{}`: {}	zymbol-interpreter/src/script_exec.rs:122	
-todo	diagnostic	C9-modules-scripts	function '{}' not exported from module '{}'	zymbol-interpreter/src/lib.rs:2144	
-todo	diagnostic	C9-modules-scripts	lexer errors: {0}	zymbol-formatter/src/lib.rs:81	
-todo	diagnostic	C9-modules-scripts	module '{module}' does not export constant '{constant}'	zymbol-interpreter/src/lib.rs:59	
-todo	diagnostic	C9-modules-scripts	undefined module alias: '{}'	zymbol-interpreter/src/functions_lambda.rs:249	
-todo	diagnostic	C9-modules-scripts	{} lexer error(s) in '{}'\n{}	zymbol-interpreter/src/modules.rs:127	
-todo	diagnostic	C9-modules-scripts	{} lexer errors in {}	zymbol-interpreter/src/script_exec.rs:54	
-todo	diagnostic	C9-modules-scripts	{} parse error(s) in '{}'\n{}	zymbol-compiler/src/lib.rs:748	
-todo	diagnostic	C9-modules-scripts	{} parser errors in {}	zymbol-interpreter/src/script_exec.rs:62	
-todo	diagnostic	C9-modules-scripts	{} semantic error(s) in '{}'\n{}	zymbol-compiler/src/lib.rs:779	
+cell	diagnostic	C9-modules-scripts	cannot use function in bash command interpolation	zymbol-interpreter/src/script_exec.rs:183	runtime-modules-scripts/bash-function-interpolation
+unreachable	diagnostic	C9-modules-scripts	circular dependency detected	zymbol-interpreter/src/lib.rs:62	unreachable: RuntimeError::CircularDependency is declared and matched, never constructed (cycles raise CircularImport)
+unreachable	diagnostic	C9-modules-scripts	constant '{}' not exported from module '{}'	zymbol-interpreter/src/lib.rs:2150	unreachable: RuntimeError::ConstantNotExported is never constructed; a missing constant raises `Module 'o' has no constant`
+cell	diagnostic	C9-modules-scripts	error executing {}: {:?}	zymbol-interpreter/src/script_exec.rs:89	runtime-modules-scripts/subscript-runtime-error
+unreachable	diagnostic	C9-modules-scripts	failed to run `{}`: {}	zymbol-interpreter/src/script_exec.rs:122	unreachable from a .zy: it needs the shell that zymbol_common::shell found to then fail to start
+cell	diagnostic	C9-modules-scripts	function '{}' not exported from module '{}'	zymbol-interpreter/src/lib.rs:2144	runtime-modules-scripts/unexported-function-as-an-error-value
+n/a	diagnostic	C9-modules-scripts	lexer errors: {0}	zymbol-formatter/src/lib.rs:81	not a runtime diagnostic: FormatError::LexerError, reached by `zymbol fmt`
+unreachable	diagnostic	C9-modules-scripts	module '{module}' does not export constant '{constant}'	zymbol-interpreter/src/lib.rs:59	unreachable: the Display of RuntimeError::ConstantNotExported, which is never constructed
+cell	diagnostic	C9-modules-scripts	undefined module alias: '{}'	zymbol-interpreter/src/functions_lambda.rs:249	runtime-modules-scripts/undefined-module-alias
+cell	diagnostic	C9-modules-scripts	{} lexer error(s) in '{}'\n{}	zymbol-interpreter/src/modules.rs:127	runtime-modules-scripts/module-with-lexer-errors — reach.py cannot count it: the template spans lines
+cell	diagnostic	C9-modules-scripts	{} lexer errors in {}	zymbol-interpreter/src/script_exec.rs:54	runtime-modules-scripts/subscript-lexer-errors
+cell	diagnostic	C9-modules-scripts	{} parse error(s) in '{}'\n{}	zymbol-compiler/src/lib.rs:748	runtime-modules-scripts/module-with-parse-errors — reach.py cannot count it: the template spans lines
+cell	diagnostic	C9-modules-scripts	{} parser errors in {}	zymbol-interpreter/src/script_exec.rs:62	runtime-modules-scripts/subscript-parser-errors
+cell	diagnostic	C9-modules-scripts	{} semantic error(s) in '{}'\n{}	zymbol-compiler/src/lib.rs:779	runtime-modules-scripts/module-with-semantic-errors — reach.py cannot count it: the template spans lines
