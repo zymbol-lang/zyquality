@@ -197,19 +197,19 @@ cell	diagnostic	C5-format-convert	integer overflow: {} cannot represent this flo
 cell	diagnostic	C5-format-convert	invalid Unicode character code: {}	zymbol-interpreter/src/data_ops.rs:363	runtime-format-convert/invalid-unicode-character-code
 cell	diagnostic	C5-format-convert	round expressions only work with numbers or numeric strings, got {:?}	zymbol-interpreter/src/data_ops.rs:417	runtime-format-convert/round-expressions-only-work-with-numbers-or
 cell	diagnostic	C5-format-convert	truncate expressions only work with numbers or numeric strings, got {:?}	zymbol-interpreter/src/data_ops.rs:467	runtime-format-convert/truncate-expressions-only-work-with-numbers-or
-todo	diagnostic	C6-loops-ranges	@~ requires integer milliseconds, got {}	zymbol-interpreter/src/loops.rs:92	
-todo	diagnostic	C6-loops-ranges	@~ requires non-negative duration, got {}	zymbol-interpreter/src/loops.rs:88	
-todo	diagnostic	C6-loops-ranges	@~ requires non-negative ms, got {}	zymbol-vm/src/lib.rs:3796	
-todo	diagnostic	C6-loops-ranges	can only iterate over ranges, arrays, strings, tuples and dictionaries, got {:?}	zymbol-interpreter/src/expr_eval.rs:114	
-todo	diagnostic	C6-loops-ranges	character code must be in range 0..0x10FFFF, got {}	zymbol-interpreter/src/data_ops.rs:355	
-todo	diagnostic	C6-loops-ranges	range bounds must be integers, got {:?} and {:?}	zymbol-interpreter/src/loops.rs:166	
-todo	diagnostic	C6-loops-ranges	range end must be an integer, got {:?}	zymbol-interpreter/src/expr_eval.rs:38	
-todo	diagnostic	C6-loops-ranges	range pattern type mismatch	zymbol-interpreter/src/match_stmt.rs:124	
-todo	diagnostic	C6-loops-ranges	range start must be an integer, got {:?}	zymbol-interpreter/src/expr_eval.rs:28	
-todo	diagnostic	C6-loops-ranges	ranges can only be used in for-each loops	zymbol-interpreter/src/lib.rs:1942	
-todo	diagnostic	C6-loops-ranges	step must be an integer, got {:?}	zymbol-interpreter/src/expr_eval.rs:57	
-todo	diagnostic	C6-loops-ranges	step must be positive, got {}	zymbol-interpreter/src/expr_eval.rs:51	
-todo	internal?	C6-loops-ranges	register {0} out of range	zymbol-vm/src/lib.rs:561	
+cell	diagnostic	C6-loops-ranges	@~ requires integer milliseconds, got {}	zymbol-interpreter/src/loops.rs:92	runtime-loops-ranges/requires-integer-milliseconds-got
+cell	diagnostic	C6-loops-ranges	@~ requires non-negative duration, got {}	zymbol-interpreter/src/loops.rs:88	runtime-loops-ranges/requires-non-negative-duration-got
+cell	diagnostic	C6-loops-ranges	@~ requires non-negative ms, got {}	zymbol-vm/src/lib.rs:3796	runtime-loops-ranges/requires-non-negative-duration-got
+cell	diagnostic	C6-loops-ranges	can only iterate over ranges, arrays, strings, tuples and dictionaries, got {:?}	zymbol-interpreter/src/expr_eval.rs:114	runtime-loops-ranges/can-only-iterate-over-ranges-arrays-strings
+cell	diagnostic	C6-loops-ranges	character code must be in range 0..0x10FFFF, got {}	zymbol-interpreter/src/data_ops.rs:355	runtime-loops-ranges/character-code-must-be-in-range-0
+cell	diagnostic	C6-loops-ranges	range bounds must be integers, got {:?} and {:?}	zymbol-interpreter/src/loops.rs:166	runtime-loops-ranges/range-bounds-must-be-integers-got-and
+cell	diagnostic	C6-loops-ranges	range end must be an integer, got {:?}	zymbol-interpreter/src/expr_eval.rs:38	runtime-loops-ranges/range-end-must-be-an-integer-got
+cell	diagnostic	C6-loops-ranges	range pattern type mismatch	zymbol-interpreter/src/match_stmt.rs:124	runtime-loops-ranges/range-pattern-type-mismatch
+cell	diagnostic	C6-loops-ranges	range start must be an integer, got {:?}	zymbol-interpreter/src/expr_eval.rs:28	runtime-loops-ranges/range-start-must-be-an-integer-got
+cell	diagnostic	C6-loops-ranges	ranges can only be used in for-each loops	zymbol-interpreter/src/lib.rs:1942	runtime-loops-ranges/ranges-can-only-be-used-in-for
+cell	diagnostic	C6-loops-ranges	step must be an integer, got {:?}	zymbol-interpreter/src/expr_eval.rs:57	runtime-loops-ranges/step-must-be-an-integer-got
+cell	diagnostic	C6-loops-ranges	step must be positive, got {}	zymbol-interpreter/src/expr_eval.rs:51	runtime-loops-ranges/step-must-be-positive-got
+unreachable	internal?	C6-loops-ranges	register {0} out of range	zymbol-vm/src/lib.rs:561	unreachable: VmError::RegisterOutOfRange is declared and never constructed
 todo	diagnostic	C7-functions-hof	expression is not callable	zymbol-interpreter/src/functions_lambda.rs:292	
 todo	diagnostic	C7-functions-hof	filter requires array, got {:?}	zymbol-interpreter/src/collection_ops.rs:712	
 todo	diagnostic	C7-functions-hof	filter requires lambda function	zymbol-interpreter/src/collection_ops.rs:678	
