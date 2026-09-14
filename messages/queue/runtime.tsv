@@ -210,21 +210,21 @@ cell	diagnostic	C6-loops-ranges	ranges can only be used in for-each loops	zymbol
 cell	diagnostic	C6-loops-ranges	step must be an integer, got {:?}	zymbol-interpreter/src/expr_eval.rs:57	runtime-loops-ranges/step-must-be-an-integer-got
 cell	diagnostic	C6-loops-ranges	step must be positive, got {}	zymbol-interpreter/src/expr_eval.rs:51	runtime-loops-ranges/step-must-be-positive-got
 unreachable	internal?	C6-loops-ranges	register {0} out of range	zymbol-vm/src/lib.rs:561	unreachable: VmError::RegisterOutOfRange is declared and never constructed
-todo	diagnostic	C7-functions-hof	expression is not callable	zymbol-interpreter/src/functions_lambda.rs:292	
-todo	diagnostic	C7-functions-hof	filter requires array, got {:?}	zymbol-interpreter/src/collection_ops.rs:712	
-todo	diagnostic	C7-functions-hof	filter requires lambda function	zymbol-interpreter/src/collection_ops.rs:678	
-todo	diagnostic	C7-functions-hof	function expects {} argument(s), got {}	zymbol-compiler/src/lib.rs:2833	
-todo	diagnostic	C7-functions-hof	function expects {} arguments, got {}	zymbol-compiler/src/lib.rs:2835	
-todo	diagnostic	C7-functions-hof	lambda expects {} arguments, got {}	zymbol-interpreter/src/functions_lambda.rs:99	
-todo	diagnostic	C7-functions-hof	map requires array, got {:?}	zymbol-interpreter/src/collection_ops.rs:663	
-todo	diagnostic	C7-functions-hof	map requires lambda function	zymbol-interpreter/src/collection_ops.rs:640	
-todo	diagnostic	C7-functions-hof	member function calls not supported	zymbol-interpreter/src/functions_lambda.rs:273	
-todo	diagnostic	C7-functions-hof	pipe operator requires a callable function or lambda	zymbol-interpreter/src/expressions.rs:47	
-todo	diagnostic	C7-functions-hof	reduce lambda requires 2 parameters (accumulator, element), got {}	zymbol-interpreter/src/collection_ops.rs:738	
-todo	diagnostic	C7-functions-hof	reduce requires array, got {:?}	zymbol-interpreter/src/collection_ops.rs:761	
-todo	diagnostic	C7-functions-hof	reduce requires lambda function	zymbol-interpreter/src/collection_ops.rs:728	
-todo	diagnostic	C7-functions-hof	sort comparator must be a lambda (a, b) -> Bool	zymbol-interpreter/src/collection_ops.rs:782	
-todo	diagnostic	C7-functions-hof	sort requires an array, got {:?}	zymbol-interpreter/src/collection_ops.rs:814	
+cell	diagnostic	C7-functions-hof	expression is not callable	zymbol-interpreter/src/functions_lambda.rs:292	runtime-functions-hof/expression-is-not-callable
+cell	diagnostic	C7-functions-hof	filter requires array, got {:?}	zymbol-interpreter/src/collection_ops.rs:712	runtime-functions-hof/filter-requires-array-got
+cell	diagnostic	C7-functions-hof	filter requires lambda function	zymbol-interpreter/src/collection_ops.rs:678	runtime-functions-hof/filter-requires-lambda-function
+unreachable	diagnostic	C7-functions-hof	function expects {} argument(s), got {}	zymbol-compiler/src/lib.rs:2833	unreachable from the CLI: the analyzer reports the same arity mismatch first; the compiler raise_arity is a backstop for running without analysis (its own doc comment)
+unreachable	diagnostic	C7-functions-hof	function expects {} arguments, got {}	zymbol-compiler/src/lib.rs:2835	unreachable from the CLI: the analyzer reports the same arity mismatch first; the compiler raise_arity is a backstop for running without analysis (its own doc comment)
+cell	diagnostic	C7-functions-hof	lambda expects {} arguments, got {}	zymbol-interpreter/src/functions_lambda.rs:99	runtime-functions-hof/lambda-expects-arguments-got
+cell	diagnostic	C7-functions-hof	map requires array, got {:?}	zymbol-interpreter/src/collection_ops.rs:663	runtime-functions-hof/map-requires-array-got
+cell	diagnostic	C7-functions-hof	map requires lambda function	zymbol-interpreter/src/collection_ops.rs:640	runtime-functions-hof/map-requires-lambda-function
+cell	diagnostic	C7-functions-hof	member function calls not supported	zymbol-interpreter/src/functions_lambda.rs:273	runtime-functions-hof/member-function-calls-not-supported
+cell	diagnostic	C7-functions-hof	pipe operator requires a callable function or lambda	zymbol-interpreter/src/expressions.rs:47	runtime-functions-hof/pipe-operator-requires-a-callable-function-or
+cell	diagnostic	C7-functions-hof	reduce lambda requires 2 parameters (accumulator, element), got {}	zymbol-interpreter/src/collection_ops.rs:738	runtime-functions-hof/reduce-lambda-requires-2-parameters-accumulator-element
+cell	diagnostic	C7-functions-hof	reduce requires array, got {:?}	zymbol-interpreter/src/collection_ops.rs:761	runtime-functions-hof/reduce-requires-array-got
+cell	diagnostic	C7-functions-hof	reduce requires lambda function	zymbol-interpreter/src/collection_ops.rs:728	runtime-functions-hof/reduce-requires-lambda-function
+unreachable	diagnostic	C7-functions-hof	sort comparator must be a lambda (a, b) -> Bool	zymbol-interpreter/src/collection_ops.rs:782	unreachable: the parser requires a lambda literal after $^ (zymbol-parser collection_ops.rs:463), so the comparator is always a function
+cell	diagnostic	C7-functions-hof	sort requires an array, got {:?}	zymbol-interpreter/src/collection_ops.rs:814	runtime-functions-hof/sort-requires-an-array-got
 todo	diagnostic	C8-match-patterns	array pattern '[ … ]' requires an array, got {}	zymbol-interpreter/src/lib.rs:1828	
 todo	diagnostic	C8-match-patterns	comparison pattern did not produce a boolean	zymbol-interpreter/src/match_stmt.rs:183	
 todo	diagnostic	C8-match-patterns	no pattern matched in match expression	zymbol-interpreter/src/match_stmt.rs:75	
