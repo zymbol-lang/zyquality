@@ -1,0 +1,247 @@
+# Phase C work queue: the runtime diagnostics nothing provokes (reach.py --list ejecución, 2026-09-14).
+# status: todo | cell (provoked + met by a cell) | unreachable (with a reason in `note`) | n/a
+# class:  diagnostic | internal? (suspected unreachable, to be confirmed) | fragment (part of another message) | test (a test's own string)
+status	class	family	message	where	note
+n/a	fragment	-	(year, month, day) or (year, month, day, hour, minute, second), each ###, plus an optional zone	zymbol-interpreter/src/stdlib/time.rs:121	
+n/a	fragment	-	Array or String	zymbol-vm/src/lib.rs:2279	
+n/a	fragment	-	Array, Tuple, NamedTuple, or String	zymbol-vm/src/lib.rs:2488	
+n/a	fragment	-	Array, Tuple, or String	zymbol-vm/src/lib.rs:2341	
+n/a	fragment	-	Char or String	zymbol-vm/src/lib.rs:2379	
+n/a	fragment	-	Char, Int, or String	zymbol-vm/src/lib.rs:3497	
+n/a	fragment	-	Int or String	zymbol-vm/src/lib.rs:2267	
+n/a	fragment	-	String or Array	zymbol-vm/src/lib.rs:1840	
+n/a	fragment	-	String, Array or dictionary	zymbol-vm/src/lib.rs:2193	
+n/a	fragment	-	String, Array, or Tuple	zymbol-vm/src/lib.rs:2808	
+n/a	fragment	-	a decimal count that is not negative	zymbol-vm/src/lib.rs:629	
+n/a	fragment	-	a number with up to {} digits and {} decimals	zymbol-interpreter/src/io.rs:383	
+n/a	fragment	-	a single character	zymbol-interpreter/src/io.rs:388	
+n/a	fragment	-	a whole number as the decimal count	zymbol-vm/src/lib.rs:633	
+n/a	fragment	-	an integer of up to {} digits	zymbol-interpreter/src/io.rs:385	
+n/a	fragment	-	an optional zone String	zymbol-interpreter/src/stdlib/time.rs:101	
+n/a	fragment	-	connection string	zymbol-interpreter/src/stdlib/db.rs:6	
+n/a	fragment	-	non-negative Int	zymbol-vm/src/lib.rs:1854	
+n/a	fragment	-	savepoint name	zymbol-interpreter/src/stdlib/db.rs:497	
+n/a	fragment	-	text of up to {} characters	zymbol-interpreter/src/io.rs:387	
+n/a	test	-	1 2 Fizz 4 Buzz Fizz 7 8 Fizz Buzz 11 Fizz 13 14 FizzBuzz \n	zymbol-interpreter/tests/e2e.rs:543	
+n/a	test	-	Array type metadata: {}	zymbol-interpreter/tests/e2e.rs:496	
+n/a	test	-	Bool type metadata: {}	zymbol-interpreter/tests/e2e.rs:493	
+n/a	test	-	Char type metadata: {}	zymbol-interpreter/tests/e2e.rs:516	
+n/a	test	-	Compile error: {}	zymbol-interpreter/tests/e2e.rs:41	
+n/a	test	-	Expected lexer error but got none	zymbol-interpreter/tests/e2e.rs:54	
+n/a	test	-	Expected runtime error	zymbol-interpreter/tests/e2e.rs:75	
+n/a	test	-	Int type metadata: {}	zymbol-interpreter/tests/e2e.rs:487	
+n/a	test	-	Lex errors: {:?}	zymbol-interpreter/tests/e2e.rs:37	
+n/a	test	-	Parse error: {:?}	zymbol-interpreter/tests/e2e.rs:40	
+n/a	test	-	Runtime error	zymbol-interpreter/tests/e2e.rs:27	
+n/a	test	-	String type metadata: {}	zymbol-interpreter/tests/e2e.rs:490	
+n/a	test	-	VM accepted a non-numeric string	zymbol-interpreter/tests/e2e.rs:1447	
+n/a	test	-	VM error: {}	zymbol-interpreter/tests/e2e.rs:44	
+n/a	test	-	VM outputpos	zymbol-interpreter/tests/e2e.rs:1765	
+n/a	test	-	VM terminal size	zymbol-interpreter/tests/e2e.rs:1758	
+n/a	test	-	cannot compare	zymbol-interpreter/tests/e2e.rs:1453	
+n/a	test	-	cannot convert string	zymbol-interpreter/tests/e2e.rs:1445	
+n/a	test	-	caught error\n	zymbol-interpreter/tests/e2e.rs:453	
+n/a	test	-	error caught\n	zymbol-interpreter/tests/e2e.rs:478	
+n/a	test	-	expected 'non-negative' in error, got: {err}	zymbol-interpreter/tests/e2e.rs:1831	
+n/a	test	-	unexpected error message: {msg}	zymbol-interpreter/tests/e2e.rs:1215	
+todo	diagnostic	C10-std	io::delete: expected String path	zymbol-interpreter/src/stdlib/io.rs:102	
+todo	diagnostic	C10-std	io::exists: expected String path	zymbol-interpreter/src/stdlib/io.rs:80	
+todo	diagnostic	C10-std	io::list: expected String path	zymbol-interpreter/src/stdlib/io.rs:122	
+todo	diagnostic	C10-std	io::mkdir: expected String path	zymbol-interpreter/src/stdlib/io.rs:136	
+todo	diagnostic	C10-std	io::read: expected String path	zymbol-interpreter/src/stdlib/io.rs:31	
+todo	diagnostic	C10-std	json::decode: expected String	zymbol-interpreter/src/stdlib/json.rs:83	
+todo	diagnostic	C10-std	json::decode_map: expected String as the first argument	zymbol-interpreter/src/stdlib/json.rs:150	
+todo	diagnostic	C10-std	json::decode_map: expected a NamedTuple map as the second argument	zymbol-interpreter/src/stdlib/json.rs:116	
+todo	diagnostic	C10-std	json::decode_map: map value for '{}' must be a String (the new name)	zymbol-interpreter/src/stdlib/json.rs:105	
+todo	diagnostic	C10-std	mat::acos: argument must be in [-1, 1]	zymbol-interpreter/src/stdlib/math.rs:95	
+todo	diagnostic	C10-std	mat::asin: argument must be in [-1, 1]	zymbol-interpreter/src/stdlib/math.rs:85	
+todo	diagnostic	C10-std	mat::ln: argument must be positive	zymbol-interpreter/src/stdlib/math.rs:54	
+todo	diagnostic	C10-std	mat::log: x and base must be positive; base ≠ 1	zymbol-interpreter/src/stdlib/math.rs:184	
+todo	diagnostic	C10-std	net::get: expected String url	zymbol-interpreter/src/stdlib/net.rs:79	
+todo	diagnostic	C10-std	net::head: expected String url	zymbol-interpreter/src/stdlib/net.rs:134	
+todo	diagnostic	C10-std	random::entero: expected (###, ###) with max >= min	zymbol-interpreter/src/stdlib/random.rs:57	
+todo	diagnostic	C10-std	random::rango: expected positive ###	zymbol-interpreter/src/stdlib/random.rs:69	
+todo	diagnostic	C10-std	term::width: expected a String or Char, got {got}	zymbol-interpreter/src/stdlib/term.rs:84	
+todo	diagnostic	C10-std	time::of: expected (year, month, day) or (year, month, day, hour, minute, second), each ###, plus an optional zone	zymbol-vm/src/stdlib_builtins.rs:1150	
+todo	diagnostic	C10-std	time::today: expected an optional zone String	zymbol-vm/src/stdlib_builtins.rs:1127	
+todo	diagnostic	C10-std	{}: headers must be an Array of (String, String) tuples	zymbol-interpreter/src/stdlib/net.rs:39	
+todo	internal?	C10-std	unknown builtin id {}	zymbol-vm/src/stdlib_builtins.rs:1346	
+todo	diagnostic	C11-std-db	db: cannot bind {:?} as a parameter	zymbol-interpreter/src/stdlib/db.rs:159	
+todo	diagnostic	C11-std-db	db: expected String {}	zymbol-interpreter/src/stdlib/db.rs:119	
+todo	diagnostic	C11-std-db	db: params must be a Tuple, Array, or scalar	zymbol-interpreter/src/stdlib/db.rs:140	
+todo	diagnostic	C11-std-db	db::tx: each statement is (String sql, Array params)	zymbol-interpreter/src/stdlib/db.rs:405	
+todo	diagnostic	C11-std-db	db::tx: each statement must be a (sql, params) tuple	zymbol-interpreter/src/stdlib/db.rs:410	
+todo	diagnostic	C11-std-db	db::tx: statements must be an Array	zymbol-interpreter/src/stdlib/db.rs:394	
+todo	diagnostic	C11-std-db	invalid savepoint name '{}'	zymbol-interpreter/src/stdlib/db.rs:499	
+todo	diagnostic	C11-std-db	query_one matched no rows	zymbol-interpreter/src/stdlib/db.rs:90	
+todo	diagnostic	C11-std-db	transaction already active (use savepoints to nest)	zymbol-interpreter/src/stdlib/db.rs:447	
+todo	diagnostic	C11-std-db	unknown connection '{}'	zymbol-interpreter/src/stdlib/db.rs:109	
+todo	internal?	C11-std-db	std/db is not available in this build (compiled without ODBC support)	zymbol-vm/src/stdlib_builtins.rs:1376	
+todo	internal?	C11-std-db	unknown db builtin id {}	zymbol-vm/src/stdlib_builtins.rs:1368	
+todo	diagnostic	C12-io-tui	>>~ slot expects Int, got {}	zymbol-interpreter/src/io.rs:249	
+todo	diagnostic	C12-io-tui	end of input while waiting for {}	zymbol-interpreter/src/io.rs:111	
+todo	diagnostic	C12-io-tui	failed to enable raw mode: {}	zymbol-interpreter/src/io.rs:296	
+todo	diagnostic	C12-io-tui	failed to enter alternate screen: {}	zymbol-interpreter/src/io.rs:300	
+todo	diagnostic	C12-io-tui	input read error: {}	zymbol-interpreter/src/io.rs:103	
+todo	diagnostic	C12-io-tui	input: failed to disable raw mode: {}	zymbol-interpreter/src/io.rs:89	
+todo	diagnostic	C12-io-tui	input: failed to restore raw mode: {}	zymbol-interpreter/src/io.rs:98	
+todo	diagnostic	C12-io-tui	io error: {0}	zymbol-interpreter/src/lib.rs:50	
+todo	diagnostic	C12-io-tui	undefined variable in input prompt: '{}'	zymbol-interpreter/src/io.rs:63	
+todo	diagnostic	C8-match-patterns	  --> consider assigning to a variable: `result = ?? expr {{ ... }}`	zymbol-interpreter/src/match_stmt.rs:36	
+todo	diagnostic	C13-operators-variables-internal	'{}' is undefined — did you mean '{}°' (hot definition)?	zymbol-compiler/src/lib.rs:2139	
+todo	diagnostic	C13-operators-variables-internal	cannot compare float {} with string '{}' using operator '{:?}'	zymbol-interpreter/src/arithmetic_ops.rs:412	
+todo	diagnostic	C13-operators-variables-internal	cannot compare string '{}' with float {} using operator '{:?}'	zymbol-interpreter/src/arithmetic_ops.rs:395	
+todo	diagnostic	C13-operators-variables-internal	cannot reassign constant '{}' (declared with :=)	zymbol-interpreter/src/variables.rs:78	
+todo	diagnostic	C13-operators-variables-internal	constant '{}' already declared	zymbol-interpreter/src/variables.rs:321	
+todo	diagnostic	C13-operators-variables-internal	logical NOT requires boolean operand, got {}	zymbol-interpreter/src/expressions.rs:270	
+todo	diagnostic	C13-operators-variables-internal	modulo by zero	zymbol-interpreter/src/arithmetic_ops.rs:144	
+todo	diagnostic	C13-operators-variables-internal	negation requires numeric operand, got {}	zymbol-interpreter/src/expressions.rs:280	
+todo	diagnostic	C13-operators-variables-internal	this needs {expected} and got {got}	zymbol-vm/src/lib.rs:536	
+todo	diagnostic	C13-operators-variables-internal	unary plus requires numeric operand, got {:?}	zymbol-interpreter/src/expressions.rs:290	
+todo	internal?	C9-modules-scripts	Module '{}' not loaded	zymbol-interpreter/src/expr_eval.rs:156	
+todo	internal?	C13-operators-variables-internal	ZyStr requires a 64-bit platform	zymbol-vm/src/zy_str.rs:31	
+todo	internal?	C13-operators-variables-internal	internal: use of '{}' after auto-destruction (string interpolation) — this is a bug in the last-use analyzer, please report it	zymbol-interpreter/src/literals.rs:60	
+todo	internal?	C13-operators-variables-internal	internal: use of '{}' after auto-destruction — this is a bug in the last-use analyzer, please report it (workaround: add a later `>> {}` mention or a `\\ {}` at the intended end of life)	zymbol-interpreter/src/lib.rs:1362	
+todo	internal?	C13-operators-variables-internal	unknown error	zymbol-vm/src/lib.rs:3529	
+todo	internal?	C13-operators-variables-internal	unsupported binary operator: {:?}	zymbol-interpreter/src/expressions.rs:255	
+cell	diagnostic	C3-collection-ops	$* repetition count must be an integer, got {}	zymbol-interpreter/src/string_ops.rs:35	runtime-collection-ops/repeat-repetition-count-must-be-an-integer
+cell	diagnostic	C3-collection-ops	$* repetition count must be non-negative, got {}	zymbol-interpreter/src/string_ops.rs:31	runtime-collection-ops/repeat-repetition-count-must-be-non-negative
+cell	diagnostic	C3-collection-ops	$+ is not supported on named tuples — no field name available	zymbol-interpreter/src/collection_ops.rs:87	runtime-collection-ops/append-is-not-supported-on-named-tuples
+cell	diagnostic	C3-collection-ops	$+ on string requires char or string element, got {:?}	zymbol-interpreter/src/collection_ops.rs:95	runtime-collection-ops/append-on-string-requires-char-or-string
+cell	diagnostic	C3-collection-ops	$++ requires a string or array as base, got {:?}	zymbol-interpreter/src/string_ops.rs:184	runtime-collection-ops/build-requires-a-string-or-array-as
+cell	diagnostic	C3-collection-ops	$+[i] index must be an integer, got {:?}	zymbol-interpreter/src/collection_ops.rs:829	runtime-collection-ops/insert-index-must-be-an-integer-got
+cell	diagnostic	C3-collection-ops	$+[i] index must be positive (1-based, use 1 to insert at the beginning), got {}	zymbol-interpreter/src/collection_ops.rs:835	runtime-collection-ops/insert-index-must-be-positive-1-based
+cell	diagnostic	C3-collection-ops	$+[i] is not supported on named tuples — no field name available	zymbol-interpreter/src/collection_ops.rs:863	runtime-collection-ops/insert-is-not-supported-on-named-tuples
+cell	diagnostic	C3-collection-ops	$+[i] on string requires char or string element, got {:?}	zymbol-interpreter/src/collection_ops.rs:884	runtime-collection-ops/insert-on-string-requires-char-or-string
+cell	diagnostic	C3-collection-ops	$+[i] requires an array, tuple, or string, got {:?}	zymbol-interpreter/src/collection_ops.rs:890	runtime-collection-ops/insert-requires-an-array-tuple-or-string
+cell	diagnostic	C3-collection-ops	$+[{}] index out of bounds for array of length {}	zymbol-interpreter/src/collection_ops.rs:845	runtime-collection-ops/append-index-out-of-bounds-for-array
+cell	diagnostic	C3-collection-ops	$+[{}] index out of bounds for string of length {}	zymbol-interpreter/src/collection_ops.rs:870	runtime-collection-ops/append-index-out-of-bounds-for-string
+cell	diagnostic	C3-collection-ops	$+[{}] index out of bounds for tuple of length {}	zymbol-interpreter/src/collection_ops.rs:855	runtime-collection-ops/append-index-out-of-bounds-for-tuple
+cell	diagnostic	C3-collection-ops	$- on string requires char or string value, got {:?}	zymbol-interpreter/src/collection_ops.rs:946	runtime-collection-ops/remove-on-string-requires-char-or-string
+cell	diagnostic	C3-collection-ops	$- requires an array, tuple, or string, got {:?}	zymbol-interpreter/src/collection_ops.rs:953	runtime-collection-ops/remove-requires-an-array-tuple-or-string
+cell	diagnostic	C3-collection-ops	$-- on string requires char or string value, got {:?}	zymbol-interpreter/src/collection_ops.rs:992	runtime-collection-ops/remove-all-on-string-requires-char-or
+cell	diagnostic	C3-collection-ops	$-- requires an array, tuple, or string, got {:?}	zymbol-interpreter/src/collection_ops.rs:999	runtime-collection-ops/remove-all-requires-an-array-tuple-or
+cell	diagnostic	C3-collection-ops	$-[..] count must be non-negative, got {}	zymbol-interpreter/src/collection_ops.rs:1048	runtime-collection-ops/remove-range-count-must-be-non-negative
+cell	diagnostic	C3-collection-ops	$-[..] end must be an integer, got {:?}	zymbol-interpreter/src/collection_ops.rs:1055	runtime-collection-ops/remove-range-end-must-be-an-integer
+cell	diagnostic	C3-collection-ops	$-[..] requires an array, tuple, or string, got {:?}	zymbol-interpreter/src/collection_ops.rs:1015	runtime-collection-ops/remove-range-requires-an-array-tuple-or
+cell	diagnostic	C3-collection-ops	$-[..] start must be an integer, got {:?}	zymbol-interpreter/src/collection_ops.rs:1030	runtime-collection-ops/remove-range-start-must-be-an-integer
+cell	diagnostic	C3-collection-ops	$-[..end] end must be positive (1-based), got {}	zymbol-interpreter/src/collection_ops.rs:1042	runtime-collection-ops/remove-range-end-end-must-be-positive
+cell	diagnostic	C3-collection-ops	$-[start..] start must be positive (1-based), got {}	zymbol-interpreter/src/collection_ops.rs:1024	runtime-collection-ops/remove-range-start-start-must-be-positive
+cell	diagnostic	C3-collection-ops	$-[start..end]: start ({}) cannot be greater than end ({})	zymbol-interpreter/src/collection_ops.rs:1066	runtime-collection-ops/remove-range-start-cannot-be-greater-than
+cell	diagnostic	C3-collection-ops	$-[{}..{}] out of bounds for collection of length {}	zymbol-interpreter/src/collection_ops.rs:1072	runtime-collection-ops/remove-range-out-of-bounds-for-collection
+cell	diagnostic	C3-collection-ops	$/ delimiter must be a char or string, got {:?}	zymbol-interpreter/src/string_ops.rs:207	runtime-collection-ops/split-delimiter-must-be-a-char-or
+cell	diagnostic	C3-collection-ops	$/ requires a string on the left, got {:?}	zymbol-interpreter/src/string_ops.rs:198	runtime-collection-ops/split-requires-a-string-on-the-left
+cell	diagnostic	C3-collection-ops	$?? on string requires char or string value, got {:?}	zymbol-interpreter/src/collection_ops.rs:1148	runtime-collection-ops/find-all-on-string-requires-char-or
+cell	diagnostic	C3-collection-ops	$?? requires an array, tuple, or string, got {:?}	zymbol-interpreter/src/collection_ops.rs:1159	runtime-collection-ops/find-all-requires-an-array-tuple-or
+cell	diagnostic	C3-collection-ops	$~ writes into a collection, and this is {}\nhelp: use a[1]$~ v on an array or tuple, d[\"key\"]$~ v on a #(…)	zymbol-interpreter/src/collection_ops.rs:499	runtime-collection-ops/update-writes-into-a-collection-and-this — reach.py cannot count it: the template spans two lines
+cell	diagnostic	C3-collection-ops	$~~ count must be an integer, got {:?}	zymbol-interpreter/src/string_ops.rs:87	runtime-collection-ops/replace-count-must-be-an-integer-got
+cell	diagnostic	C3-collection-ops	$~~ pattern must be a string or char, got {:?}	zymbol-interpreter/src/string_ops.rs:153	runtime-collection-ops/replace-pattern-must-be-a-string-or
+cell	diagnostic	C3-collection-ops	$~~ replacement must be a string, got {:?}	zymbol-interpreter/src/string_ops.rs:67	runtime-collection-ops/replace-replacement-must-be-a-string-got
+cell	diagnostic	C3-collection-ops	array update index must be an integer, got {:?}	zymbol-interpreter/src/collection_ops.rs:405	runtime-collection-ops/array-update-index-must-be-an-integer
+cell	diagnostic	C3-collection-ops	cannot append to {:?} - only arrays, tuples, and strings support $+	zymbol-interpreter/src/collection_ops.rs:103	runtime-collection-ops/cannot-append-to-only-arrays-tuples-and
+cell	diagnostic	C3-collection-ops	cannot get length of {:?} - only arrays, tuples, and strings have length	zymbol-interpreter/src/collection_ops.rs:64	runtime-collection-ops/cannot-get-length-of-only-arrays-tuples
+cell	diagnostic	C3-collection-ops	cannot index into {:?} during deep update	zymbol-interpreter/src/collection_ops.rs:1260	runtime-collection-ops/cannot-index-into-during-deep-update
+cell	diagnostic	C3-collection-ops	cannot modify tuple '{}': tuples are immutable\nhelp: use 'new = {}[i]$~ value' for a functional update	zymbol-interpreter/src/variables.rs:22	runtime-collection-ops/cannot-modify-tuple-tuples-are-immutable — reach.py cannot count it: the template spans two lines
+cell	diagnostic	C3-collection-ops	cannot remove from {:?} - only arrays, tuples, and strings support $-[i]	zymbol-interpreter/src/collection_ops.rs:244	runtime-collection-ops/cannot-remove-from-only-arrays-tuples-and
+cell	diagnostic	C3-collection-ops	cannot search {:?} - only arrays, tuples, and strings support contains	zymbol-interpreter/src/collection_ops.rs:311	runtime-collection-ops/cannot-search-only-arrays-tuples-and-strings
+cell	diagnostic	C3-collection-ops	cannot slice {:?} - only arrays, tuples, named tuples, and strings support slice	zymbol-interpreter/src/collection_ops.rs:520	runtime-collection-ops/cannot-slice-only-arrays-tuples-named-tuples
+unreachable	diagnostic	C3-collection-ops	cannot update {:?} during deep update	zymbol-interpreter/src/collection_ops.rs:1290	unreachable: deep_update_value reads a step (get_at_step, which refuses the same types) before it writes it, so set_at_idx's `other` arm never runs
+unreachable	diagnostic	C3-collection-ops	deep update ($~) does not support ranges in the path	zymbol-compiler/src/lib.rs:3708	unreachable: the parser refuses a `$~` receiver that is not a place (zymbol-parser collection_ops.rs:243) before the compiler sees a range step
+cell	diagnostic	C3-collection-ops	named tuple update index must be an integer or field name (string), got {:?}	zymbol-interpreter/src/collection_ops.rs:490	runtime-collection-ops/named-tuple-update-index-must-be-an
+cell	diagnostic	C3-collection-ops	remove index must be an integer, got {:?}	zymbol-interpreter/src/collection_ops.rs:150	runtime-collection-ops/remove-index-must-be-an-integer-got
+cell	diagnostic	C3-collection-ops	replacement count must be non-negative, got {}	zymbol-interpreter/src/string_ops.rs:79	runtime-collection-ops/replacement-count-must-be-non-negative-got
+cell	diagnostic	C3-collection-ops	slice end must be an integer, got {:?}	zymbol-interpreter/src/collection_ops.rs:551	runtime-collection-ops/slice-end-must-be-an-integer-got
+cell	diagnostic	C3-collection-ops	slice indices out of bounds: [{}..{}] for collection of length {}	zymbol-interpreter/src/collection_ops.rs:586	runtime-collection-ops/slice-indices-out-of-bounds-for-collection
+cell	diagnostic	C3-collection-ops	slice start ({}) cannot be greater than end ({})	zymbol-interpreter/src/collection_ops.rs:596	runtime-collection-ops/slice-start-cannot-be-greater-than-end
+cell	diagnostic	C3-collection-ops	slice start must be an integer, got {:?}	zymbol-interpreter/src/collection_ops.rs:535	runtime-collection-ops/slice-start-must-be-an-integer-got
+cell	diagnostic	C3-collection-ops	string contains only supports char or string search, got {:?}	zymbol-interpreter/src/collection_ops.rs:302	runtime-collection-ops/string-contains-only-supports-char-or-string
+cell	diagnostic	C3-collection-ops	tuple update index must be an integer, got {:?}	zymbol-interpreter/src/collection_ops.rs:418	runtime-collection-ops/tuple-update-index-must-be-an-integer
+unreachable	diagnostic	C3-collection-ops	update operator ($~) requires a place to write like arr[i]$~ val, arr[i>j]$~ val or d.key$~ val	zymbol-interpreter/src/collection_ops.rs:370	unreachable: the same parser rule refuses a non-place receiver before the tree-walker's runtime check
+todo	diagnostic	C4-index-nav-dict	a String navigation step addresses a dictionary key, and this is {}	zymbol-interpreter/src/index_nav.rs:219	
+todo	diagnostic	C4-index-nav-dict	a dictionary is addressed by key, not by position: `{}` has no meaning here\nhelp: use the key — d[\"{}\"], d[\"{}\"]$~ value, d$-[\"{}\"] — because adding a key changes what sits at each position	zymbol-interpreter/src/collection_ops.rs:47	
+todo	diagnostic	C4-index-nav-dict	a dictionary is addressed by key, not by position\nhelp: use d[\"{}\"] — adding a key changes what sits at each position	zymbol-interpreter/src/expr_eval.rs:384	
+todo	diagnostic	C4-index-nav-dict	a dictionary is asked about a key, so `$?` needs a String, got {:?}	zymbol-interpreter/src/collection_ops.rs:279	
+todo	diagnostic	C4-index-nav-dict	a navigation step is a position (Int) or a dictionary key (String), got {:?}	zymbol-interpreter/src/collection_ops.rs:339	
+todo	diagnostic	C4-index-nav-dict	a navigation step is a position or a key, got {:?}	zymbol-interpreter/src/collection_ops.rs:1222	
+todo	diagnostic	C4-index-nav-dict	a positional tuple is addressed by position, not by name: '{}'\nhelp: use t[1] — names live in a dictionary, #(key: value)	zymbol-interpreter/src/expr_eval.rs:230	
+todo	diagnostic	C4-index-nav-dict	cannot index into {:?} — expected array, tuple, or string	zymbol-interpreter/src/index_nav.rs:269	
+todo	diagnostic	C4-index-nav-dict	cannot index {:?} - only arrays, tuples, and strings are indexable	zymbol-interpreter/src/expr_eval.rs:483	
+todo	diagnostic	C4-index-nav-dict	index 0 is invalid — Zymbol uses 1-based indexing	zymbol-interpreter/src/collection_ops.rs:161	
+todo	diagnostic	C4-index-nav-dict	index must be an integer, got {:?}	zymbol-interpreter/src/expr_eval.rs:396	
+todo	diagnostic	C4-index-nav-dict	index out of bounds: index {} for array of length {}	zymbol-interpreter/src/collection_ops.rs:171	
+todo	diagnostic	C4-index-nav-dict	index out of bounds: index {} for named tuple of length {}	zymbol-interpreter/src/collection_ops.rs:213	
+todo	diagnostic	C4-index-nav-dict	index out of bounds: index {} for string of length {}	zymbol-interpreter/src/collection_ops.rs:235	
+todo	diagnostic	C4-index-nav-dict	index out of bounds: index {} for tuple of length {}	zymbol-interpreter/src/collection_ops.rs:192	
+todo	diagnostic	C4-index-nav-dict	index out of bounds: {} for collection of length {}	zymbol-interpreter/src/collection_ops.rs:1306	
+todo	diagnostic	C4-index-nav-dict	invalid nav range {}..{} — indices are 1-based and start must be ≤ end	zymbol-interpreter/src/index_nav.rs:135	
+todo	diagnostic	C4-index-nav-dict	named tuple index out of bounds: index {} for tuple of length {}	zymbol-interpreter/src/expr_eval.rs:440	
+todo	diagnostic	C4-index-nav-dict	navigation index must be an integer, got {:?}	zymbol-interpreter/src/index_nav.rs:195	
+todo	diagnostic	C4-index-nav-dict	no key '{}' in dictionary — it is empty	zymbol-interpreter/src/variables.rs:39	
+todo	diagnostic	C4-index-nav-dict	range indices in nav path must be positive integers	zymbol-interpreter/src/index_nav.rs:125	
+todo	diagnostic	C4-index-nav-dict	string index out of bounds: index {} for string of length {}	zymbol-interpreter/src/expr_eval.rs:475	
+todo	diagnostic	C4-index-nav-dict	the dot reaches a dictionary key, and this is {}\nhelp: use d.{} on a #(…) — for a position, use x[1]	zymbol-interpreter/src/expr_eval.rs:239	
+todo	diagnostic	C4-index-nav-dict	the pattern #(…) requires a dictionary, got {}\nhelp: #(key: name) = d unpacks a dictionary; use (a, b) for a tuple, [a, b] for an array	zymbol-interpreter/src/lib.rs:1854	
+todo	diagnostic	C4-index-nav-dict	tuple index out of bounds: index {} for tuple of length {}	zymbol-interpreter/src/expr_eval.rs:422	
+todo	internal?	C4-index-nav-dict	undefined function index {0}	zymbol-vm/src/lib.rs:559	
+todo	diagnostic	C5-format-convert	##! requires a numeric value or Char, got {}	zymbol-interpreter/src/data_ops.rs:151	
+todo	diagnostic	C5-format-convert	### requires a numeric value, got {}	zymbol-interpreter/src/data_ops.rs:138	
+todo	diagnostic	C5-format-convert	base conversion expressions work with char, int, or string, got {:?}	zymbol-interpreter/src/data_ops.rs:372	
+todo	diagnostic	C5-format-convert	cannot convert string '{}' to number for rounding	zymbol-interpreter/src/data_ops.rs:407	
+todo	diagnostic	C5-format-convert	cannot convert string '{}' to number for truncation	zymbol-interpreter/src/data_ops.rs:407	
+todo	diagnostic	C5-format-convert	decimal count must be a whole number, got {}	zymbol-interpreter/src/data_ops.rs:218	
+todo	diagnostic	C5-format-convert	decimal count must not be negative, got {}	zymbol-interpreter/src/data_ops.rs:213	
+todo	diagnostic	C5-format-convert	failed to parse '{}' as base-{} number	zymbol-vm/src/lib.rs:3492	
+todo	diagnostic	C5-format-convert	failed to parse '{}' as {} number	zymbol-interpreter/src/data_ops.rs:340	
+todo	diagnostic	C5-format-convert	format expressions only work with numbers, got {:?}	zymbol-interpreter/src/data_ops.rs:255	
+todo	diagnostic	C5-format-convert	integer overflow: {} cannot represent this float	zymbol-interpreter/src/data_ops.rs:91	
+todo	diagnostic	C5-format-convert	invalid Unicode character code: {}	zymbol-interpreter/src/data_ops.rs:363	
+todo	diagnostic	C5-format-convert	round expressions only work with numbers or numeric strings, got {:?}	zymbol-interpreter/src/data_ops.rs:417	
+todo	diagnostic	C5-format-convert	truncate expressions only work with numbers or numeric strings, got {:?}	zymbol-interpreter/src/data_ops.rs:467	
+todo	diagnostic	C6-loops-ranges	@~ requires integer milliseconds, got {}	zymbol-interpreter/src/loops.rs:92	
+todo	diagnostic	C6-loops-ranges	@~ requires non-negative duration, got {}	zymbol-interpreter/src/loops.rs:88	
+todo	diagnostic	C6-loops-ranges	@~ requires non-negative ms, got {}	zymbol-vm/src/lib.rs:3796	
+todo	diagnostic	C6-loops-ranges	can only iterate over ranges, arrays, strings, tuples and dictionaries, got {:?}	zymbol-interpreter/src/expr_eval.rs:114	
+todo	diagnostic	C6-loops-ranges	character code must be in range 0..0x10FFFF, got {}	zymbol-interpreter/src/data_ops.rs:355	
+todo	diagnostic	C6-loops-ranges	range bounds must be integers, got {:?} and {:?}	zymbol-interpreter/src/loops.rs:166	
+todo	diagnostic	C6-loops-ranges	range end must be an integer, got {:?}	zymbol-interpreter/src/expr_eval.rs:38	
+todo	diagnostic	C6-loops-ranges	range pattern type mismatch	zymbol-interpreter/src/match_stmt.rs:124	
+todo	diagnostic	C6-loops-ranges	range start must be an integer, got {:?}	zymbol-interpreter/src/expr_eval.rs:28	
+todo	diagnostic	C6-loops-ranges	ranges can only be used in for-each loops	zymbol-interpreter/src/lib.rs:1942	
+todo	diagnostic	C6-loops-ranges	step must be an integer, got {:?}	zymbol-interpreter/src/expr_eval.rs:57	
+todo	diagnostic	C6-loops-ranges	step must be positive, got {}	zymbol-interpreter/src/expr_eval.rs:51	
+todo	internal?	C6-loops-ranges	register {0} out of range	zymbol-vm/src/lib.rs:561	
+todo	diagnostic	C7-functions-hof	expression is not callable	zymbol-interpreter/src/functions_lambda.rs:292	
+todo	diagnostic	C7-functions-hof	filter requires array, got {:?}	zymbol-interpreter/src/collection_ops.rs:712	
+todo	diagnostic	C7-functions-hof	filter requires lambda function	zymbol-interpreter/src/collection_ops.rs:678	
+todo	diagnostic	C7-functions-hof	function expects {} argument(s), got {}	zymbol-compiler/src/lib.rs:2833	
+todo	diagnostic	C7-functions-hof	function expects {} arguments, got {}	zymbol-compiler/src/lib.rs:2835	
+todo	diagnostic	C7-functions-hof	lambda expects {} arguments, got {}	zymbol-interpreter/src/functions_lambda.rs:99	
+todo	diagnostic	C7-functions-hof	map requires array, got {:?}	zymbol-interpreter/src/collection_ops.rs:663	
+todo	diagnostic	C7-functions-hof	map requires lambda function	zymbol-interpreter/src/collection_ops.rs:640	
+todo	diagnostic	C7-functions-hof	member function calls not supported	zymbol-interpreter/src/functions_lambda.rs:273	
+todo	diagnostic	C7-functions-hof	pipe operator requires a callable function or lambda	zymbol-interpreter/src/expressions.rs:47	
+todo	diagnostic	C7-functions-hof	reduce lambda requires 2 parameters (accumulator, element), got {}	zymbol-interpreter/src/collection_ops.rs:738	
+todo	diagnostic	C7-functions-hof	reduce requires array, got {:?}	zymbol-interpreter/src/collection_ops.rs:761	
+todo	diagnostic	C7-functions-hof	reduce requires lambda function	zymbol-interpreter/src/collection_ops.rs:728	
+todo	diagnostic	C7-functions-hof	sort comparator must be a lambda (a, b) -> Bool	zymbol-interpreter/src/collection_ops.rs:782	
+todo	diagnostic	C7-functions-hof	sort requires an array, got {:?}	zymbol-interpreter/src/collection_ops.rs:814	
+todo	diagnostic	C8-match-patterns	array pattern '[ … ]' requires an array, got {}	zymbol-interpreter/src/lib.rs:1828	
+todo	diagnostic	C8-match-patterns	comparison pattern did not produce a boolean	zymbol-interpreter/src/match_stmt.rs:183	
+todo	diagnostic	C8-match-patterns	no pattern matched in match expression	zymbol-interpreter/src/match_stmt.rs:75	
+todo	diagnostic	C8-match-patterns	tuple pattern '( … )' requires a tuple, got {}	zymbol-interpreter/src/lib.rs:1841	
+todo	diagnostic	C8-match-patterns	warning: match expression returns values but result is unused	zymbol-interpreter/src/match_stmt.rs:35	
+todo	internal?	C8-match-patterns	unsupported operator in comparison pattern: {:?}	zymbol-interpreter/src/match_stmt.rs:175	
+todo	diagnostic	C9-modules-scripts	cannot use function in bash command interpolation	zymbol-interpreter/src/script_exec.rs:183	
+todo	diagnostic	C9-modules-scripts	circular dependency detected	zymbol-interpreter/src/lib.rs:62	
+todo	diagnostic	C9-modules-scripts	constant '{}' not exported from module '{}'	zymbol-interpreter/src/lib.rs:2150	
+todo	diagnostic	C9-modules-scripts	error executing {}: {:?}	zymbol-interpreter/src/script_exec.rs:89	
+todo	diagnostic	C9-modules-scripts	failed to run `{}`: {}	zymbol-interpreter/src/script_exec.rs:122	
+todo	diagnostic	C9-modules-scripts	function '{}' not exported from module '{}'	zymbol-interpreter/src/lib.rs:2144	
+todo	diagnostic	C9-modules-scripts	lexer errors: {0}	zymbol-formatter/src/lib.rs:81	
+todo	diagnostic	C9-modules-scripts	module '{module}' does not export constant '{constant}'	zymbol-interpreter/src/lib.rs:59	
+todo	diagnostic	C9-modules-scripts	undefined module alias: '{}'	zymbol-interpreter/src/functions_lambda.rs:249	
+todo	diagnostic	C9-modules-scripts	{} lexer error(s) in '{}'\n{}	zymbol-interpreter/src/modules.rs:127	
+todo	diagnostic	C9-modules-scripts	{} lexer errors in {}	zymbol-interpreter/src/script_exec.rs:54	
+todo	diagnostic	C9-modules-scripts	{} parse error(s) in '{}'\n{}	zymbol-compiler/src/lib.rs:748	
+todo	diagnostic	C9-modules-scripts	{} parser errors in {}	zymbol-interpreter/src/script_exec.rs:62	
+todo	diagnostic	C9-modules-scripts	{} semantic error(s) in '{}'\n{}	zymbol-compiler/src/lib.rs:779	
