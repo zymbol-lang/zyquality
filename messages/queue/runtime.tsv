@@ -183,20 +183,20 @@ cell	diagnostic	C4-index-nav-dict	the dot reaches a dictionary key, and this is 
 cell	diagnostic	C4-index-nav-dict	the pattern #(…) requires a dictionary, got {}\nhelp: #(key: name) = d unpacks a dictionary; use (a, b) for a tuple, [a, b] for an array	zymbol-interpreter/src/lib.rs:1854	runtime-index-nav/the-pattern-dict-requires-a-dictionary-got — reach.py cannot count it: the template spans two lines
 cell	diagnostic	C4-index-nav-dict	tuple index out of bounds: index {} for tuple of length {}	zymbol-interpreter/src/expr_eval.rs:422	runtime-index-nav/tuple-index-out-of-bounds-index-for
 unreachable	internal?	C4-index-nav-dict	undefined function index {0}	zymbol-vm/src/lib.rs:559	unreachable: the VM only receives function indices the compiler took from its own table
-todo	diagnostic	C5-format-convert	##! requires a numeric value or Char, got {}	zymbol-interpreter/src/data_ops.rs:151	
-todo	diagnostic	C5-format-convert	### requires a numeric value, got {}	zymbol-interpreter/src/data_ops.rs:138	
-todo	diagnostic	C5-format-convert	base conversion expressions work with char, int, or string, got {:?}	zymbol-interpreter/src/data_ops.rs:372	
-todo	diagnostic	C5-format-convert	cannot convert string '{}' to number for rounding	zymbol-interpreter/src/data_ops.rs:407	
-todo	diagnostic	C5-format-convert	cannot convert string '{}' to number for truncation	zymbol-interpreter/src/data_ops.rs:407	
-todo	diagnostic	C5-format-convert	decimal count must be a whole number, got {}	zymbol-interpreter/src/data_ops.rs:218	
-todo	diagnostic	C5-format-convert	decimal count must not be negative, got {}	zymbol-interpreter/src/data_ops.rs:213	
-todo	diagnostic	C5-format-convert	failed to parse '{}' as base-{} number	zymbol-vm/src/lib.rs:3492	
-todo	diagnostic	C5-format-convert	failed to parse '{}' as {} number	zymbol-interpreter/src/data_ops.rs:340	
-todo	diagnostic	C5-format-convert	format expressions only work with numbers, got {:?}	zymbol-interpreter/src/data_ops.rs:255	
-todo	diagnostic	C5-format-convert	integer overflow: {} cannot represent this float	zymbol-interpreter/src/data_ops.rs:91	
-todo	diagnostic	C5-format-convert	invalid Unicode character code: {}	zymbol-interpreter/src/data_ops.rs:363	
-todo	diagnostic	C5-format-convert	round expressions only work with numbers or numeric strings, got {:?}	zymbol-interpreter/src/data_ops.rs:417	
-todo	diagnostic	C5-format-convert	truncate expressions only work with numbers or numeric strings, got {:?}	zymbol-interpreter/src/data_ops.rs:467	
+cell	diagnostic	C5-format-convert	##! requires a numeric value or Char, got {}	zymbol-interpreter/src/data_ops.rs:151	runtime-format-convert/trunc-cast-requires-a-numeric-value-or
+cell	diagnostic	C5-format-convert	### requires a numeric value, got {}	zymbol-interpreter/src/data_ops.rs:138	runtime-format-convert/int-cast-requires-a-numeric-value-got
+cell	diagnostic	C5-format-convert	base conversion expressions work with char, int, or string, got {:?}	zymbol-interpreter/src/data_ops.rs:372	runtime-format-convert/base-conversion-expressions-work-with-char-int
+cell	diagnostic	C5-format-convert	cannot convert string '{}' to number for rounding	zymbol-interpreter/src/data_ops.rs:407	runtime-format-convert/cannot-convert-string-to-number-for-rounding
+cell	diagnostic	C5-format-convert	cannot convert string '{}' to number for truncation	zymbol-interpreter/src/data_ops.rs:407	runtime-format-convert/cannot-convert-string-to-number-for-truncation
+cell	diagnostic	C5-format-convert	decimal count must be a whole number, got {}	zymbol-interpreter/src/data_ops.rs:218	runtime-format-convert/decimal-count-must-be-a-whole-number
+cell	diagnostic	C5-format-convert	decimal count must not be negative, got {}	zymbol-interpreter/src/data_ops.rs:213	runtime-format-convert/decimal-count-must-not-be-negative-got
+cell	diagnostic	C5-format-convert	failed to parse '{}' as base-{} number	zymbol-vm/src/lib.rs:3492	runtime-format-convert/failed-to-parse-as-number
+cell	diagnostic	C5-format-convert	failed to parse '{}' as {} number	zymbol-interpreter/src/data_ops.rs:340	runtime-format-convert/failed-to-parse-as-number
+cell	diagnostic	C5-format-convert	format expressions only work with numbers, got {:?}	zymbol-interpreter/src/data_ops.rs:255	runtime-format-convert/format-expressions-only-work-with-numbers-got
+cell	diagnostic	C5-format-convert	integer overflow: {} cannot represent this float	zymbol-interpreter/src/data_ops.rs:91	runtime-format-convert/integer-overflow-cannot-represent-this-float
+cell	diagnostic	C5-format-convert	invalid Unicode character code: {}	zymbol-interpreter/src/data_ops.rs:363	runtime-format-convert/invalid-unicode-character-code
+cell	diagnostic	C5-format-convert	round expressions only work with numbers or numeric strings, got {:?}	zymbol-interpreter/src/data_ops.rs:417	runtime-format-convert/round-expressions-only-work-with-numbers-or
+cell	diagnostic	C5-format-convert	truncate expressions only work with numbers or numeric strings, got {:?}	zymbol-interpreter/src/data_ops.rs:467	runtime-format-convert/truncate-expressions-only-work-with-numbers-or
 todo	diagnostic	C6-loops-ranges	@~ requires integer milliseconds, got {}	zymbol-interpreter/src/loops.rs:92	
 todo	diagnostic	C6-loops-ranges	@~ requires non-negative duration, got {}	zymbol-interpreter/src/loops.rs:88	
 todo	diagnostic	C6-loops-ranges	@~ requires non-negative ms, got {}	zymbol-vm/src/lib.rs:3796	
