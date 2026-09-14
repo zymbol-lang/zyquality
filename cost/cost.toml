@@ -116,3 +116,20 @@ what      = "accumulating into a module's own state is linear, like a local"
 # future default engine and a module that accumulates is an ordinary module.
 why       = "two owners of one Rc across a load/store make every append copy the vector"
 open_finding = { zyvm = "ZYVM-003" }
+
+[[case]]
+id        = "growth/caught-errors"
+kind      = "growth-ratio"
+template  = "casos/errores_capturados.zy.in"
+# The VM catches 1 600 000 in about the time the tree-walker takes for 400 000,
+# so each engine is asked at a size where its own base run clears the floor.
+n         = 400000
+n_by_engine = { zyvm = 1600000, zyjs = 20000 }
+factor    = 4
+max_ratio = 6.0
+what      = "catching an error costs the same on the thousandth turn as on the first"
+# Measured 2026-09-14 before the fix: zytw 19.5 (20 000 → 0.61 s, 80 000 →
+# 11.9 s, and 33 MB → 110 MB). ZYTW-003: every caught error left the scopes it
+# was raised in open, so every later lookup walked all of them.
+why       = "an error that leaves blocks without popping their scopes makes each lookup slower than the last"
+engines   = ["zytw", "zyvm", "zyjs"]
