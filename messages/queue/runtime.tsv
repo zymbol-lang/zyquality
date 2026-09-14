@@ -157,32 +157,32 @@ cell	diagnostic	C3-collection-ops	slice start must be an integer, got {:?}	zymbo
 cell	diagnostic	C3-collection-ops	string contains only supports char or string search, got {:?}	zymbol-interpreter/src/collection_ops.rs:302	runtime-collection-ops/string-contains-only-supports-char-or-string
 cell	diagnostic	C3-collection-ops	tuple update index must be an integer, got {:?}	zymbol-interpreter/src/collection_ops.rs:418	runtime-collection-ops/tuple-update-index-must-be-an-integer
 unreachable	diagnostic	C3-collection-ops	update operator ($~) requires a place to write like arr[i]$~ val, arr[i>j]$~ val or d.key$~ val	zymbol-interpreter/src/collection_ops.rs:370	unreachable: the same parser rule refuses a non-place receiver before the tree-walker's runtime check
-todo	diagnostic	C4-index-nav-dict	a String navigation step addresses a dictionary key, and this is {}	zymbol-interpreter/src/index_nav.rs:219	
-todo	diagnostic	C4-index-nav-dict	a dictionary is addressed by key, not by position: `{}` has no meaning here\nhelp: use the key — d[\"{}\"], d[\"{}\"]$~ value, d$-[\"{}\"] — because adding a key changes what sits at each position	zymbol-interpreter/src/collection_ops.rs:47	
-todo	diagnostic	C4-index-nav-dict	a dictionary is addressed by key, not by position\nhelp: use d[\"{}\"] — adding a key changes what sits at each position	zymbol-interpreter/src/expr_eval.rs:384	
-todo	diagnostic	C4-index-nav-dict	a dictionary is asked about a key, so `$?` needs a String, got {:?}	zymbol-interpreter/src/collection_ops.rs:279	
-todo	diagnostic	C4-index-nav-dict	a navigation step is a position (Int) or a dictionary key (String), got {:?}	zymbol-interpreter/src/collection_ops.rs:339	
-todo	diagnostic	C4-index-nav-dict	a navigation step is a position or a key, got {:?}	zymbol-interpreter/src/collection_ops.rs:1222	
-todo	diagnostic	C4-index-nav-dict	a positional tuple is addressed by position, not by name: '{}'\nhelp: use t[1] — names live in a dictionary, #(key: value)	zymbol-interpreter/src/expr_eval.rs:230	
-todo	diagnostic	C4-index-nav-dict	cannot index into {:?} — expected array, tuple, or string	zymbol-interpreter/src/index_nav.rs:269	
-todo	diagnostic	C4-index-nav-dict	cannot index {:?} - only arrays, tuples, and strings are indexable	zymbol-interpreter/src/expr_eval.rs:483	
-todo	diagnostic	C4-index-nav-dict	index 0 is invalid — Zymbol uses 1-based indexing	zymbol-interpreter/src/collection_ops.rs:161	
-todo	diagnostic	C4-index-nav-dict	index must be an integer, got {:?}	zymbol-interpreter/src/expr_eval.rs:396	
-todo	diagnostic	C4-index-nav-dict	index out of bounds: index {} for array of length {}	zymbol-interpreter/src/collection_ops.rs:171	
-todo	diagnostic	C4-index-nav-dict	index out of bounds: index {} for named tuple of length {}	zymbol-interpreter/src/collection_ops.rs:213	
-todo	diagnostic	C4-index-nav-dict	index out of bounds: index {} for string of length {}	zymbol-interpreter/src/collection_ops.rs:235	
-todo	diagnostic	C4-index-nav-dict	index out of bounds: index {} for tuple of length {}	zymbol-interpreter/src/collection_ops.rs:192	
-todo	diagnostic	C4-index-nav-dict	index out of bounds: {} for collection of length {}	zymbol-interpreter/src/collection_ops.rs:1306	
-todo	diagnostic	C4-index-nav-dict	invalid nav range {}..{} — indices are 1-based and start must be ≤ end	zymbol-interpreter/src/index_nav.rs:135	
-todo	diagnostic	C4-index-nav-dict	named tuple index out of bounds: index {} for tuple of length {}	zymbol-interpreter/src/expr_eval.rs:440	
-todo	diagnostic	C4-index-nav-dict	navigation index must be an integer, got {:?}	zymbol-interpreter/src/index_nav.rs:195	
-todo	diagnostic	C4-index-nav-dict	no key '{}' in dictionary — it is empty	zymbol-interpreter/src/variables.rs:39	
-todo	diagnostic	C4-index-nav-dict	range indices in nav path must be positive integers	zymbol-interpreter/src/index_nav.rs:125	
-todo	diagnostic	C4-index-nav-dict	string index out of bounds: index {} for string of length {}	zymbol-interpreter/src/expr_eval.rs:475	
-todo	diagnostic	C4-index-nav-dict	the dot reaches a dictionary key, and this is {}\nhelp: use d.{} on a #(…) — for a position, use x[1]	zymbol-interpreter/src/expr_eval.rs:239	
-todo	diagnostic	C4-index-nav-dict	the pattern #(…) requires a dictionary, got {}\nhelp: #(key: name) = d unpacks a dictionary; use (a, b) for a tuple, [a, b] for an array	zymbol-interpreter/src/lib.rs:1854	
-todo	diagnostic	C4-index-nav-dict	tuple index out of bounds: index {} for tuple of length {}	zymbol-interpreter/src/expr_eval.rs:422	
-todo	internal?	C4-index-nav-dict	undefined function index {0}	zymbol-vm/src/lib.rs:559	
+cell	diagnostic	C4-index-nav-dict	a String navigation step addresses a dictionary key, and this is {}	zymbol-interpreter/src/index_nav.rs:219	runtime-index-nav/a-string-navigation-step-addresses-a-dictionary
+cell	diagnostic	C4-index-nav-dict	a dictionary is addressed by key, not by position: `{}` has no meaning here\nhelp: use the key — d[\"{}\"], d[\"{}\"]$~ value, d$-[\"{}\"] — because adding a key changes what sits at each position	zymbol-interpreter/src/collection_ops.rs:47	runtime-index-nav/a-dictionary-is-addressed-by-key-not — reach.py cannot count it: the template spans two lines
+cell	diagnostic	C4-index-nav-dict	a dictionary is addressed by key, not by position\nhelp: use d[\"{}\"] — adding a key changes what sits at each position	zymbol-interpreter/src/expr_eval.rs:384	runtime-index-nav/a-dictionary-is-addressed-by-key-not-2 — reach.py cannot count it: the template spans two lines
+cell	diagnostic	C4-index-nav-dict	a dictionary is asked about a key, so `$?` needs a String, got {:?}	zymbol-interpreter/src/collection_ops.rs:279	runtime-index-nav/a-dictionary-is-asked-about-a-key
+cell	diagnostic	C4-index-nav-dict	a navigation step is a position (Int) or a dictionary key (String), got {:?}	zymbol-interpreter/src/collection_ops.rs:339	runtime-index-nav/a-navigation-step-is-a-position-int
+unreachable	diagnostic	C4-index-nav-dict	a navigation step is a position or a key, got {:?}	zymbol-interpreter/src/collection_ops.rs:1222	unreachable: deep_update_value validates the step with get_at_step (the message of #5) before set_at_step can see it
+cell	diagnostic	C4-index-nav-dict	a positional tuple is addressed by position, not by name: '{}'\nhelp: use t[1] — names live in a dictionary, #(key: value)	zymbol-interpreter/src/expr_eval.rs:230	runtime-index-nav/a-positional-tuple-is-addressed-by-position — reach.py cannot count it: the template spans two lines
+cell	diagnostic	C4-index-nav-dict	cannot index into {:?} — expected array, tuple, or string	zymbol-interpreter/src/index_nav.rs:269	runtime-index-nav/cannot-index-into-expected-array-tuple-or
+cell	diagnostic	C4-index-nav-dict	cannot index {:?} - only arrays, tuples, and strings are indexable	zymbol-interpreter/src/expr_eval.rs:483	runtime-index-nav/cannot-index-only-arrays-tuples-and-strings
+cell	diagnostic	C4-index-nav-dict	index 0 is invalid — Zymbol uses 1-based indexing	zymbol-interpreter/src/collection_ops.rs:161	runtime-index-nav/index-0-is-invalid-zymbol-uses-1
+cell	diagnostic	C4-index-nav-dict	index must be an integer, got {:?}	zymbol-interpreter/src/expr_eval.rs:396	runtime-index-nav/index-must-be-an-integer-got
+cell	diagnostic	C4-index-nav-dict	index out of bounds: index {} for array of length {}	zymbol-interpreter/src/collection_ops.rs:171	runtime-index-nav/index-out-of-bounds-index-for-array
+unreachable	diagnostic	C4-index-nav-dict	index out of bounds: index {} for named tuple of length {}	zymbol-interpreter/src/collection_ops.rs:213	unreachable: `$-[n]` on a dictionary returns dict_not_positional before the named-tuple bounds check (collection_ops.rs:138)
+cell	diagnostic	C4-index-nav-dict	index out of bounds: index {} for string of length {}	zymbol-interpreter/src/collection_ops.rs:235	runtime-index-nav/index-out-of-bounds-index-for-string
+cell	diagnostic	C4-index-nav-dict	index out of bounds: index {} for tuple of length {}	zymbol-interpreter/src/collection_ops.rs:192	runtime-index-nav/index-out-of-bounds-index-for-tuple
+cell	diagnostic	C4-index-nav-dict	index out of bounds: {} for collection of length {}	zymbol-interpreter/src/collection_ops.rs:1306	runtime-index-nav/index-out-of-bounds-for-collection-of
+cell	diagnostic	C4-index-nav-dict	invalid nav range {}..{} — indices are 1-based and start must be ≤ end	zymbol-interpreter/src/index_nav.rs:135	runtime-index-nav/invalid-nav-range-indices-are-1-based
+unreachable	diagnostic	C4-index-nav-dict	named tuple index out of bounds: index {} for tuple of length {}	zymbol-interpreter/src/expr_eval.rs:440	unreachable: an Int index on a dictionary already returned `addressed by key` above; the source says so (expr_eval.rs:429)
+cell	diagnostic	C4-index-nav-dict	navigation index must be an integer, got {:?}	zymbol-interpreter/src/index_nav.rs:195	runtime-index-nav/navigation-index-must-be-an-integer-got
+cell	diagnostic	C4-index-nav-dict	no key '{}' in dictionary — it is empty	zymbol-interpreter/src/variables.rs:39	runtime-index-nav/no-key-in-dictionary-it-is-empty
+cell	diagnostic	C4-index-nav-dict	range indices in nav path must be positive integers	zymbol-interpreter/src/index_nav.rs:125	runtime-index-nav/range-indices-in-nav-path-must-be
+cell	diagnostic	C4-index-nav-dict	string index out of bounds: index {} for string of length {}	zymbol-interpreter/src/expr_eval.rs:475	runtime-index-nav/string-index-out-of-bounds-index-for
+cell	diagnostic	C4-index-nav-dict	the dot reaches a dictionary key, and this is {}\nhelp: use d.{} on a #(…) — for a position, use x[1]	zymbol-interpreter/src/expr_eval.rs:239	runtime-index-nav/the-dot-reaches-a-dictionary-key-and — reach.py cannot count it: the template spans two lines
+cell	diagnostic	C4-index-nav-dict	the pattern #(…) requires a dictionary, got {}\nhelp: #(key: name) = d unpacks a dictionary; use (a, b) for a tuple, [a, b] for an array	zymbol-interpreter/src/lib.rs:1854	runtime-index-nav/the-pattern-dict-requires-a-dictionary-got — reach.py cannot count it: the template spans two lines
+cell	diagnostic	C4-index-nav-dict	tuple index out of bounds: index {} for tuple of length {}	zymbol-interpreter/src/expr_eval.rs:422	runtime-index-nav/tuple-index-out-of-bounds-index-for
+unreachable	internal?	C4-index-nav-dict	undefined function index {0}	zymbol-vm/src/lib.rs:559	unreachable: the VM only receives function indices the compiler took from its own table
 todo	diagnostic	C5-format-convert	##! requires a numeric value or Char, got {}	zymbol-interpreter/src/data_ops.rs:151	
 todo	diagnostic	C5-format-convert	### requires a numeric value, got {}	zymbol-interpreter/src/data_ops.rs:138	
 todo	diagnostic	C5-format-convert	base conversion expressions work with char, int, or string, got {:?}	zymbol-interpreter/src/data_ops.rs:372	
