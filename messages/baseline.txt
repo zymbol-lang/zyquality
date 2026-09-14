@@ -718,7 +718,6 @@ rust	shared	member function calls not supported
 rust	shared	mixed digit scripts
 rust	shared	mixed digit scripts in numeric literal
 rust	shared	module '§' does not export constant '§'
-rust	shared	module '§' has no constant '§'. available constants: §
 rust	shared	module '§' not loaded
 rust	shared	module body must be enclosed in braces: # name §
 rust	shared	module-level constants must use literal values, not expressions or function calls
@@ -866,7 +865,6 @@ rust	shared	use := to declare constants (immutable values)
 rust	shared	use `[…]` — `#[…]` is for declaring a mix that is deliberate
 rust	shared	use `°` only on the first assignment to auto-initialize
 rust	shared	use a different alias for this import
-rust	shared	use after destruction: variable '§' was destroyed after its last use
 rust	shared	valid error types: ##io, ##network, ##parse, ##index, ##type, ##div, ##_
 rust	shared	valid nav index: arr[1>2], arr[n>m], arr[(a)>(b)], arr[1>2..4]
 rust	shared	variable '§' is assigned but never read
