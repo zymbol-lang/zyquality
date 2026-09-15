@@ -144,23 +144,23 @@ cell	diagnostic	B5-literals	expected a key in the dictionary	zymbol-parser/src/c
 cell	help	B5-literals	a dictionary is written #(key: value, key2: value2)	zymbol-parser/src/collections.rs:166	syntax-literals/dictionary-left-open
 cell	help	B5-literals	array literals must be enclosed in brackets	zymbol-parser/src/collections.rs:69	syntax-literals/array-literal-left-open
 cell	help	B5-literals	tuples must be enclosed in parentheses: (expr, expr, ...)	zymbol-parser/src/collections.rs:233	syntax-literals/tuple-left-open
-todo	diagnostic	B6-format-convert	expected '|' after base prefix '{}'	zymbol-parser/src/data_ops.rs:155	
-todo	diagnostic	B6-format-convert	expected '|' after format operator '{}'	zymbol-parser/src/data_ops.rs:70	
-todo	diagnostic	B6-format-convert	expected '|' after precision	zymbol-parser/src/data_ops.rs:195	
-todo	diagnostic	B6-format-convert	expected '|' to close base conversion expression	zymbol-parser/src/data_ops.rs:173	
-todo	diagnostic	B6-format-convert	expected '|' to close format expression	zymbol-parser/src/data_ops.rs:82	
-todo	diagnostic	B6-format-convert	expected '|' to close numeric evaluation	zymbol-parser/src/data_ops.rs:30	
-todo	diagnostic	B6-format-convert	expected '|' to close round expression	zymbol-parser/src/data_ops.rs:207	
-todo	diagnostic	B6-format-convert	expected '|' to close truncate expression	zymbol-parser/src/data_ops.rs:241	
-todo	diagnostic	B6-format-convert	expected a decimal count after '{}'	zymbol-parser/src/data_ops.rs:132	
-todo	diagnostic	B6-format-convert	precision must be a non-negative integer	zymbol-parser/src/data_ops.rs:104	
-todo	help	B6-format-convert	base conversion syntax: {}|expr|	zymbol-parser/src/data_ops.rs:157	
-todo	help	B6-format-convert	format expression syntax: {}.N|expr| where N >= 0	zymbol-parser/src/data_ops.rs:106	
-todo	help	B6-format-convert	format expression syntax: {}|expr| or {}.N|expr|	zymbol-parser/src/data_ops.rs:72	
-todo	help	B6-format-convert	numeric evaluation syntax: #|expr|	zymbol-parser/src/data_ops.rs:32	
-todo	help	B6-format-convert	round expression syntax: #.N|expr|	zymbol-parser/src/data_ops.rs:197	
-todo	help	B6-format-convert	truncate expression syntax: #!N|expr|	zymbol-parser/src/data_ops.rs:231	
-todo	help	B6-format-convert	write the count or the name of a variable holding it: {}.2|value| or {}.n|value|	zymbol-parser/src/data_ops.rs:135	
+unreachable	diagnostic	B6-format-convert	expected '|' after base prefix '{}'	zymbol-parser/src/data_ops.rs:155	unreachable: the lexer emits a base-prefix token only when a | follows it (literals.rs:286)
+cell	diagnostic	B6-format-convert	expected '|' after format operator '{}'	zymbol-parser/src/data_ops.rs:70	syntax-format-convert/format-expects-bar-after-operator
+cell	diagnostic	B6-format-convert	expected '|' after precision	zymbol-parser/src/data_ops.rs:195	syntax-format-convert/round-expects-bar-after-count
+cell	diagnostic	B6-format-convert	expected '|' to close base conversion expression	zymbol-parser/src/data_ops.rs:173	syntax-format-convert/base-conversion-left-open
+cell	diagnostic	B6-format-convert	expected '|' to close format expression	zymbol-parser/src/data_ops.rs:82	syntax-format-convert/format-left-open
+cell	diagnostic	B6-format-convert	expected '|' to close numeric evaluation	zymbol-parser/src/data_ops.rs:30	syntax-format-convert/numeric-evaluation-left-open
+cell	diagnostic	B6-format-convert	expected '|' to close round expression	zymbol-parser/src/data_ops.rs:207	syntax-format-convert/round-left-open
+cell	diagnostic	B6-format-convert	expected '|' to close truncate expression	zymbol-parser/src/data_ops.rs:241	syntax-format-convert/truncate-left-open
+cell	diagnostic	B6-format-convert	expected a decimal count after '{}'	zymbol-parser/src/data_ops.rs:132	syntax-format-convert/round-expects-a-decimal-count
+unreachable	diagnostic	B6-format-convert	precision must be a non-negative integer	zymbol-parser/src/data_ops.rs:104	unreachable: `-` is its own token, so a precision never arrives as a negative Integer
+cell	help	B6-format-convert	base conversion syntax: {}|expr|	zymbol-parser/src/data_ops.rs:157	syntax-format-convert/base-conversion-left-open
+unreachable	help	B6-format-convert	format expression syntax: {}.N|expr| where N >= 0	zymbol-parser/src/data_ops.rs:106	unreachable: the help of `precision must be a non-negative integer`, which cannot be reached
+cell	help	B6-format-convert	format expression syntax: {}|expr| or {}.N|expr|	zymbol-parser/src/data_ops.rs:72	syntax-format-convert/format-expects-bar-after-operator
+cell	help	B6-format-convert	numeric evaluation syntax: #|expr|	zymbol-parser/src/data_ops.rs:32	syntax-format-convert/numeric-evaluation-left-open
+cell	help	B6-format-convert	round expression syntax: #.N|expr|	zymbol-parser/src/data_ops.rs:197	syntax-format-convert/round-expects-bar-after-count
+cell	help	B6-format-convert	truncate expression syntax: #!N|expr|	zymbol-parser/src/data_ops.rs:231	syntax-format-convert/truncate-expects-bar-after-count
+cell	help	B6-format-convert	write the count or the name of a variable holding it: {}.2|value| or {}.n|value|	zymbol-parser/src/data_ops.rs:135	syntax-format-convert/round-expects-a-decimal-count
 todo	diagnostic	B7-try-catch	expected '!?' to start try block	zymbol-parser/src/error_handling.rs:34	
 todo	diagnostic	B7-try-catch	expected '##' for error type	zymbol-parser/src/error_handling.rs:117	
 todo	diagnostic	B7-try-catch	expected '##' for error type (missing second #)	zymbol-parser/src/error_handling.rs:126	
