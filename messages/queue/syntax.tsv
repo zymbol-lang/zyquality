@@ -41,25 +41,25 @@ cell	help	B11-index-nav	each group must be wrapped: [path] or [path1, path2]	zym
 cell	help	B11-index-nav	negative indices: arr[-1], arr[-2>-1]	zymbol-parser/src/index_nav.rs:317	syntax-index-nav/negative-step-without-an-integer
 cell	help	B11-index-nav	structured extraction: arr[[row>col] ; [row>col]]	zymbol-parser/src/index_nav.rs:159	syntax-index-nav/structured-extraction-left-open
 cell	help	B11-index-nav	valid nav index: arr[1>2], arr[n>m], arr[(a)>(b)], arr[1>2..4]	zymbol-parser/src/index_nav.rs:360	syntax-index-nav/step-is-a-float-literal
-todo	diagnostic	B12-io	>>~ position tuple has at most 5 slots: (fila, col, BKS, fg, bg)	zymbol-parser/src/io.rs:423	
-todo	diagnostic	B12-io	expected '(' or variable after >>~	zymbol-parser/src/io.rs:378	
-todo	diagnostic	B12-io	expected ')' to close the size argument list	zymbol-parser/src/io.rs:177	
-todo	diagnostic	B12-io	expected ',' between the two size arguments	zymbol-parser/src/io.rs:149	
-todo	diagnostic	B12-io	expected '|' to close #|variable|	zymbol-parser/src/io.rs:78	
-todo	diagnostic	B12-io	expected a non-negative integer size argument	zymbol-parser/src/io.rs:167	
-todo	diagnostic	B12-io	expected file path after </	zymbol-parser/src/script_exec.rs:25	
-todo	diagnostic	B12-io	expected variable name after ><	zymbol-parser/src/io.rs:474	
-todo	diagnostic	B12-io	expected variable name after key input operator	zymbol-parser/src/io.rs:356	
-todo	diagnostic	B12-io	expected variable name in input statement	zymbol-parser/src/io.rs:68	
-todo	diagnostic	B12-io	unterminated bash execute expression	zymbol-parser/src/script_exec.rs:69	
-todo	help	B12-io	CLI args capture syntax: ><variable_name	zymbol-parser/src/io.rs:476	
-todo	help	B12-io	TUI block syntax: >>| { statements }	zymbol-parser/src/io.rs:438	
-todo	help	B12-io	bash execute syntax: <\\ expr1 expr2 ... \\>	zymbol-parser/src/script_exec.rs:71	
-todo	help	B12-io	decimal typespec syntax: ##.(total, decimals)	zymbol-parser/src/io.rs:151	
-todo	help	B12-io	input typespec sizes are non-negative integers, e.g. ##.(5,2) or ###(4)	zymbol-parser/src/io.rs:169	
-todo	help	B12-io	numeric input syntax: << #|variable|	zymbol-parser/src/io.rs:80	
-todo	internal?	B12-io	parse_bash_exec_expr called on non-BashOpen token	zymbol-parser/src/script_exec.rs:53	
-todo	internal?	B12-io	parse_execute_expr called on non-ExecuteCommand token	zymbol-parser/src/script_exec.rs:21	
+cell	diagnostic	B12-io	>>~ position tuple has at most 5 slots: (fila, col, BKS, fg, bg)	zymbol-parser/src/io.rs:423	syntax-io/position-with-six-slots
+cell	diagnostic	B12-io	expected '(' or variable after >>~	zymbol-parser/src/io.rs:378	syntax-io/position-without-a-tuple-or-a-name
+cell	diagnostic	B12-io	expected ')' to close the size argument list	zymbol-parser/src/io.rs:177	syntax-io/input-size-list-left-open
+cell	diagnostic	B12-io	expected ',' between the two size arguments	zymbol-parser/src/io.rs:149	syntax-io/decimal-input-sizes-without-comma
+cell	diagnostic	B12-io	expected '|' to close #|variable|	zymbol-parser/src/io.rs:78	syntax-io/legacy-numeric-input-left-open
+cell	diagnostic	B12-io	expected a non-negative integer size argument	zymbol-parser/src/io.rs:167	syntax-io/input-size-is-not-an-integer
+cell	diagnostic	B12-io	expected file path after </	zymbol-parser/src/script_exec.rs:25	syntax-io/execute-without-a-path
+cell	diagnostic	B12-io	expected variable name after ><	zymbol-parser/src/io.rs:474	syntax-io/cli-args-capture-without-a-name
+cell	diagnostic	B12-io	expected variable name after key input operator	zymbol-parser/src/io.rs:356	syntax-io/key-input-without-a-name
+cell	diagnostic	B12-io	expected variable name in input statement	zymbol-parser/src/io.rs:68	syntax-io/input-without-a-name
+cell	diagnostic	B12-io	unterminated bash execute expression	zymbol-parser/src/script_exec.rs:69	syntax-io/bash-execute-left-open
+cell	help	B12-io	CLI args capture syntax: ><variable_name	zymbol-parser/src/io.rs:476	syntax-io/cli-args-capture-without-a-name
+cell	help	B12-io	TUI block syntax: >>| { statements }	zymbol-parser/src/io.rs:438	syntax-io/tui-block-without-brace
+cell	help	B12-io	bash execute syntax: <\\ expr1 expr2 ... \\>	zymbol-parser/src/script_exec.rs:71	syntax-io/bash-execute-left-open
+cell	help	B12-io	decimal typespec syntax: ##.(total, decimals)	zymbol-parser/src/io.rs:151	syntax-io/decimal-input-sizes-without-comma
+cell	help	B12-io	input typespec sizes are non-negative integers, e.g. ##.(5,2) or ###(4)	zymbol-parser/src/io.rs:169	syntax-io/input-size-is-not-an-integer
+cell	help	B12-io	numeric input syntax: << #|variable|	zymbol-parser/src/io.rs:80	syntax-io/legacy-numeric-input-left-open
+unreachable	internal?	B12-io	parse_bash_exec_expr called on non-BashOpen token	zymbol-parser/src/script_exec.rs:53	unreachable: an unreachable!() message; the caller dispatches on BashOpen (lib.rs:600)
+unreachable	internal?	B12-io	parse_execute_expr called on non-ExecuteCommand token	zymbol-parser/src/script_exec.rs:21	unreachable: an unreachable!() message; the caller dispatches on ExecuteCommand
 todo	diagnostic	B13-modules	E013: constant initializer in module must be a literal	zymbol-parser/src/modules.rs:102	
 todo	diagnostic	B13-modules	E013: variable initializer in module must be a literal	zymbol-parser/src/modules.rs:114	
 todo	diagnostic	B13-modules	duplicate export block in module	zymbol-parser/src/modules.rs:77	
