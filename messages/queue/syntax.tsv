@@ -95,25 +95,25 @@ todo	help	B14-variables	syntax: \\variable to explicitly destroy a variable	zymb
 todo	help	B14-variables	syntax: arr[i] = val  or  arr[i] += val	zymbol-parser/src/variables.rs:107	
 todo	help	B14-variables	use '=' to assign a value to a variable	zymbol-parser/src/variables.rs:205	
 todo	help	B14-variables	use := to declare constants (immutable values)	zymbol-parser/src/variables.rs:257	
-todo	diagnostic	B3-lexer	Unterminated multi-line comment	zymbol-lexer/src/lib.rs:1064	
-todo	diagnostic	B3-lexer	empty string interpolation {}	zymbol-lexer/src/literals.rs:140	
-todo	diagnostic	B3-lexer	expected closing ' for char literal	zymbol-lexer/src/literals.rs:257	
-todo	diagnostic	B3-lexer	invalid Unicode code point: 0x{:X} ({} {})	zymbol-lexer/src/literals.rs:506	
-todo	diagnostic	B3-lexer	invalid boolean literal: digit {} is not valid after '#'	zymbol-lexer/src/lib.rs:875	
-todo	diagnostic	B3-lexer	invalid character in string interpolation	zymbol-lexer/src/literals.rs:128	
-todo	diagnostic	B3-lexer	invalid escape sequence: '\\{}'	zymbol-lexer/src/literals.rs:240	
-todo	diagnostic	B3-lexer	invalid float literal: '{}'	zymbol-lexer/src/literals.rs:417	
-todo	diagnostic	B3-lexer	mixed digit scripts in numeric literal	zymbol-lexer/src/literals.rs:447	
-todo	diagnostic	B3-lexer	unexpected character: '{}'	zymbol-lexer/src/lib.rs:955	
-todo	diagnostic	B3-lexer	unterminated char literal	zymbol-lexer/src/literals.rs:212	
-todo	diagnostic	B3-lexer	unterminated execute expression	zymbol-lexer/src/lib.rs:562	
-todo	diagnostic	B3-lexer	unterminated string interpolation	zymbol-lexer/src/literals.rs:99	
-todo	help	B3-lexer	add */ to close the comment	zymbol-lexer/src/lib.rs:1066	
-todo	help	B3-lexer	close the interpolation with }	zymbol-lexer/src/literals.rs:101	
-todo	help	B3-lexer	execute syntax: </ path.zy />	zymbol-lexer/src/lib.rs:564	
-todo	help	B3-lexer	interpolation must be {identifier} — use \\{ for a literal brace	zymbol-lexer/src/literals.rs:130	
-todo	help	B3-lexer	provide a variable name: {varname}	zymbol-lexer/src/literals.rs:142	
-todo	help	B3-lexer	use '#0' (or its Unicode equivalent) for false, '#1' for true	zymbol-lexer/src/lib.rs:879	
+cell	diagnostic	B3-lexer	Unterminated multi-line comment	zymbol-lexer/src/lib.rs:1064	syntax-lexer/unterminated-multiline-comment
+cell	diagnostic	B3-lexer	empty string interpolation {}	zymbol-lexer/src/literals.rs:140	syntax-lexer/empty-string-interpolation
+cell	diagnostic	B3-lexer	expected closing ' for char literal	zymbol-lexer/src/literals.rs:257	syntax-lexer/char-literal-expects-closing-quote
+cell	diagnostic	B3-lexer	invalid Unicode code point: 0x{:X} ({} {})	zymbol-lexer/src/literals.rs:506	syntax-lexer/invalid-unicode-code-point
+cell	diagnostic	B3-lexer	invalid boolean literal: digit {} is not valid after '#'	zymbol-lexer/src/lib.rs:875	syntax-lexer/invalid-boolean-digit
+cell	diagnostic	B3-lexer	invalid character in string interpolation	zymbol-lexer/src/literals.rs:128	syntax-lexer/invalid-character-in-interpolation
+cell	diagnostic	B3-lexer	invalid escape sequence: '\\{}'	zymbol-lexer/src/literals.rs:240	syntax-lexer/invalid-escape-in-char-literal
+cell	diagnostic	B3-lexer	invalid float literal: '{}'	zymbol-lexer/src/literals.rs:417	syntax-lexer/invalid-float-literal
+cell	diagnostic	B3-lexer	mixed digit scripts in numeric literal	zymbol-lexer/src/literals.rs:447	syntax-lexer/mixed-digit-scripts
+cell	diagnostic	B3-lexer	unexpected character: '{}'	zymbol-lexer/src/lib.rs:955	syntax-lexer/unexpected-character
+cell	diagnostic	B3-lexer	unterminated char literal	zymbol-lexer/src/literals.rs:212	syntax-lexer/unterminated-char-literal-at-end-of-file
+cell	diagnostic	B3-lexer	unterminated execute expression	zymbol-lexer/src/lib.rs:562	syntax-lexer/unterminated-execute-expression
+cell	diagnostic	B3-lexer	unterminated string interpolation	zymbol-lexer/src/literals.rs:99	syntax-lexer/unterminated-string-interpolation
+cell	help	B3-lexer	add */ to close the comment	zymbol-lexer/src/lib.rs:1066	syntax-lexer/unterminated-multiline-comment
+cell	help	B3-lexer	close the interpolation with }	zymbol-lexer/src/literals.rs:101	syntax-lexer/unterminated-string-interpolation
+cell	help	B3-lexer	execute syntax: </ path.zy />	zymbol-lexer/src/lib.rs:564	syntax-lexer/unterminated-execute-expression
+cell	help	B3-lexer	interpolation must be {identifier} — use \\{ for a literal brace	zymbol-lexer/src/literals.rs:130	syntax-lexer/invalid-character-in-interpolation
+cell	help	B3-lexer	provide a variable name: {varname}	zymbol-lexer/src/literals.rs:142	syntax-lexer/empty-string-interpolation
+cell	help	B3-lexer	use '#0' (or its Unicode equivalent) for false, '#1' for true	zymbol-lexer/src/lib.rs:879	syntax-lexer/invalid-boolean-digit
 todo	diagnostic	B4-collection-ops	$--[position:count] is retired — use $-[start..end] instead	zymbol-parser/src/collection_ops.rs:83	
 todo	diagnostic	B4-collection-ops	collection update ($~) requires a place to write	zymbol-parser/src/collection_ops.rs:243	
 todo	diagnostic	B4-collection-ops	expected ')' after lambda	zymbol-parser/src/collection_ops.rs:425	
