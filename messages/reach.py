@@ -107,7 +107,10 @@ def defined() -> dict:
 
 def _run(cmd: list[str], cwd: str) -> str:
     try:
-        r = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=10)
+        # stdin closed: a program that reads input must meet end of input, not
+        # wait on the terminal this runs from until the timeout swallows it.
+        r = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=10,
+                           stdin=subprocess.DEVNULL)
         return ANSI.sub("", r.stdout + r.stderr)
     except Exception:                                          # noqa: BLE001
         return ""

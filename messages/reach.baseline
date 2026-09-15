@@ -3,7 +3,7 @@
 # nothing to reach it, which is the day to notice rather than
 # at the next manual sweep. Recorded by `reach.py --baseline`,
 # deliberately and separately, like messages/baseline.txt.
-sintaxis 216
+sintaxis 209
 semántica 119
-ejecución 247
-compilación 29
+ejecución 93
+compilación 27
