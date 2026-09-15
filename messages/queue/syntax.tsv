@@ -79,22 +79,22 @@ cell	help	B13-modules	a module may only have one #> export block	zymbol-parser/s
 cell	help	B13-modules	module body must be enclosed in braces: # name { ... }	zymbol-parser/src/modules.rs:61	syntax-modules/module-without-brace
 cell	help	B13-modules	module-level constants must use literal values, not expressions or function calls	zymbol-parser/src/modules.rs:104	syntax-modules/const-not-literal
 cell	help	B13-modules	module-level variables must use literal values, not expressions or function calls	zymbol-parser/src/modules.rs:116	syntax-modules/variable-not-literal
-todo	diagnostic	B14-variables	expected ':' after field name in named tuple destructure	zymbol-parser/src/variables.rs:478	
-todo	diagnostic	B14-variables	expected '=' after index expression for indexed assignment	zymbol-parser/src/variables.rs:105	
-todo	diagnostic	B14-variables	expected '=' in destructure assignment	zymbol-parser/src/variables.rs:392	
-todo	diagnostic	B14-variables	expected ']' after index expression	zymbol-parser/src/variables.rs:34	
-todo	diagnostic	B14-variables	expected := for constant declaration	zymbol-parser/src/variables.rs:255	
-todo	diagnostic	B14-variables	expected assignment operator (=, +=, -=, *=, /=, %=, ^=, ++, --)	zymbol-parser/src/variables.rs:203	
-todo	diagnostic	B14-variables	expected identifier	zymbol-parser/src/variables.rs:24	
-todo	diagnostic	B14-variables	expected identifier after '*' in destructure	zymbol-parser/src/variables.rs:416	
-todo	diagnostic	B14-variables	expected identifier, '*rest', or '_' in array destructure	zymbol-parser/src/variables.rs:434	
-todo	diagnostic	B14-variables	expected variable name after ':' in named tuple destructure	zymbol-parser/src/variables.rs:485	
-todo	diagnostic	B14-variables	expected variable name after \\	zymbol-parser/src/variables.rs:527	
-todo	diagnostic	B14-variables	unexpected token in tuple destructure pattern	zymbol-parser/src/variables.rs:508	
-todo	help	B14-variables	syntax: \\variable to explicitly destroy a variable	zymbol-parser/src/variables.rs:529	
-todo	help	B14-variables	syntax: arr[i] = val  or  arr[i] += val	zymbol-parser/src/variables.rs:107	
-todo	help	B14-variables	use '=' to assign a value to a variable	zymbol-parser/src/variables.rs:205	
-todo	help	B14-variables	use := to declare constants (immutable values)	zymbol-parser/src/variables.rs:257	
+cell	diagnostic	B14-variables	expected ':' after field name in named tuple destructure	zymbol-parser/src/variables.rs:478	syntax-variables/named-destructure-field-without-colon
+cell	diagnostic	B14-variables	expected '=' after index expression for indexed assignment	zymbol-parser/src/variables.rs:105	syntax-variables/hot-index-without-operator
+unreachable	diagnostic	B14-variables	expected '=' in destructure assignment	zymbol-parser/src/variables.rs:392	unreachable: a pattern is only parsed as a destructure after is_*_destructure saw `=` behind it (variables.rs:354)
+cell	diagnostic	B14-variables	expected ']' after index expression	zymbol-parser/src/variables.rs:34	syntax-variables/hot-index-left-open
+unreachable	diagnostic	B14-variables	expected := for constant declaration	zymbol-parser/src/variables.rs:255	unreachable: parse_const_decl is only called after the dispatch saw `:=` (lib.rs:387)
+unreachable	diagnostic	B14-variables	expected assignment operator (=, +=, -=, *=, /=, %=, ^=, ++, --)	zymbol-parser/src/variables.rs:203	unreachable: parse_assignment is only reached after the dispatch saw one of the assignment operators, and its match handles every one of them (lib.rs:430-459, variables.rs)
+unreachable	diagnostic	B14-variables	expected identifier	zymbol-parser/src/variables.rs:24	unreachable: parse_assignment and parse_const_decl are only called on an identifier token (the dispatch matches on it)
+cell	diagnostic	B14-variables	expected identifier after '*' in destructure	zymbol-parser/src/variables.rs:416	syntax-variables/rest-without-a-name
+cell	diagnostic	B14-variables	expected identifier, '*rest', or '_' in array destructure	zymbol-parser/src/variables.rs:434	syntax-variables/array-destructure-item-not-a-name
+cell	diagnostic	B14-variables	expected variable name after ':' in named tuple destructure	zymbol-parser/src/variables.rs:485	syntax-variables/named-destructure-without-variable
+cell	diagnostic	B14-variables	expected variable name after \\	zymbol-parser/src/variables.rs:527	syntax-variables/destroy-without-a-name
+cell	diagnostic	B14-variables	unexpected token in tuple destructure pattern	zymbol-parser/src/variables.rs:508	syntax-variables/tuple-destructure-item-not-a-name
+cell	help	B14-variables	syntax: \\variable to explicitly destroy a variable	zymbol-parser/src/variables.rs:529	syntax-variables/destroy-without-a-name
+cell	help	B14-variables	syntax: arr[i] = val  or  arr[i] += val	zymbol-parser/src/variables.rs:107	syntax-variables/hot-index-without-operator
+unreachable	help	B14-variables	use '=' to assign a value to a variable	zymbol-parser/src/variables.rs:205	unreachable: parse_assignment is only reached after the dispatch saw one of the assignment operators, and its match handles every one of them (lib.rs:430-459, variables.rs)
+unreachable	help	B14-variables	use := to declare constants (immutable values)	zymbol-parser/src/variables.rs:257	unreachable: the help of the `:=` check, which never fails
 cell	diagnostic	B3-lexer	Unterminated multi-line comment	zymbol-lexer/src/lib.rs:1064	syntax-lexer/unterminated-multiline-comment
 cell	diagnostic	B3-lexer	empty string interpolation {}	zymbol-lexer/src/literals.rs:140	syntax-lexer/empty-string-interpolation
 cell	diagnostic	B3-lexer	expected closing ' for char literal	zymbol-lexer/src/literals.rs:257	syntax-lexer/char-literal-expects-closing-quote
