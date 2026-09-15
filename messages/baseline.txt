@@ -365,7 +365,6 @@ rust	shared	'§' §s the enclosing '@' loop; there is none here. a function or l
 rust	shared	'§°' hot-initialized to 0 — '^' will always produce 0
 rust	shared	'°name' is only valid as an assignment target
 rust	shared	(year, month, day) or (year, month, day, hour, minute, second), each ###, plus an optional zone
-rust	shared	--> consider assigning to a variable: `result = ?? expr §`
 rust	shared	1 2 fizz 4 buzz fizz 7 8 fizz buzz 11 fizz 13 14 fizzbuzz
 rust	shared	>>~ position tuple has at most 5 slots: (fila, col, bks, fg, bg)
 rust	shared	>>~ slot expects int, got §
@@ -712,6 +711,7 @@ rust	shared	map requires array, got §
 rust	shared	map requires lambda function
 rust	shared	mat::§: incompatible argument type(s) §
 rust	shared	match expression must be enclosed in braces
+rust	shared	match expression returns values but result is unused
 rust	shared	mathematical sans-serif bold
 rust	shared	member access requires a field name: object.field
 rust	shared	member function calls not supported
@@ -874,7 +874,6 @@ rust	shared	vm accepted a non-numeric string
 rust	shared	vm error: §
 rust	shared	vm outputpos
 rust	shared	vm terminal size
-rust	shared	warning: match expression returns values but result is unused
 rust	shared	write `#(` here: `#(nombre: valor)`. a bare `(…)` is a positional tuple, and `#()` is the empty dictionary — which `()` cannot be, since it would have to be the empty tuple as well
 rust	shared	write the argument as 'name<~' — the mark says the value comes back changed, so a reader does not have to open the function to find out
 rust	shared	write the count or the name of a variable holding it: §.2|value| or §.n|value|
