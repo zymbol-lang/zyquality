@@ -172,20 +172,20 @@ cell	help	B7-try-catch	error types use ## prefix: ##IO, ##Network, ##Parse	zymbo
 unreachable	help	B7-try-catch	finally blocks start with :>{ }	zymbol-parser/src/error_handling.rs:158	unreachable: parse_finally_clause is only called when the current token already is :> (error_handling.rs, lib.rs:374), so the check that it is not never fails
 unreachable	help	B7-try-catch	try blocks start with !?{ }	zymbol-parser/src/error_handling.rs:36	unreachable: parse_try_statement is only called when the current token already is !? (error_handling.rs, lib.rs:374), so the check that it is not never fails
 cell	help	B7-try-catch	valid error types: ##IO, ##Network, ##Parse, ##Index, ##Type, ##Div, ##_	zymbol-parser/src/error_handling.rs:140	syntax-try-catch/error-type-without-a-name
-todo	diagnostic	B8-functions-lambdas	expected '(' after function name	zymbol-parser/src/functions.rs:26	
-todo	diagnostic	B8-functions-lambdas	expected ')' after lambda parameters	zymbol-parser/src/functions.rs:210	
-todo	diagnostic	B8-functions-lambdas	expected ')' after parameters	zymbol-parser/src/functions.rs:80	
-todo	diagnostic	B8-functions-lambdas	expected '->' in lambda expression	zymbol-parser/src/functions.rs:233	
-todo	diagnostic	B8-functions-lambdas	expected function call	zymbol-parser/src/functions.rs:138	
-todo	diagnostic	B8-functions-lambdas	expected parameter name	zymbol-parser/src/functions.rs:45	
-todo	diagnostic	B8-functions-lambdas	expected parameter name in lambda	zymbol-parser/src/functions.rs:186	
-todo	help	B8-functions-lambdas	function syntax: name(params) { }	zymbol-parser/src/functions.rs:28	
-todo	help	B8-functions-lambdas	lambda parameters must be identifiers: (a, b) -> expr	zymbol-parser/src/functions.rs:188	
-todo	help	B8-functions-lambdas	lambda syntax: (a, b) -> expr	zymbol-parser/src/functions.rs:212	
-todo	help	B8-functions-lambdas	lambda syntax: x -> expr	zymbol-parser/src/functions.rs:225	
-todo	help	B8-functions-lambdas	lambda syntax: x -> expr or (a, b) -> expr	zymbol-parser/src/functions.rs:235	
-todo	help	B8-functions-lambdas	only function calls can be used as statements	zymbol-parser/src/functions.rs:157	
-todo	help	B8-functions-lambdas	parameters must be identifiers	zymbol-parser/src/functions.rs:47	
+unreachable	diagnostic	B8-functions-lambdas	expected '(' after function name	zymbol-parser/src/functions.rs:26	unreachable: parse_function_decl is only called after a lookahead has seen `name(…) {` (lib.rs:418-425)
+cell	diagnostic	B8-functions-lambdas	expected ')' after lambda parameters	zymbol-parser/src/functions.rs:210	syntax-functions-lambdas/lambda-parameters-left-open
+cell	diagnostic	B8-functions-lambdas	expected ')' after parameters	zymbol-parser/src/functions.rs:80	syntax-functions-lambdas/function-parameters-left-open
+cell	diagnostic	B8-functions-lambdas	expected '->' in lambda expression	zymbol-parser/src/functions.rs:233	syntax-functions-lambdas/lambda-without-arrow
+cell	diagnostic	B8-functions-lambdas	expected function call	zymbol-parser/src/functions.rs:138	syntax-functions-lambdas/expression-used-as-a-statement
+cell	diagnostic	B8-functions-lambdas	expected parameter name	zymbol-parser/src/functions.rs:45	syntax-functions-lambdas/function-parameter-not-a-name
+cell	diagnostic	B8-functions-lambdas	expected parameter name in lambda	zymbol-parser/src/functions.rs:186	syntax-functions-lambdas/lambda-parameter-not-a-name
+cell	help	B8-functions-lambdas	function syntax: name(params) { }	zymbol-parser/src/functions.rs:28	syntax-functions-lambdas/function-parameters-left-open
+cell	help	B8-functions-lambdas	lambda parameters must be identifiers: (a, b) -> expr	zymbol-parser/src/functions.rs:188	syntax-functions-lambdas/lambda-parameter-not-a-name
+cell	help	B8-functions-lambdas	lambda syntax: (a, b) -> expr	zymbol-parser/src/functions.rs:212	syntax-functions-lambdas/lambda-parameters-left-open
+unreachable	help	B8-functions-lambdas	lambda syntax: x -> expr	zymbol-parser/src/functions.rs:225	unreachable: the unparenthesised lambda is only parsed after a lookahead has seen `ident ->`, so its parameter is always a name
+cell	help	B8-functions-lambdas	lambda syntax: x -> expr or (a, b) -> expr	zymbol-parser/src/functions.rs:235	syntax-functions-lambdas/lambda-without-arrow
+cell	help	B8-functions-lambdas	only function calls can be used as statements	zymbol-parser/src/functions.rs:157	syntax-functions-lambdas/expression-used-as-a-statement
+cell	help	B8-functions-lambdas	parameters must be identifiers	zymbol-parser/src/functions.rs:47	syntax-functions-lambdas/function-parameter-not-a-name
 todo	diagnostic	B9-expressions-core	'°name' is only valid as an assignment target	zymbol-parser/src/lib.rs:556	
 todo	diagnostic	B9-expressions-core	expected '(' for module function call	zymbol-parser/src/lib.rs:1282	
 todo	diagnostic	B9-expressions-core	expected ')' after arguments	zymbol-parser/src/expressions.rs:560	
