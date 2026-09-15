@@ -66,18 +66,18 @@ cell	diagnostic	C10-std	time::of: expected (year, month, day) or (year, month, d
 cell	diagnostic	C10-std	time::today: expected an optional zone String	zymbol-vm/src/stdlib_builtins.rs:1127	runtime-std/time-today-expected-an-optional-zone-string
 cell	diagnostic	C10-std	{}: headers must be an Array of (String, String) tuples	zymbol-interpreter/src/stdlib/net.rs:39	runtime-std/headers-must-be-an-array-of-string
 unreachable	internal?	C10-std	unknown builtin id {}	zymbol-vm/src/stdlib_builtins.rs:1346	unreachable: the compiler assigns builtin ids from the same table the VM dispatches on (stdlib_module_builtins)
-todo	diagnostic	C11-std-db	db: cannot bind {:?} as a parameter	zymbol-interpreter/src/stdlib/db.rs:159	
-todo	diagnostic	C11-std-db	db: expected String {}	zymbol-interpreter/src/stdlib/db.rs:119	
-todo	diagnostic	C11-std-db	db: params must be a Tuple, Array, or scalar	zymbol-interpreter/src/stdlib/db.rs:140	
-todo	diagnostic	C11-std-db	db::tx: each statement is (String sql, Array params)	zymbol-interpreter/src/stdlib/db.rs:405	
-todo	diagnostic	C11-std-db	db::tx: each statement must be a (sql, params) tuple	zymbol-interpreter/src/stdlib/db.rs:410	
-todo	diagnostic	C11-std-db	db::tx: statements must be an Array	zymbol-interpreter/src/stdlib/db.rs:394	
-todo	diagnostic	C11-std-db	invalid savepoint name '{}'	zymbol-interpreter/src/stdlib/db.rs:499	
-todo	diagnostic	C11-std-db	query_one matched no rows	zymbol-interpreter/src/stdlib/db.rs:90	
-todo	diagnostic	C11-std-db	transaction already active (use savepoints to nest)	zymbol-interpreter/src/stdlib/db.rs:447	
-todo	diagnostic	C11-std-db	unknown connection '{}'	zymbol-interpreter/src/stdlib/db.rs:109	
-todo	internal?	C11-std-db	std/db is not available in this build (compiled without ODBC support)	zymbol-vm/src/stdlib_builtins.rs:1376	
-todo	internal?	C11-std-db	unknown db builtin id {}	zymbol-vm/src/stdlib_builtins.rs:1368	
+cell	diagnostic	C11-std-db	db: cannot bind {:?} as a parameter	zymbol-interpreter/src/stdlib/db.rs:159	runtime-std-db/cannot-bind-a-function
+cell	diagnostic	C11-std-db	db: expected String {}	zymbol-interpreter/src/stdlib/db.rs:119	runtime-std-db/name-must-be-a-string
+cell	diagnostic	C11-std-db	db: params must be a Tuple, Array, or scalar	zymbol-interpreter/src/stdlib/db.rs:140	runtime-std-db/params-must-be-a-tuple-array-or-scalar
+cell	diagnostic	C11-std-db	db::tx: each statement is (String sql, Array params)	zymbol-interpreter/src/stdlib/db.rs:405	runtime-std-db/tx-statement-is-sql-and-params
+cell	diagnostic	C11-std-db	db::tx: each statement must be a (sql, params) tuple	zymbol-interpreter/src/stdlib/db.rs:410	runtime-std-db/tx-statement-must-be-a-tuple
+cell	diagnostic	C11-std-db	db::tx: statements must be an Array	zymbol-interpreter/src/stdlib/db.rs:394	runtime-std-db/tx-statements-must-be-an-array
+cell	diagnostic	C11-std-db	invalid savepoint name '{}'	zymbol-interpreter/src/stdlib/db.rs:499	runtime-std-db/invalid-savepoint-name-is-soft — soft: a value, never a diagnostic line, so reach.py cannot count it
+cell	diagnostic	C11-std-db	query_one matched no rows	zymbol-interpreter/src/stdlib/db.rs:90	runtime-std-db/query-one-no-rows-is-soft — soft: a value, never a diagnostic line, so reach.py cannot count it
+cell	diagnostic	C11-std-db	transaction already active (use savepoints to nest)	zymbol-interpreter/src/stdlib/db.rs:447	runtime-std-db/transaction-already-active-is-soft — soft: a value, never a diagnostic line, so reach.py cannot count it
+cell	diagnostic	C11-std-db	unknown connection '{}'	zymbol-interpreter/src/stdlib/db.rs:109	runtime-std-db/unknown-connection-is-soft — soft: a value, never a diagnostic line, so reach.py cannot count it
+unreachable	internal?	C11-std-db	std/db is not available in this build (compiled without ODBC support)	zymbol-vm/src/stdlib_builtins.rs:1376	unreachable in this build: compiled only when the binary is built without the ODBC feature
+unreachable	internal?	C11-std-db	unknown db builtin id {}	zymbol-vm/src/stdlib_builtins.rs:1368	unreachable: the compiler assigns db builtin ids from the same table db_dispatch matches on
 todo	diagnostic	C12-io-tui	>>~ slot expects Int, got {}	zymbol-interpreter/src/io.rs:249	
 todo	diagnostic	C12-io-tui	end of input while waiting for {}	zymbol-interpreter/src/io.rs:111	
 todo	diagnostic	C12-io-tui	failed to enable raw mode: {}	zymbol-interpreter/src/io.rs:296	
