@@ -136,14 +136,14 @@ cell	help	B4-collection-ops	reduce syntax: collection$< (initial, lambda)	zymbol
 cell	help	B4-collection-ops	remove syntax: $-[index], $-[start..end], or $-[start:count]	zymbol-parser/src/collection_ops.rs:201	syntax-collection-ops/remove-expects-bracket-range-or-count
 cell	help	B4-collection-ops	slice syntax: $[start..end], $[..end], $[start..], or $[start:count]	zymbol-parser/src/collection_ops.rs:338	syntax-collection-ops/slice-expects-range-or-count
 cell	help	B4-collection-ops	syntax: string$~~[pattern:replacement] or string$~~[pattern:replacement:count]	zymbol-parser/src/string_ops.rs:76	syntax-collection-ops/replace-expects-open-bracket
-todo	diagnostic	B5-literals	expected ')' to close the dictionary	zymbol-parser/src/collections.rs:164	
-todo	diagnostic	B5-literals	expected ')' to close tuple	zymbol-parser/src/collections.rs:231	
-todo	diagnostic	B5-literals	expected ':' after the key	zymbol-parser/src/collections.rs:143	
-todo	diagnostic	B5-literals	expected ']' to close array literal	zymbol-parser/src/collections.rs:67	
-todo	diagnostic	B5-literals	expected a key in the dictionary	zymbol-parser/src/collections.rs:132	
-todo	help	B5-literals	a dictionary is written #(key: value, key2: value2)	zymbol-parser/src/collections.rs:166	
-todo	help	B5-literals	array literals must be enclosed in brackets	zymbol-parser/src/collections.rs:69	
-todo	help	B5-literals	tuples must be enclosed in parentheses: (expr, expr, ...)	zymbol-parser/src/collections.rs:233	
+cell	diagnostic	B5-literals	expected ')' to close the dictionary	zymbol-parser/src/collections.rs:164	syntax-literals/dictionary-left-open
+cell	diagnostic	B5-literals	expected ')' to close tuple	zymbol-parser/src/collections.rs:231	syntax-literals/tuple-left-open
+cell	diagnostic	B5-literals	expected ':' after the key	zymbol-parser/src/collections.rs:143	syntax-literals/dictionary-key-without-colon
+cell	diagnostic	B5-literals	expected ']' to close array literal	zymbol-parser/src/collections.rs:67	syntax-literals/array-literal-left-open
+cell	diagnostic	B5-literals	expected a key in the dictionary	zymbol-parser/src/collections.rs:132	syntax-literals/dictionary-key-is-not-a-name
+cell	help	B5-literals	a dictionary is written #(key: value, key2: value2)	zymbol-parser/src/collections.rs:166	syntax-literals/dictionary-left-open
+cell	help	B5-literals	array literals must be enclosed in brackets	zymbol-parser/src/collections.rs:69	syntax-literals/array-literal-left-open
+cell	help	B5-literals	tuples must be enclosed in parentheses: (expr, expr, ...)	zymbol-parser/src/collections.rs:233	syntax-literals/tuple-left-open
 todo	diagnostic	B6-format-convert	expected '|' after base prefix '{}'	zymbol-parser/src/data_ops.rs:155	
 todo	diagnostic	B6-format-convert	expected '|' after format operator '{}'	zymbol-parser/src/data_ops.rs:70	
 todo	diagnostic	B6-format-convert	expected '|' after precision	zymbol-parser/src/data_ops.rs:195	
