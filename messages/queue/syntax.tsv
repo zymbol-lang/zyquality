@@ -114,28 +114,28 @@ cell	help	B3-lexer	execute syntax: </ path.zy />	zymbol-lexer/src/lib.rs:564	syn
 cell	help	B3-lexer	interpolation must be {identifier} — use \\{ for a literal brace	zymbol-lexer/src/literals.rs:130	syntax-lexer/invalid-character-in-interpolation
 cell	help	B3-lexer	provide a variable name: {varname}	zymbol-lexer/src/literals.rs:142	syntax-lexer/empty-string-interpolation
 cell	help	B3-lexer	use '#0' (or its Unicode equivalent) for false, '#1' for true	zymbol-lexer/src/lib.rs:879	syntax-lexer/invalid-boolean-digit
-todo	diagnostic	B4-collection-ops	$--[position:count] is retired — use $-[start..end] instead	zymbol-parser/src/collection_ops.rs:83	
-todo	diagnostic	B4-collection-ops	collection update ($~) requires a place to write	zymbol-parser/src/collection_ops.rs:243	
-todo	diagnostic	B4-collection-ops	expected ')' after lambda	zymbol-parser/src/collection_ops.rs:425	
-todo	diagnostic	B4-collection-ops	expected ',' after initial value	zymbol-parser/src/collection_ops.rs:414	
-todo	diagnostic	B4-collection-ops	expected '..', or ':' in slice	zymbol-parser/src/collection_ops.rs:336	
-todo	diagnostic	B4-collection-ops	expected ':' after pattern	zymbol-parser/src/string_ops.rs:86	
-todo	diagnostic	B4-collection-ops	expected ']' after count	zymbol-parser/src/collection_ops.rs:185	
-todo	diagnostic	B4-collection-ops	expected ']' after index in $+[index]	zymbol-parser/src/collection_ops.rs:110	
-todo	diagnostic	B4-collection-ops	expected ']' after range	zymbol-parser/src/collection_ops.rs:144	
-todo	diagnostic	B4-collection-ops	expected ']' after replacement or count	zymbol-parser/src/string_ops.rs:106	
-todo	diagnostic	B4-collection-ops	expected ']' after slice range	zymbol-parser/src/collection_ops.rs:350	
-todo	diagnostic	B4-collection-ops	expected ']', '..', or ':' after index	zymbol-parser/src/collection_ops.rs:199	
-todo	diagnostic	B4-collection-ops	expected comparator lambda after '$^', e.g. $^ (a, b -> a < b)	zymbol-parser/src/collection_ops.rs:463	
-todo	help	B4-collection-ops	count-based range syntax: $-[start:count]	zymbol-parser/src/collection_ops.rs:187	
-todo	help	B4-collection-ops	count-based slice syntax: $[start:count]	zymbol-parser/src/collection_ops.rs:322	
-todo	help	B4-collection-ops	insert syntax: collection$+[index] element	zymbol-parser/src/collection_ops.rs:112	
-todo	help	B4-collection-ops	range syntax: $-[..end] or $-[..]	zymbol-parser/src/collection_ops.rs:146	
-todo	help	B4-collection-ops	range syntax: $-[start..end] or $-[start..]	zymbol-parser/src/collection_ops.rs:170	
-todo	help	B4-collection-ops	reduce syntax: collection$< (initial, lambda)	zymbol-parser/src/collection_ops.rs:405	
-todo	help	B4-collection-ops	remove syntax: $-[index], $-[start..end], or $-[start:count]	zymbol-parser/src/collection_ops.rs:201	
-todo	help	B4-collection-ops	slice syntax: $[start..end], $[..end], $[start..], or $[start:count]	zymbol-parser/src/collection_ops.rs:338	
-todo	help	B4-collection-ops	syntax: string$~~[pattern:replacement] or string$~~[pattern:replacement:count]	zymbol-parser/src/string_ops.rs:76	
+cell	diagnostic	B4-collection-ops	$--[position:count] is retired — use $-[start..end] instead	zymbol-parser/src/collection_ops.rs:83	syntax-collection-ops/retired-remove-all-by-count
+cell	diagnostic	B4-collection-ops	collection update ($~) requires a place to write	zymbol-parser/src/collection_ops.rs:243	syntax-collection-ops/update-needs-a-place
+cell	diagnostic	B4-collection-ops	expected ')' after lambda	zymbol-parser/src/collection_ops.rs:425	syntax-collection-ops/reduce-expects-close-paren-after-lambda
+cell	diagnostic	B4-collection-ops	expected ',' after initial value	zymbol-parser/src/collection_ops.rs:414	syntax-collection-ops/reduce-expects-comma-after-initial
+cell	diagnostic	B4-collection-ops	expected '..', or ':' in slice	zymbol-parser/src/collection_ops.rs:336	syntax-collection-ops/slice-expects-range-or-count
+cell	diagnostic	B4-collection-ops	expected ':' after pattern	zymbol-parser/src/string_ops.rs:86	syntax-collection-ops/replace-expects-colon-after-pattern
+cell	diagnostic	B4-collection-ops	expected ']' after count	zymbol-parser/src/collection_ops.rs:185	syntax-collection-ops/remove-by-count-expects-close-bracket
+cell	diagnostic	B4-collection-ops	expected ']' after index in $+[index]	zymbol-parser/src/collection_ops.rs:110	syntax-collection-ops/insert-expects-close-bracket
+cell	diagnostic	B4-collection-ops	expected ']' after range	zymbol-parser/src/collection_ops.rs:144	syntax-collection-ops/remove-range-expects-close-bracket
+cell	diagnostic	B4-collection-ops	expected ']' after replacement or count	zymbol-parser/src/string_ops.rs:106	syntax-collection-ops/replace-expects-close-bracket
+cell	diagnostic	B4-collection-ops	expected ']' after slice range	zymbol-parser/src/collection_ops.rs:350	syntax-collection-ops/slice-range-expects-close-bracket
+cell	diagnostic	B4-collection-ops	expected ']', '..', or ':' after index	zymbol-parser/src/collection_ops.rs:199	syntax-collection-ops/remove-expects-bracket-range-or-count
+cell	diagnostic	B4-collection-ops	expected comparator lambda after '$^', e.g. $^ (a, b -> a < b)	zymbol-parser/src/collection_ops.rs:463	syntax-collection-ops/sort-expects-comparator-lambda
+cell	help	B4-collection-ops	count-based range syntax: $-[start:count]	zymbol-parser/src/collection_ops.rs:187	syntax-collection-ops/remove-by-count-expects-close-bracket
+cell	help	B4-collection-ops	count-based slice syntax: $[start:count]	zymbol-parser/src/collection_ops.rs:322	syntax-collection-ops/slice-by-count-expects-close-bracket
+cell	help	B4-collection-ops	insert syntax: collection$+[index] element	zymbol-parser/src/collection_ops.rs:112	syntax-collection-ops/insert-expects-close-bracket
+cell	help	B4-collection-ops	range syntax: $-[..end] or $-[..]	zymbol-parser/src/collection_ops.rs:146	syntax-collection-ops/remove-range-to-end-expects-close-bracket
+cell	help	B4-collection-ops	range syntax: $-[start..end] or $-[start..]	zymbol-parser/src/collection_ops.rs:170	syntax-collection-ops/remove-range-expects-close-bracket
+cell	help	B4-collection-ops	reduce syntax: collection$< (initial, lambda)	zymbol-parser/src/collection_ops.rs:405	syntax-collection-ops/reduce-expects-close-paren-after-lambda
+cell	help	B4-collection-ops	remove syntax: $-[index], $-[start..end], or $-[start:count]	zymbol-parser/src/collection_ops.rs:201	syntax-collection-ops/remove-expects-bracket-range-or-count
+cell	help	B4-collection-ops	slice syntax: $[start..end], $[..end], $[start..], or $[start:count]	zymbol-parser/src/collection_ops.rs:338	syntax-collection-ops/slice-expects-range-or-count
+cell	help	B4-collection-ops	syntax: string$~~[pattern:replacement] or string$~~[pattern:replacement:count]	zymbol-parser/src/string_ops.rs:76	syntax-collection-ops/replace-expects-open-bracket
 todo	diagnostic	B5-literals	expected ')' to close the dictionary	zymbol-parser/src/collections.rs:164	
 todo	diagnostic	B5-literals	expected ')' to close tuple	zymbol-parser/src/collections.rs:231	
 todo	diagnostic	B5-literals	expected ':' after the key	zymbol-parser/src/collections.rs:143	
