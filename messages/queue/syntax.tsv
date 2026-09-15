@@ -161,17 +161,17 @@ cell	help	B6-format-convert	numeric evaluation syntax: #|expr|	zymbol-parser/src
 cell	help	B6-format-convert	round expression syntax: #.N|expr|	zymbol-parser/src/data_ops.rs:197	syntax-format-convert/round-expects-bar-after-count
 cell	help	B6-format-convert	truncate expression syntax: #!N|expr|	zymbol-parser/src/data_ops.rs:231	syntax-format-convert/truncate-expects-bar-after-count
 cell	help	B6-format-convert	write the count or the name of a variable holding it: {}.2|value| or {}.n|value|	zymbol-parser/src/data_ops.rs:135	syntax-format-convert/round-expects-a-decimal-count
-todo	diagnostic	B7-try-catch	expected '!?' to start try block	zymbol-parser/src/error_handling.rs:34	
-todo	diagnostic	B7-try-catch	expected '##' for error type	zymbol-parser/src/error_handling.rs:117	
-todo	diagnostic	B7-try-catch	expected '##' for error type (missing second #)	zymbol-parser/src/error_handling.rs:126	
-todo	diagnostic	B7-try-catch	expected ':!' to start catch block	zymbol-parser/src/error_handling.rs:81	
-todo	diagnostic	B7-try-catch	expected ':>' to start finally block	zymbol-parser/src/error_handling.rs:156	
-todo	diagnostic	B7-try-catch	expected error type name after '##'	zymbol-parser/src/error_handling.rs:138	
-todo	help	B7-try-catch	catch blocks start with :! { } or :! ##Type { }	zymbol-parser/src/error_handling.rs:83	
-todo	help	B7-try-catch	error types use ## prefix: ##IO, ##Network, ##Parse	zymbol-parser/src/error_handling.rs:119	
-todo	help	B7-try-catch	finally blocks start with :>{ }	zymbol-parser/src/error_handling.rs:158	
-todo	help	B7-try-catch	try blocks start with !?{ }	zymbol-parser/src/error_handling.rs:36	
-todo	help	B7-try-catch	valid error types: ##IO, ##Network, ##Parse, ##Index, ##Type, ##Div, ##_	zymbol-parser/src/error_handling.rs:140	
+unreachable	diagnostic	B7-try-catch	expected '!?' to start try block	zymbol-parser/src/error_handling.rs:34	unreachable: parse_try_statement is only called when the current token already is !? (error_handling.rs, lib.rs:374), so the check that it is not never fails
+unreachable	diagnostic	B7-try-catch	expected '##' for error type	zymbol-parser/src/error_handling.rs:117	unreachable: parse_error_type is only called when the next token is `#` (error_handling.rs:97), so its first check never fails; the second one is reachable and has a cell
+cell	diagnostic	B7-try-catch	expected '##' for error type (missing second #)	zymbol-parser/src/error_handling.rs:126	syntax-try-catch/error-type-with-one-hash
+unreachable	diagnostic	B7-try-catch	expected ':!' to start catch block	zymbol-parser/src/error_handling.rs:81	unreachable: parse_catch_clause is only called when the current token already is :! (error_handling.rs, lib.rs:374), so the check that it is not never fails
+unreachable	diagnostic	B7-try-catch	expected ':>' to start finally block	zymbol-parser/src/error_handling.rs:156	unreachable: parse_finally_clause is only called when the current token already is :> (error_handling.rs, lib.rs:374), so the check that it is not never fails
+cell	diagnostic	B7-try-catch	expected error type name after '##'	zymbol-parser/src/error_handling.rs:138	syntax-try-catch/error-type-without-a-name
+unreachable	help	B7-try-catch	catch blocks start with :! { } or :! ##Type { }	zymbol-parser/src/error_handling.rs:83	unreachable: parse_catch_clause is only called when the current token already is :! (error_handling.rs, lib.rs:374), so the check that it is not never fails
+cell	help	B7-try-catch	error types use ## prefix: ##IO, ##Network, ##Parse	zymbol-parser/src/error_handling.rs:119	syntax-try-catch/error-type-with-one-hash
+unreachable	help	B7-try-catch	finally blocks start with :>{ }	zymbol-parser/src/error_handling.rs:158	unreachable: parse_finally_clause is only called when the current token already is :> (error_handling.rs, lib.rs:374), so the check that it is not never fails
+unreachable	help	B7-try-catch	try blocks start with !?{ }	zymbol-parser/src/error_handling.rs:36	unreachable: parse_try_statement is only called when the current token already is !? (error_handling.rs, lib.rs:374), so the check that it is not never fails
+cell	help	B7-try-catch	valid error types: ##IO, ##Network, ##Parse, ##Index, ##Type, ##Div, ##_	zymbol-parser/src/error_handling.rs:140	syntax-try-catch/error-type-without-a-name
 todo	diagnostic	B8-functions-lambdas	expected '(' after function name	zymbol-parser/src/functions.rs:26	
 todo	diagnostic	B8-functions-lambdas	expected ')' after lambda parameters	zymbol-parser/src/functions.rs:210	
 todo	diagnostic	B8-functions-lambdas	expected ')' after parameters	zymbol-parser/src/functions.rs:80	
