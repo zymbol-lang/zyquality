@@ -1,0 +1,211 @@
+# Phase B work queue: the syntax diagnostics nothing provokes (reach.py --list sintaxis, 2026-09-14).
+# status: todo | cell (provoked by a refusal cell) | unreachable (with a reason in `note`) | n/a
+# class:  diagnostic | help (the `help:` line of a diagnostic, provoked with it) | internal? (to confirm) | token-payload (text inside a TokenKind::Error, not a diagnostic line) | fragment | test | data
+status	class	family	message	where	note
+n/a	data	-	Klingon pIqaD	zymbol-lexer/src/digit_blocks.rs:57	
+n/a	fragment	-	format expression syntax: {}|expr|	zymbol-parser/src/data_ops.rs:72	
+n/a	fragment	-	invalid boolean literal	zymbol-lexer/src/lib.rs:875	
+n/a	fragment	-	mixed digit scripts	zymbol-lexer/src/literals.rs:447	
+n/a	fragment	-	unterminated char	zymbol-lexer/src/literals.rs:212	
+n/a	fragment	-	unterminated string	zymbol-lexer/src/literals.rs:99	
+n/a	test	-	a bracket after a bracket is what the navigator is for: write `d[\"x\">\"y\"]$~ value`	zymbol-parser/src/lib.rs:1775	
+n/a	test	-	a write reaches one place, so its path has no ranges	zymbol-parser/src/lib.rs:1776	
+n/a	test	-	this edits what the expression produced, and nothing holds it — assign the result to a name first	zymbol-parser/src/lib.rs:1777	
+n/a	token-payload	-	empty interpolation	zymbol-lexer/src/literals.rs:145	
+n/a	token-payload	-	invalid code point: 0x{:X}	zymbol-lexer/src/literals.rs:512	
+n/a	token-payload	-	invalid float: '{}'	zymbol-lexer/src/literals.rs:420	
+n/a	token-payload	-	invalid integer: '{}'	zymbol-lexer/src/literals.rs:437	
+n/a	token-payload	-	invalid interpolation	zymbol-lexer/src/literals.rs:133	
+n/a	token-payload	-	unmatched close brace	zymbol-lexer/src/literals.rs:165	
+n/a	token-payload	-	unterminated interpolation	zymbol-lexer/src/literals.rs:103	
+todo	diagnostic	B10-control-flow	expected ':' after iterator variable	zymbol-parser/src/loops.rs:101	
+todo	diagnostic	B10-control-flow	expected '=>' after pattern	zymbol-parser/src/match_stmt.rs:55	
+todo	diagnostic	B10-control-flow	expected ']' to close list pattern	zymbol-parser/src/match_stmt.rs:256	
+todo	diagnostic	B10-control-flow	expected '{' after match expression	zymbol-parser/src/match_stmt.rs:37	
+todo	diagnostic	B10-control-flow	expected '}' to close match expression	zymbol-parser/src/match_stmt.rs:95	
+todo	diagnostic	B10-control-flow	expected char after '..' in range pattern	zymbol-parser/src/match_stmt.rs:208	
+todo	diagnostic	B10-control-flow	expected integer after '..' in range pattern	zymbol-parser/src/match_stmt.rs:173	
+todo	help	B10-control-flow	for-each syntax: @ var:iterable { }	zymbol-parser/src/loops.rs:103	
+todo	help	B10-control-flow	match expression must be enclosed in braces	zymbol-parser/src/match_stmt.rs:97	
+todo	help	B10-control-flow	use '_' (without '?') for an unconditional else branch	zymbol-parser/src/if_stmt.rs:32	
+todo	internal?	B10-control-flow	alternatives always contains the first pattern	zymbol-parser/src/match_stmt.rs:127	
+todo	diagnostic	B11-index-nav	expected ')' after computed index	zymbol-parser/src/index_nav.rs:345	
+todo	diagnostic	B11-index-nav	expected ']' after flat extraction	zymbol-parser/src/index_nav.rs:216	
+todo	diagnostic	B11-index-nav	expected ']' to close extraction group	zymbol-parser/src/index_nav.rs:186	
+todo	diagnostic	B11-index-nav	expected ']' to close structured extraction	zymbol-parser/src/index_nav.rs:157	
+todo	diagnostic	B11-index-nav	expected integer after '-' in nav index	zymbol-parser/src/index_nav.rs:315	
+todo	diagnostic	B11-index-nav	expected navigation step: a position (integer or variable) or a dictionary key (string)	zymbol-parser/src/index_nav.rs:356	
+todo	help	B11-index-nav	array indexing must use brackets: arr[index] or arr[i>j]	zymbol-parser/src/index_nav.rs:234	
+todo	help	B11-index-nav	computed indices: arr[(expr)>(expr)]	zymbol-parser/src/index_nav.rs:347	
+todo	help	B11-index-nav	each group must be wrapped: [path] or [path1, path2]	zymbol-parser/src/index_nav.rs:188	
+todo	help	B11-index-nav	negative indices: arr[-1], arr[-2>-1]	zymbol-parser/src/index_nav.rs:317	
+todo	help	B11-index-nav	structured extraction: arr[[row>col] ; [row>col]]	zymbol-parser/src/index_nav.rs:159	
+todo	help	B11-index-nav	valid nav index: arr[1>2], arr[n>m], arr[(a)>(b)], arr[1>2..4]	zymbol-parser/src/index_nav.rs:360	
+todo	diagnostic	B12-io	>>~ position tuple has at most 5 slots: (fila, col, BKS, fg, bg)	zymbol-parser/src/io.rs:423	
+todo	diagnostic	B12-io	expected '(' or variable after >>~	zymbol-parser/src/io.rs:378	
+todo	diagnostic	B12-io	expected ')' to close the size argument list	zymbol-parser/src/io.rs:177	
+todo	diagnostic	B12-io	expected ',' between the two size arguments	zymbol-parser/src/io.rs:149	
+todo	diagnostic	B12-io	expected '|' to close #|variable|	zymbol-parser/src/io.rs:78	
+todo	diagnostic	B12-io	expected a non-negative integer size argument	zymbol-parser/src/io.rs:167	
+todo	diagnostic	B12-io	expected file path after </	zymbol-parser/src/script_exec.rs:25	
+todo	diagnostic	B12-io	expected variable name after ><	zymbol-parser/src/io.rs:474	
+todo	diagnostic	B12-io	expected variable name after key input operator	zymbol-parser/src/io.rs:356	
+todo	diagnostic	B12-io	expected variable name in input statement	zymbol-parser/src/io.rs:68	
+todo	diagnostic	B12-io	unterminated bash execute expression	zymbol-parser/src/script_exec.rs:69	
+todo	help	B12-io	CLI args capture syntax: ><variable_name	zymbol-parser/src/io.rs:476	
+todo	help	B12-io	TUI block syntax: >>| { statements }	zymbol-parser/src/io.rs:438	
+todo	help	B12-io	bash execute syntax: <\\ expr1 expr2 ... \\>	zymbol-parser/src/script_exec.rs:71	
+todo	help	B12-io	decimal typespec syntax: ##.(total, decimals)	zymbol-parser/src/io.rs:151	
+todo	help	B12-io	input typespec sizes are non-negative integers, e.g. ##.(5,2) or ###(4)	zymbol-parser/src/io.rs:169	
+todo	help	B12-io	numeric input syntax: << #|variable|	zymbol-parser/src/io.rs:80	
+todo	internal?	B12-io	parse_bash_exec_expr called on non-BashOpen token	zymbol-parser/src/script_exec.rs:53	
+todo	internal?	B12-io	parse_execute_expr called on non-ExecuteCommand token	zymbol-parser/src/script_exec.rs:21	
+todo	diagnostic	B13-modules	E013: constant initializer in module must be a literal	zymbol-parser/src/modules.rs:102	
+todo	diagnostic	B13-modules	E013: variable initializer in module must be a literal	zymbol-parser/src/modules.rs:114	
+todo	diagnostic	B13-modules	duplicate export block in module	zymbol-parser/src/modules.rs:77	
+todo	diagnostic	B13-modules	expected '#' for module declaration	zymbol-parser/src/modules.rs:34	
+todo	diagnostic	B13-modules	expected '#>' for export block	zymbol-parser/src/modules.rs:216	
+todo	diagnostic	B13-modules	expected '<#' for import statement	zymbol-parser/src/modules.rs:424	
+todo	diagnostic	B13-modules	expected '=>' for module alias	zymbol-parser/src/modules.rs:435	
+todo	diagnostic	B13-modules	expected '{' after module name	zymbol-parser/src/modules.rs:59	
+todo	diagnostic	B13-modules	expected '}' to close export block	zymbol-parser/src/modules.rs:247	
+todo	diagnostic	B13-modules	expected alias name after '=>'	zymbol-parser/src/modules.rs:450	
+todo	diagnostic	B13-modules	expected constant name after '.'	zymbol-parser/src/modules.rs:356	
+todo	diagnostic	B13-modules	expected identifier in export item	zymbol-parser/src/modules.rs:283	
+todo	diagnostic	B13-modules	expected new name after '=>'	zymbol-parser/src/modules.rs:325	
+todo	diagnostic	B13-modules	expected public name after '=>'	zymbol-parser/src/modules.rs:403	
+todo	diagnostic	B13-modules	legacy export rename separator	zymbol-parser/src/modules.rs:278	
+todo	help	B13-modules	a module may only have one #> export block	zymbol-parser/src/modules.rs:79	
+todo	help	B13-modules	module body must be enclosed in braces: # name { ... }	zymbol-parser/src/modules.rs:61	
+todo	help	B13-modules	module-level constants must use literal values, not expressions or function calls	zymbol-parser/src/modules.rs:104	
+todo	help	B13-modules	module-level variables must use literal values, not expressions or function calls	zymbol-parser/src/modules.rs:116	
+todo	diagnostic	B14-variables	expected ':' after field name in named tuple destructure	zymbol-parser/src/variables.rs:478	
+todo	diagnostic	B14-variables	expected '=' after index expression for indexed assignment	zymbol-parser/src/variables.rs:105	
+todo	diagnostic	B14-variables	expected '=' in destructure assignment	zymbol-parser/src/variables.rs:392	
+todo	diagnostic	B14-variables	expected ']' after index expression	zymbol-parser/src/variables.rs:34	
+todo	diagnostic	B14-variables	expected := for constant declaration	zymbol-parser/src/variables.rs:255	
+todo	diagnostic	B14-variables	expected assignment operator (=, +=, -=, *=, /=, %=, ^=, ++, --)	zymbol-parser/src/variables.rs:203	
+todo	diagnostic	B14-variables	expected identifier	zymbol-parser/src/variables.rs:24	
+todo	diagnostic	B14-variables	expected identifier after '*' in destructure	zymbol-parser/src/variables.rs:416	
+todo	diagnostic	B14-variables	expected identifier, '*rest', or '_' in array destructure	zymbol-parser/src/variables.rs:434	
+todo	diagnostic	B14-variables	expected variable name after ':' in named tuple destructure	zymbol-parser/src/variables.rs:485	
+todo	diagnostic	B14-variables	expected variable name after \\	zymbol-parser/src/variables.rs:527	
+todo	diagnostic	B14-variables	unexpected token in tuple destructure pattern	zymbol-parser/src/variables.rs:508	
+todo	help	B14-variables	syntax: \\variable to explicitly destroy a variable	zymbol-parser/src/variables.rs:529	
+todo	help	B14-variables	syntax: arr[i] = val  or  arr[i] += val	zymbol-parser/src/variables.rs:107	
+todo	help	B14-variables	use '=' to assign a value to a variable	zymbol-parser/src/variables.rs:205	
+todo	help	B14-variables	use := to declare constants (immutable values)	zymbol-parser/src/variables.rs:257	
+todo	diagnostic	B3-lexer	Unterminated multi-line comment	zymbol-lexer/src/lib.rs:1064	
+todo	diagnostic	B3-lexer	empty string interpolation {}	zymbol-lexer/src/literals.rs:140	
+todo	diagnostic	B3-lexer	expected closing ' for char literal	zymbol-lexer/src/literals.rs:257	
+todo	diagnostic	B3-lexer	invalid Unicode code point: 0x{:X} ({} {})	zymbol-lexer/src/literals.rs:506	
+todo	diagnostic	B3-lexer	invalid boolean literal: digit {} is not valid after '#'	zymbol-lexer/src/lib.rs:875	
+todo	diagnostic	B3-lexer	invalid character in string interpolation	zymbol-lexer/src/literals.rs:128	
+todo	diagnostic	B3-lexer	invalid escape sequence: '\\{}'	zymbol-lexer/src/literals.rs:240	
+todo	diagnostic	B3-lexer	invalid float literal: '{}'	zymbol-lexer/src/literals.rs:417	
+todo	diagnostic	B3-lexer	mixed digit scripts in numeric literal	zymbol-lexer/src/literals.rs:447	
+todo	diagnostic	B3-lexer	unexpected character: '{}'	zymbol-lexer/src/lib.rs:955	
+todo	diagnostic	B3-lexer	unterminated char literal	zymbol-lexer/src/literals.rs:212	
+todo	diagnostic	B3-lexer	unterminated execute expression	zymbol-lexer/src/lib.rs:562	
+todo	diagnostic	B3-lexer	unterminated string interpolation	zymbol-lexer/src/literals.rs:99	
+todo	help	B3-lexer	add */ to close the comment	zymbol-lexer/src/lib.rs:1066	
+todo	help	B3-lexer	close the interpolation with }	zymbol-lexer/src/literals.rs:101	
+todo	help	B3-lexer	execute syntax: </ path.zy />	zymbol-lexer/src/lib.rs:564	
+todo	help	B3-lexer	interpolation must be {identifier} — use \\{ for a literal brace	zymbol-lexer/src/literals.rs:130	
+todo	help	B3-lexer	provide a variable name: {varname}	zymbol-lexer/src/literals.rs:142	
+todo	help	B3-lexer	use '#0' (or its Unicode equivalent) for false, '#1' for true	zymbol-lexer/src/lib.rs:879	
+todo	diagnostic	B4-collection-ops	$--[position:count] is retired — use $-[start..end] instead	zymbol-parser/src/collection_ops.rs:83	
+todo	diagnostic	B4-collection-ops	collection update ($~) requires a place to write	zymbol-parser/src/collection_ops.rs:243	
+todo	diagnostic	B4-collection-ops	expected ')' after lambda	zymbol-parser/src/collection_ops.rs:425	
+todo	diagnostic	B4-collection-ops	expected ',' after initial value	zymbol-parser/src/collection_ops.rs:414	
+todo	diagnostic	B4-collection-ops	expected '..', or ':' in slice	zymbol-parser/src/collection_ops.rs:336	
+todo	diagnostic	B4-collection-ops	expected ':' after pattern	zymbol-parser/src/string_ops.rs:86	
+todo	diagnostic	B4-collection-ops	expected ']' after count	zymbol-parser/src/collection_ops.rs:185	
+todo	diagnostic	B4-collection-ops	expected ']' after index in $+[index]	zymbol-parser/src/collection_ops.rs:110	
+todo	diagnostic	B4-collection-ops	expected ']' after range	zymbol-parser/src/collection_ops.rs:144	
+todo	diagnostic	B4-collection-ops	expected ']' after replacement or count	zymbol-parser/src/string_ops.rs:106	
+todo	diagnostic	B4-collection-ops	expected ']' after slice range	zymbol-parser/src/collection_ops.rs:350	
+todo	diagnostic	B4-collection-ops	expected ']', '..', or ':' after index	zymbol-parser/src/collection_ops.rs:199	
+todo	diagnostic	B4-collection-ops	expected comparator lambda after '$^', e.g. $^ (a, b -> a < b)	zymbol-parser/src/collection_ops.rs:463	
+todo	help	B4-collection-ops	count-based range syntax: $-[start:count]	zymbol-parser/src/collection_ops.rs:187	
+todo	help	B4-collection-ops	count-based slice syntax: $[start:count]	zymbol-parser/src/collection_ops.rs:322	
+todo	help	B4-collection-ops	insert syntax: collection$+[index] element	zymbol-parser/src/collection_ops.rs:112	
+todo	help	B4-collection-ops	range syntax: $-[..end] or $-[..]	zymbol-parser/src/collection_ops.rs:146	
+todo	help	B4-collection-ops	range syntax: $-[start..end] or $-[start..]	zymbol-parser/src/collection_ops.rs:170	
+todo	help	B4-collection-ops	reduce syntax: collection$< (initial, lambda)	zymbol-parser/src/collection_ops.rs:405	
+todo	help	B4-collection-ops	remove syntax: $-[index], $-[start..end], or $-[start:count]	zymbol-parser/src/collection_ops.rs:201	
+todo	help	B4-collection-ops	slice syntax: $[start..end], $[..end], $[start..], or $[start:count]	zymbol-parser/src/collection_ops.rs:338	
+todo	help	B4-collection-ops	syntax: string$~~[pattern:replacement] or string$~~[pattern:replacement:count]	zymbol-parser/src/string_ops.rs:76	
+todo	diagnostic	B5-literals	expected ')' to close the dictionary	zymbol-parser/src/collections.rs:164	
+todo	diagnostic	B5-literals	expected ')' to close tuple	zymbol-parser/src/collections.rs:231	
+todo	diagnostic	B5-literals	expected ':' after the key	zymbol-parser/src/collections.rs:143	
+todo	diagnostic	B5-literals	expected ']' to close array literal	zymbol-parser/src/collections.rs:67	
+todo	diagnostic	B5-literals	expected a key in the dictionary	zymbol-parser/src/collections.rs:132	
+todo	help	B5-literals	a dictionary is written #(key: value, key2: value2)	zymbol-parser/src/collections.rs:166	
+todo	help	B5-literals	array literals must be enclosed in brackets	zymbol-parser/src/collections.rs:69	
+todo	help	B5-literals	tuples must be enclosed in parentheses: (expr, expr, ...)	zymbol-parser/src/collections.rs:233	
+todo	diagnostic	B6-format-convert	expected '|' after base prefix '{}'	zymbol-parser/src/data_ops.rs:155	
+todo	diagnostic	B6-format-convert	expected '|' after format operator '{}'	zymbol-parser/src/data_ops.rs:70	
+todo	diagnostic	B6-format-convert	expected '|' after precision	zymbol-parser/src/data_ops.rs:195	
+todo	diagnostic	B6-format-convert	expected '|' to close base conversion expression	zymbol-parser/src/data_ops.rs:173	
+todo	diagnostic	B6-format-convert	expected '|' to close format expression	zymbol-parser/src/data_ops.rs:82	
+todo	diagnostic	B6-format-convert	expected '|' to close numeric evaluation	zymbol-parser/src/data_ops.rs:30	
+todo	diagnostic	B6-format-convert	expected '|' to close round expression	zymbol-parser/src/data_ops.rs:207	
+todo	diagnostic	B6-format-convert	expected '|' to close truncate expression	zymbol-parser/src/data_ops.rs:241	
+todo	diagnostic	B6-format-convert	expected a decimal count after '{}'	zymbol-parser/src/data_ops.rs:132	
+todo	diagnostic	B6-format-convert	precision must be a non-negative integer	zymbol-parser/src/data_ops.rs:104	
+todo	help	B6-format-convert	base conversion syntax: {}|expr|	zymbol-parser/src/data_ops.rs:157	
+todo	help	B6-format-convert	format expression syntax: {}.N|expr| where N >= 0	zymbol-parser/src/data_ops.rs:106	
+todo	help	B6-format-convert	format expression syntax: {}|expr| or {}.N|expr|	zymbol-parser/src/data_ops.rs:72	
+todo	help	B6-format-convert	numeric evaluation syntax: #|expr|	zymbol-parser/src/data_ops.rs:32	
+todo	help	B6-format-convert	round expression syntax: #.N|expr|	zymbol-parser/src/data_ops.rs:197	
+todo	help	B6-format-convert	truncate expression syntax: #!N|expr|	zymbol-parser/src/data_ops.rs:231	
+todo	help	B6-format-convert	write the count or the name of a variable holding it: {}.2|value| or {}.n|value|	zymbol-parser/src/data_ops.rs:135	
+todo	diagnostic	B7-try-catch	expected '!?' to start try block	zymbol-parser/src/error_handling.rs:34	
+todo	diagnostic	B7-try-catch	expected '##' for error type	zymbol-parser/src/error_handling.rs:117	
+todo	diagnostic	B7-try-catch	expected '##' for error type (missing second #)	zymbol-parser/src/error_handling.rs:126	
+todo	diagnostic	B7-try-catch	expected ':!' to start catch block	zymbol-parser/src/error_handling.rs:81	
+todo	diagnostic	B7-try-catch	expected ':>' to start finally block	zymbol-parser/src/error_handling.rs:156	
+todo	diagnostic	B7-try-catch	expected error type name after '##'	zymbol-parser/src/error_handling.rs:138	
+todo	help	B7-try-catch	catch blocks start with :! { } or :! ##Type { }	zymbol-parser/src/error_handling.rs:83	
+todo	help	B7-try-catch	error types use ## prefix: ##IO, ##Network, ##Parse	zymbol-parser/src/error_handling.rs:119	
+todo	help	B7-try-catch	finally blocks start with :>{ }	zymbol-parser/src/error_handling.rs:158	
+todo	help	B7-try-catch	try blocks start with !?{ }	zymbol-parser/src/error_handling.rs:36	
+todo	help	B7-try-catch	valid error types: ##IO, ##Network, ##Parse, ##Index, ##Type, ##Div, ##_	zymbol-parser/src/error_handling.rs:140	
+todo	diagnostic	B8-functions-lambdas	expected '(' after function name	zymbol-parser/src/functions.rs:26	
+todo	diagnostic	B8-functions-lambdas	expected ')' after lambda parameters	zymbol-parser/src/functions.rs:210	
+todo	diagnostic	B8-functions-lambdas	expected ')' after parameters	zymbol-parser/src/functions.rs:80	
+todo	diagnostic	B8-functions-lambdas	expected '->' in lambda expression	zymbol-parser/src/functions.rs:233	
+todo	diagnostic	B8-functions-lambdas	expected function call	zymbol-parser/src/functions.rs:138	
+todo	diagnostic	B8-functions-lambdas	expected parameter name	zymbol-parser/src/functions.rs:45	
+todo	diagnostic	B8-functions-lambdas	expected parameter name in lambda	zymbol-parser/src/functions.rs:186	
+todo	help	B8-functions-lambdas	function syntax: name(params) { }	zymbol-parser/src/functions.rs:28	
+todo	help	B8-functions-lambdas	lambda parameters must be identifiers: (a, b) -> expr	zymbol-parser/src/functions.rs:188	
+todo	help	B8-functions-lambdas	lambda syntax: (a, b) -> expr	zymbol-parser/src/functions.rs:212	
+todo	help	B8-functions-lambdas	lambda syntax: x -> expr	zymbol-parser/src/functions.rs:225	
+todo	help	B8-functions-lambdas	lambda syntax: x -> expr or (a, b) -> expr	zymbol-parser/src/functions.rs:235	
+todo	help	B8-functions-lambdas	only function calls can be used as statements	zymbol-parser/src/functions.rs:157	
+todo	help	B8-functions-lambdas	parameters must be identifiers	zymbol-parser/src/functions.rs:47	
+todo	diagnostic	B9-expressions-core	'°name' is only valid as an assignment target	zymbol-parser/src/lib.rs:556	
+todo	diagnostic	B9-expressions-core	expected '(' for module function call	zymbol-parser/src/lib.rs:1282	
+todo	diagnostic	B9-expressions-core	expected ')' after arguments	zymbol-parser/src/expressions.rs:560	
+todo	diagnostic	B9-expressions-core	expected ')' after expression	zymbol-parser/src/lib.rs:1036	
+todo	diagnostic	B9-expressions-core	expected ')' after function arguments	zymbol-parser/src/lib.rs:910	
+todo	diagnostic	B9-expressions-core	expected ')' after pipe arguments	zymbol-parser/src/expressions.rs:79	
+todo	diagnostic	B9-expressions-core	expected ']' after index	zymbol-parser/src/expressions.rs:497	
+todo	diagnostic	B9-expressions-core	expected '{' to start block	zymbol-parser/src/lib.rs:629	
+todo	diagnostic	B9-expressions-core	expected expression, found end of file	zymbol-parser/src/lib.rs:1528	
+todo	diagnostic	B9-expressions-core	expected field name after '.'	zymbol-parser/src/expressions.rs:514	
+todo	diagnostic	B9-expressions-core	expected function name after '::'	zymbol-parser/src/lib.rs:1275	
+todo	diagnostic	B9-expressions-core	this edit has nothing to write into	zymbol-parser/src/lib.rs:501	
+todo	diagnostic	B9-expressions-core	unexpected '#(' at statement level	zymbol-parser/src/lib.rs:583	
+todo	diagnostic	B9-expressions-core	unexpected end of file	zymbol-parser/src/lib.rs:605	
+todo	diagnostic	B9-expressions-core	unexpected token after module block	zymbol-parser/src/lib.rs:73	
+todo	help	B9-expressions-core	a module file must contain only: # name { ... }	zymbol-parser/src/lib.rs:75	
+todo	help	B9-expressions-core	array indexing must use brackets: arr[index]	zymbol-parser/src/expressions.rs:499	
+todo	help	B9-expressions-core	function call syntax: expr(arg1, arg2, ...)	zymbol-parser/src/lib.rs:912	
+todo	help	B9-expressions-core	function call syntax: name(arg1, arg2, ...)	zymbol-parser/src/lib.rs:1370	
+todo	help	B9-expressions-core	member access requires a field name: object.field	zymbol-parser/src/lib.rs:861	
+todo	help	B9-expressions-core	pipe syntax: value |> func(_)	zymbol-parser/src/expressions.rs:81	
+todo	help	B9-expressions-core	use '#(name: n) = expr' to destructure a dictionary	zymbol-parser/src/lib.rs:585	
+todo	help	B9-expressions-core	use '°x += n' to anchor accumulation above the nearest loop	zymbol-parser/src/lib.rs:558	
