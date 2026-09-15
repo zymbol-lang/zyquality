@@ -29,18 +29,18 @@ unreachable	help	B10-control-flow	for-each syntax: @ var:iterable { }	zymbol-par
 cell	help	B10-control-flow	match expression must be enclosed in braces	zymbol-parser/src/match_stmt.rs:97	syntax-control-flow/match-left-open
 cell	help	B10-control-flow	use '_' (without '?') for an unconditional else branch	zymbol-parser/src/if_stmt.rs:32	syntax-control-flow/else-if-without-a-condition
 unreachable	internal?	B10-control-flow	alternatives always contains the first pattern	zymbol-parser/src/match_stmt.rs:127	unreachable: the message of an .expect() on a Vec that always holds the first pattern
-todo	diagnostic	B11-index-nav	expected ')' after computed index	zymbol-parser/src/index_nav.rs:345	
-todo	diagnostic	B11-index-nav	expected ']' after flat extraction	zymbol-parser/src/index_nav.rs:216	
-todo	diagnostic	B11-index-nav	expected ']' to close extraction group	zymbol-parser/src/index_nav.rs:186	
-todo	diagnostic	B11-index-nav	expected ']' to close structured extraction	zymbol-parser/src/index_nav.rs:157	
-todo	diagnostic	B11-index-nav	expected integer after '-' in nav index	zymbol-parser/src/index_nav.rs:315	
-todo	diagnostic	B11-index-nav	expected navigation step: a position (integer or variable) or a dictionary key (string)	zymbol-parser/src/index_nav.rs:356	
-todo	help	B11-index-nav	array indexing must use brackets: arr[index] or arr[i>j]	zymbol-parser/src/index_nav.rs:234	
-todo	help	B11-index-nav	computed indices: arr[(expr)>(expr)]	zymbol-parser/src/index_nav.rs:347	
-todo	help	B11-index-nav	each group must be wrapped: [path] or [path1, path2]	zymbol-parser/src/index_nav.rs:188	
-todo	help	B11-index-nav	negative indices: arr[-1], arr[-2>-1]	zymbol-parser/src/index_nav.rs:317	
-todo	help	B11-index-nav	structured extraction: arr[[row>col] ; [row>col]]	zymbol-parser/src/index_nav.rs:159	
-todo	help	B11-index-nav	valid nav index: arr[1>2], arr[n>m], arr[(a)>(b)], arr[1>2..4]	zymbol-parser/src/index_nav.rs:360	
+cell	diagnostic	B11-index-nav	expected ')' after computed index	zymbol-parser/src/index_nav.rs:345	syntax-index-nav/computed-step-left-open
+cell	diagnostic	B11-index-nav	expected ']' after flat extraction	zymbol-parser/src/index_nav.rs:216	syntax-index-nav/flat-extraction-left-open
+cell	diagnostic	B11-index-nav	expected ']' to close extraction group	zymbol-parser/src/index_nav.rs:186	syntax-index-nav/extraction-group-left-open
+cell	diagnostic	B11-index-nav	expected ']' to close structured extraction	zymbol-parser/src/index_nav.rs:157	syntax-index-nav/structured-extraction-left-open
+cell	diagnostic	B11-index-nav	expected integer after '-' in nav index	zymbol-parser/src/index_nav.rs:315	syntax-index-nav/negative-step-without-an-integer
+cell	diagnostic	B11-index-nav	expected navigation step: a position (integer or variable) or a dictionary key (string)	zymbol-parser/src/index_nav.rs:356	syntax-index-nav/step-is-a-float-literal
+cell	help	B11-index-nav	array indexing must use brackets: arr[index] or arr[i>j]	zymbol-parser/src/index_nav.rs:234	syntax-index-nav/navigation-left-open
+cell	help	B11-index-nav	computed indices: arr[(expr)>(expr)]	zymbol-parser/src/index_nav.rs:347	syntax-index-nav/computed-step-left-open
+cell	help	B11-index-nav	each group must be wrapped: [path] or [path1, path2]	zymbol-parser/src/index_nav.rs:188	syntax-index-nav/extraction-group-left-open
+cell	help	B11-index-nav	negative indices: arr[-1], arr[-2>-1]	zymbol-parser/src/index_nav.rs:317	syntax-index-nav/negative-step-without-an-integer
+cell	help	B11-index-nav	structured extraction: arr[[row>col] ; [row>col]]	zymbol-parser/src/index_nav.rs:159	syntax-index-nav/structured-extraction-left-open
+cell	help	B11-index-nav	valid nav index: arr[1>2], arr[n>m], arr[(a)>(b)], arr[1>2..4]	zymbol-parser/src/index_nav.rs:360	syntax-index-nav/step-is-a-float-literal
 todo	diagnostic	B12-io	>>~ position tuple has at most 5 slots: (fila, col, BKS, fg, bg)	zymbol-parser/src/io.rs:423	
 todo	diagnostic	B12-io	expected '(' or variable after >>~	zymbol-parser/src/io.rs:378	
 todo	diagnostic	B12-io	expected ')' to close the size argument list	zymbol-parser/src/io.rs:177	
