@@ -1,0 +1,9 @@
+// @reject: `{name}` of a name that is nothing is a static error, decided
+// @reject: 2026-09-15 (GLB-018 A). Until then every engine printed `{nadie}`
+// @reject: as text, silently, and `zymbol check` said nothing: a misspelt name
+// @reject: came out as its own spelling. Only the tree-walker's `<<` prompt
+// @reject: failed, and at run time.
+// @reject: The same rule reaches the prompt, and a file variable interpolated
+// @reject: inside a function is refused as `'k' is read from outside this
+// @reject: function`, exactly as `k` alone is (MEM-2).
+>> "a {nadie} b" ¶

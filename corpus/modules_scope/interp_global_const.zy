@@ -25,6 +25,8 @@ directo() { <~ DIR }
 >> "all types:  " (mezcla()) ¶
 >> "direct ref: " (directo()) ¶
 
-// A name that is genuinely unknown stays literal, in both engines.
-desconocido() { <~ "before {NOPE} after" }
->> "unknown:    " (desconocido()) ¶
+// A name that is genuinely unknown used to stay literal here, in every engine.
+// Since 2026-09-15 it is a static error, the author's decision on GLB-018 A:
+// a misspelt name printed as its own spelling was a value nobody computed. The
+// case moved out of this file, which runs, to the refusal cell
+// ZyDDT refusal/undefined-name-in-string-interpolation.
