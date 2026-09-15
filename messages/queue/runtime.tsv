@@ -88,22 +88,22 @@ unreachable	diagnostic	C12-io-tui	input: failed to restore raw mode: {}	zymbol-i
 manual	diagnostic	C12-io-tui	io error: {0}	zymbol-interpreter/src/lib.rs:50	reached by hand, no cell: `zymbol run f.zy | head -1` with a program printing 20000 lines -> `io error: Broken pipe (os error 32)`; a ZyDDT cell cannot close stdout
 cell	diagnostic	C12-io-tui	undefined variable in input prompt: '{}'	zymbol-interpreter/src/io.rs:63	runtime-io/undefined-variable-in-input-prompt
 cell	diagnostic	C8-match-patterns	  --> consider assigning to a variable: `result = ?? expr {{ ... }}`	zymbol-interpreter/src/match_stmt.rs:36	runtime-match-patterns/match-with-values-used-as-a-statement — reach.py cannot count it: a `-->` continuation line is not a diagnostic line
-todo	diagnostic	C13-operators-variables-internal	'{}' is undefined — did you mean '{}°' (hot definition)?	zymbol-compiler/src/lib.rs:2139	
-todo	diagnostic	C13-operators-variables-internal	cannot compare float {} with string '{}' using operator '{:?}'	zymbol-interpreter/src/arithmetic_ops.rs:412	
-todo	diagnostic	C13-operators-variables-internal	cannot compare string '{}' with float {} using operator '{:?}'	zymbol-interpreter/src/arithmetic_ops.rs:395	
-todo	diagnostic	C13-operators-variables-internal	cannot reassign constant '{}' (declared with :=)	zymbol-interpreter/src/variables.rs:78	
-todo	diagnostic	C13-operators-variables-internal	constant '{}' already declared	zymbol-interpreter/src/variables.rs:321	
-todo	diagnostic	C13-operators-variables-internal	logical NOT requires boolean operand, got {}	zymbol-interpreter/src/expressions.rs:270	
-todo	diagnostic	C13-operators-variables-internal	modulo by zero	zymbol-interpreter/src/arithmetic_ops.rs:144	
-todo	diagnostic	C13-operators-variables-internal	negation requires numeric operand, got {}	zymbol-interpreter/src/expressions.rs:280	
-todo	diagnostic	C13-operators-variables-internal	this needs {expected} and got {got}	zymbol-vm/src/lib.rs:536	
-todo	diagnostic	C13-operators-variables-internal	unary plus requires numeric operand, got {:?}	zymbol-interpreter/src/expressions.rs:290	
+unreachable	diagnostic	C13-operators-variables-internal	'{}' is undefined — did you mean '{}°' (hot definition)?	zymbol-compiler/src/lib.rs:2139	unreachable from the CLI: the analyzer reports `undefined variable` first; the compiler's RaiseError is a backstop for running without analysis
+cell	diagnostic	C13-operators-variables-internal	cannot compare float {} with string '{}' using operator '{:?}'	zymbol-interpreter/src/arithmetic_ops.rs:412	runtime-operators/cannot-compare-float-with-string
+cell	diagnostic	C13-operators-variables-internal	cannot compare string '{}' with float {} using operator '{:?}'	zymbol-interpreter/src/arithmetic_ops.rs:395	runtime-operators/cannot-compare-string-with-float
+unreachable	diagnostic	C13-operators-variables-internal	cannot reassign constant '{}' (declared with :=)	zymbol-interpreter/src/variables.rs:78	unreachable from the CLI: the analyzer refuses `C = …` and `(C, d) = …` first (`cannot reassign constant 'C'`) — but see GLB-020: `<< C` and `@ C:…` overwrite a constant with no error at all
+cell	diagnostic	C13-operators-variables-internal	constant '{}' already declared	zymbol-interpreter/src/variables.rs:321	runtime-operators/constant-already-declared
+cell	diagnostic	C13-operators-variables-internal	logical NOT requires boolean operand, got {}	zymbol-interpreter/src/expressions.rs:270	runtime-operators/logical-not-requires-a-boolean
+cell	diagnostic	C13-operators-variables-internal	modulo by zero	zymbol-interpreter/src/arithmetic_ops.rs:144	runtime-operators/modulo-by-zero
+cell	diagnostic	C13-operators-variables-internal	negation requires numeric operand, got {}	zymbol-interpreter/src/expressions.rs:280	runtime-operators/negation-requires-a-number
+cell	diagnostic	C13-operators-variables-internal	this needs {expected} and got {got}	zymbol-vm/src/lib.rs:536	provoked by the VM in runtime-collection-ops and runtime-index-nav (its TypeError display)
+cell	diagnostic	C13-operators-variables-internal	unary plus requires numeric operand, got {:?}	zymbol-interpreter/src/expressions.rs:290	runtime-operators/unary-plus-requires-a-number
 unreachable	internal?	C9-modules-scripts	Module '{}' not loaded	zymbol-interpreter/src/expr_eval.rs:156	unreachable: an alias is registered only after its module loaded (modules.rs:75, :319), so the lookup cannot miss
-todo	internal?	C13-operators-variables-internal	ZyStr requires a 64-bit platform	zymbol-vm/src/zy_str.rs:31	
-todo	internal?	C13-operators-variables-internal	internal: use of '{}' after auto-destruction (string interpolation) — this is a bug in the last-use analyzer, please report it	zymbol-interpreter/src/literals.rs:60	
-todo	internal?	C13-operators-variables-internal	internal: use of '{}' after auto-destruction — this is a bug in the last-use analyzer, please report it (workaround: add a later `>> {}` mention or a `\\ {}` at the intended end of life)	zymbol-interpreter/src/lib.rs:1362	
-todo	internal?	C13-operators-variables-internal	unknown error	zymbol-vm/src/lib.rs:3529	
-todo	internal?	C13-operators-variables-internal	unsupported binary operator: {:?}	zymbol-interpreter/src/expressions.rs:255	
+unreachable	internal?	C13-operators-variables-internal	ZyStr requires a 64-bit platform	zymbol-vm/src/zy_str.rs:31	unreachable on the supported platforms: a size assertion on usize
+unreachable	internal?	C13-operators-variables-internal	internal: use of '{}' after auto-destruction (string interpolation) — this is a bug in the last-use analyzer, please report it	zymbol-interpreter/src/literals.rs:60	unreachable by design: raised only if the last-use analyzer is wrong — the message says so
+unreachable	internal?	C13-operators-variables-internal	internal: use of '{}' after auto-destruction — this is a bug in the last-use analyzer, please report it (workaround: add a later `>> {}` mention or a `\\ {}` at the intended end of life)	zymbol-interpreter/src/lib.rs:1362	unreachable by design: raised only if the last-use analyzer is wrong — the message says so
+unreachable	internal?	C13-operators-variables-internal	unknown error	zymbol-vm/src/lib.rs:3529	unreachable: TryLand's fallback when nothing is in flight, and TryLand is only reached through raise!, which always sets it
+unreachable	internal?	C13-operators-variables-internal	unsupported binary operator: {:?}	zymbol-interpreter/src/expressions.rs:255	unreachable: only Pipe, Comma and Range reach that arm, and the parser never builds an Expr::Binary with any of them
 cell	diagnostic	C3-collection-ops	$* repetition count must be an integer, got {}	zymbol-interpreter/src/string_ops.rs:35	runtime-collection-ops/repeat-repetition-count-must-be-an-integer
 cell	diagnostic	C3-collection-ops	$* repetition count must be non-negative, got {}	zymbol-interpreter/src/string_ops.rs:31	runtime-collection-ops/repeat-repetition-count-must-be-non-negative
 cell	diagnostic	C3-collection-ops	$+ is not supported on named tuples — no field name available	zymbol-interpreter/src/collection_ops.rs:87	runtime-collection-ops/append-is-not-supported-on-named-tuples
