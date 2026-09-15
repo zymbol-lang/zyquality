@@ -186,26 +186,26 @@ unreachable	help	B8-functions-lambdas	lambda syntax: x -> expr	zymbol-parser/src
 cell	help	B8-functions-lambdas	lambda syntax: x -> expr or (a, b) -> expr	zymbol-parser/src/functions.rs:235	syntax-functions-lambdas/lambda-without-arrow
 cell	help	B8-functions-lambdas	only function calls can be used as statements	zymbol-parser/src/functions.rs:157	syntax-functions-lambdas/expression-used-as-a-statement
 cell	help	B8-functions-lambdas	parameters must be identifiers	zymbol-parser/src/functions.rs:47	syntax-functions-lambdas/function-parameter-not-a-name
-todo	diagnostic	B9-expressions-core	'°name' is only valid as an assignment target	zymbol-parser/src/lib.rs:556	
-todo	diagnostic	B9-expressions-core	expected '(' for module function call	zymbol-parser/src/lib.rs:1282	
-todo	diagnostic	B9-expressions-core	expected ')' after arguments	zymbol-parser/src/expressions.rs:560	
-todo	diagnostic	B9-expressions-core	expected ')' after expression	zymbol-parser/src/lib.rs:1036	
-todo	diagnostic	B9-expressions-core	expected ')' after function arguments	zymbol-parser/src/lib.rs:910	
-todo	diagnostic	B9-expressions-core	expected ')' after pipe arguments	zymbol-parser/src/expressions.rs:79	
-todo	diagnostic	B9-expressions-core	expected ']' after index	zymbol-parser/src/expressions.rs:497	
-todo	diagnostic	B9-expressions-core	expected '{' to start block	zymbol-parser/src/lib.rs:629	
-todo	diagnostic	B9-expressions-core	expected expression, found end of file	zymbol-parser/src/lib.rs:1528	
-todo	diagnostic	B9-expressions-core	expected field name after '.'	zymbol-parser/src/expressions.rs:514	
-todo	diagnostic	B9-expressions-core	expected function name after '::'	zymbol-parser/src/lib.rs:1275	
-todo	diagnostic	B9-expressions-core	this edit has nothing to write into	zymbol-parser/src/lib.rs:501	
-todo	diagnostic	B9-expressions-core	unexpected '#(' at statement level	zymbol-parser/src/lib.rs:583	
-todo	diagnostic	B9-expressions-core	unexpected end of file	zymbol-parser/src/lib.rs:605	
-todo	diagnostic	B9-expressions-core	unexpected token after module block	zymbol-parser/src/lib.rs:73	
-todo	help	B9-expressions-core	a module file must contain only: # name { ... }	zymbol-parser/src/lib.rs:75	
-todo	help	B9-expressions-core	array indexing must use brackets: arr[index]	zymbol-parser/src/expressions.rs:499	
-todo	help	B9-expressions-core	function call syntax: expr(arg1, arg2, ...)	zymbol-parser/src/lib.rs:912	
-todo	help	B9-expressions-core	function call syntax: name(arg1, arg2, ...)	zymbol-parser/src/lib.rs:1370	
-todo	help	B9-expressions-core	member access requires a field name: object.field	zymbol-parser/src/lib.rs:861	
-todo	help	B9-expressions-core	pipe syntax: value |> func(_)	zymbol-parser/src/expressions.rs:81	
-todo	help	B9-expressions-core	use '#(name: n) = expr' to destructure a dictionary	zymbol-parser/src/lib.rs:585	
-todo	help	B9-expressions-core	use '°x += n' to anchor accumulation above the nearest loop	zymbol-parser/src/lib.rs:558	
+cell	diagnostic	B9-expressions-core	'°name' is only valid as an assignment target	zymbol-parser/src/lib.rs:556	syntax-expressions/hot-name-outside-an-assignment
+cell	diagnostic	B9-expressions-core	expected '(' for module function call	zymbol-parser/src/lib.rs:1282	syntax-expressions/module-call-without-parenthesis
+cell	diagnostic	B9-expressions-core	expected ')' after arguments	zymbol-parser/src/expressions.rs:560	syntax-expressions/call-on-a-group-left-open
+cell	diagnostic	B9-expressions-core	expected ')' after expression	zymbol-parser/src/lib.rs:1036	syntax-expressions/pipe-target-group-left-open
+cell	diagnostic	B9-expressions-core	expected ')' after function arguments	zymbol-parser/src/lib.rs:910	syntax-expressions/call-on-an-expression-left-open
+cell	diagnostic	B9-expressions-core	expected ')' after pipe arguments	zymbol-parser/src/expressions.rs:79	syntax-expressions/pipe-arguments-left-open
+cell	diagnostic	B9-expressions-core	expected ']' after index	zymbol-parser/src/expressions.rs:497	syntax-expressions/pipe-target-index-left-open
+cell	diagnostic	B9-expressions-core	expected '{' to start block	zymbol-parser/src/lib.rs:629	syntax-expressions/block-without-brace
+cell	diagnostic	B9-expressions-core	expected expression, found end of file	zymbol-parser/src/lib.rs:1528	syntax-expressions/expression-missing-at-end-of-file
+cell	diagnostic	B9-expressions-core	expected field name after '.'	zymbol-parser/src/expressions.rs:514	syntax-expressions/pipe-target-member-without-field
+cell	diagnostic	B9-expressions-core	expected function name after '::'	zymbol-parser/src/lib.rs:1275	syntax-expressions/module-call-without-function-name
+cell	diagnostic	B9-expressions-core	this edit has nothing to write into	zymbol-parser/src/lib.rs:501	syntax-expressions/edit-of-an-edit
+cell	diagnostic	B9-expressions-core	unexpected '#(' at statement level	zymbol-parser/src/lib.rs:583	syntax-expressions/dictionary-literal-as-a-statement
+unreachable	diagnostic	B9-expressions-core	unexpected end of file	zymbol-parser/src/lib.rs:605	unreachable: parse_statement is only called from loops that stop at the end of the file first (lib.rs:90, :637)
+cell	diagnostic	B9-expressions-core	unexpected token after module block	zymbol-parser/src/lib.rs:73	syntax-expressions/module-with-a-statement-after-its-block
+cell	help	B9-expressions-core	a module file must contain only: # name { ... }	zymbol-parser/src/lib.rs:75	syntax-expressions/module-with-a-statement-after-its-block
+cell	help	B9-expressions-core	array indexing must use brackets: arr[index]	zymbol-parser/src/expressions.rs:499	syntax-expressions/pipe-target-index-left-open
+cell	help	B9-expressions-core	function call syntax: expr(arg1, arg2, ...)	zymbol-parser/src/lib.rs:912	syntax-expressions/call-on-an-expression-left-open
+cell	help	B9-expressions-core	function call syntax: name(arg1, arg2, ...)	zymbol-parser/src/lib.rs:1370	syntax-expressions/call-by-name-left-open
+cell	help	B9-expressions-core	member access requires a field name: object.field	zymbol-parser/src/lib.rs:861	syntax-expressions/pipe-target-member-without-field
+cell	help	B9-expressions-core	pipe syntax: value |> func(_)	zymbol-parser/src/expressions.rs:81	syntax-expressions/pipe-arguments-left-open
+cell	help	B9-expressions-core	use '#(name: n) = expr' to destructure a dictionary	zymbol-parser/src/lib.rs:585	syntax-expressions/dictionary-literal-as-a-statement
+cell	help	B9-expressions-core	use '°x += n' to anchor accumulation above the nearest loop	zymbol-parser/src/lib.rs:558	syntax-expressions/hot-name-outside-an-assignment
