@@ -60,25 +60,25 @@ cell	help	B12-io	input typespec sizes are non-negative integers, e.g. ##.(5,2) o
 cell	help	B12-io	numeric input syntax: << #|variable|	zymbol-parser/src/io.rs:80	syntax-io/legacy-numeric-input-left-open
 unreachable	internal?	B12-io	parse_bash_exec_expr called on non-BashOpen token	zymbol-parser/src/script_exec.rs:53	unreachable: an unreachable!() message; the caller dispatches on BashOpen (lib.rs:600)
 unreachable	internal?	B12-io	parse_execute_expr called on non-ExecuteCommand token	zymbol-parser/src/script_exec.rs:21	unreachable: an unreachable!() message; the caller dispatches on ExecuteCommand
-todo	diagnostic	B13-modules	E013: constant initializer in module must be a literal	zymbol-parser/src/modules.rs:102	
-todo	diagnostic	B13-modules	E013: variable initializer in module must be a literal	zymbol-parser/src/modules.rs:114	
-todo	diagnostic	B13-modules	duplicate export block in module	zymbol-parser/src/modules.rs:77	
-todo	diagnostic	B13-modules	expected '#' for module declaration	zymbol-parser/src/modules.rs:34	
-todo	diagnostic	B13-modules	expected '#>' for export block	zymbol-parser/src/modules.rs:216	
-todo	diagnostic	B13-modules	expected '<#' for import statement	zymbol-parser/src/modules.rs:424	
-todo	diagnostic	B13-modules	expected '=>' for module alias	zymbol-parser/src/modules.rs:435	
-todo	diagnostic	B13-modules	expected '{' after module name	zymbol-parser/src/modules.rs:59	
-todo	diagnostic	B13-modules	expected '}' to close export block	zymbol-parser/src/modules.rs:247	
-todo	diagnostic	B13-modules	expected alias name after '=>'	zymbol-parser/src/modules.rs:450	
-todo	diagnostic	B13-modules	expected constant name after '.'	zymbol-parser/src/modules.rs:356	
-todo	diagnostic	B13-modules	expected identifier in export item	zymbol-parser/src/modules.rs:283	
-todo	diagnostic	B13-modules	expected new name after '=>'	zymbol-parser/src/modules.rs:325	
-todo	diagnostic	B13-modules	expected public name after '=>'	zymbol-parser/src/modules.rs:403	
-todo	diagnostic	B13-modules	legacy export rename separator	zymbol-parser/src/modules.rs:278	
-todo	help	B13-modules	a module may only have one #> export block	zymbol-parser/src/modules.rs:79	
-todo	help	B13-modules	module body must be enclosed in braces: # name { ... }	zymbol-parser/src/modules.rs:61	
-todo	help	B13-modules	module-level constants must use literal values, not expressions or function calls	zymbol-parser/src/modules.rs:104	
-todo	help	B13-modules	module-level variables must use literal values, not expressions or function calls	zymbol-parser/src/modules.rs:116	
+cell	diagnostic	B13-modules	E013: constant initializer in module must be a literal	zymbol-parser/src/modules.rs:102	syntax-modules/const-not-literal
+cell	diagnostic	B13-modules	E013: variable initializer in module must be a literal	zymbol-parser/src/modules.rs:114	syntax-modules/variable-not-literal
+cell	diagnostic	B13-modules	duplicate export block in module	zymbol-parser/src/modules.rs:77	syntax-modules/two-export-blocks
+unreachable	diagnostic	B13-modules	expected '#' for module declaration	zymbol-parser/src/modules.rs:34	unreachable: parse_module_block is only called when the file starts with `#` (lib.rs:57)
+unreachable	diagnostic	B13-modules	expected '#>' for export block	zymbol-parser/src/modules.rs:216	unreachable: parse_export_block is only called on an ExportBlock token (modules.rs, module body loop)
+unreachable	diagnostic	B13-modules	expected '<#' for import statement	zymbol-parser/src/modules.rs:424	unreachable: parse_import_statement is only called on a ModuleImport token (lib.rs:81, modules.rs)
+cell	diagnostic	B13-modules	expected '=>' for module alias	zymbol-parser/src/modules.rs:435	syntax-modules/import-without-arrow
+cell	diagnostic	B13-modules	expected '{' after module name	zymbol-parser/src/modules.rs:59	syntax-modules/module-without-brace
+cell	diagnostic	B13-modules	expected '}' to close export block	zymbol-parser/src/modules.rs:247	syntax-modules/export-block-left-open
+cell	diagnostic	B13-modules	expected alias name after '=>'	zymbol-parser/src/modules.rs:450	syntax-modules/import-alias-not-a-name
+cell	diagnostic	B13-modules	expected constant name after '.'	zymbol-parser/src/modules.rs:356	syntax-modules/export-constant-without-name
+cell	diagnostic	B13-modules	expected identifier in export item	zymbol-parser/src/modules.rs:283	syntax-modules/export-item-not-a-name
+cell	diagnostic	B13-modules	expected new name after '=>'	zymbol-parser/src/modules.rs:325	syntax-modules/export-reexport-without-new-name
+cell	diagnostic	B13-modules	expected public name after '=>'	zymbol-parser/src/modules.rs:403	syntax-modules/export-rename-without-public-name
+cell	diagnostic	B13-modules	legacy export rename separator	zymbol-parser/src/modules.rs:278	syntax-modules/export-legacy-rename-separator
+cell	help	B13-modules	a module may only have one #> export block	zymbol-parser/src/modules.rs:79	syntax-modules/two-export-blocks
+cell	help	B13-modules	module body must be enclosed in braces: # name { ... }	zymbol-parser/src/modules.rs:61	syntax-modules/module-without-brace
+cell	help	B13-modules	module-level constants must use literal values, not expressions or function calls	zymbol-parser/src/modules.rs:104	syntax-modules/const-not-literal
+cell	help	B13-modules	module-level variables must use literal values, not expressions or function calls	zymbol-parser/src/modules.rs:116	syntax-modules/variable-not-literal
 todo	diagnostic	B14-variables	expected ':' after field name in named tuple destructure	zymbol-parser/src/variables.rs:478	
 todo	diagnostic	B14-variables	expected '=' after index expression for indexed assignment	zymbol-parser/src/variables.rs:105	
 todo	diagnostic	B14-variables	expected '=' in destructure assignment	zymbol-parser/src/variables.rs:392	
