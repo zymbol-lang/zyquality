@@ -1,5 +1,5 @@
 # Phase C work queue: the runtime diagnostics nothing provokes (reach.py --list ejecución, 2026-09-14).
-# status: todo | cell (provoked + met by a cell) | unreachable (with a reason in `note`) | n/a
+# status: todo | cell (provoked + met by a cell) | manual (provoked by hand; a cell cannot ask it, the command is in `note`) | unreachable (with a reason in `note`) | n/a
 # class:  diagnostic | internal? (suspected unreachable, to be confirmed) | fragment (part of another message) | test (a test's own string)
 status	class	family	message	where	note
 n/a	fragment	-	(year, month, day) or (year, month, day, hour, minute, second), each ###, plus an optional zone	zymbol-interpreter/src/stdlib/time.rs:121	
@@ -78,15 +78,15 @@ cell	diagnostic	C11-std-db	transaction already active (use savepoints to nest)	z
 cell	diagnostic	C11-std-db	unknown connection '{}'	zymbol-interpreter/src/stdlib/db.rs:109	runtime-std-db/unknown-connection-is-soft — soft: a value, never a diagnostic line, so reach.py cannot count it
 unreachable	internal?	C11-std-db	std/db is not available in this build (compiled without ODBC support)	zymbol-vm/src/stdlib_builtins.rs:1376	unreachable in this build: compiled only when the binary is built without the ODBC feature
 unreachable	internal?	C11-std-db	unknown db builtin id {}	zymbol-vm/src/stdlib_builtins.rs:1368	unreachable: the compiler assigns db builtin ids from the same table db_dispatch matches on
-todo	diagnostic	C12-io-tui	>>~ slot expects Int, got {}	zymbol-interpreter/src/io.rs:249	
-todo	diagnostic	C12-io-tui	end of input while waiting for {}	zymbol-interpreter/src/io.rs:111	
-todo	diagnostic	C12-io-tui	failed to enable raw mode: {}	zymbol-interpreter/src/io.rs:296	
-todo	diagnostic	C12-io-tui	failed to enter alternate screen: {}	zymbol-interpreter/src/io.rs:300	
-todo	diagnostic	C12-io-tui	input read error: {}	zymbol-interpreter/src/io.rs:103	
-todo	diagnostic	C12-io-tui	input: failed to disable raw mode: {}	zymbol-interpreter/src/io.rs:89	
-todo	diagnostic	C12-io-tui	input: failed to restore raw mode: {}	zymbol-interpreter/src/io.rs:98	
-todo	diagnostic	C12-io-tui	io error: {0}	zymbol-interpreter/src/lib.rs:50	
-todo	diagnostic	C12-io-tui	undefined variable in input prompt: '{}'	zymbol-interpreter/src/io.rs:63	
+cell	diagnostic	C12-io-tui	>>~ slot expects Int, got {}	zymbol-interpreter/src/io.rs:249	runtime-io/positioned-output-slot-must-be-int
+cell	diagnostic	C12-io-tui	end of input while waiting for {}	zymbol-interpreter/src/io.rs:111	runtime-io/end-of-input (met: error-flow/input-eof-is-catchable)
+cell	diagnostic	C12-io-tui	failed to enable raw mode: {}	zymbol-interpreter/src/io.rs:296	runtime-io/alternate-screen-without-a-terminal
+unreachable	diagnostic	C12-io-tui	failed to enter alternate screen: {}	zymbol-interpreter/src/io.rs:300	unreachable from a program: raw mode has to succeed on a terminal that then refuses the alternate screen
+manual	diagnostic	C12-io-tui	input read error: {}	zymbol-interpreter/src/io.rs:103	reached by hand, no cell: `printf '\xff\xfe\n' | zymbol run f.zy` with `<< n` -> `input read error: stream did not contain valid UTF-8` (the VM reads it as end of input); a ZyDDT cell cannot give stdin
+unreachable	diagnostic	C12-io-tui	input: failed to disable raw mode: {}	zymbol-interpreter/src/io.rs:89	unreachable from a program: needs input inside `>>|` on a terminal that then fails to leave raw mode
+unreachable	diagnostic	C12-io-tui	input: failed to restore raw mode: {}	zymbol-interpreter/src/io.rs:98	unreachable from a program: needs input inside `>>|` on a terminal that then fails to re-enter raw mode
+manual	diagnostic	C12-io-tui	io error: {0}	zymbol-interpreter/src/lib.rs:50	reached by hand, no cell: `zymbol run f.zy | head -1` with a program printing 20000 lines -> `io error: Broken pipe (os error 32)`; a ZyDDT cell cannot close stdout
+cell	diagnostic	C12-io-tui	undefined variable in input prompt: '{}'	zymbol-interpreter/src/io.rs:63	runtime-io/undefined-variable-in-input-prompt
 cell	diagnostic	C8-match-patterns	  --> consider assigning to a variable: `result = ?? expr {{ ... }}`	zymbol-interpreter/src/match_stmt.rs:36	runtime-match-patterns/match-with-values-used-as-a-statement — reach.py cannot count it: a `-->` continuation line is not a diagnostic line
 todo	diagnostic	C13-operators-variables-internal	'{}' is undefined — did you mean '{}°' (hot definition)?	zymbol-compiler/src/lib.rs:2139	
 todo	diagnostic	C13-operators-variables-internal	cannot compare float {} with string '{}' using operator '{:?}'	zymbol-interpreter/src/arithmetic_ops.rs:412	
