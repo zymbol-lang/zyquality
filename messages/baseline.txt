@@ -490,7 +490,6 @@ rust	shared	empty interpolation
 rust	shared	ensure the path is valid and does not go above the root
 rust	shared	error caught
 rust	shared	error executing §: §
-rust	shared	error types use ## prefix: ##io, ##network, ##parse
 rust	shared	execute syntax: </ path.zy />
 rust	shared	expected '!?' to start try block
 rust	shared	expected '##' for error type
@@ -865,7 +864,6 @@ rust	shared	use := to declare constants (immutable values)
 rust	shared	use `[…]` — `#[…]` is for declaring a mix that is deliberate
 rust	shared	use `°` only on the first assignment to auto-initialize
 rust	shared	use a different alias for this import
-rust	shared	valid error types: ##io, ##network, ##parse, ##index, ##type, ##div, ##_
 rust	shared	valid nav index: arr[1>2], arr[n>m], arr[(a)>(b)], arr[1>2..4]
 rust	shared	variable '§' is assigned but never read
 rust	shared	variable should only be scheduled for destruction once
