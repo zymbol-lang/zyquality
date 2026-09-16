@@ -489,7 +489,6 @@ rust	shared	else-if condition should be bool, got §
 rust	shared	empty interpolation
 rust	shared	ensure the path is valid and does not go above the root
 rust	shared	error caught
-rust	shared	error executing §: §
 rust	shared	execute syntax: </ path.zy />
 rust	shared	expected '!?' to start try block
 rust	shared	expected '##' for error type
