@@ -155,12 +155,12 @@ cell	diagnostic	B6-format-convert	expected '|' to close truncate expression	zymb
 cell	diagnostic	B6-format-convert	expected a decimal count after '{}'	zymbol-parser/src/data_ops.rs:132	syntax-format-convert/round-expects-a-decimal-count
 unreachable	diagnostic	B6-format-convert	precision must be a non-negative integer	zymbol-parser/src/data_ops.rs:104	unreachable: `-` is its own token, so a precision never arrives as a negative Integer
 cell	help	B6-format-convert	base conversion syntax: {}|expr|	zymbol-parser/src/data_ops.rs:157	syntax-format-convert/base-conversion-left-open
-unreachable	help	B6-format-convert	format expression syntax: {}.N|expr| where N >= 0	zymbol-parser/src/data_ops.rs:106	unreachable: the help of `precision must be a non-negative integer`, which cannot be reached
+unreachable	help	B6-format-convert	format expression syntax: {}N|expr| where N >= 0	zymbol-parser/src/data_ops.rs:112	unreachable: the help of `precision must be a non-negative integer`, which cannot be reached
 cell	help	B6-format-convert	format expression syntax: {}|expr| or {}.N|expr|	zymbol-parser/src/data_ops.rs:72	syntax-format-convert/format-expects-bar-after-operator
 cell	help	B6-format-convert	numeric evaluation syntax: #|expr|	zymbol-parser/src/data_ops.rs:32	syntax-format-convert/numeric-evaluation-left-open
 cell	help	B6-format-convert	round expression syntax: #.N|expr|	zymbol-parser/src/data_ops.rs:197	syntax-format-convert/round-expects-bar-after-count
 cell	help	B6-format-convert	truncate expression syntax: #!N|expr|	zymbol-parser/src/data_ops.rs:231	syntax-format-convert/truncate-expects-bar-after-count
-cell	help	B6-format-convert	write the count or the name of a variable holding it: {}.2|value| or {}.n|value|	zymbol-parser/src/data_ops.rs:135	syntax-format-convert/round-expects-a-decimal-count
+cell	help	B6-format-convert	write the count or the name of a variable holding it: {}2|value| or {}n|value|	zymbol-parser/src/data_ops.rs:141	syntax-format-convert/round-expects-a-decimal-count
 unreachable	diagnostic	B7-try-catch	expected '!?' to start try block	zymbol-parser/src/error_handling.rs:34	unreachable: parse_try_statement is only called when the current token already is !? (error_handling.rs, lib.rs:374), so the check that it is not never fails
 unreachable	diagnostic	B7-try-catch	expected '##' for error type	zymbol-parser/src/error_handling.rs:117	unreachable: parse_error_type is only called when the next token is `#` (error_handling.rs:97), so its first check never fails; the second one is reachable and has a cell
 cell	diagnostic	B7-try-catch	expected '##' for error type (missing second #)	zymbol-parser/src/error_handling.rs:126	syntax-try-catch/error-type-with-one-hash
