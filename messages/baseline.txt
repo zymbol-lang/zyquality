@@ -642,7 +642,7 @@ rust	shared	filter requires array, got §
 rust	shared	filter requires lambda function
 rust	shared	finally blocks start with :>§
 rust	shared	for-each syntax: @ var:iterable §
-rust	shared	format expression syntax: §.n|expr| where n >= 0
+rust	shared	format expression syntax: §n|expr| where n >= 0
 rust	shared	format expression syntax: §|expr|
 rust	shared	format expression syntax: §|expr| or §.n|expr|
 rust	shared	format expressions only work with numbers, got §
@@ -876,7 +876,6 @@ rust	shared	vm outputpos
 rust	shared	vm terminal size
 rust	shared	write `#(` here: `#(nombre: valor)`. a bare `(…)` is a positional tuple, and `#()` is the empty dictionary — which `()` cannot be, since it would have to be the empty tuple as well
 rust	shared	write the argument as 'name<~' — the mark says the value comes back changed, so a reader does not have to open the function to find out
-rust	shared	write the count or the name of a variable holding it: §.2|value| or §.n|value|
 rust	shared	x should be destroyed after final output
 rust	shared	x should not be destroyed after first output
 rust	shared	zymbol: no posix shell found (§); running `<\ \>` through cmd.exe. commands written in posix shell syntax will not work — install git for windows or set zymbol_sh to get the portable behaviour back
