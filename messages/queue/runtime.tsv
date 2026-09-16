@@ -234,7 +234,7 @@ unreachable	internal?	C8-match-patterns	unsupported operator in comparison patte
 cell	diagnostic	C9-modules-scripts	cannot use function in bash command interpolation	zymbol-interpreter/src/script_exec.rs:183	runtime-modules-scripts/bash-function-interpolation
 unreachable	diagnostic	C9-modules-scripts	circular dependency detected	zymbol-interpreter/src/lib.rs:62	unreachable: RuntimeError::CircularDependency is declared and matched, never constructed (cycles raise CircularImport)
 unreachable	diagnostic	C9-modules-scripts	constant '{}' not exported from module '{}'	zymbol-interpreter/src/lib.rs:2150	unreachable: RuntimeError::ConstantNotExported is never constructed; a missing constant raises `Module 'o' has no constant`
-cell	diagnostic	C9-modules-scripts	error executing {}: {:?}	zymbol-interpreter/src/script_exec.rs:89	runtime-modules-scripts/subscript-runtime-error
+cell	diagnostic	C9-modules-scripts	Runtime error: {}	zymbol-interpreter/src/script_exec.rs:95	runtime-modules-scripts/subscript-runtime-error
 unreachable	diagnostic	C9-modules-scripts	failed to run `{}`: {}	zymbol-interpreter/src/script_exec.rs:122	unreachable from a .zy: it needs the shell that zymbol_common::shell found to then fail to start
 cell	diagnostic	C9-modules-scripts	function '{}' not exported from module '{}'	zymbol-interpreter/src/lib.rs:2144	runtime-modules-scripts/unexported-function-as-an-error-value — reach.py cannot count it: the text only exists inside the printed `_err` value
 n/a	diagnostic	C9-modules-scripts	lexer errors: {0}	zymbol-formatter/src/lib.rs:81	not a runtime diagnostic: FormatError::LexerError, reached by `zymbol fmt`
