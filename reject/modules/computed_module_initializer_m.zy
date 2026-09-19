@@ -1,7 +1,9 @@
 // @reject: the module refused by 02_computed_module_initializer.zy — its own
 // @reject: initialiser computes, so loading it is the error wherever it is
 // @reject: loaded from.
-# 02_computed_module_initializer_m {
+// @reject: No numeric prefix on purpose: with one, the importer refused this
+// @reject: file for its PATH and E013 never ran (renamed 2026-09-19, step 3.7).
+# computed_module_initializer_m {
     #> { ver }
     x = 1 + 2
     ver() { <~ x }

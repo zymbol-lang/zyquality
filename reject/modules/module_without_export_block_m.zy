@@ -11,7 +11,11 @@
 // @reject: It was free to decide: of every module in the corpus and in the six
 // @reject: LDV applications, none omitted the block, so nothing depended on
 // @reject: either default.
-# 04_module_without_export_block_m {
+// @reject: No numeric prefix on purpose: with one, this file was refused for its
+// @reject: module NAME — `expected module name after '#'` — and E014 never ran
+// @reject: (renamed 2026-09-19, step 3.7). `run` says a module file is not a
+// @reject: script; `check` is what reads it and reports E014.
+# module_without_export_block_m {
     TOPE := 7
 
     privada() {
