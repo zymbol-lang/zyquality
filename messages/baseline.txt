@@ -521,14 +521,12 @@ rust	shared	expected ':' after pattern
 rust	shared	expected ':' after the key
 rust	shared	expected ':>' to start finally block
 rust	shared	expected '<#' for import statement
-rust	shared	expected '=' after index expression for indexed assignment
 rust	shared	expected '=' in destructure assignment
 rust	shared	expected '=>' after pattern
 rust	shared	expected '=>' for module alias
 rust	shared	expected ']' after count
 rust	shared	expected ']' after flat extraction
 rust	shared	expected ']' after index
-rust	shared	expected ']' after index expression
 rust	shared	expected ']' after index in $+[index]
 rust	shared	expected ']' after range
 rust	shared	expected ']' after replacement or count

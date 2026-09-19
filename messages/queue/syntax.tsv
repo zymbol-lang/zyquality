@@ -80,9 +80,9 @@ cell	help	B13-modules	module body must be enclosed in braces: # name { ... }	zym
 cell	help	B13-modules	module-level constants must use literal values, not expressions or function calls	zymbol-parser/src/modules.rs:104	syntax-modules/const-not-literal
 cell	help	B13-modules	module-level variables must use literal values, not expressions or function calls	zymbol-parser/src/modules.rs:116	syntax-modules/variable-not-literal
 cell	diagnostic	B14-variables	expected ':' after field name in named tuple destructure	zymbol-parser/src/variables.rs:478	syntax-variables/named-destructure-field-without-colon
-cell	diagnostic	B14-variables	expected '=' after index expression for indexed assignment	zymbol-parser/src/variables.rs:105	syntax-variables/hot-index-without-operator
+n/a	diagnostic	B14-variables	expected '=' after index expression for indexed assignment	—	retirado 2026-09-19 (paso 3.6, GLB-027): era el último resto de la asignación indexada y su help enseñaba `arr[i] = val`, la forma retirada por la decisión 6
 unreachable	diagnostic	B14-variables	expected '=' in destructure assignment	zymbol-parser/src/variables.rs:392	unreachable: a pattern is only parsed as a destructure after is_*_destructure saw `=` behind it (variables.rs:354)
-cell	diagnostic	B14-variables	expected ']' after index expression	zymbol-parser/src/variables.rs:34	syntax-variables/hot-index-left-open
+cell	diagnostic	B14-variables	expected ']' after index	zymbol-parser/src/variables.rs:50	syntax-variables/hot-index-left-open — reescrito 2026-09-19 (paso 3.6): un texto por fallo, el mismo que expressions.rs y closeNav
 unreachable	diagnostic	B14-variables	expected := for constant declaration	zymbol-parser/src/variables.rs:255	unreachable: parse_const_decl is only called after the dispatch saw `:=` (lib.rs:387)
 unreachable	diagnostic	B14-variables	expected assignment operator (=, +=, -=, *=, /=, %=, ^=, ++, --)	zymbol-parser/src/variables.rs:203	unreachable: parse_assignment is only reached after the dispatch saw one of the assignment operators, and its match handles every one of them (lib.rs:430-459, variables.rs)
 unreachable	diagnostic	B14-variables	expected identifier	zymbol-parser/src/variables.rs:24	unreachable: parse_assignment and parse_const_decl are only called on an identifier token (the dispatch matches on it)
