@@ -5,5 +5,9 @@
 // @reject: printed 14 here and the other two said the *function* was not
 // @reject: exported, which names the wrong cause and taught the invalid
 // @reject: file-level `#>` that 03 refuses.
-<# ./04_module_without_export_block_m => m
+// @reject: The module is `module_without_export_block_m.zy`, with no numeric
+// @reject: prefix: a module path whose last component starts with a digit fails
+// @reject: to lex, so `./04_…` refused this file for its PATH and never reached
+// @reject: E014 at all. Renamed 2026-09-19 (step 3.7) — see 03's note.
+<# ./module_without_export_block_m => m
 >> m::publica() ¶

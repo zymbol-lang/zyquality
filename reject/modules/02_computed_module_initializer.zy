@@ -11,5 +11,9 @@
 // @reject: same blind spot that hid L41 in the other direction.
 // @reject: A collection literal IS accepted — see
 // @reject: corpus/modules_scope/module_collection_state.zy.
-<# ./02_computed_module_initializer_m => m
+// @reject: The module is `computed_module_initializer_m.zy`, with no numeric
+// @reject: prefix: a module path whose last component starts with a digit fails
+// @reject: to lex, so `./02_…` refused this file for its PATH and never reached
+// @reject: E013 at all. Renamed 2026-09-19 (step 3.7) — see 03's note.
+<# ./computed_module_initializer_m => m
 >> m::ver() ¶

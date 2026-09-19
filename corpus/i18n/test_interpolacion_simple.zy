@@ -10,6 +10,12 @@
 // primero señala la llave que abre, el segundo la que cierra, y el tercero era
 // la recuperación tropezando con la segunda pareja. Cada línea mala conserva su
 // diagnóstico en su sitio; lo que se retiró es el resto que dejaba la anterior.
+//
+// Y de 13 a 7 el 2026-09-19 (GLB-028, paso 3.7). Los seis que se fueron eran el
+// SEGUNDO error de cada línea mala, `unexpected token: RBrace`: el salto de
+// recuperación contaba las llaves desde donde había fallado, así que se paraba
+// en la que cerraba la interpolación en vez de tragarla. Ahora cuenta desde el
+// principio de la sentencia. Queda uno por línea, que es el que hay.
 
 >> "=== Test Interpolacion Bash ===" ¶
 ¶
