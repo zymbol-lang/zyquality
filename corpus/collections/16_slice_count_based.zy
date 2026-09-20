@@ -1,6 +1,7 @@
 // Test: $[start:count] count-based slice — arrays, tuples, strings
-// 1-based indexing. Every :count scenario is paired with its ..end equivalent;
-// outputs must match.
+// 1-based indexing. Every :count scenario is paired with its ..end equivalent
+// and the outputs must match — except count 0, which a range cannot spell since
+// D3: `$[2..1]` reads high-to-low and builds backwards (step 4.4, 2026-09-20).
 
 // ── Arrays ────────────────────────────────────────────────────────────────────
 arr = [10, 20, 30, 40, 50]
@@ -35,10 +36,14 @@ b5 = arr$[3..3]
 >> a5 ¶
 >> b5 ¶
 
-// Count = 0 → empty slice
+// Count = 0 → empty slice. It has NO `..end` twin any more: `arr$[2..1]` is
+// written high-to-low and D3 makes that a descending slice — two elements
+// backwards, not none (step 4.4, 2026-09-20). The pairing this file is built on
+// holds for every count except 0, which is the one a range cannot spell.
 a6 = arr$[2:0]
-b6 = arr$[2..1]
 >> a6 ¶
+// And what `arr$[2..1]` now is:
+b6 = arr$[2..1]
 >> b6 ¶
 
 // Slice from last valid position: start at pos 5, take 1 → [50]
@@ -68,10 +73,10 @@ t2b = tup$[3..4]
 >> t2 ¶
 >> t2b ¶
 
-// Count = 0 → empty tuple
+// Count = 0 → empty tuple; no `..end` twin, same reason as the array above.
 t3 = tup$[2:0]
-t3b = tup$[2..1]
 >> t3 ¶
+t3b = tup$[2..1]
 >> t3b ¶
 
 // Full tuple slice
@@ -107,10 +112,10 @@ s4b = s$[5..5]
 >> s4 ¶
 >> s4b ¶
 
-// Count = 0 → empty string
+// Count = 0 → empty string; no `..end` twin, same reason.
 s5 = s$[4:0]
-s5b = s$[4..3]
 >> s5 ¶
+s5b = s$[4..3]
 >> s5b ¶
 
 // Interior slice: start at pos 3, take 4 → "llo "
