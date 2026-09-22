@@ -128,7 +128,8 @@ cell	diagnostic	C3-collection-ops	$-[..] start must be an integer, got {:?}	zymb
 cell	diagnostic	C3-collection-ops	$-[..end] end must be positive (1-based), got {}	zymbol-interpreter/src/collection_ops.rs:1042	runtime-collection-ops/remove-range-end-end-must-be-positive
 cell	diagnostic	C3-collection-ops	$-[start..] start must be positive (1-based), got {}	zymbol-interpreter/src/collection_ops.rs:1024	runtime-collection-ops/remove-range-start-start-must-be-positive
 cell	diagnostic	C3-collection-ops	$-[start..end]: start ({}) cannot be greater than end ({})	zymbol-interpreter/src/collection_ops.rs:1066	runtime-collection-ops/remove-range-start-cannot-be-greater-than
-cell	diagnostic	C3-collection-ops	$-[{}..{}] out of bounds for collection of length {}	zymbol-interpreter/src/collection_ops.rs:1072	runtime-collection-ops/remove-range-out-of-bounds-for-collection
+cell	diagnostic	C3-collection-ops	$-[{}..{}] out of bounds for collection of length {}	zymbol-interpreter/src/collection_ops.rs:1196	runtime-collection-ops/remove-range-out-of-bounds-for-collection
+cell	diagnostic	C3-collection-ops	$-[{}:{}] out of bounds for collection of length {}	zymbol-interpreter/src/collection_ops.rs:1191	runtime-collection-ops/remove-count-out-of-bounds-for-collection
 cell	diagnostic	C3-collection-ops	$/ delimiter must be a char or string, got {:?}	zymbol-interpreter/src/string_ops.rs:207	runtime-collection-ops/split-delimiter-must-be-a-char-or
 cell	diagnostic	C3-collection-ops	$/ requires a string on the left, got {:?}	zymbol-interpreter/src/string_ops.rs:198	runtime-collection-ops/split-requires-a-string-on-the-left
 cell	diagnostic	C3-collection-ops	$?? on string requires char or string value, got {:?}	zymbol-interpreter/src/collection_ops.rs:1148	runtime-collection-ops/find-all-on-string-requires-char-or
