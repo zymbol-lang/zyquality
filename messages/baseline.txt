@@ -681,7 +681,7 @@ rust	shared	invalid float literal: '§'
 rust	shared	invalid float: '§'
 rust	shared	invalid integer: '§'
 rust	shared	invalid interpolation
-rust	shared	invalid nav range §..§ — indices are 1-based and start must be ≤ end
+rust	shared	invalid nav range §..§ — indices are 1-based
 rust	shared	invalid operator '!='
 rust	shared	invalid savepoint name '§'
 rust	shared	invalid unicode character code: §
