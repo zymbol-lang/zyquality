@@ -173,7 +173,7 @@ unreachable	diagnostic	C4-index-nav-dict	index out of bounds: index {} for named
 cell	diagnostic	C4-index-nav-dict	index out of bounds: index {} for string of length {}	zymbol-interpreter/src/collection_ops.rs:235	runtime-index-nav/index-out-of-bounds-index-for-string
 cell	diagnostic	C4-index-nav-dict	index out of bounds: index {} for tuple of length {}	zymbol-interpreter/src/collection_ops.rs:192	runtime-index-nav/index-out-of-bounds-index-for-tuple
 cell	diagnostic	C4-index-nav-dict	index out of bounds: {} for collection of length {}	zymbol-interpreter/src/collection_ops.rs:1306	runtime-index-nav/index-out-of-bounds-for-collection-of
-cell	diagnostic	C4-index-nav-dict	invalid nav range {}..{} — indices are 1-based and start must be ≤ end	zymbol-interpreter/src/index_nav.rs:135	runtime-index-nav/invalid-nav-range-indices-are-1-based
+cell	diagnostic	C4-index-nav-dict	invalid nav range {}..{} — indices are 1-based	zymbol-interpreter/src/index_nav.rs:134	runtime-index-nav/invalid-nav-range-indices-are-1-based
 unreachable	diagnostic	C4-index-nav-dict	named tuple index out of bounds: index {} for tuple of length {}	zymbol-interpreter/src/expr_eval.rs:440	unreachable: an Int index on a dictionary already returned `addressed by key` above; the source says so (expr_eval.rs:429)
 cell	diagnostic	C4-index-nav-dict	navigation index must be an integer, got {:?}	zymbol-interpreter/src/index_nav.rs:195	runtime-index-nav/navigation-index-must-be-an-integer-got
 cell	diagnostic	C4-index-nav-dict	no key '{}' in dictionary — it is empty	zymbol-interpreter/src/variables.rs:39	runtime-index-nav/no-key-in-dictionary-it-is-empty
