@@ -754,12 +754,10 @@ rust	shared	query_one matched no rows
 rust	shared	range bound `1..total` must count as a use of `total`, got: §
 rust	shared	range bounds must be integers, got § and §
 rust	shared	range component `§` must count as a use, got: §
-rust	shared	range end must be an integer, got §
 rust	shared	range indices in nav path must be positive integers
 rust	shared	range pattern start must be int, float, or char, got §
 rust	shared	range pattern type mismatch
 rust	shared	range pattern type § does not match scrutinee type §
-rust	shared	range start must be an integer, got §
 rust	shared	range start type § differs from end type §
 rust	shared	range syntax: $-[..end] or $-[..]
 rust	shared	range syntax: $-[start..end] or $-[start..]
