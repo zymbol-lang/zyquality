@@ -623,7 +623,6 @@ rust	shared	expected variable name after \
 rust	shared	expected variable name after key input operator
 rust	shared	expected variable name in input statement
 rust	shared	expected x to be destroyed after output
-rust	shared	expression is not callable
 rust	shared	expression statement
 rust	shared	extended arabic-indic
 rust	shared	failed to enable raw mode: §
@@ -634,8 +633,6 @@ rust	shared	failed to run `§`: §
 rust	shared	file not found: §
 rust	shared	filter lambda must have exactly 1 parameter, got §
 rust	shared	filter operation requires a lambda, got §
-rust	shared	filter requires array, got §
-rust	shared	filter requires lambda function
 rust	shared	finally blocks start with :>§
 rust	shared	for-each syntax: @ var:iterable §
 rust	shared	format expression syntax: §n|expr| where n >= 0
@@ -703,8 +700,6 @@ rust	shared	logical and requires boolean operands, got §
 rust	shared	logical or requires boolean operands, got §
 rust	shared	map lambda must have exactly 1 parameter, got §
 rust	shared	map operation requires a lambda, got §
-rust	shared	map requires array, got §
-rust	shared	map requires lambda function
 rust	shared	mat::§: incompatible argument type(s) §
 rust	shared	match expression must be enclosed in braces
 rust	shared	match expression returns values but result is unused
@@ -766,8 +761,6 @@ rust	shared	read it with '.': §.§
 rust	shared	reduce lambda must have exactly 2 parameters (acc, elem), got §
 rust	shared	reduce lambda requires 2 parameters (accumulator, element), got §
 rust	shared	reduce operation requires a lambda, got §
-rust	shared	reduce requires array, got §
-rust	shared	reduce requires lambda function
 rust	shared	reduce syntax: collection$< (initial, lambda)
 rust	shared	refactor to remove the circular dependency
 rust	shared	remove index must be an integer, got §
