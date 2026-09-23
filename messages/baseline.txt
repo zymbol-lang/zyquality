@@ -26,7 +26,6 @@ rust	rust-only	= note: reached from § (§:§)
 rust	rust-only	>> "hello bytecode" ¶
 rust	rust-only	>>| §
 rust	rust-only	@ § (infinite loop)
-rust	rust-only	@~ requires non-negative ms, got §
 rust	rust-only	] }} [profile.release] opt-level = 3 lto = true strip = true codegen-units = 1
 rust	rust-only	```zymbol @ §:... ``` (loop iterator)
 rust	rust-only	a decimal count that is not negative
@@ -106,7 +105,6 @@ rust	rust-only	failed to create tokio runtime: §
 rust	rust-only	failed to extract §
 rust	rust-only	failed to format file: §
 rust	rust-only	failed to format input
-rust	rust-only	failed to parse '§' as base-§ number
 rust	rust-only	failed to read file: §
 rust	rust-only	failed to read from stdin
 rust	rust-only	failed to read script '§': §
@@ -303,7 +301,6 @@ rust	rust-only	§ file(s) would be packaged
 rust	rust-only	§ is callable but missing from zymbol_common::stdlib
 rust	rust-only	§ is in the table but the compiler has no builtins for it
 rust	rust-only	§ is in the table but the tree-walker has no such module
-rust	rust-only	§ requires a numeric value, got §
 rust	rust-only	§: constant names in zymbol_common::stdlib differ from the tree-walker's
 rust	rust-only	§: function names in zymbol_common::stdlib differ from the tree-walker's
 rust	rust-only	§: function names in zymbol_common::stdlib differ from the vm's builtin table
@@ -865,7 +862,6 @@ rust	shared	zymbol: no posix shell found (§); running `<\ \>` through cmd.exe. 
 rust	shared	§ does not export a constant '§'
 rust	shared	§ does not export a function '§'
 rust	shared	§ lexer error(s) in '§' §
-rust	shared	§ lexer errors in §
 rust	shared	§ parse error(s) in '§' §
 rust	shared	§ parser errors in §
 rust	shared	§ semantic error(s) in '§' §
