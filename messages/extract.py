@@ -183,6 +183,14 @@ def rust_files(root):
     for d, ds, fs in sorted(os.walk(root)):
         ds.sort()
         if '/target/' in d: continue
+        # An integration-test directory is not engine code. Its assertions
+        # are strings a test compares against, and a string that looks like a
+        # diagnostic — `undefined variable '_inner'` — was harvested as if an
+        # engine emitted it. `#[cfg(test)]` modules were already stripped (see
+        # strip_test_modules); a whole `tests/` directory was not, because the
+        # only filter was a file name starting with `test`, and
+        # `underscore_semantics.rs` does not (found while closing GLB-039).
+        if '/tests/' in (d.replace(os.sep, '/') + '/'): continue
         for fn in sorted(fs):
             if fn.endswith('.rs') and not fn.startswith('test'):
                 yield os.path.join(d, fn)
