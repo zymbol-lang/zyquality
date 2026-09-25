@@ -1,4 +1,4 @@
-[1m[31merror[39m[0m: expected expression, found Dot
+[1m[31merror[39m[0m: expected expression, found '.'
   [1m[34m-->[39m[0m i18n/test_integration_all.zy:40:16
 [1m[34m  40[39m[0m [34m|[39m
 [1m[34m  40[39m[0m [34m|[39m count = <\ ls *.zy | wc -l \>

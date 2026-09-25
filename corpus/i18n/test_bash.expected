@@ -1,4 +1,4 @@
-[1m[31merror[39m[0m: expected expression, found Pipe
+[1m[31merror[39m[0m: expected expression, found '|'
   [1m[34m-->[39m[0m i18n/test_bash.zy:24:18
 [1m[34m  24[39m[0m [34m|[39m
 [1m[34m  24[39m[0m [34m|[39m archivos = <\ ls | head -n 5 \>

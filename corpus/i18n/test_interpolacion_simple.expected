@@ -1,34 +1,34 @@
-[1m[31merror[39m[0m: expected expression, found LBrace
+[1m[31merror[39m[0m: expected expression, found '{'
   [1m[34m-->[39m[0m i18n/test_interpolacion_simple.zy:26:20
 [1m[34m  26[39m[0m [34m|[39m
 [1m[34m  26[39m[0m [34m|[39m contenido = <\ cat {archivo} \>
 [34m     |[39m [1m[31m                   ^[39m[0m
-[1m[31merror[39m[0m: expected expression, found LBrace
+[1m[31merror[39m[0m: expected expression, found '{'
   [1m[34m-->[39m[0m i18n/test_interpolacion_simple.zy:35:26
 [1m[34m  35[39m[0m [34m|[39m
 [1m[34m  35[39m[0m [34m|[39m resultado = <\ head "-n" {lineas} {archivo2} \>
 [34m     |[39m [1m[31m                         ^[39m[0m
-[1m[31merror[39m[0m: expected expression, found LBrace
+[1m[31merror[39m[0m: expected expression, found '{'
   [1m[34m-->[39m[0m i18n/test_interpolacion_simple.zy:43:17
 [1m[34m  43[39m[0m [34m|[39m
 [1m[34m  43[39m[0m [34m|[39m listado = <\ ls {opcion} \>
 [34m     |[39m [1m[31m                ^[39m[0m
-[1m[31merror[39m[0m: expected expression, found Pipe
+[1m[31merror[39m[0m: expected expression, found '|'
   [1m[34m-->[39m[0m i18n/test_interpolacion_simple.zy:51:18
 [1m[34m  51[39m[0m [34m|[39m
 [1m[34m  51[39m[0m [34m|[39m primeras = <\ ls | head "-n" {num} \>
 [34m     |[39m [1m[31m                 ^[39m[0m
-[1m[31merror[39m[0m: expected expression, found LBrace
+[1m[31merror[39m[0m: expected expression, found '{'
   [1m[34m-->[39m[0m i18n/test_interpolacion_simple.zy:60:21
 [1m[34m  60[39m[0m [34m|[39m
 [1m[34m  60[39m[0m [34m|[39m crear_cmd = <\ echo {texto} > {nombre} \>
 [34m     |[39m [1m[31m                    ^[39m[0m
-[1m[31merror[39m[0m: expected expression, found LBrace
+[1m[31merror[39m[0m: expected expression, found '{'
   [1m[34m-->[39m[0m i18n/test_interpolacion_simple.zy:61:15
 [1m[34m  61[39m[0m [34m|[39m
 [1m[34m  61[39m[0m [34m|[39m leer = <\ cat {nombre} \>
 [34m     |[39m [1m[31m              ^[39m[0m
-[1m[31merror[39m[0m: expected expression, found LBrace
+[1m[31merror[39m[0m: expected expression, found '{'
   [1m[34m-->[39m[0m i18n/test_interpolacion_simple.zy:64:25
 [1m[34m  64[39m[0m [34m|[39m
 [1m[34m  64[39m[0m [34m|[39m borrar_cmd = <\ rm "-f" {nombre} \>
