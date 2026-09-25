@@ -352,12 +352,10 @@ rust	shared	$~~ count must be an integer, got §
 rust	shared	$~~ pattern must be a string or char, got §
 rust	shared	$~~ replacement must be a string, got §
 rust	shared	'./../' is not a module path
-rust	shared	'<~' writes the change back into the caller's variable; there is nowhere to write an expression back to — assign it to a variable first
 rust	shared	'§' is a constant of §, not a function
 rust	shared	'§' is a function of §, not a constant
 rust	shared	'§' is already defined — `°` initializer is redundant; remove it
 rust	shared	'§' is inside no loop at all. a function or lambda body does not see the caller's loops
-rust	shared	'§' was declared at §:§
 rust	shared	'§' §s the enclosing '@' loop; there is none here. a function or lambda body does not see the caller's loops
 rust	shared	'§°' hot-initialized to 0 — '^' will always produce 0
 rust	shared	'°name' is only valid as an assignment target
@@ -450,8 +448,6 @@ rust	shared	consider removing this variable or using its value
 rust	shared	constant '§' already declared
 rust	shared	constant '§' not exported from module '§'
 rust	shared	constant with non-literal initializer
-rust	shared	constants declared with ':=' cannot be modified
-rust	shared	constants declared with ':=' cannot be modified — use a different name in the destructuring pattern
 rust	shared	count-based range syntax: $-[start:count]
 rust	shared	count-based slice syntax: $[start:count]
 rust	shared	db: cannot bind § as a parameter
@@ -464,7 +460,6 @@ rust	shared	decimal typespec syntax: ##.(total, decimals)
 rust	shared	destructure assignment
 rust	shared	did you mean '§::§'?
 rust	shared	divide by zero
-rust	shared	drop the '<~', or declare the parameter as an output in the signature
 rust	shared	duplicate export block in module
 rust	shared	e002: module '§' not found
 rust	shared	e003: failed to resolve path '§'
@@ -808,7 +803,6 @@ rust	shared	undefined module alias: '§'
 rust	shared	undefined variable '§' in match pattern
 rust	shared	undefined variable in input prompt: '§'
 rust	shared	underscore variables are strictly local to their declaration block '§' was declared in an inner scope and is not accessible here
-rust	shared	underscore variables are strictly local to their declaration block '§' was declared in an outer scope and cannot be accessed from nested blocks
 rust	shared	underscore variables should not be in destruction schedule
 rust	shared	unexpected character: '§'
 rust	shared	unexpected end of file
@@ -855,7 +849,6 @@ rust	shared	vm error: §
 rust	shared	vm outputpos
 rust	shared	vm terminal size
 rust	shared	write `#(` here: `#(nombre: valor)`. a bare `(…)` is a positional tuple, and `#()` is the empty dictionary — which `()` cannot be, since it would have to be the empty tuple as well
-rust	shared	write the argument as 'name<~' — the mark says the value comes back changed, so a reader does not have to open the function to find out
 rust	shared	x should be destroyed after final output
 rust	shared	x should not be destroyed after first output
 rust	shared	zymbol: no posix shell found (§); running `<\ \>` through cmd.exe. commands written in posix shell syntax will not work — install git for windows or set zymbol_sh to get the portable behaviour back
