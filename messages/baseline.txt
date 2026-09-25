@@ -808,7 +808,6 @@ rust	shared	unexpected end of file
 rust	shared	unexpected error message: §
 rust	shared	unexpected token after module block
 rust	shared	unexpected token in tuple destructure pattern
-rust	shared	unexpected token: §
 rust	shared	unknown connection '§'
 rust	shared	unmatched '}' in string
 rust	shared	unmatched close brace

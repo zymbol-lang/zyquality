@@ -1,4 +1,4 @@
 Runtime error: failed to parse module: 3 parse error(s) in 'i18n/matematicas/sistema.zy'
-  i18n/matematicas/sistema.zy:55:27: expected expression, found Pipe
+  i18n/matematicas/sistema.zy:55:27: expected expression, found '|'
   i18n/matematicas/sistema.zy:61:34: expected field name after '.'
-  i18n/matematicas/sistema.zy:67:31: expected expression, found Pipe
+  i18n/matematicas/sistema.zy:67:31: expected expression, found '|'
