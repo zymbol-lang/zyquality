@@ -608,7 +608,6 @@ rust	shared	expected parameter name in lambda
 rust	shared	expected pattern, found §
 rust	shared	expected public name after '=>'
 rust	shared	expected runtime error
-rust	shared	expected signature: §(§)
 rust	shared	expected variable name after ':' in named tuple destructure
 rust	shared	expected variable name after ><
 rust	shared	expected variable name after \
