@@ -358,7 +358,6 @@ rust	shared	'§' is already defined — `°` initializer is redundant; remove it
 rust	shared	'§' is inside no loop at all. a function or lambda body does not see the caller's loops
 rust	shared	'§' §s the enclosing '@' loop; there is none here. a function or lambda body does not see the caller's loops
 rust	shared	'§°' hot-initialized to 0 — '^' will always produce 0
-rust	shared	'°name' is only valid as an assignment target
 rust	shared	(year, month, day) or (year, month, day, hour, minute, second), each ###, plus an optional zone
 rust	shared	1 2 fizz 4 buzz fizz 7 8 fizz buzz 11 fizz 13 14 fizzbuzz
 rust	shared	>>~ position tuple has at most 5 slots: (fila, col, bks, fg, bg)
@@ -833,7 +832,6 @@ rust	shared	use '=' to assign a value to a variable
 rust	shared	use '_' (without '?') for an unconditional else branch
 rust	shared	use '_' to indicate where the piped value should go
 rust	shared	use '§[i]$~ value' to modify in place — '=' gives a value to a name, '$~' changes part of a collection
-rust	shared	use '°x += n' to anchor accumulation above the nearest loop
 rust	shared	use := to declare constants (immutable values)
 rust	shared	use `[…]` — `#[…]` is for declaring a mix that is deliberate
 rust	shared	use `°` only on the first assignment to auto-initialize
