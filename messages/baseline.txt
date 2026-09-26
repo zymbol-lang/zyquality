@@ -673,7 +673,6 @@ rust	shared	invalid utf-8
 rust	shared	io error: §
 rust	shared	key input (<<|)
 rust	shared	labels in scope here: §
-rust	shared	lambda expects § arguments, got §
 rust	shared	lambda parameters must be identifiers: (a, b) -> expr
 rust	shared	lambda syntax: (a, b) -> expr
 rust	shared	lambda syntax: x -> expr
