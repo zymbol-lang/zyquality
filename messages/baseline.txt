@@ -859,6 +859,7 @@ zyjs	shared	cannot convert string '§' to number for §
 zyjs	shared	cannot import '§': no module resolver available
 zyjs	shared	cannot iterate over §
 zyjs	shared	cannot modify tuple '§': tuples are immutable help: use 'new_var = §[§]$~ value' for a functional update
+zyjs	shared	cannot run '§': a subscript runs another file as a process, and the browser has none
 zyjs	shared	cannot subscript §
 zyjs	shared	cannot use bool as array index
 zyjs	shared	cannot write § to [§]: type mismatch — expected element of type §
