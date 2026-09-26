@@ -360,7 +360,6 @@ rust	shared	'§' §s the enclosing '@' loop; there is none here. a function or l
 rust	shared	'§°' hot-initialized to 0 — '^' will always produce 0
 rust	shared	(year, month, day) or (year, month, day, hour, minute, second), each ###, plus an optional zone
 rust	shared	1 2 fizz 4 buzz fizz 7 8 fizz buzz 11 fizz 13 14 fizzbuzz
-rust	shared	>>~ position tuple has at most 5 slots: (fila, col, bks, fg, bg)
 rust	shared	>>~ slot expects int, got §
 rust	shared	@~ requires integer milliseconds, got §
 rust	shared	@~ requires non-negative duration, got §
@@ -604,7 +603,6 @@ rust	shared	expected no errors for same-scope access in if block
 rust	shared	expected no errors for same-scope access in loop
 rust	shared	expected parameter name
 rust	shared	expected parameter name in lambda
-rust	shared	expected pattern, found §
 rust	shared	expected public name after '=>'
 rust	shared	expected runtime error
 rust	shared	expected variable name after ':' in named tuple destructure
@@ -858,7 +856,6 @@ zyjs	shared	$~ not supported on §
 zyjs	shared	'§' is not a function
 zyjs	shared	'§' is not an array
 zyjs	shared	), // and without it
-zyjs	shared	>>~ position has at most 5 slots
 zyjs	shared	`°` has no effect in output context — use `>> x ¶`
 zyjs	shared	a dictionary is written `#(…)`: write `#(` here, as in #(nombre: valor). a bare `(…)` is a positional tuple, and `#()` is the empty dictionary — which `()` cannot be, since it would have to be the empty tuple as well
 zyjs	shared	a dictionary key cannot interpolate — use `d[…]$~ value` to add a computed key
