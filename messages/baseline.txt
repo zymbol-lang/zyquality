@@ -351,8 +351,6 @@ rust	shared	$~~ count must be an integer, got §
 rust	shared	$~~ pattern must be a string or char, got §
 rust	shared	$~~ replacement must be a string, got §
 rust	shared	'./../' is not a module path
-rust	shared	'§' is a constant of §, not a function
-rust	shared	'§' is a function of §, not a constant
 rust	shared	'§' is already defined — `°` initializer is redundant; remove it
 rust	shared	'§' is inside no loop at all. a function or lambda body does not see the caller's loops
 rust	shared	'§' §s the enclosing '@' loop; there is none here. a function or lambda body does not see the caller's loops
@@ -392,7 +390,6 @@ rust	shared	base conversion syntax: §|expr|
 rust	shared	bash execute syntax: <\ expr1 expr2 ... \>
 rust	shared	blocks must be enclosed in braces
 rust	shared	bool type metadata: §
-rust	shared	call it with '::': §::§(…)
 rust	shared	can only iterate over ranges, arrays, strings, tuples and dictionaries, got §
 rust	shared	cannot access underscore variable '_config'
 rust	shared	cannot access underscore variable '_counter'
@@ -454,7 +451,6 @@ rust	shared	db::tx: each statement must be a (sql, params) tuple
 rust	shared	db::tx: statements must be an array
 rust	shared	decimal typespec syntax: ##.(total, decimals)
 rust	shared	destructure assignment
-rust	shared	did you mean '§::§'?
 rust	shared	divide by zero
 rust	shared	duplicate export block in module
 rust	shared	e002: module '§' not found
@@ -735,7 +731,6 @@ rust	shared	range start type § differs from end type §
 rust	shared	range syntax: $-[..end] or $-[..]
 rust	shared	range syntax: $-[start..end] or $-[start..]
 rust	shared	ranges can only be used in for-each loops
-rust	shared	read it with '.': §.§
 rust	shared	reduce lambda must have exactly 2 parameters (acc, elem), got §
 rust	shared	reduce lambda requires 2 parameters (accumulator, element), got §
 rust	shared	reduce operation requires a lambda, got §
@@ -839,8 +834,6 @@ rust	shared	write `#(` here: `#(nombre: valor)`. a bare `(…)` is a positional 
 rust	shared	x should be destroyed after final output
 rust	shared	x should not be destroyed after first output
 rust	shared	zymbol: no posix shell found (§); running `<\ \>` through cmd.exe. commands written in posix shell syntax will not work — install git for windows or set zymbol_sh to get the portable behaviour back
-rust	shared	§ does not export a constant '§'
-rust	shared	§ does not export a function '§'
 rust	shared	§ lexer error(s) in '§' §
 rust	shared	§ parse error(s) in '§' §
 rust	shared	§ parser errors in §
