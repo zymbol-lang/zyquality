@@ -444,7 +444,6 @@ rust	shared	connection string
 rust	shared	consider removing this variable or prefixing with '_' if intentionally unused
 rust	shared	consider removing this variable or using its value
 rust	shared	constant '§' already declared
-rust	shared	constant '§' not exported from module '§'
 rust	shared	constant with non-literal initializer
 rust	shared	count-based range syntax: $-[start:count]
 rust	shared	count-based slice syntax: $[start:count]
@@ -627,7 +626,6 @@ rust	shared	format expression syntax: §n|expr| where n >= 0
 rust	shared	format expression syntax: §|expr|
 rust	shared	format expression syntax: §|expr| or §.n|expr|
 rust	shared	format expressions only work with numbers, got §
-rust	shared	function '§' not exported from module '§'
 rust	shared	function '§::§' expects § argument(s), but § were provided
 rust	shared	function call syntax: expr(arg1, arg2, ...)
 rust	shared	function call syntax: name(arg1, arg2, ...)
@@ -693,7 +691,6 @@ rust	shared	member access requires a field name: object.field
 rust	shared	member function calls not supported
 rust	shared	mixed digit scripts
 rust	shared	mixed digit scripts in numeric literal
-rust	shared	module '§' does not export constant '§'
 rust	shared	module '§' not loaded
 rust	shared	module body must be enclosed in braces: # name §
 rust	shared	module-level constants must use literal values, not expressions or function calls
