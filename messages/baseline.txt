@@ -611,7 +611,6 @@ rust	shared	expected variable name in input statement
 rust	shared	expected x to be destroyed after output
 rust	shared	expression statement
 rust	shared	extended arabic-indic
-rust	shared	failed to enable raw mode: §
 rust	shared	failed to enter alternate screen: §
 rust	shared	failed to parse '§' as § number
 rust	shared	failed to parse module: §
