@@ -211,12 +211,6 @@ engines = ["zyjs"]
 tag = "TUI"
 reason = "raw mode and key input need a real terminal"
 
-[[rule]]
-match = "manual/tui/06_tui_block.zy"
-engines = ["zyjs"]
-tag = "TUI"
-reason = "raw mode and key input need a real terminal"
-
 # ── golden ────────────────────────────────────────────────────────────────
 # How a `.expected` file was recorded, and therefore how it has to be checked.
 # The last matching entry wins, so write the general case first.
