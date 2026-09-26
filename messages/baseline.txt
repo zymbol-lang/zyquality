@@ -688,7 +688,6 @@ rust	shared	match expression must be enclosed in braces
 rust	shared	match expression returns values but result is unused
 rust	shared	mathematical sans-serif bold
 rust	shared	member access requires a field name: object.field
-rust	shared	member function calls not supported
 rust	shared	mixed digit scripts
 rust	shared	mixed digit scripts in numeric literal
 rust	shared	module '§' not loaded
