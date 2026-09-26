@@ -324,7 +324,6 @@ rust	shared	$+ is not supported on named tuples — no field name available
 rust	shared	$+ on string requires char or string element, got §
 rust	shared	$++ requires a string or array as base, got §
 rust	shared	$+[i] index must be an integer, got §
-rust	shared	$+[i] index must be positive (1-based, use 1 to insert at the beginning), got §
 rust	shared	$+[i] is not supported on named tuples — no field name available
 rust	shared	$+[i] on string requires char or string element, got §
 rust	shared	$+[i] requires an array, tuple, or string, got §
