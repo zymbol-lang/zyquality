@@ -179,9 +179,9 @@ $ zymbol check tests/analysis/unused_variable.zy
    at tests/analysis/unused_variable.zy:4:1
    help: consider removing this variable or prefixing with '_' if intentionally unused
 
-2. unused variable 'UNUSED_CONST'
+2. unused constant 'UNUSED_CONST'
    at tests/analysis/unused_variable.zy:11:1
-   help: consider removing this variable or prefixing with '_' if intentionally unused
+   help: consider removing this constant
 
 Found 2 warning(s)
 ✓ No errors found
