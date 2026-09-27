@@ -53,6 +53,7 @@ rust	rust-only	building standalone executable
 rust	rust-only	built executable not found at: §
 rust	rust-only	cannot open package '§': §
 rust	rust-only	cannot resolve import path
+rust	rust-only	cannot run '§': a subscript needs the zymbol command, and this program runs without it
 rust	rust-only	cargo build failed
 rust	rust-only	char or string
 rust	rust-only	char, int, or string
