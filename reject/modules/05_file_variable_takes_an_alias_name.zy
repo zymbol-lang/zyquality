@@ -1,0 +1,12 @@
+// @reject: a variable of the file may not take the name of an import alias
+// @reject: (GLB-070, decided 2026-09-26). MEM-7: within one strong environment
+// @reject: a name designates one thing, and the file is one. When both could
+// @reject: exist, `js.x` read the module at file level and the variable inside
+// @reject: a function, so the same text meant two things depending on where it
+// @reject: stood. Inside a function the name is free — a different strong
+// @reject: environment — and there the variable hides the alias behind a `.`;
+// @reject: `::` always names the module. See
+// @reject: corpus/modules_scope/alias_shadowed_by_variable.zy.
+<# std/json => js
+js = 1
+>> js ¶
