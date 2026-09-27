@@ -1,0 +1,11 @@
+// @reject: decision 15, where the FIRST element is a read, not a literal.
+// @reject: `k` is `[Int]`, so `k[1]` is an Int and "x" does not agree with it.
+// @reject: The two Rust engines infer that; the browser engine decided element
+// @reject: types from literals and remembered array variables only, so it could
+// @reject: not type `k[1]`, and — by the rule this file's sibling 16 covers —
+// @reject: that one unknown kind switched the check off. Closed by consulting
+// @reject: the same inference the browser engine already used for `W_TYPE_CHANGE`
+// @reject: (GO/Depurando_GO.md DG-05, 2026-09-27).
+k = [1]
+c = [k[1], "x"]
+>> c ¶
