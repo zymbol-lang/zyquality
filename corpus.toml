@@ -80,6 +80,12 @@ reason = "std/db is ODBC; a browser has no equivalent"
 # deleting one file does not silently widen the exclusion.
 
 [[rule]]
+match = "bugs/bug03_bashexec_void_statement.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "`<\\ shell \\>` has no browser equivalent — this file agreed until 2026-09-29 only because the browser answered `true`, `mkdir` and `rmdir` with a random number and discarded it (BUG-GOL-014); now it refuses them"
+
+[[rule]]
 match = "i18n/test_bash.zy"
 engines = ["zyjs"]
 tag = "BASH_EXEC"
