@@ -1,0 +1,6 @@
+top level: 1
+inside a loop: 1
+inside an if: 2
+from a function: 11
+nested: 2
+nested: 4

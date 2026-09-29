@@ -1,0 +1,20 @@
+// A file-level function whose name begins with `_` is callable from inside any
+// block. GUIDE.md § 4 gives `_` exact block scope over *variables*; a function
+// declaration is not one. BUG-GOL-002 (GoL/HALLAZGOS.md): the browser engine
+// applied the variable rule to the function namespace, in both its analyzer and
+// its runtime, so no script with a `_private()` helper ran in the playground.
+//
+// The variable half of the rule stands and is not tested here: `_v = 5` read
+// from inside `@ 1 { }` is still refused by all three engines.
+
+_uno() { <~ 1 }
+_doble(x) { <~ x * 2 }
+
+>> "top level: " _uno() ¶
+@ 1 { >> "inside a loop: " _uno() ¶ }
+? #1 { >> "inside an if: " _doble(_uno()) ¶ }
+externa() { <~ _uno() + 10 }
+>> "from a function: " externa() ¶
+@ i:1..2 {
+    @ _j:1..1 { >> "nested: " _doble(i) ¶ }
+}

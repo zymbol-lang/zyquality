@@ -40,6 +40,11 @@
 # the browser engine has no terminal, no filesystem and no shell, so it diverges
 # on every one of them and the number means nothing. Ask for it with `--engines`
 # when there is a reason to.
+#
+# One exception, measured when it joined (2026-09-29): `gol` agrees under all
+# three — its tests call the program as modules instead of reaching for a shell
+# or a file — so `--only gol --engines zytw,zyvm,zyjs` is a question worth
+# asking, and it is how BUG-GOL-002 was found.
 
 [[app]]
 id = "go"
@@ -75,3 +80,8 @@ desc = "code auditor, written in Chinese — parsing, metrics, reports, translat
 id = "zybank"
 dir = "../ZyBank/pruebas"
 desc = "ZyBank, personal ledger in Spanish — money as integers with a per-currency exponent, SQLite through std/db, four locales, two digit scripts"
+
+[[app]]
+id = "gol"
+dir = "../GoL/δοκιμές"
+desc = "Conway's Game of Life, written in Greek — B/S rules, torus and bounded worlds, stop diagnosis, four locales incl. Devanagari digits; the one app whose tests are all Zymbol, runner included"
