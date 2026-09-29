@@ -88,7 +88,7 @@ gate = false
 [[suite]]
 id = "project"
 cmd = ["bash", "project/run.sh"]
-desc = "the real programs written in Zymbol: a go engine, two TUI games, a neural-network library, a code auditor"
+desc = "the real programs written in Zymbol: a go engine, a chaturanga engine, two TUI games, a neural-network library, a code auditor, a ledger, the Game of Life"
 needs = ["zymbol"]
 # A gate. These suites are the strongest regression signal the project has: a
 # test case failing says a feature broke, an application failing says something
