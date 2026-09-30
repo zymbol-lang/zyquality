@@ -66,11 +66,12 @@ done
 read_apps() {
     awk '
         /^[[:space:]]*#/    { next }
-        /^\[\[app\]\][[:space:]]*$/ { if (id != "") print id "\t" dir "\t" desc; id=dir=desc=""; next }
+        /^\[\[app\]\][[:space:]]*$/ { if (id != "") print id "\t" dir "\t" desc "\t" fx; id=dir=desc=fx=""; next }
         /^[[:space:]]*id[[:space:]]*=/   { sub(/^[^=]*=[[:space:]]*/, ""); gsub(/"/, ""); id=$0;   next }
         /^[[:space:]]*dir[[:space:]]*=/  { sub(/^[^=]*=[[:space:]]*/, ""); gsub(/"/, ""); dir=$0;  next }
         /^[[:space:]]*desc[[:space:]]*=/ { sub(/^[^=]*=[[:space:]]*/, ""); gsub(/"/, ""); desc=$0; next }
-        END { if (id != "") print id "\t" dir "\t" desc }
+        /^[[:space:]]*fixtures[[:space:]]*=/ { sub(/^[^=]*=[[:space:]]*/, ""); gsub(/[]["[:space:]]/, ""); fx=$0; next }
+        END { if (id != "") print id "\t" dir "\t" desc "\t" fx }
     ' "$APPS"
 }
 
@@ -79,9 +80,16 @@ wanted() { [[ -z "$ONLY" ]] || [[ ",$ONLY," == *",$1,"* ]]; }
 echo "${BOLD}project${RESET} the real programs written in Zymbol"
 
 fail=0; ran=0; absent=0; unset_apps=0
-while IFS=$'\t' read -r id dir desc; do
+while IFS=$'\t' read -r id dir desc fx; do
     wanted "$id" || continue
     abs="$ZYQ_HOME/$dir"
+    # Data the suites read from beside the app, copied into each scratch
+    # directory (`fixtures` in apps.toml, D9).
+    fixture_args=()
+    if [[ -n "$fx" ]]; then
+        IFS=',' read -ra fixture_list <<<"$fx"
+        for f in "${fixture_list[@]}"; do fixture_args+=(--fixture "$ZYQ_HOME/$f"); done
+    fi
 
     if [[ ! -d "$abs" ]]; then
         absent=$((absent + 1))
@@ -99,7 +107,7 @@ while IFS=$'\t' read -r id dir desc; do
     # golden is a regression; no goldens at all means this app has never been
     # recorded — its suites live in another repository, and a checkout that has
     # not had them recorded yet is unconfigured, not broken.
-    out="$("$ZYQ" --root "$ZYQ_HOME" expect --corpus "$abs" \
+    out="$("$ZYQ" --root "$ZYQ_HOME" expect --corpus "$abs" "${fixture_args[@]}" \
             --timeout "$TIMEOUT" --no-colour $([[ $VERBOSE -eq 1 ]] && echo -v) 2>&1)"
     rc=$?
     case $rc in
@@ -113,7 +121,7 @@ while IFS=$'\t' read -r id dir desc; do
     esac
 
     # The finding: do the engines agree?  Never fails this runner.
-    out="$("$ZYQ" --root "$ZYQ_HOME" consensus --corpus "$abs" --engines "$ENGINES" \
+    out="$("$ZYQ" --root "$ZYQ_HOME" consensus --corpus "$abs" "${fixture_args[@]}" --engines "$ENGINES" \
             --timeout "$TIMEOUT" --no-colour 2>&1)"
     line="$(grep -a 'files:' <<<"$out" | tail -1 | sed 's/^consensus *//')"
     if grep -aq 'DIVERGE' <<<"$out"; then

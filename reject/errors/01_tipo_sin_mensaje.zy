@@ -1,0 +1,5 @@
+// @reject: in an expression, an error kind builds an error value and needs its
+// @reject: message: `##Parse("…")`. `##Parse` alone stands only after `:!`.
+// @reject: Decided 2026-09-29 with the constructor (D3, GAP-GOL-003).
+e = ##Parse
+>> e ¶

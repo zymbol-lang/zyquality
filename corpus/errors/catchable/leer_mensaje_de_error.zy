@@ -1,0 +1,51 @@
+// Test: `##Tipo(m) =>` lee el mensaje de un error (GAP-GOL-016, D7).
+//
+// Un valor de error se construía (`##Parse("…")`) y no dejaba leer su
+// mensaje: sólo `_err`, dentro de un `:!`, adonde un error construido no
+// llega. La grafía que lo construye lo desmonta como patrón de `??`, igual que
+// `(a, b)` construye y desestructura una tupla.
+//
+// La ligadura es un NACIMIENTO como `m = …`: si `m` ya es visible se le asigna
+// (MEM-7, un nombre es una cosa); si no, vive en el brazo. `##Tipo(_)` y
+// `##Tipo` a secas emparejan sin ligar, como `:! ##Tipo`.
+
+regla(t) {
+    ? t$# == 0 { <~ ##Κανόνας("σφάλμα.κανόνας_κενό") }
+    ? t$# > 5 { <~ ##Μήκος("πολύ μακρύς") }
+    <~ t
+}
+
+describe(r) {
+    <~ ?? r {
+        ##Κανόνας(clave) => ("clave: " clave)
+        ##Μήκος(_)       => "demasiado larga"
+        ##Parse          => "parse"
+        _                => ("bien: " r)
+    }
+}
+
+>> describe(regla("")) ¶
+>> describe(regla("B3/S23x")) ¶
+>> describe(regla("B3")) ¶
+>> describe(##Parse("x")) ¶
+>> describe(42) ¶
+
+// Como sentencia, con bloque.
+?? regla("") {
+    ##Κανόνας(clave) => { >> "bloque: " clave ¶ }
+    _                => { >> "otro" ¶ }
+}
+
+// Un nombre ya visible se asigna, no se oculta.
+m = "fuera"
+?? ##A("dentro") {
+    ##A(m) => { >> "en el brazo: " m ¶ }
+    _      => { >> "otro" ¶ }
+}
+>> "después: " m ¶
+
+// Alternativas sin ligar.
+?? ##B("x") {
+    ##A(_) || ##B => { >> "A o B" ¶ }
+    _             => { >> "otro" ¶ }
+}

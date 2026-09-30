@@ -1,0 +1,8 @@
+// @reject: an error pattern names its message or ignores it with `_`; it does
+// @reject: not compare it. `##A(1)` and `##A("x")` are refused — to test the
+// @reject: text, bind it and compare in the arm (D7, 2026-09-29).
+r = ##A("x")
+?? r {
+    ##A("x") => { >> "x" ¶ }
+    _        => { >> "o" ¶ }
+}

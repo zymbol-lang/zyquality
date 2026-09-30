@@ -1,0 +1,8 @@
+// @reject: an element of a list pattern is a value compared with an element of
+// @reject: the array; an error pattern takes a value apart and belongs to an
+// @reject: arm of its own. Decided with the pattern, 2026-09-29 (D7).
+r = [##A("x")]
+?? r {
+    [##A(m)] => { >> m ¶ }
+    _        => { >> "o" ¶ }
+}

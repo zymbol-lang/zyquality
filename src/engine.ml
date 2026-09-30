@@ -186,10 +186,22 @@ let subst ~file ~exe s =
    has the engines racing over the same paths, and the loser reports a
    divergence that says nothing about the language.  Isolation makes the
    comparison about the program, not about who got there first. *)
+(* Data a program reads from beside it, copied into every sandbox before it
+   runs (`--fixture`, declared per application in project/apps.toml).  A suite
+   that reads `源文件/计算器.zy` relative to where it runs found an empty
+   directory here, and ZyAudit's goldens recorded the shell's "No such file" as
+   if it were the audit (D9, 2026-09-30).  Copied rather than run in place, so
+   what a suite writes still lands in the scratch directory and nowhere else. *)
+let fixtures : string list ref = ref []
+
 let sandbox_of () =
   let d = Filename.concat (Filename.get_temp_dir_name ())
       (Printf.sprintf "zyq_%d_%d" (Unix.getpid ()) (Random.bits ())) in
   (try Unix.mkdir d 0o700 with Unix.Unix_error (Unix.EEXIST, _, _) -> ());
+  List.iter (fun f ->
+      if Sys.command (Filename.quote_command "cp" [ "-R"; f; d ]) <> 0 then
+        Printf.eprintf "zyq: could not copy fixture %s\n%!" f)
+    !fixtures;
   d
 
 let rec rm_rf path =

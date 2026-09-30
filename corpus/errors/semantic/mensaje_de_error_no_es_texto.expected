@@ -1,0 +1,6 @@
+error: an error's message is a String, got Int
+  --> errors/semantic/mensaje_de_error_no_es_texto.zy:5:13
+   5 |
+   5 | e = ##Parse(42)
+     |             ^^
+  = help: build the text first: ##Parse("…"), or ##Parse("" x) to turn a value into it

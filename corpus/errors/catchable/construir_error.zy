@@ -1,0 +1,52 @@
+// Test: `##Tipo("mensaje")` construye un valor de error (GAP-GOL-003, D3).
+//
+// Antes un programa podía MANEJAR un error — `$!`, `$!!`, `:!` — y no podía
+// HACER uno: la convención de error suave que siguen std/io, std/net, std/db y
+// std/time no estaba al alcance de un módulo del usuario, y GoL devolvía
+// tuplas `(mensaje, valor)` en su lugar.
+//
+// Es un VALOR, no un lanzamiento: `$!` da #1, `$!!` lo propaga, y ningún `:!`
+// lo ve, igual que un error suave de std/io. Se escribe como se imprime, y el
+// tipo es libre, como en `:!`: aquí `##Regla` y `##Κανόνας` no son de la lista.
+
+regla(t) {
+    ? t$# == 0 { <~ ##Parse("regla vacía") }
+    ? t$# > 5 { <~ ##Regla("demasiado larga: {t}") }
+    <~ t
+}
+
+a = regla("")
+b = regla("B3/S23x")
+c = regla("B3")
+>> a ¶
+>> b ¶
+>> c ¶
+>> a$! " " b$! " " c$! ¶
+
+// `#?` lee el tipo de vuelta, y cuenta el mensaje en puntos de código: la í
+// de «vacía» es uno, no dos bytes.
+>> a#? ¶
+
+usa(t) {
+    r = regla(t)
+    r$!!
+    <~ "usada: " r
+}
+>> usa("B3") ¶
+>> usa("") ¶
+
+// Construirlo no lo lanza: el `:!` no se entera.
+!? {
+    x = ##IO("no lanzado")
+    >> "sigue: " x ¶
+} :! {
+    >> "capturado" ¶
+}
+
+// El mensaje es una posición delimitada, como un argumento: yuxtapone.
+n = 3
+>> ##Parse("línea " n) ¶
+
+// Un tipo en cualquier escritura, construido y filtrado.
+k = ##Κανόνας("κενός")
+>> k ¶
