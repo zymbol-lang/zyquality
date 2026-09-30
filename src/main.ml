@@ -127,6 +127,7 @@ let usage code =
   p "  --audit-exclusions  consensus: run the excused engines too and report";
   p "                   every exclusion that has stopped being true";
   p "  --timeout N      seconds per engine (default: 10)";
+  p "  --fixture PATH   copy PATH into every engine's scratch directory (repeatable)";
   p "  -v, --verbose    show agreeing files too";
   p "  --json           machine-readable output";
   p "  --only a,b       suite: run only these script suites (fmt, tui, guide, bench)";
@@ -165,6 +166,10 @@ let parse_args argv =
   let rec go = function
     | [] -> ()
     | "--corpus" :: v :: t -> o.corpus <- v; go t
+    | "--fixture" :: v :: t ->
+      if not (Sys.file_exists v) then die 2 "--fixture: no such file or directory: %s" v;
+      let v = if Filename.is_relative v then Filename.concat (Sys.getcwd ()) v else v in
+      Engine.fixtures := !Engine.fixtures @ [ v ]; go t
     | "--reject" :: v :: t -> o.reject_dir <- v; go t
     | "--engines-file" :: v :: t -> o.engines_file <- v; go t
     | "--corpus-file" :: v :: t -> o.corpus_file <- v; go t

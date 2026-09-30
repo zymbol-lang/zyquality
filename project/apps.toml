@@ -32,6 +32,8 @@
 #   id     short name, used in the report and in --only
 #   dir    the suite directory, relative to zyquality/
 #   desc   what the application is
+#   fixtures  optional: data the suites read from beside the app, copied into
+#             each engine's scratch directory before every run (D9)
 #
 # Engines are not declared per app: `zyq` works out per file which of them can
 # run a given suite, and reports "unsupported" apart from "gave a different
@@ -74,6 +76,11 @@ desc = "neural-network library — activations, gradients, attention, forward pa
 [[app]]
 id = "zyaudit"
 dir = "../ZyAudit/测试"
+# The suites read 源文件/计算器.zy and i18n.json relative to where they run.
+# Without the copy they found an empty scratch directory, and six of the eight
+# goldens recorded the shell's "No such file" — and empty labels — as the audit
+# (D9, 2026-09-30).
+fixtures = ["../ZyAudit/源文件", "../ZyAudit/i18n.json"]
 desc = "code auditor, written in Chinese — parsing, metrics, reports, translation"
 
 [[app]]

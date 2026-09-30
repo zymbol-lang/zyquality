@@ -80,6 +80,12 @@ reason = "std/db is ODBC; a browser has no equivalent"
 # deleting one file does not silently widen the exclusion.
 
 [[rule]]
+match = "errors/catchable/estado_de_salida.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "`<\\ shell \\>` has no browser equivalent, and neither has `</ … />` — the exit status these read belongs to a process, and a browser has none"
+
+[[rule]]
 match = "bugs/bug03_bashexec_void_statement.zy"
 engines = ["zyjs"]
 tag = "BASH_EXEC"

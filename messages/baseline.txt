@@ -766,6 +766,7 @@ rust	shared	syntax: \variable to explicitly destroy a variable
 rust	shared	syntax: arr[i] = val or arr[i] += val
 rust	shared	syntax: string$~~[pattern:replacement] or string$~~[pattern:replacement:count]
 rust	shared	term::width: expected a string or char, got §
+rust	shared	terminated by a signal
 rust	shared	the `°` marker is for initialization in assignments, not for reading
 rust	shared	the enclosing loops have no labels — write '@:§ §' on the one you mean to target
 rust	shared	the escape is symmetric — write \} for a literal brace, as \{ is for the opening one

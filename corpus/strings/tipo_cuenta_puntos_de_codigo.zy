@@ -1,0 +1,13 @@
+// Test: `#?` cuenta una cadena en puntos de código, como `$#`.
+//
+// El tree-walker contaba bytes: `"vacía"#?` daba 6 ahí y 5 en la VM y en
+// zyjs, y el mensaje de un error daba bytes en los dos motores Rust. Ningún
+// archivo preguntaba `#?` a una cadena que no fuera ASCII (BUG-GOL-015).
+
+s = "vacía"
+>> s#? ¶
+>> s$# ¶
+>> "κενός"#? ¶
+>> "漢字"#? ¶
+e = ##Parse("vacía")
+>> e#? ¶

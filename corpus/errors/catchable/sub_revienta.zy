@@ -1,0 +1,3 @@
+// Subscript de `estado_de_salida.zy`, y un programa por sí mismo: revienta.
+x = 1 / 0
+>> x ¶
