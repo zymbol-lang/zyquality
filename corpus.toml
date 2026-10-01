@@ -80,6 +80,18 @@ reason = "std/db is ODBC; a browser has no equivalent"
 # deleting one file does not silently widen the exclusion.
 
 [[rule]]
+match = "output/pantalla_virtual.zy"
+engines = ["zyjs"]
+tag = "TUI"
+reason = "raw mode and key input need a real terminal — and the virtual screen `zymbol run --keys` gives in its place exists only in the Rust CLI"
+
+[[rule]]
+match = "errors/catchable/argumentos_del_subscript.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "`</ … />` runs another file as a process, and a browser has none"
+
+[[rule]]
 match = "errors/catchable/estado_de_salida.zy"
 engines = ["zyjs"]
 tag = "BASH_EXEC"
