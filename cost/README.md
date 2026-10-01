@@ -21,6 +21,13 @@ a change from linear to quadratic reads as "slower" until the input grows and it
 reads as a hang. Here the same program is run at `N` and at `N × 4`: linear is
 4.0, quadratic is 16.0, and the limit sits between them.
 
+**What does a function call cost?** The same Life generation written twice — a
+neighbour count called once per cell, and the same count inline — run at one
+size (`time-ratio`). Measured 2026-09-30: 1.14 under the VM, 0.87 under the
+tree-walker. The limit, 1.30, guards the call path; it does not claim the 14 %
+is understood — see the case's comment in `cost.toml` for what was measured and
+what was not.
+
 ## Why ratios and not a baseline
 
 `bench/baseline.txt` records milliseconds and says so in its own header —

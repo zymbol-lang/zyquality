@@ -27,6 +27,11 @@
 #                 is `factor`, quadratic is `factor²`, and the limit sits
 #                 between them. This is what `bench/` structurally cannot see —
 #                 it runs each program at one size.
+#
+#   time-ratio    subject vs control, wall time, at one size: the same work
+#                 written two ways, so the ratio is the price of the one
+#                 difference between them. Added for the cost of a function call
+#                 in a hot loop (IDEA-GOL-007).
 
 # ── `open_finding` ───────────────────────────────────────────────────────────
 #
@@ -133,3 +138,30 @@ what      = "catching an error costs the same on the thousandth turn as on the f
 # was raised in open, so every later lookup walked all of them.
 why       = "an error that leaves blocks without popping their scopes makes each lookup slower than the last"
 engines   = ["zytw", "zyvm", "zyjs"]
+
+# ── The price of a call ──────────────────────────────────────────────────────
+
+[[case]]
+id        = "call/function-in-hot-loop"
+kind      = "time-ratio"
+subject   = "casos/llamada_por_celda.zy.in"
+control   = "casos/en_linea.zy.in"
+n         = 160
+n_by_engine = { zytw = 64 }
+max_ratio = 1.30
+what      = "a Life generation with a call per cell costs little more than the same code inline"
+# Measured 2026-09-30, side 160, median of 12 interleaved runs: zyvm 1.14,
+# zytw 0.87 (the tree-walker is FASTER with the call: its per-scope cost is
+# lower in a fresh frame). GoL's own bench had said 1.39 for the VM on
+# 2026-09-04; it says 1.22 today, and its call variant also does work the
+# inline one does not, so it overstated the call.
+#
+# What the 14 % is made of, as far as could be measured without a profiler
+# (none on this machine): the call machinery itself is 2-5 % — the same
+# control with an EMPTY five-argument call per cell; preparing and dropping a
+# 34-register frame instead of a 5-register one is ~55 ns of the ~280 ns
+# extra per call; the six auto-free LoadUnits before the callee's `<~` were
+# measured, removed, made no difference, and were put back. The rest is not
+# located. The limit catches a regression of the call path, not the residue.
+why       = "if this climbs, a call in a hot loop got dearer — frame setup, argument copy, or what runs at return"
+

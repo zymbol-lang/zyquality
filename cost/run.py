@@ -123,6 +123,26 @@ def main() -> int:
                     if ss or cs:
                         raise RuntimeError(f"engine exited {ss or cs}")
                     ratio, unit = s / c, f"{s:.0f}MB vs {c:.0f}MB"
+                elif kind == "time-ratio":
+                    # Subject against control at ONE size, wall time: the same
+                    # work written two ways, so the ratio is what the difference
+                    # between them costs (a function call in the hot loop, for
+                    # IDEA-GOL-007) — on this machine, against itself.
+                    n = case.get("n_by_engine", {}).get(eng, case["n"])
+                    sf, cf = render(ROOT / case["subject"], n), render(ROOT / case["control"], n)
+                    tmp += [sf, cf]
+                    runs = defaults.get("runs_time", 3)
+                    ts, bad_s = median_time(ENGINES[eng](sf), ROOT, runs)
+                    tc, bad_c = median_time(ENGINES[eng](cf), ROOT, runs)
+                    if bad_s or bad_c:
+                        raise RuntimeError(f"engine exited {bad_s or bad_c}")
+                    floor = defaults.get("min_base_ms", 0) / 1000.0
+                    if tc < floor:
+                        raise TooFast(f"control run {tc*1000:.0f}ms < "
+                                      f"{floor*1000:.0f}ms floor — this ratio "
+                                      f"would measure process startup")
+                    ratio = ts / tc if tc else float("inf")
+                    unit = f"{ts*1000:.0f}ms vs {tc*1000:.0f}ms at n={n}"
                 else:
                     tpl = ROOT / case["template"]
                     n = case.get("n_by_engine", {}).get(eng, case["n"])
