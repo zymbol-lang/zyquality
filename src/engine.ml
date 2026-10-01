@@ -250,6 +250,21 @@ let argv_for (e : engine) (how : how) =
 
 let can (e : engine) (how : how) = argv_for e how <> []
 
+(* The argv one engine runs one file with.  One place, for the sequential
+   runner and the parallel one: `{keys}` was first expanded in only one of them,
+   and every golden taken through the other ran `zymbol run {keys} x.zy`.
+
+   `{keys}` is `--keys x.keys` when a key script sits beside `x.zy`, and nothing
+   otherwise — the way `x.input` becomes stdin.  A full-screen program then runs
+   on a virtual screen and leaves its last frame as output (D11). *)
+let argv_of (e : engine) (how : how) ~(file : string) =
+  let exe = Filename.remove_extension file ^ ".exe" in
+  let keys = Filename.remove_extension file ^ ".keys" in
+  List.concat_map (fun a ->
+      if a = "{keys}" then (if Sys.file_exists keys then [ "--keys"; keys ] else [])
+      else [ subst ~file ~exe a ])
+    (argv_for e how)
+
 (* Run one engine over one file.  [timeout] is seconds; the coreutils `timeout`
    does the enforcing, which keeps signal handling out of this process.
 
@@ -270,8 +285,7 @@ let can (e : engine) (how : how) = argv_for e how <> []
 let run ?(timeout = 10) ?stdin_file ?(how : how = `Run) ?(merge = false)
     (e : engine) ~(file : string) : result =
   let file = if Filename.is_relative file then Filename.concat (Sys.getcwd ()) file else file in
-  let exe = Filename.remove_extension file ^ ".exe" in
-  let argv = List.map (subst ~file ~exe) (argv_for e how) in
+  let argv = argv_of e how ~file in
   match argv with
   | [] -> { eid = e.id; stdout = ""; stderr = "no command for this mode"; code = 127;
             wall_ms = 0.0; status = Unavailable }
@@ -333,8 +347,7 @@ let run_all ?(timeout = 10) ?stdin_file ?(how : how = `Run) ?(merge = false)
   let file = if Filename.is_relative file then Filename.concat (Sys.getcwd ()) file else file in
   let started =
     List.map (fun e ->
-        let exe = Filename.remove_extension file ^ ".exe" in
-        let argv = List.map (subst ~file ~exe) (argv_for e how) in
+        let argv = argv_of e how ~file in
         match argv with
         | [] -> (e, None)
         | _ ->

@@ -1,0 +1,15 @@
+// Test: un subscript recibe los argumentos escritos tras su ruta (D10).
+//
+// Antes heredaba siempre los del programa que lo llamaba, y `</ ./x.zy uno />`
+// era «file not found: ./x.zy uno». Ahora las palabras tras la ruta son su
+// línea de órdenes, LITERALES como la ruta: el empaquetador y AGT-3 leen el
+// programa alcanzable sin ejecutar nada. Una palabra entre comillas dobles
+// puede llevar espacios. Sin argumentos, hereda los del llamante, como antes.
+//
+// Es lo que faltaba para que una suite compruebe lo que un programa DICE, y
+// no sólo con qué código sale (GAP-GOL-010).
+
+>> </ ./sub_eco_argumentos.zy /> ¶
+>> </ ./sub_eco_argumentos.zy uno dos /> ¶
+>> </ ./sub_eco_argumentos.zy -L es "dos palabras" /> ¶
+>> </ "./sub_eco_argumentos.zy" --list /> ¶

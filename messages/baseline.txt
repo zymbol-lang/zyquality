@@ -11,6 +11,7 @@ rust	rust-only	'§' is not exported by module '§'
 rust	rust-only	'§' referenced but not found on disk; not packaged
 rust	rust-only	* note line missing
 rust	rust-only	*/ line missing
+rust	rust-only	--keys: cannot read §
 rust	rust-only	1980-01-01 00:00:00 is a representable dos date/time
 rust	rust-only	:! must be on same line as closing }}. result: §
 rust	rust-only	:! must follow }} on same line. result: §
@@ -357,6 +358,7 @@ rust	shared	'§' is inside no loop at all. a function or lambda body does not se
 rust	shared	'§' §s the enclosing '@' loop; there is none here. a function or lambda body does not see the caller's loops
 rust	shared	'§°' hot-initialized to 0 — '^' will always produce 0
 rust	shared	(year, month, day) or (year, month, day, hour, minute, second), each ###, plus an optional zone
+rust	shared	--keys: the key script ran out while the program waited for a key
 rust	shared	1 2 fizz 4 buzz fizz 7 8 fizz buzz 11 fizz 13 14 fizzbuzz
 rust	shared	>>~ slot expects int, got §
 rust	shared	@~ requires integer milliseconds, got §
@@ -674,6 +676,9 @@ rust	shared	legacy export rename separator
 rust	shared	lex errors: §
 rust	shared	lexer errors: §
 rust	shared	lifetime end (\)
+rust	shared	line §: '§' is not one key — write one character, or space, enter, esc, tab, backspace, up, down, left, right, ctrl+x, wait n or show
+rust	shared	line §: ctrl+ takes one letter, got '§'
+rust	shared	line §: wait takes a whole number of polls, got '§'
 rust	shared	logical and requires boolean operands, got §
 rust	shared	logical or requires boolean operands, got §
 rust	shared	map lambda must have exactly 1 parameter, got §

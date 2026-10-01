@@ -46,7 +46,9 @@
 # One exception, measured when it joined (2026-09-29): `gol` agrees under all
 # three — its tests call the program as modules instead of reaching for a shell
 # or a file — so `--only gol --engines zytw,zyvm,zyjs` is a question worth
-# asking, and it is how BUG-GOL-002 was found.
+# asking, and it is how BUG-GOL-002 was found. Its `όλα.zy` still does; its
+# `έξοδος.zy` (2026-09-30) runs the program as a subscript to check what it
+# says, and the browser engine has no process to run one in.
 
 [[app]]
 id = "go"

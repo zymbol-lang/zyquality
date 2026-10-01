@@ -1,0 +1,29 @@
+// Test: `zymbol run --keys` — una pantalla virtual y teclas de un guion
+// (GAP-GOL-009, D11). Las teclas están en pantalla_virtual.keys, junto a este
+// archivo; zyq pasa `--keys` cuando lo encuentra.
+//
+// `>>|` dibuja en 24×80 sin tomar ningún terminal, `>>?` contesta ese tamaño,
+// `<<|` lee la siguiente tecla, `<<|?` no encuentra nada mientras dure un
+// `WAIT`, `SHOW` deja en la salida el fotograma de ese instante, y al cerrar el
+// bloque su último fotograma sale como texto. Sin `--keys` y sin terminal, `>>|`
+// sigue fallando (GLB-018 C).
+
+>>| {
+    (filas, cols) = >>?
+    >>~ (1, 1) > "tamaño " filas "×" cols
+    >>~ (3, 5) > "espera una tecla"
+    <<| k
+    >>~ (4, 5) > "llegó: " k
+    vacías = 0
+    p = '\0'
+    @ {
+        <<|? p
+        ? p <> '\0' { @! }
+        vacías += 1
+    }
+    >>~ (5, 5) > "polls vacíos: " vacías ", luego: " p
+    <<| flecha
+    >>!
+    >>~ (2, 3) > "tras borrar, flecha: " flecha
+}
+>> "fin" ¶

@@ -1,0 +1,6 @@
+# una tecla, tres polls vacíos, otra tecla
+x
+WAIT 3
+y
+SHOW
+DOWN

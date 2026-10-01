@@ -7,7 +7,9 @@
 # Fields:
 #
 #   id           short name used in reports and in --engines
-#   cmd          argv; {file} is replaced by the program to run
+#   cmd          argv; {file} is replaced by the program to run, and {keys} by
+#                `--keys x.keys` when a key script sits beside x.zy (D11), or by
+#                nothing
 #   check_cmd    argv for analysing a program without running it.  Optional:
 #                an engine without one is simply not judged on the goldens
 #                recorded that way (errors/semantic/), rather than failing
@@ -35,14 +37,14 @@
 
 [[engine]]
 id = "zytw"
-cmd = ["${ZYMBOL_BIN:-zymbol}", "run", "{file}"]
+cmd = ["${ZYMBOL_BIN:-zymbol}", "run", "{keys}", "{file}"]
 check_cmd = ["${ZYMBOL_BIN:-zymbol}", "check", "{file}"]
 lang = "zymbol"
 desc = "Rust tree-walker (default engine)"
 
 [[engine]]
 id = "zyvm"
-cmd = ["${ZYMBOL_BIN:-zymbol}", "run", "--vm", "{file}"]
+cmd = ["${ZYMBOL_BIN:-zymbol}", "run", "--vm", "{keys}", "{file}"]
 check_cmd = ["${ZYMBOL_BIN:-zymbol}", "check", "{file}"]
 lang = "zymbol"
 desc = "Rust register VM"
