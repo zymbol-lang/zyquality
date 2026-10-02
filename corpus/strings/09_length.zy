@@ -8,5 +8,5 @@ n = s$#
 >> n ¶
 
 // Length after operations
-ins = s$++[5:"!!!"]
+ins = s$+[6] "!!!"
 >> (ins$#) ¶
