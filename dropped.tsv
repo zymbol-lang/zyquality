@@ -1,0 +1,29 @@
+# Files retired from ZyQuality, and why — ZyDDT/MIGRATION.md § 2: "dropped, not
+# deleted: ZyQuality's history remains, and a dropped file that later turns out to
+# matter is one `git log` away". A file is never dropped for being old or for
+# passing; it is dropped for being unexplainable, or for asking what a declared
+# cell already asks.
+#
+# path	retired	verdict	what holds the question now, or why nothing has to
+corpus/i18n/test_bash.zy	2026-10-02	CELL	written as `<\ ls | head \>`, a form the language does not have (GLB-004): never parsed in the CLI, its golden recorded the parse error, zyjs ran it; pipes are ZyDDT environment/shell-pipe, the form is environment/bare-word-* (GLB-075)
+corpus/i18n/test_bash_simple.zy	2026-10-02	CELL	same nonexistent form (`<\ echo "…" | wc -w \>`); ZyDDT environment/shell-pipe, environment/bare-word-* (GLB-075)
+corpus/i18n/test_integration_all.zy	2026-10-02	CELL	same nonexistent form (`<\ ls *.zy | wc -l \>`); CLI arguments are corpus/i18n/test_cli_args.zy, subscripts ZyDDT runtime-modules-scripts/subscript-*, the shell environment/*
+corpus/i18n/test_interpolacion_simple.zy	2026-10-02	CELL	same nonexistent form (`<\ cat {archivo} \>`); a text variable interpolated into a command is ZyDDT environment/shell-interpolates-a-text-variable, declared for it
+corpus/i18n/test_sqlite_direct.zy	2026-10-02	CELL	same nonexistent form (`<\ sqlite3 {db} "…" \>`); a shell command with interpolation is environment/*, and SQLite itself is std/db (ZyDDT runtime-std-db, corpus/stdlib/stdlib_db_*)
+corpus/i18n/test_sqlite_simple.zy	2026-10-02	CELL	as test_sqlite_direct.zy
+corpus/i18n/test_archivos.expected	2026-10-02	DEAD GOLDEN	its program is excused for every engine (ENVIRONMENT) and the golden recorded the parse error of the form GLB-004 rewrote; nothing compared it. The program stays, swept by `zymbol check`
+corpus/i18n/test_database.expected	2026-10-02	DEAD GOLDEN	as test_archivos.expected
+corpus/i18n/test_http_api.expected	2026-10-02	DEAD GOLDEN	as test_archivos.expected
+corpus/i18n/test_modulos_sistema.expected	2026-10-02	DEAD GOLDEN	as test_archivos.expected
+corpus/i18n/test_all_i18n.sh	2026-10-02	REDUNDANT	a runner registered nowhere, so nothing ran it; its two checks — an import is analysed (L21, v0.0.8) and the VM runs the module code — are `zyq expect` and `zyq consensus` over the four consumer programs
+corpus/manual/logs/*.log	2026-10-02	ARTIFACT	seven logs of manual sessions (2026-05-05, 2026-08-08) committed with the corpus, and the .gitkeep that kept their directory
+corpus/i18n/25	2026-10-02	ARTIFACT	an empty file the shell created from `WHERE edad > 25` in test_database.zy, committed with the initial import
+25	2026-10-02	ARTIFACT	the same file, created in this repository's root by fmt's P3 running the corpus there, and committed in bef2ab6
+cases/arith/int_overflow_add.zy	2026-10-02	CELL	a seed for an oracle phase never built in zyq; written for i64 and four engines. Overflow is ZyDDT arithmetic/i53-* and integer-arithmetic (oracled)
+cases/arith/pow_overflow.zy	2026-10-02	CELL	as int_overflow_add.zy
+cases/arith/pow_negative_exponent.zy	2026-10-02	CELL	`2 ^ -1` answers 0.5 in the three engines today, and the corpus asks it already
+cases/collect/array_equality.zy	2026-10-02	PIN	ZyDDT cases/pin/DM-02_array_equality.zy
+cases/collect/findall_empty_pattern.zy	2026-10-02	CELL	STILL DIVERGED on the day it was retired, unseen since 2026-08-07: filed as GLB-078 and held by ZyDDT runtime-collection-ops/find-all-of-the-empty-string
+cases/collect/split_empty_separator.zy	2026-10-02	CELL	STILL DIVERGED likewise: GLB-079, runtime-collection-ops/split-by-the-empty-string
+cases/text/typemeta_error_value.zy	2026-10-02	CELL	ZyDDT type-symbol/error-*
+cases/text/typemeta_width.zy	2026-10-02	CELL	`#?` counts characters in the three engines today, and the corpus asks it already

@@ -104,18 +104,6 @@ tag = "BASH_EXEC"
 reason = "`<\\ shell \\>` has no browser equivalent — this file agreed until 2026-09-29 only because the browser answered `true`, `mkdir` and `rmdir` with a random number and discarded it (BUG-GOL-014); now it refuses them"
 
 [[rule]]
-match = "i18n/test_bash.zy"
-engines = ["zyjs"]
-tag = "BASH_EXEC"
-reason = "`<\\ shell \\>` has no browser equivalent"
-
-[[rule]]
-match = "i18n/test_bash_simple.zy"
-engines = ["zyjs"]
-tag = "BASH_EXEC"
-reason = "`<\\ shell \\>` has no browser equivalent"
-
-[[rule]]
 match = "i18n/test_archivos.zy"
 engines = ["zyjs"]
 tag = "BASH_EXEC"
@@ -134,31 +122,7 @@ tag = "BASH_EXEC"
 reason = "`<\\ shell \\>` has no browser equivalent"
 
 [[rule]]
-match = "i18n/test_integration_all.zy"
-engines = ["zyjs"]
-tag = "BASH_EXEC"
-reason = "`<\\ shell \\>` has no browser equivalent"
-
-[[rule]]
-match = "i18n/test_interpolacion_simple.zy"
-engines = ["zyjs"]
-tag = "BASH_EXEC"
-reason = "`<\\ shell \\>` has no browser equivalent"
-
-[[rule]]
 match = "i18n/test_modulos_sistema.zy"
-engines = ["zyjs"]
-tag = "BASH_EXEC"
-reason = "`<\\ shell \\>` has no browser equivalent"
-
-[[rule]]
-match = "i18n/test_sqlite_direct.zy"
-engines = ["zyjs"]
-tag = "BASH_EXEC"
-reason = "`<\\ shell \\>` has no browser equivalent"
-
-[[rule]]
-match = "i18n/test_sqlite_simple.zy"
 engines = ["zyjs"]
 tag = "BASH_EXEC"
 reason = "`<\\ shell \\>` has no browser equivalent"
@@ -262,6 +226,12 @@ by = "zytw"
 # stay because `zymbol check` still sweeps them, so a parse regression is caught
 # — which is more than they did before — and their four `matematicas/` modules
 # ARE graded now, by all three engines, as the module-file refusals they are.
+#
+# Their goldens went on 2026-10-02: they still recorded the parse errors of the
+# form these files no longer have, and nothing compared them — `zyq audit` calls
+# a golden beside a program every engine is excused from a dead golden now. Six
+# more files written in the same nonexistent form, which GLB-004 had not reached,
+# were retired the same day: see dropped.tsv.
 #
 # See ZyDDT HALLAZGOS/GLOBAL.md GLB-004 for the measurement.
 
