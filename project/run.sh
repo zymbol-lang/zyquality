@@ -12,15 +12,21 @@
 #              application, or in the engine under it.  **This is the gate**:
 #              the point of these suites is to validate what already works.
 #
-#   consensus  do the engines agree about it?  A divergence, which is a finding
-#              rather than a regression — an engine being behind does not mean
-#              the application broke.  Reported, not gated.
+#   consensus  do the engines agree about it?  **Also the gate**, since
+#              2026-10-02. It used to be reported only, on the argument that an
+#              engine being behind does not mean the application broke — true
+#              while the VM was behind. It no longer is: zytw and zyvm diverge
+#              on none of the applications, the VM is to become the default
+#              engine, and the goldens are recorded by the tree-walker alone, so
+#              a VM regression in the programs people actually run was the one
+#              thing this suite could not turn red.
 #
 # Correctness used to be `grep -q FAIL` over the suite's output, in a runner per
 # project. A suite that crashes half way through prints no FAIL and passes; that
 # was verified, not supposed. A golden does not match a truncated run.
 #
-# Exit status: 0 every golden holds, 1 one does not, 2 could not run.
+# Exit status: 0 every golden holds and the engines agree, 1 one of the two
+# fails, 2 could not run.
 #
 # An app whose checkout is absent, or whose goldens have never been recorded, is
 # reported and not counted either way. The suites live in the applications'
@@ -79,7 +85,7 @@ wanted() { [[ -z "$ONLY" ]] || [[ ",$ONLY," == *",$1,"* ]]; }
 
 echo "${BOLD}project${RESET} the real programs written in Zymbol"
 
-fail=0; ran=0; absent=0; unset_apps=0
+fail=0; diverged=0; ran=0; absent=0; unset_apps=0
 while IFS=$'\t' read -r id dir desc fx; do
     wanted "$id" || continue
     abs="$ZYQ_HOME/$dir"
@@ -120,12 +126,15 @@ while IFS=$'\t' read -r id dir desc fx; do
             echo "            ${DIM}record them:  ./zyq expect --regen --new --engines zytw --corpus $dir${RESET}" ;;
     esac
 
-    # The finding: do the engines agree?  Never fails this runner.
+    # Do the engines agree?  A divergence fails the run (see the header). The
+    # default engines are the two Rust ones; zyjs on command-line programs
+    # diverges by construction and is asked only when --engines names it.
     out="$("$ZYQ" --root "$ZYQ_HOME" consensus --corpus "$abs" "${fixture_args[@]}" --engines "$ENGINES" \
             --timeout "$TIMEOUT" --no-colour 2>&1)"
     line="$(grep -a 'files:' <<<"$out" | tail -1 | sed 's/^consensus *//')"
     if grep -aq 'DIVERGE' <<<"$out"; then
-        echo "  ${YELLOW}engines${RESET}   $line"
+        diverged=$((diverged + 1))
+        echo "  ${RED}engines${RESET}   $line"
         grep -a '^DIVERGE' <<<"$out" | sed 's/^DIVERGE /    diverges: /'
     else
         echo "  ${GREEN}engines${RESET}   $line"
@@ -140,7 +149,12 @@ if [[ $fail -eq 0 ]]; then
 else
     printf ': %s\n' "${RED}${fail} with a stale golden${RESET}"
 fi
+if [[ $diverged -eq 0 ]]; then
+    echo "${GREEN}the engines agree on every application${RESET} ${DIM}($ENGINES)${RESET}"
+else
+    echo "${RED}${diverged} application(s) where the engines diverge${RESET} ${DIM}($ENGINES)${RESET}"
+fi
 [[ $absent -eq 0 ]] || echo "${DIM}${absent} checkout(s) not present and therefore not tested${RESET}"
 [[ $unset_apps -eq 0 ]] || echo "${YELLOW}${unset_apps} app(s) have no goldens recorded — see the command above${RESET}"
 
-[[ $fail -eq 0 ]] || exit 1
+[[ $fail -eq 0 && $diverged -eq 0 ]] || exit 1
