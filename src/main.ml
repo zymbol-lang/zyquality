@@ -714,7 +714,11 @@ let cmd_audit o =
       note "dead rule    " (Printf.sprintf "`%s` matches no file in the corpus" r.pat))
     (Corpus.dead_rules corpus ~files:rels);
 
-  (* A .expected with no .zy is a golden for a program that no longer exists. *)
+  (* A .expected with no .zy is a golden for a program that no longer exists.
+     And one beside a program corpus.toml excuses for EVERY engine is a golden
+     nobody compares: it goes on describing what the file did the day it was
+     last recorded. Four sat in i18n/ recording parse errors their programs had
+     stopped having, and `expect` counted them as `unchecked` in silence. *)
   let rec walk dir =
     if Sys.is_directory dir then
       Array.iter (fun e -> walk (Filename.concat dir e)) (Sys.readdir dir)
@@ -722,9 +726,31 @@ let cmd_audit o =
       let zy = Filename.remove_extension dir ^ ".zy" in
       if not (Sys.file_exists zy) then
         note "orphan golden" (relative_to root dir)
+      else if Corpus.excused_everywhere ~path:zy corpus ~rel:(relative_to root zy) <> None then
+        note "dead golden  " (relative_to root dir ^ " — every engine is excused from its program")
     end
   in
   walk root;
+
+  (* Only test material belongs in the corpus: a program, its golden, its input,
+     its key script, and prose about them. What git CARRIES is read, not what
+     the disk holds: a run's leftovers ignored by .gitignore are this machine's
+     business, and committing them is the defect — an empty file called `25`
+     came in with the initial import, seven logs of a manual session with it. *)
+  let material f =
+    List.exists (Filename.check_suffix f) [ ".zy"; ".expected"; ".input"; ".keys"; ".md" ]
+  in
+  (match Unix.open_process_args_in "git"
+           [| "git"; "-C"; root; "ls-files"; "-z"; "--"; "." |] with
+   | exception Unix.Unix_error _ -> ()
+   | ic ->
+     let listing = In_channel.input_all ic in
+     (match Unix.close_process_in ic with
+      | Unix.WEXITED 0 ->
+        List.iter (fun f -> if f <> "" && not (material f) then
+                      note "not a test   " (f ^ " — tracked in the corpus, and not test material"))
+          (String.split_on_char '\000' listing)
+      | _ -> ()));
 
   (* A rejection with no reason is indistinguishable from a program that
      happens to fail today — the same argument corpus.toml makes about an
@@ -1048,12 +1074,5 @@ let () =
   | "selftest" :: rest -> ignore (parse_args rest); exit (cmd_selftest ())
   | "show" :: file :: rest -> cmd_show (parse_args rest) file
   | "show" :: [] -> die 2 "show needs a file"
-  | "oracle" :: _ ->
-    prerr_endline "zyq: `oracle` is not implemented yet (phase 2)";
-    prerr_endline "  it will run cases/ against their .py / .js / .ml equivalents";
-    exit 3
-  | "bench" :: _ ->
-    prerr_endline "zyq: `bench` is not implemented yet (phase 3)";
-    exit 3
   | [] -> usage 2
   | a :: _ -> prerr_endline ("zyq: unknown command: " ^ a); usage 2
