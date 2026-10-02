@@ -23,7 +23,7 @@ try_access()
 
 process_value(value) {
     >> "Received value: " value ¶
-    <~ value + " [processed]"
+    <~ value " [processed]"
 }
 
 data = "Hello"

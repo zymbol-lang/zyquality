@@ -117,9 +117,13 @@ let run ?(timeout = 10) ?(strict = false) ?(audit_exclusions = false)
      engine its own equivalence class on this machine and a different set on
      the next one. *)
   let clean s = Corpus.strip_root ~root (Corpus.redact corpus s) in
+  (* What an engine said about the program is compared as ZyDDT compares it —
+     no colour, no source excerpt, the line of a location and not its path or
+     column.  Only stderr: stdout is the program's own output. *)
+  let diag s = Compare.normalise_diagnostics (clean s) in
   let votes =
     List.map (fun (r : Engine.result) ->
-        (r.eid, { out = clean r.stdout; err = clean r.stderr;
+        (r.eid, { out = clean r.stdout; err = diag r.stderr;
                   verdict = Engine.verdict_of r }))
       (voters results)
   in
@@ -163,7 +167,7 @@ let run ?(timeout = 10) ?(strict = false) ?(audit_exclusions = false)
       List.filter_map (fun (r : Engine.result) ->
           if r.status <> Engine.Completed then None
           else
-            let v = { out = clean r.stdout; err = clean r.stderr;
+            let v = { out = clean r.stdout; err = diag r.stderr;
                       verdict = Engine.verdict_of r } in
             match classify ~mode ~strict:true (votes @ [ (r.eid, v) ]) with
             | Agree _ ->

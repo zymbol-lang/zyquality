@@ -1,14 +1,19 @@
 // Named tuple sort — extended
+//
+// No two people share an age or a score, on purpose. Which of two tied
+// elements `$^` puts first is not decided — the engines answered it
+// differently the day this file first ran (GLB-073) — and a file asks only
+// what the language has decided.
 people = [
     #(name: "Zara",  age: 22, score: 88),
     #(name: "Inti",  age: 35, score: 72),
-    #(name: "Luna",  age: 22, score: 95),
-    #(name: "Omar",  age: 29, score: 72),
-    #(name: "Mia",   age: 35, score: 60)
+    #(name: "Luna",  age: 24, score: 95),
+    #(name: "Omar",  age: 29, score: 74),
+    #(name: "Mia",   age: 31, score: 60)
 ]
 
 // Sort by age ascending
-by_age = people$^+ (a, b -> a.age < b.age)
+by_age = people$^ (a, b -> a.age < b.age)
 >> "Sort by Age ascending" ¶ 
 >> "Age|Name|Score" ¶
 @ age:by_age {
@@ -16,7 +21,7 @@ by_age = people$^+ (a, b -> a.age < b.age)
 }
 
 // Sort by score descending (custom: a.score > b.score keeps a first)
-by_score_desc = people$^- (a, b -> a.score > b.score)
+by_score_desc = people$^ (a, b -> a.score > b.score)
 >> ¶ 
 >> "Sort by Score descending" ¶ 
 >> "Score|Name|Age" ¶
@@ -25,7 +30,7 @@ by_score_desc = people$^- (a, b -> a.score > b.score)
 }
 
 // Sort by name lexicographic ascending
-by_name = people$^+ (a, b -> a.name < b.name)
+by_name = people$^ (a, b -> a.name < b.name)
 >> ¶ 
 >> "Sort by Name ascending" ¶ 
 >> "Name|Age|Score" ¶

@@ -1,5 +1,9 @@
-[1m[31merror[39m[0m: argument 1 has type String, but function 'process_value' expects Number
-  [1m[34m-->[39m[0m memory02_function_isolation.zy:30:24
-[1m[34m  30[39m[0m [34m|[39m
-[1m[34m  30[39m[0m [34m|[39m result = process_value(data)
-[34m     |[39m [1m[31m                       ^^^^[39m[0m
+=== Test 1: Function trying to access main variable ===
+Function executed (not trying to access main_variable)
+=== Test 2: Function with parameter (CORRECT WAY) ===
+Received value: Hello
+Result: Hello [processed]
+=== Test 3: Function accessing own local variables only ===
+Sum: 8
+Product: 15
+Final result: 23

@@ -181,53 +181,32 @@ engines = ["zyjs"]
 tag = "BASH_EXEC"
 reason = "`<\\ shell \\>` has no browser equivalent"
 
-[[rule]]
-match = "scope04_match_block.zy"
-engines = ["zyjs"]
-tag = "ANSI_FORMAT"
-reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
-
-[[rule]]
-match = "arithmetic/04_comparison_ops.zy"
-engines = ["zyjs"]
-tag = "ANSI_FORMAT"
-reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
-
-[[rule]]
-match = "strings/09_length.zy"
-engines = ["zyjs"]
-tag = "ANSI_FORMAT"
-reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
-
-[[rule]]
-match = "collections/11_hof_filter_reduce.zy"
-engines = ["zyjs"]
-tag = "ANSI_FORMAT"
-reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
-
-[[rule]]
-match = "collections/22_sort_named.zy"
-engines = ["zyjs"]
-tag = "ANSI_FORMAT"
-reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
-
-[[rule]]
-match = "collections/34_homogeneous_type_error.zy"
-engines = ["zyjs"]
-tag = "ANSI_FORMAT"
-reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
-
-[[rule]]
-match = "memory02_function_isolation.zy"
-engines = ["zyjs"]
-tag = "ANSI_FORMAT"
-reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
-
-[[rule]]
-match = "memory_correct_01_lambdas.zy"
-engines = ["zyjs"]
-tag = "ANSI_FORMAT"
-reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
+# ── ANSI_FORMAT, retired 2026-10-02 ──────────────────────────────────────
+#
+# Eight rules excused the browser engine from eight files because "the CLI prints
+# ANSI escapes and a file location the browser has no way to produce". It was
+# true of the CLI and it was not the reason the files differed. Measured once
+# zyq compared stderr the way ZyDDT does (no colour, no excerpt, the line of a
+# location — src/compare.ml, normalise_diagnostics):
+#
+#   · three agreed already — scope04_match_block, collections/11_hof_filter_reduce
+#     and collections/34_homogeneous_type_error. `--audit-exclusions` reported
+#     the three rules stale the moment it could read the text;
+#   · five were fossils that had never run in any engine since the corpus was
+#     imported: `!=` (arithmetic/04_comparison_ops, collections/11_…), `$^+` with
+#     a comparator (collections/22_sort_named), `s$++[5:"!!!"]`
+#     (strings/09_length) and `+` between strings (memory02_function_isolation).
+#     Their goldens recorded the parse error. Each is rewritten to the form the
+#     language has, verified identical in the three engines, its golden
+#     re-recorded from a run; 22_sort_named lost its tied keys, because the order
+#     of ties under `$^` is not decided (GLB-073) and a file asks only what is;
+#   · memory_correct_01_lambdas agrees on stdout. Its golden keeps a warning the
+#     Rust engines give and should not (`unused variable 'base'` for a variable
+#     that is read — GLB-074); when that is fixed the golden goes stale, which is
+#     the point.
+#
+# An exclusion compared through ANSI could never expire: --audit-exclusions
+# asks for the same words, and the colour alone guaranteed different ones.
 
 [[rule]]
 match = "manual/tui/05_key_input.zy"

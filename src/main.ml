@@ -936,6 +936,32 @@ let cmd_selftest () =
     (Golden.strip_ansi "\027[0;31merror\027[0m: x" = "error: x");
   ok "chomp"             (Golden.chomp "a\n\n\n" = "a");
 
+  (* Diagnostic normalisation, against stderr captured from the engines
+     (arithmetic/04_comparison_ops.zy, 2026-10-01): the CLI's colour, excerpt
+     and caret, and the browser's bare form, must come out as one text. *)
+  let rust =
+    "\027[1m\027[31merror\027[39m\027[0m: '!=' is not a valid Zymbol operator\n\
+    \  \027[1m\027[34m-->\027[39m\027[0m arithmetic/04_comparison_ops.zy:5:7\n\
+     \027[1m\027[34m   5\027[39m\027[0m \027[34m|\027[39m\n\
+     \027[1m\027[34m   5\027[39m\027[0m \027[34m|\027[39m >> (a != 5) \194\182\n\
+     \027[34m     |\027[39m \027[1m\027[31m      ^^\027[39m\027[0m\n\
+    \  \027[1m\027[32m= help:\027[39m\027[0m use '<>' for not-equal  \226\134\146  a <> b\n" in
+  let browser =
+    "error: '!=' is not a valid Zymbol operator\n\
+    \  --> arithmetic/04_comparison_ops.zy:5:7\n\
+    \  = help: use '<>' for not-equal  \226\134\146  a <> b\n" in
+  ok "diag: the CLI's colour and excerpt are presentation"
+    (Compare.normalise_diagnostics rust = Compare.normalise_diagnostics browser);
+  ok "diag: a location keeps its line, not its path or column"
+    (Compare.normalise_diagnostics "  --> /tmp/zyq_1/x.zy:12:4" = "--> 12"
+     && Compare.normalise_diagnostics "  --> line 12" = "--> 12"
+     && Compare.normalise_diagnostics "  --> x.zy:12" = "--> 12");
+  ok "diag: an absolute or .zy path is its last component"
+    (Compare.normalise_diagnostics "in '/home/u/corpus/m/x.zy'" = "in 'x.zy'"
+     && Compare.normalise_diagnostics "in 'm/x.zy'" = "in 'x.zy'");
+  ok "diag: a module name, an operator and a lone slash are information"
+    (Compare.normalise_diagnostics "std/math: `$/` and </ f />" = "std/math: `$/` and </ f />");
+
   (* The separator used to be a value built when Report was loaded, before
      `--no-colour` had been read, so it carried a bold escape whatever the flag
      said.  Asked with colour off, it must not contain one. *)
