@@ -44,10 +44,16 @@ def read_literal(src, i):
     return ''.join(out), i
 
 def all_literals(src, quotes):
-    """Every string literal, with adjacent `+`-concatenations joined.
+    """Every string literal, with adjacent `+`-concatenations joined."""
+    return [text for text, _ in literals_at(src, quotes)]
+
+def literals_at(src, quotes):
+    """Every string literal as (text, index where it starts), with adjacent
+    `+`-concatenations joined.
 
     Joining matters: zyjs builds its longer messages as several template pieces,
     and comparing only the first piece makes an identical message look different.
+    The index is there so `harvest` can read what the literal is an argument OF.
     """
     out, i, n = [], 0, len(src)
     while i < n:
@@ -82,7 +88,7 @@ def all_literals(src, quotes):
                     more, j2 = read_literal(src, k)
                     text += more; j = j2; continue
                 break
-            out.append(text); i = j; continue
+            out.append((text, i)); i = j; continue
         i += 1
     return out
 
@@ -158,13 +164,37 @@ def strip_test_modules(src):
             k += 1
         i = k
 
+# What a Rust string is the argument OF can say it is not a message at all.
+#
+#   TokenKind::Error("…")  the payload of an error token. The parser drops the
+#                          diagnostic it would build from one as a cascade of the
+#                          lexer's own (zymbol-parser/src/lib.rs, the filter at
+#                          the end of `parse`), and `run` never parses a file
+#                          the lexer refused: the payload is never shown. The
+#                          parser says it in so many words — the mechanism
+#                          "keeps this out of the message inventory" — and this
+#                          inventory had not been told.
+#   unreachable!/panic!/.expect
+#                          an engine's own invariant: the text of a crash, not a
+#                          diagnostic any program can provoke.
+#
+# Measured 2026-10-02: they sat in the baseline as one-sided messages on the
+# shared surface (`unterminated string`, `parse_bash_exec_expr called on
+# non-BashOpen token`), and in reach.py as diagnostics nothing provokes — which
+# nothing ever will.
+NOT_A_MESSAGE = re.compile(r'(?:TokenKind::Error\(\s*(?:format!\(\s*)?'
+                           r'|unreachable!\(\s*|panic!\(\s*|\.expect\(\s*)$')
+
 def harvest(paths, quotes):
     out = {}
     for p in paths:
         src = io.open(p, encoding='utf-8', errors='replace').read()
-        if p.endswith('.rs'):
+        rust = p.endswith('.rs')
+        if rust:
             src = strip_test_modules(src)
-        for t in all_literals(src, quotes):
+        for t, at in literals_at(src, quotes):
+            if rust and NOT_A_MESSAGE.search(src[max(0, at - 64):at]):
+                continue
             if is_message(t):
                 # EVERY file the message appears in, not just the first one
                 # walked. A message defined in two crates used to be filed under
@@ -216,8 +246,9 @@ def read_baseline():
 def write_baseline(rows):
     with io.open(BASELINE, 'w', encoding='utf-8') as f:
         f.write('# Every message one engine defines and the other does not.\n')
-        f.write('# Recorded so the number can only go DOWN: a new one-sided message\n')
-        f.write('# fails the gate, a closed one is reported as an improvement.\n')
+        f.write('# Recorded so the number can only go DOWN: a new one-sided message on\n')
+        f.write('# the shared surface fails the gate, and so does an entry here that is\n')
+        f.write('# no longer one-sided — remove those with --prune, which only removes.\n')
         f.write('# Regenerate deliberately:  python3 zyquality/messages/extract.py --baseline\n')
         for r in sorted(rows):
             f.write(r + '\n')
@@ -275,8 +306,25 @@ def main():
 
     nuevas   = sorted(rows - base)
     cerradas = sorted(base - rows)
+
+    # `--prune` removes what is no longer one-sided, and only that. It cannot
+    # add anything, so it cannot absorb a new divergence — which is why it can
+    # be run without the review a full `--baseline` needs.
+    if '--prune' in sys.argv:
+        write_baseline(base - set(cerradas))
+        print('  línea base podada: %d entrada(s) cerrada(s) quitada(s), %d quedan'
+              % (len(cerradas), len(base) - len(cerradas)))
+        return 0
+
+    # An entry that is no longer one-sided is an open door on the shared
+    # surface: while it is listed, that message can split again and be
+    # accepted in silence. Red since 2026-10-02, the rule ZyDDT's STALE WORDING
+    # follows (GLB-040). It used to be reported as an improvement, and 437
+    # dead entries — 49% of the file — accumulated before anybody pruned.
+    muertas = [r for r in cerradas if r.split('\t', 2)[1] == 'shared']
     if cerradas:
-        print('  ↑ %d cerrada(s) — regraba la línea base para fijarlo' % len(cerradas))
+        print('  ↑ %d cerrada(s)%s' % (len(cerradas),
+              '' if muertas else ' — fuera de la superficie compartida; --prune las quita'))
         for r in cerradas[:8]:
             side, scope, key = r.split('\t', 2)
             print('      %-4s %-9s %s' % (side, scope, key[:78]))
@@ -294,6 +342,10 @@ def main():
         for r in graves:
             side, scope, key = r.split('\t', 2)
             print('      %-4s %s' % (side, key[:88]))
+        return 1
+    if muertas:
+        print('  ✗ %d entrada(s) de la superficie compartida ya no son de un solo lado: '
+              'quítalas con --prune' % len(muertas))
         return 1
     base_shared = len([r for r in base if r.split('\t', 2)[1] == 'shared'])
     print('  ✓ nada nuevo en la superficie compartida (línea base: %d de %d)'

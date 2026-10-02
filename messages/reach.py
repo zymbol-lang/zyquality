@@ -8,16 +8,23 @@ define 1022 diagnostics and 1281 corpus files plus 661 failing ones provoke 132.
 
     python3 zyquality/messages/reach.py              # the crossing, by layer
     python3 zyquality/messages/reach.py --list ejecución
+    python3 zyquality/messages/reach.py --prune      # drop what is provoked now
     python3 zyquality/messages/reach.py --baseline   # deliberate, and separate
 
-## Why this is not in the gate
+## The gate, since 2026-10-02
 
-It runs the corpus twice over — `check` on everything, `run` on everything that
-should fail, in both Rust engines — which is a couple of thousand processes. The
-precedent is `coverage/`, carried over from the same reasoning and deliberately
-outside the gate. What IS in the gate is the baseline: the count may only go
-down, so a diagnostic added with nothing to provoke it shows up the day it is
-written rather than at the next manual sweep.
+It was kept out of the gate because it "runs a couple of thousand processes,
+minutes". Measured on 2026-10-01 it took five seconds — eight workers — and it
+was red, with eleven diagnostics added since its baseline and nothing to provoke
+them, while `zyq suite` said all gates pass. So it is a gate now, and its
+baseline is a LIST, not a count per layer: a count that stays at 41 while one
+diagnostic is reached and another is added is a green gate over a regression
+(the reason ZyDDT keeps `wording.baseline` as a list).
+
+  · a diagnostic nothing provokes that is not listed → red: give it a cell, or
+    record it deliberately;
+  · a listed one that something provokes now → red: `--prune` removes it, and
+    can only remove, so it cannot absorb anything.
 
 ## The mistake this file exists to not repeat
 
@@ -46,6 +53,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import extract as E                                            # noqa: E402
@@ -82,8 +90,11 @@ def is_data(text: str) -> bool:
     would count as 22 diagnostics nobody provokes, which is true and useless.
     """
     words = text.split()
+    # A capital ANYWHERE in the word, not only first: `Klingon pIqaD` is a
+    # proper noun whose second word starts lower-case, and it sat in the list of
+    # diagnostics nothing provokes — which nothing ever will.
     return len(words) <= 3 and all(
-        w[:1].isupper() or not w[:1].isalpha() for w in words)
+        any(c.isupper() for c in w) or not any(c.isalpha() for c in w) for w in words)
 
 
 def provoked_by(key: str) -> re.Pattern:
@@ -105,12 +116,20 @@ def defined() -> dict:
     return out
 
 
-def _run(cmd: list[str], cwd: str) -> str:
+def _run(cmd: list[str]) -> str:
+    """Run one job in a scratch directory of its own, the program by absolute path.
+
+    It used to run each program from the program's OWN directory, so what a
+    program wrote landed in the corpus, in `reject/` or among ZyDDT's generated
+    cells — the defect fmt/fmt_property.sh had, which wrote `25` into this
+    repository. Imports resolve from the file, not from the working directory,
+    so nothing a program reads is lost by moving it."""
     try:
-        # stdin closed: a program that reads input must meet end of input, not
-        # wait on the terminal this runs from until the timeout swallows it.
-        r = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=10,
-                           stdin=subprocess.DEVNULL)
+        with tempfile.TemporaryDirectory(prefix="reach_") as here:
+            # stdin closed: a program that reads input must meet end of input,
+            # not wait on the terminal this runs from until the timeout.
+            r = subprocess.run(cmd, cwd=here, capture_output=True, text=True,
+                               timeout=10, stdin=subprocess.DEVNULL)
         return ANSI.sub("", r.stdout + r.stderr)
     except Exception:                                          # noqa: BLE001
         return ""
@@ -118,6 +137,21 @@ def _run(cmd: list[str], cwd: str) -> str:
 
 DIAG = re.compile(r"\s*(?:Runtime error|error|warning)(?:\[[^\]]*\])?:\s*(.+)")
 HELP = re.compile(r"\s*=?\s*help:\s*(.+)")
+
+
+def one_line(text: str) -> str:
+    """A diagnostic as one line of the baseline. A Rust string continued with a
+    trailing `\\` keeps its newline in the harvested text, and a list whose
+    entries can span two lines is a list that cannot be read back."""
+    return " ".join(re.sub(r"\\\n\s*", " ", text).split())
+
+
+def _no_verdict(why: str) -> None:
+    """Exit 2: the question could not be asked, which is not the same as nothing
+    being wrong. A SystemExit carrying a message exits 1 — a red for a harness
+    that never ran — which is what these paths did at first."""
+    print(f"reach: {why} — no verdict", file=sys.stderr)
+    raise SystemExit(2)
 
 
 def emitted(verbose: bool = True) -> set[str]:
@@ -129,6 +163,17 @@ def emitted(verbose: bool = True) -> set[str]:
     over what is *supposed* to fail.
     """
     root = E.ROOT
+    # ZyDDT's cells are generated, never committed, and this suite runs before
+    # `zyddt suite` does in `zyq suite`: in a fresh clone the directory it reads
+    # would be empty or stale, and the baseline — recorded WITH those cells —
+    # would read as a hundred diagnostics nothing provokes. So the cells are
+    # generated here first, from the declarations, every run.
+    zyddt = os.path.join(root, "ZyDDT", "bin", "zyddt")
+    if not os.path.exists(zyddt):
+        _no_verdict("ZyDDT is not cloned beside zyquality; its cells are half of what "
+                    "provokes the diagnostics")
+    if subprocess.run([sys.executable, zyddt, "gen"], capture_output=True).returncode != 0:
+        _no_verdict("`zyddt gen` failed")
     checked, ran = [], []
     for base in ("zyquality/corpus", "zyquality/reject", "ZyDDT/generated"):
         for d, _, fs in os.walk(os.path.join(root, base)):
@@ -141,17 +186,15 @@ def emitted(verbose: bool = True) -> set[str]:
                 if f.endswith(".zy"):
                     ran.append(os.path.join(d, f))
 
-    jobs = [(["zymbol", "check", os.path.basename(f)], os.path.dirname(f))
-            for f in checked]
-    jobs += [(["zymbol", "run", *flag, os.path.basename(f)], os.path.dirname(f))
-             for f in ran for flag in ([], ["--vm"])]
+    jobs = [["zymbol", "check", f] for f in checked]
+    jobs += [["zymbol", "run", *flag, f] for f in ran for flag in ([], ["--vm"])]
     if verbose:
         print(f"  {len(checked)} ficheros con `check`, {len(ran)} con `run` "
               f"en dos motores — {len(jobs)} ejecuciones…", flush=True)
 
     seen: set[str] = set()
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
-        for text in pool.map(lambda j: _run(*j), jobs):
+        for text in pool.map(_run, jobs):
             for line in text.splitlines():
                 if m := DIAG.match(line):
                     seen.add(E.norm(m.group(1).strip()))
@@ -174,16 +217,36 @@ def cross(verbose: bool = True):
     return tally
 
 
-def read_baseline() -> dict | None:
+HEADER = ("# Diagnostics nothing provokes, one per line: layer TAB text. A list and\n"
+          "# not a count, so one reached cannot hide one added. A diagnostic missing\n"
+          "# from here that nothing provokes is red, and so is one listed here that\n"
+          "# something provokes now — remove those with `reach.py --prune`, which\n"
+          "# only removes. `--baseline` rewrites the whole file: deliberate, and\n"
+          "# separate, like messages/baseline.txt.\n")
+
+
+def read_baseline() -> set[tuple[str, str]] | None:
     if not os.path.exists(BASELINE):
         return None
-    out = {}
+    out = set()
     for line in open(BASELINE, encoding="utf-8"):
-        line = line.strip()
+        line = line.rstrip("\n")
         if line and not line.startswith("#"):
-            name, n = line.rsplit(None, 1)
-            out[name] = int(n)
+            if "\t" not in line:
+                # The count format of 2026-09-14. Refused, not converted: turning
+                # "sintaxis 41" into a list would mean choosing which 41.
+                _no_verdict(f"{BASELINE} is in the old count format; record a list "
+                            f"with --baseline")
+            layer, text = line.split("\t", 1)
+            out.add((layer, text))
     return out
+
+
+def write_baseline(rows: set[tuple[str, str]]) -> None:
+    with open(BASELINE, "w", encoding="utf-8") as fh:
+        fh.write(HEADER)
+        for layer, text in sorted(rows):
+            fh.write(f"{layer}\t{text}\n")
 
 
 def main() -> int:
@@ -191,7 +254,9 @@ def main() -> int:
     ap.add_argument("--list", metavar="CAPA",
                     help="print the diagnostics of one layer that nothing provokes")
     ap.add_argument("--baseline", action="store_true",
-                    help="record today's counts; deliberate and separate")
+                    help="record today's list; deliberate and separate")
+    ap.add_argument("--prune", action="store_true",
+                    help="remove listed diagnostics something provokes now; only removes")
     args = ap.parse_args()
 
     tally = cross(verbose=not args.list)
@@ -202,7 +267,7 @@ def main() -> int:
             print(f"reach: no such layer: {args.list}\n"
                   f"       one of: {', '.join(GATED)}, otros", file=sys.stderr)
             return 2
-        for text in sorted(rows[2]):
+        for text in sorted(one_line(x) for x in rows[2]):
             print(text)
         return 0
 
@@ -218,42 +283,42 @@ def main() -> int:
     print(f"  {'gated':<13}{total[0]:>11}{total[1]:>12}{total[0] - total[1]:>14}"
           f"{100 * total[1] // max(total[0], 1):>5}%")
 
+    now = {(L, one_line(text)) for L in GATED for text in tally[L][2]}
     if args.baseline:
-        with open(BASELINE, "w", encoding="utf-8") as fh:
-            fh.write("# Diagnostics nothing provokes, by layer. The number may only\n"
-                     "# go DOWN: one that goes up means a message was added with\n"
-                     "# nothing to reach it, which is the day to notice rather than\n"
-                     "# at the next manual sweep. Recorded by `reach.py --baseline`,\n"
-                     "# deliberately and separately, like messages/baseline.txt.\n")
-            for L in GATED:
-                d, p, _ = tally[L]
-                fh.write(f"{L} {d - p}\n")
-        print(f"\n  línea base escrita: {BASELINE}")
+        write_baseline(now)
+        print(f"\n  línea base escrita: {len(now)} diagnóstico(s) sin provocar")
         return 0
 
     base = read_baseline()
     if base is None:
         print("\n  sin línea base — `--baseline` para grabar la de hoy")
+        return 2
+
+    stale = sorted(base - now)          # provoked now, or no longer defined
+    if args.prune:
+        write_baseline(base - set(stale))
+        print(f"\n  línea base podada: {len(stale)} quitado(s), {len(base) - len(stale)} quedan")
         return 0
 
-    worse = [(L, tally[L][0] - tally[L][1], base[L])
-             for L in GATED if L in base and tally[L][0] - tally[L][1] > base[L]]
-    if worse:
-        print()
-        for L, now, was in worse:
-            print(f"  ✗ {L}: {now} sin provocar, la línea base dice {was} "
-                  f"— {now - was} diagnóstico(s) nuevo(s) que nada alcanza")
-        return 1
-
-    better = [(L, tally[L][0] - tally[L][1], base[L])
-              for L in GATED if L in base and tally[L][0] - tally[L][1] < base[L]]
-    if better:
-        print()
-        for L, now, was in better:
-            print(f"  ↑ {L}: {was} → {now} — regraba la línea base para fijarlo")
-    else:
-        print("\n  ✓ nada nuevo sin provocar")
-    return 0
+    new = sorted(now - base)
+    rc = 0
+    if new:
+        print(f"\n  ✗ {len(new)} diagnóstico(s) que nada provoca y la línea base no lista "
+              f"— dales una celda:")
+        for L, text in new:
+            print(f"      {L:<12} {text[:90]}")
+        rc = 1
+    if stale:
+        print(f"\n  ✗ {len(stale)} diagnóstico(s) de la línea base que ya se provocan, "
+              f"o ya no existen — `--prune` los quita:")
+        for L, text in stale[:12]:
+            print(f"      {L:<12} {text[:90]}")
+        if len(stale) > 12:
+            print(f"      … y {len(stale) - 12} más")
+        rc = 1
+    if rc == 0:
+        print(f"\n  ✓ nada nuevo sin provocar ({len(base)} en la línea base)")
+    return rc
 
 
 if __name__ == "__main__":

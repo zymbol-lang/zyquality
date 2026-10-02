@@ -1,9 +1,176 @@
-# Diagnostics nothing provokes, by layer. The number may only
-# go DOWN: one that goes up means a message was added with
-# nothing to reach it, which is the day to notice rather than
-# at the next manual sweep. Recorded by `reach.py --baseline`,
-# deliberately and separately, like messages/baseline.txt.
-sintaxis 41
-semántica 119
-ejecución 93
-compilación 27
+# Diagnostics nothing provokes, one per line: layer TAB text. A list and
+# not a count, so one reached cannot hide one added. A diagnostic missing
+# from here that nothing provokes is red, and so is one listed here that
+# something provokes now — remove those with `reach.py --prune`, which
+# only removes. `--baseline` rewrites the whole file: deliberate, and
+# separate, like messages/baseline.txt.
+compilación	array for-each loop — VM Fase 4C
+compilación	break outside loop
+compilación	collection update on non-index expr
+compilación	continue outside loop
+compilación	dynamic range in match
+compilación	non-int range in match
+compilación	pipe (|>) — VM Fase 4C
+compilación	range (..) in expression — VM Fase 4C
+compilación	range outside loop
+compilación	too many registers (>65535) in function '{0}'
+compilación	unsupported construct: {0}
+compilación	unsupported op {:?} in comparison pattern
+compilación	{} label '{}' not found
+ejecución	$~ writes into a collection, and this is {}\nhelp: use a[1]$~ v on an array or tuple, d[\"key\"]$~ v on a #(…)
+ejecución	(year, month, day) or (year, month, day, hour, minute, second), each ###, plus an optional zone
+ejecución	Module '{}' not loaded
+ejecución	ZyStr requires a 64-bit platform
+ejecución	a dictionary is addressed by key, not by position: `{}` has no meaning here\nhelp: use the key — d[\"{}\"], d[\"{}\"]$~ value, d$-[\"{}\"] — because adding a key changes what sits at each position
+ejecución	a dictionary is addressed by key, not by position\nhelp: use d[\"{}\"] — adding a key changes what sits at each position
+ejecución	a navigation step is a position or a key, got {}
+ejecución	a number with up to {} digits and {} decimals
+ejecución	a positional tuple is addressed by position, not by name: '{}'\nhelp: use t[1] — names live in a dictionary, #(key: value)
+ejecución	a single character
+ejecución	an integer of up to {} digits
+ejecución	an optional zone String
+ejecución	cannot modify tuple '{}': tuples are immutable\nhelp: use 'new = {}[i]$~ value' for a functional update
+ejecución	cannot reassign constant '{}' (declared with :=)
+ejecución	cannot run '{}': a subscript needs the zymbol command, and this program runs without it
+ejecución	cannot update {} during deep update
+ejecución	circular dependency detected
+ejecución	comparison pattern did not produce a boolean
+ejecución	connection string
+ejecución	deep update ($~) does not support ranges in the path
+ejecución	failed to enter alternate screen: {}
+ejecución	failed to run `{}`: {}
+ejecución	function expects {} argument(s), got {}
+ejecución	function expects {} arguments, got {}
+ejecución	index 0 is invalid — Zymbol uses 1-based indexing
+ejecución	index out of bounds: index {} for named tuple of length {}
+ejecución	input read error: {}
+ejecución	input: failed to disable raw mode: {}
+ejecución	input: failed to restore raw mode: {}
+ejecución	internal: use of '{}' after auto-destruction (string interpolation) — this is a bug in the last-use analyzer, please report it
+ejecución	internal: use of '{}' after auto-destruction — this is a bug in the last-use analyzer, please report it (workaround: add a later `>> {}` mention or a `\\ {}` at the intended end of life)
+ejecución	invalid savepoint name '{}'
+ejecución	io error: {0}
+ejecución	named tuple index out of bounds: index {} for tuple of length {}
+ejecución	named tuple update index must be an integer or field name (string), got {}
+ejecución	query_one matched no rows
+ejecución	register {0} out of range
+ejecución	remove index
+ejecución	savepoint name
+ejecución	slice count must be non-negative, got {}
+ejecución	slice indices out of bounds: [{}:{}] for collection of length {}
+ejecución	sort comparator must be a lambda (a, b) -> Bool
+ejecución	std/db is not available in this build (compiled without ODBC support)
+ejecución	string update index must be an integer, got {}
+ejecución	text of up to {} characters
+ejecución	the dot reaches a dictionary key, and this is {}\nhelp: use d.{} on a #(…) — for a position, use x[1]
+ejecución	the pattern #(…) requires a dictionary, got {}\nhelp: #(key: name) = d unpacks a dictionary; use (a, b) for a tuple, [a, b] for an array
+ejecución	this needs {expected} and got {got}
+ejecución	transaction already active (use savepoints to nest)
+ejecución	undefined function index {0}
+ejecución	undefined module alias: '{}'
+ejecución	undefined variable in input prompt: '{}'
+ejecución	unknown builtin id {}
+ejecución	unknown connection '{}'
+ejecución	unknown db builtin id {}
+ejecución	unknown error
+ejecución	unsupported binary operator: {:?}
+ejecución	unsupported operator in comparison pattern: {:?}
+ejecución	update operator ($~) requires a place to write like arr[i]$~ val, arr[i>j]$~ val or d.key$~ val
+ejecución	{} lexer error(s) in '{}'\n{}
+ejecución	{} parse error(s) in '{}'\n{}
+ejecución	{} parser errors in {}
+ejecución	{} semantic error(s) in '{}'\n{}
+semántica	'{}' is a constant of {}, not a function
+semántica	'{}' is a function of {}, not a constant
+semántica	'{}' was declared at {}:{}
+semántica	Cannot re-export items that are not exported by the source module
+semántica	Check that the item is defined in the module
+semántica	Check the module's export block
+semántica	E003: Failed to resolve path '{path}'
+semántica	E004: Circular dependency detected: {cycle}
+semántica	E006: Cannot re-export '{item}' - item not found in module '{module}'
+semántica	E007: Type mismatch in re-export: '{item}' is a {actual} but used '::' (function) syntax
+semántica	E008: Item '{item}' is private and cannot be imported
+semántica	E010: Cannot re-export private item '{item}' from module '{module}'
+semántica	E011: Import alias '{alias}' conflicts with existing import
+semántica	E012: Module '{module}' does not export item '{item}'
+semántica	E013: executable statement '{stmt_kind}' is not allowed in a module body
+semántica	Ensure the path is valid and does not go above the root
+semántica	Only exported items can be imported
+semántica	Refactor to remove the circular dependency
+semántica	TUI block (>>|)
+semántica	The item must be exported by the imported module
+semántica	Use '.' syntax for constants: alias.CONSTANT
+semántica	Use '::' syntax for functions: alias::function
+semántica	Use a different alias for this import
+semántica	a range yields whole numbers; use '@ name:a..b' and no pattern
+semántica	argument type {} incompatible with function parameter {}
+semántica	array index must be Int, got {}
+semántica	call it with '::': {}::{}(…)
+semántica	clear screen (>>!)
+semántica	cli args capture (><)
+semántica	comparison pattern requires scalar scrutinee, got {}
+semántica	constant with non-literal initializer
+semántica	destructure assignment
+semántica	did you mean '{}::{}'?
+semántica	else-if condition should be Bool, got {}
+semántica	expression statement
+semántica	filter operation requires a lambda, got {}
+semántica	functions must be defined before use, or imported with a module alias (e.g. `math::cos`)
+semántica	key input (<<|)
+semántica	lifetime end (\\)
+semántica	logical not on non-boolean type: {}
+semántica	map operation requires a lambda, got {}
+semántica	numeral mode switch
+semántica	pattern type {} does not match scrutinee type {}
+semántica	pipe callable must be a function, got {}
+semántica	pipe expression has no placeholder '_'
+semántica	pipe expression has {} placeholders, only first will be used
+semántica	piped value type {} incompatible with function parameter {}
+semántica	positioned output (>>~)
+semántica	range pattern start must be Int, Float, or Char, got {}
+semántica	range pattern type {} does not match scrutinee type {}
+semántica	range start type {} differs from end type {}
+semántica	read it with '.': {}.{}
+semántica	reduce operation requires a lambda, got {}
+semántica	remove it, or use it — `>> name ¶` to print it
+semántica	the enclosing loops have no labels — write '@:{wanted} {{ }}' on the one you mean to target
+semántica	this statement does nothing: '{}' is read and discarded
+semántica	tuple index {} is out of bounds (tuple has {} elements)
+semántica	unary {} on non-numeric type: {}
+semántica	undefined function: '{}'
+semántica	use '_' to indicate where the piped value should go
+semántica	variable with non-literal initializer
+semántica	{} does not export a constant '{}'
+sintaxis	a bracket after a bracket is what the navigator is for: write `d[\"x\">\"y\"]$~ value`
+sintaxis	a write reaches one place, so its path has no ranges
+sintaxis	catch blocks start with :! { } or :! ##Type { }
+sintaxis	expected '!?' to start try block
+sintaxis	expected '##' for error type
+sintaxis	expected '#' for module declaration
+sintaxis	expected '#>' for export block
+sintaxis	expected '(' after function name
+sintaxis	expected ')' to close grouped expression
+sintaxis	expected ':!' to start catch block
+sintaxis	expected ':' after iterator variable
+sintaxis	expected ':>' to start finally block
+sintaxis	expected '<#' for import statement
+sintaxis	expected '=' in destructure assignment
+sintaxis	expected '|' after base prefix '{}'
+sintaxis	expected '}' to close block
+sintaxis	expected '}' to close module body
+sintaxis	expected := for constant declaration
+sintaxis	expected assignment operator (=, +=, -=, *=, /=, %=, ^=, ++, --)
+sintaxis	expected identifier
+sintaxis	expected module name after '#'
+sintaxis	expected module path
+sintaxis	finally blocks start with :>{ }
+sintaxis	for-each syntax: @ var:iterable { }
+sintaxis	format expression syntax: {}N|expr| where N >= 0
+sintaxis	grouped expressions must be enclosed in parentheses: (expr)
+sintaxis	lambda syntax: x -> expr
+sintaxis	precision must be a non-negative integer
+sintaxis	try blocks start with !?{ }
+sintaxis	unexpected end of file
+sintaxis	use '=' to assign a value to a variable
+sintaxis	use := to declare constants (immutable values)
