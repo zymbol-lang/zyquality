@@ -1,14 +1,14 @@
 // Test: MEM-2 también rechaza un nombre que el archivo creó DESESTRUCTURANDO.
 // Hermano de `funcion_lee_el_archivo.zy`, que sólo crea con `externa = …`.
 //
-// BUG-GOL-001 (GoL/HALLAZGOS.md) vivía en ese cruce: mientras una función
-// podía leer el archivo, la VM registraba sólo los nombres de `x = …` y un
-// nombre de `(a, H) = …` le resultaba indefinido — el tree-walker y zyjs
-// contestaban. Ningún archivo del corpus cruzaba las dos cosas: la captura se
-// probaba con `base = 10` y la desestructuración aparte.
+// BUG-GOL-001 (GoL/HALLAZGOS.md) nació en ese cruce y está RECHAZADO: no era
+// un bug. Se archivó cuando los motores aún dejaban a una función leer el
+// archivo; la VM decía «indefinido» y los otros dos contestaban, y se tomó a
+// la VM por la equivocada. Ese programa viola MEM-2: los tres debían negarse.
+// Ningún archivo cruzaba captura y desestructuración, y por eso nadie lo vio.
 //
-// Desde MEM-2 la lectura se rechaza antes de ejecutar, así que la divergencia
-// no puede volver por ese camino. Lo que este archivo fija es que el rechazo
+// Desde MEM-2 la lectura se rechaza antes de ejecutar, que es la respuesta
+// correcta y no un arreglo. Lo que este archivo fija es que el rechazo
 // no dependa de CÓMO nació el nombre: tupla, array y resto, los tres.
 
 (_a, H) = ("x", [1, 2, 3])
