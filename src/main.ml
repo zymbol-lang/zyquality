@@ -104,6 +104,7 @@ let usage code =
   p "  zyq expect [options]         check the corpus against its .expected goldens";
   p "  zyq reject [options]         forms every engine must refuse";
   p "  zyq audit                    corpus hygiene: dead rules, orphans, gaps";
+  p "  zyq excused [--engines a,b]  files corpus.toml excuses, one per line, for scripts";
   p "  zyq selftest                 zyq's own matcher, globs and config reader";
   p "  zyq suites                   list the script suites and what they need";
   p "  zyq engines                  list engines and availability";
@@ -431,7 +432,7 @@ let cmd_regen o corpus engines root files want_via =
           Printf.printf "  %s %s %s\n" (Report.yellow "SKIP ") rel
             (Report.dim (Engine.status_name st)))
     files;
-  Printf.printf "\n%s\n" Report.rule;
+  Printf.printf "\n%s\n" (Report.rule ());
   Printf.printf "%s      %d rewritten, %d newly recorded, %d already current, %d could not be recorded\n"
     (Report.bold "regen") !wrote !made !same !cannot;
   Printf.printf "%s\n"
@@ -618,7 +619,7 @@ let cmd_reject o =
       end else if o.verbose then
         Printf.printf "  %s %s\n" (Report.green "refused ") rel)
     files;
-  Printf.printf "\n%s\n" Report.rule;
+  Printf.printf "\n%s\n" (Report.rule ());
   Printf.printf "%s     %d forms: %s refused everywhere, %s accepted somewhere"
     (Report.bold "reject")
     (List.length files)
@@ -763,7 +764,7 @@ let cmd_audit o =
         if Corpus.excused_everywhere ~path:f corpus ~rel <> None then Some rel else None)
       files in
 
-  Printf.printf "\n%s\n" Report.rule;
+  Printf.printf "\n%s\n" (Report.rule ());
   Printf.printf "%s        %d .zy · %d with goldens · %d consensus-only · %d excused for every engine\n"
     (Report.bold "corpus")
     (List.length files)
@@ -783,6 +784,33 @@ let cmd_audit o =
   end else begin
     Printf.printf "%s %d\n" (Report.red "hygiene problems:") !problems; 1
   end
+
+(* ------------------------------------------------------------------- excused *)
+
+(* The files corpus.toml excuses, one corpus-relative path per line, for the
+   scripts that execute the corpus without going through zyq.  They have to
+   honour the same table, and a second TOML reader written in bash would be one
+   more list that drifts from this one.  fmt/fmt_property.sh is why it exists:
+   it ran every program it formatted, including the ones this table says can
+   never be part of a gate, and one of those wrote a file called `25` into the
+   repository — twice, into two commits.
+
+   With `--engines a,b`, the files excused for every one of those engines;
+   without it, the files excused for every engine there is. *)
+let cmd_excused o =
+  let corpus = load_corpus_cfg o in
+  let root = corpus_root o in
+  List.iter (fun f ->
+      let rel = relative_to root f in
+      let excused =
+        match o.only with
+        | [] -> Corpus.excused_everywhere ~path:f corpus ~rel <> None
+        | ids ->
+          List.for_all (fun id -> Corpus.excused ~path:f corpus ~engine:id ~rel <> None) ids
+      in
+      if excused then print_endline rel)
+    (zy_files root);
+  0
 
 (* ------------------------------------------------------------------ selftest *)
 
@@ -908,6 +936,15 @@ let cmd_selftest () =
     (Golden.strip_ansi "\027[0;31merror\027[0m: x" = "error: x");
   ok "chomp"             (Golden.chomp "a\n\n\n" = "a");
 
+  (* The separator used to be a value built when Report was loaded, before
+     `--no-colour` had been read, so it carried a bold escape whatever the flag
+     said.  Asked with colour off, it must not contain one. *)
+  let colour = !Report.use_colour in
+  Report.use_colour := false;
+  ok "report: the separator honours --no-colour"
+    (not (String.contains (Report.rule ()) '\027'));
+  Report.use_colour := colour;
+
   Printf.printf "%s   %d checks, %s\n"
     (Report.bold "selftest") !total
     (if !fails = 0 then Report.green "all passed"
@@ -948,7 +985,7 @@ let cmd_suite o =
      differential answers are already on screen. *)
   let f = ("suites", cmd_script_suites o) in
   let results = [ a; b; c; d; e; f ] in
-  Printf.printf "\n%s\n" Report.rule;
+  Printf.printf "\n%s\n" (Report.rule ());
   Printf.printf "%s\n" (Report.bold "zyq suite");
   List.iter (fun (name, code) ->
       Printf.printf "  %-10s %s\n" name
@@ -980,8 +1017,9 @@ let () =
   | "expect" :: rest -> run rest cmd_expect
   | "reject" :: rest -> run rest cmd_reject
   | "audit" :: rest -> run rest cmd_audit
+  | "excused" :: rest -> run rest cmd_excused
   | "suite" :: rest -> run rest cmd_suite
-  | "selftest" :: _ -> exit (cmd_selftest ())
+  | "selftest" :: rest -> ignore (parse_args rest); exit (cmd_selftest ())
   | "show" :: file :: rest -> cmd_show (parse_args rest) file
   | "show" :: [] -> die 2 "show needs a file"
   | "oracle" :: _ ->
