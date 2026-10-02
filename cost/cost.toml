@@ -161,7 +161,15 @@ what      = "a Life generation with a call per cell costs little more than the s
 # control with an EMPTY five-argument call per cell; preparing and dropping a
 # 34-register frame instead of a 5-register one is ~55 ns of the ~280 ns
 # extra per call; the six auto-free LoadUnits before the callee's `<~` were
-# measured, removed, made no difference, and were put back. The rest is not
-# located. The limit catches a regression of the call path, not the residue.
+# measured, removed, made no difference, and were put back.
+#
+# Profiled 2026-10-01 with perf (side 160, binaries with symbols and frame
+# pointers): the call is work, not layout — ~1 900 machine instructions and
+# ~1 500 cycles more per call. Over half the gap is dropping Values: tearing
+# down the callee's frame (34 registers, because alloc_temp never reuses a
+# temporary) and the drop every register write makes of the old value. That
+# second cost is ~11 % of the run even inline, so it is not this cell's: it is
+# ZYVM-010 (ZyDDT/HALLAZGOS/zyvm.md). The limit catches a regression of the
+# call path, not that.
 why       = "if this climbs, a call in a hot loop got dearer — frame setup, argument copy, or what runs at return"
 
