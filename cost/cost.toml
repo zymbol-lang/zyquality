@@ -46,9 +46,11 @@
 #
 # It is not an exclusion and it is not a skip: the case still RUNS and its ratio
 # is still printed, so the number moves in the report as the work progresses.
-# And the day it passes, the runner says so and asks for the finding to be
-# closed — a `open_finding` that nobody removes is the way debt becomes
-# permanent.
+# And the day it passes, the case is RED until the finding is closed and the
+# marker removed — a `open_finding` that nobody removes is the way debt becomes
+# permanent, and the way the next regression of the same case gets in unseen.
+# It used to print in green and move on (changed 2026-10-02, the rule ZyDDT's
+# `open_finding` follows: VERDICTS.md § 12).
 
 [defaults]
 runs_time = 3          # median; memory is deterministic enough to take once
