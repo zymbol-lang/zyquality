@@ -20,6 +20,16 @@
 # afterwards.  Run it on a clean checkout, and check `git -C ../zyquality status`
 # if it is ever interrupted.
 #
+# What it EXECUTES runs somewhere else.  P3 used to run every program from the
+# caller's directory — the root of this repository when `zyq suite` drives it —
+# so a program that writes a file wrote it here: `corpus/i18n/test_database.zy`
+# left a file called `25` behind (a `>` in its SQL reached the shell), and the
+# std/db tests left their databases.  Each run now gets a scratch directory of
+# its own, the way zyq runs every engine.  And a program corpus.toml excuses
+# from the tree-walker is not executed at all: the table says it cannot be
+# judged, and that is as true for the formatter's P3 as for a golden.  The
+# table is read through `zyq excused` — one reader, not two.
+#
 # Usage:
 #   ./fmt/fmt_property.sh                                # report all failures
 #   ./fmt/fmt_property.sh --baseline fmt/baseline.txt    # regressions only
@@ -35,7 +45,19 @@ TESTS_DIR="$ZYQ_HOME/corpus"
 # they are 98 more real programs, and the formatter has no reason to care which
 # repository a file came from.  Absent, the corpus alone is plenty.
 EXAMPLES_DIR="${ZY_EXAMPLES:-$ZYQ_HOME/../interpreter/examples}"
-[[ -d "$EXAMPLES_DIR" ]] || EXAMPLES_DIR=""
+# Absolute: programs run from a scratch directory, so a relative path would
+# point at nothing there.
+if [[ -d "$EXAMPLES_DIR" ]]; then EXAMPLES_DIR="$(cd "$EXAMPLES_DIR" && pwd)"; else EXAMPLES_DIR=""; fi
+
+# corpus.toml is read by zyq and only by zyq. Without it this script cannot know
+# which programs must not be run, and running them anyway is the defect above —
+# so its absence is "could not run" (2), never a silent pass.
+ZYQ="$ZYQ_HOME/zyq"
+[[ -x "$ZYQ" ]] || { echo "fmt_property.sh: build zyq first: make -C '$ZYQ_HOME'" >&2; exit 2; }
+declare -A NOT_RUN=()
+while IFS= read -r rel_excused; do
+    [[ -n "$rel_excused" ]] && NOT_RUN["corpus/$rel_excused"]=1
+done < <("$ZYQ" --root "$ZYQ_HOME" excused --engines zytw)
 
 # Only one engine has a formatter, so this suite is not differential -- but it
 # is a language-quality property over the shared corpus, which is why it lives
@@ -61,7 +83,7 @@ CYAN='\033[0;36m'
 BOLD='\033[1m'
 RESET='\033[0m'
 
-PASS=0; SKIP=0
+PASS=0; SKIP=0; FAILED_FILES=0; P3_EXCUSED=0
 declare -a FAILURES=()   # entries: "P1 rel", "P2 rel", "P3 rel", "P4 rel"
 declare -a SKIPPED=()
 
@@ -73,13 +95,17 @@ trap restore EXIT
 # Diagnostics legitimately shift line/col after formatting; normalize spans.
 normalize_spans() { sed -E 's/:[0-9]+:[0-9]+/:L:C/g'; }
 
-run_file() { # $1 = .zy file (its own .input is used as stdin when present)
-    local input_file="${1%.zy}.input"
-    if [[ -f "$input_file" ]]; then
-        timeout "$TIMEOUT_SEC" "$ZYMBOL" run "$1" < "$input_file" 2>&1 | normalize_spans
-    else
-        timeout "$TIMEOUT_SEC" "$ZYMBOL" run "$1" < /dev/null 2>&1 | normalize_spans
-    fi
+run_file() { # $1 = absolute .zy path; its .input is stdin and its .keys the key script
+    local input_file="${1%.zy}.input" keys_file="${1%.zy}.keys" here
+    local -a keys=()
+    [[ -f "$keys_file" ]] && keys=(--keys "$keys_file")
+    [[ -f "$input_file" ]] || input_file=/dev/null
+    # A fresh directory per run, like zyq's sandbox: what a program writes lands
+    # there, and a second run cannot read what the first one left behind.
+    here="$(mktemp -d "$WORK/run.XXXXXX")"
+    (cd "$here" && timeout "$TIMEOUT_SEC" "$ZYMBOL" run ${keys[@]+"${keys[@]}"} "$1" < "$input_file" 2>&1) \
+        | normalize_spans
+    rm -rf "$here"
     return 0
 }
 
@@ -108,12 +134,15 @@ for file in "${FILES[@]}"; do
     # NUL bytes (TUI sources legitimately contain them in char literals)
     if ! "$ZYMBOL" fmt "$file" > "$WORK/fmt1" 2>"$WORK/err"; then
         # Formatter refused a valid file — count as a P1-class failure.
-        FAILURES+=("P1 $rel")
+        FAILURES+=("P1 $rel"); FAILED_FILES=$((FAILED_FILES + 1))
         echo -e "  ${RED}FAIL${RESET}  $rel  ${RED}[fmt error: $(head -c 120 "$WORK/err" | tr -d '\n')]${RESET}"
         continue
     fi
 
     file_failed=false
+    # P3 inconclusive. Not a pass: the file was counted as PASS *and* SKIP until
+    # 2026-10-02, so PASS + SKIP came out larger than the number of files.
+    file_skipped=false
 
     # P2 — idempotence (via stdin, no swap needed)
     "$ZYMBOL" fmt - < "$WORK/fmt1" > "$WORK/fmt2" 2>/dev/null
@@ -133,6 +162,11 @@ for file in "${FILES[@]}"; do
     # P1 + P3 — swap formatted content in place, test, restore
     has_expected=false
     [[ -f "${file%.zy}.expected" ]] && has_expected=true
+    # Excused from the tree-walker in corpus.toml: formatted and reparsed like
+    # any other file, never executed (see the NOTE at the top).
+    if $has_expected && [[ -n "${NOT_RUN[$rel]:-}" ]]; then
+        has_expected=false; P3_EXCUSED=$((P3_EXCUSED + 1))
+    fi
     o1=""
     if $has_expected; then o1="$(run_file "$file")"; fi
 
@@ -152,6 +186,7 @@ for file in "${FILES[@]}"; do
             cp "$WORK/fmt1" "$file"
             if [[ "$o1" != "$o1b" ]]; then
                 SKIP=$((SKIP + 1)); SKIPPED+=("$rel (nondeterministic output)")
+                file_skipped=true
             else
                 FAILURES+=("P3 $rel"); file_failed=true
                 echo -e "  ${RED}FAIL${RESET}  $rel  ${RED}[P3 semantics]${RESET}"
@@ -162,7 +197,9 @@ for file in "${FILES[@]}"; do
     cp "$WORK/cur" "$file"
     CURF=""
 
-    if ! $file_failed; then
+    if $file_failed; then
+        FAILED_FILES=$((FAILED_FILES + 1))
+    elif ! $file_skipped; then
         PASS=$((PASS + 1))
     fi
 done
@@ -173,13 +210,22 @@ echo -e "${BOLD}  SUMMARY${RESET}"
 echo -e "${BOLD}═══════════════════════════════════════════════════════════${RESET}"
 echo -e "  Total files  : ${BOLD}$TOTAL${RESET}"
 echo -e "  ${GREEN}PASS${RESET}         : ${GREEN}${BOLD}$PASS${RESET}"
-echo -e "  ${RED}FAIL${RESET}         : ${RED}${BOLD}${#FAILURES[@]}${RESET}"
+echo -e "  ${RED}FAIL${RESET}         : ${RED}${BOLD}$FAILED_FILES${RESET} file(s), ${#FAILURES[@]} property failure(s)"
 echo -e "  ${YELLOW}SKIP${RESET}         : ${YELLOW}${BOLD}$SKIP${RESET}"
 for p in P1 P2 P3 P4; do
     n=$(printf '%s\n' "${FAILURES[@]:-}" | grep -c "^$p " || true)
     echo -e "    $p failures : $n"
 done
+echo -e "  P3 not run   : $P3_EXCUSED (excused from the tree-walker in corpus.toml)"
 echo ""
+
+# Grading the grader: every file is exactly one of pass, skip or fail. A total
+# that does not add up is a defect in this script, and no verdict it gives can
+# be trusted — which is what the double count above had been doing quietly.
+if (( PASS + SKIP + FAILED_FILES != TOTAL )); then
+    echo -e "${RED}${BOLD}fmt_property.sh: $PASS + $SKIP + $FAILED_FILES ≠ $TOTAL — the tally is wrong${RESET}" >&2
+    exit 2
+fi
 
 if [[ -n "$UPDATE_BASELINE" ]]; then
     printf '%s\n' "${FAILURES[@]:-}" | grep -v '^$' | sort > "$UPDATE_BASELINE"
