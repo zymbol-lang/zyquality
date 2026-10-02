@@ -1,0 +1,26 @@
+// ERROR-GOL-017 (GoL/HALLAZGOS.md) — a loop that writes a visible name with a
+// value of another type is the change `m = 5` warns about after `m = "fuera"`.
+//
+// The loop writes the outer `m` (PREMISES.md MEM-7), so after it `m` holds the
+// last element. The analyser saw a second `m` in the loop and compared nothing:
+// a plain reassignment warned and this one did not. Each loop below changes
+// the type of a variable the program reads afterwards, so each one warns, and
+// none of them warns `unused variable`.
+
+m = "fuera"
+@ m:[1, 2] {
+    >> m ¶
+}
+>> m ¶
+
+t = 1
+@ t:"ab" {
+    >> t ¶
+}
+>> t ¶
+
+r = "x"
+@ r:1..2 {
+    >> r ¶
+}
+>> r ¶
