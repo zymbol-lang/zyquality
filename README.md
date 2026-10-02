@@ -78,9 +78,10 @@ it was missing.
 
 | | |
 |---|---|
-| `corpus/` | 661 `.zy` files, 659 with a `.expected` golden |
-| `corpus.toml` | which engine may be judged on which file, and why not |
-| `reject/` | 34 forms every engine must refuse — `@reject:` for a live bug, `@reject-pending:` for a rule decided and not yet built |
+| `corpus/` | 675 `.zy` files, 669 with a `.expected` golden (2026-10-02) |
+| `corpus.toml` | which engine may be judged on which file, and why not — 19 rules, each with its reason |
+| `dropped.tsv` | what was retired from the corpus, when, and what holds its question now |
+| `reject/` | 50 forms every engine must refuse — `@reject:` for a live bug, `@reject-pending:` for a rule decided and not yet built |
 | `engines.toml` | how to run each engine |
 | `suites.toml` | the script suites, so `zyq suite` runs them too |
 | `fmt/` | formatter properties P1–P4, and its baseline |
@@ -88,14 +89,19 @@ it was missing.
 | `bench/` | benchmark programs and their gate — **not** tests, see below |
 | `docs/` | verification of the annotated examples in `GUIDE.md` |
 | `project/` | the registry and runner for the real programs written in Zymbol |
+| `messages/` | the diagnostic inventory (`extract.py`: what exists) and its other half (`reach.py`: what any program provokes), each against a list baseline |
+| `addressing/` | the bracket rule crossed with the whole action vocabulary |
+| `cost/` | auto-free and complexity, asserted as ratios against their own control |
+| `lsp/` | the corpus through the language server, against `zymbol check` |
+| `coverage/` | which code no test executes — a list to read, outside the gate on purpose |
 | `platform/` | the native Windows runner — no bash, no coreutils, no WSL |
 | `notes/` | historical measurement records |
-| `cases/` | curated cases for the external oracles (phase 3) |
 
 ### Not everything is differential
 
-`zyq` answers *do the engines agree*. Three questions are not that shape and are
-scripts, registered in `suites.toml` so `zyq suite` runs them anyway:
+`zyq` answers *do the engines agree*. Many questions are not that shape and are
+scripts, registered in `suites.toml` so `zyq suite` runs them anyway — `zyq
+suites` lists all twelve and what each needs. Four of them, at length:
 
 - **`fmt/`** — only one engine has a formatter, so there is nothing to compare;
   what is checked is that formatting preserves reparse, idempotence, semantics
@@ -111,6 +117,9 @@ scripts, registered in `suites.toml` so `zyq suite` runs them anyway:
   code auditor. Their suites cannot move here: each imports the application it
   tests. `apps.toml` says where they are, `run.sh` drives them through `zyq`,
   and their goldens sit beside them as Zofia's already did.
+
+  Two questions per application, and both are the gate since 2026-10-02: do
+  its goldens hold, and do `zytw` and `zyvm` agree on it.
 
   This is the strongest regression signal the project has, and it was the
   weakest link: each application had a runner of its own that decided
@@ -227,7 +236,29 @@ desc = "..."
 
 ## Current state
 
-Measured 2026-08-17 on v0.0.9, 599 files, three engines.
+Measured 2026-10-02, the whole gate (`./zyq suite`): **all gates pass**.
+
+| | |
+|---|---|
+| consensus, three engines | 675 files: **669 agree, 0 diverge**, 6 excused for every engine |
+| goldens | 639 via `run` and 30 via `check`, all match, **none unchecked** |
+| rejections | 50 forms, all refused by all three engines |
+| `--strict` | compares what the engines SAY, normalised as ZyDDT normalises it (no colour, no excerpt, the line of a location): the files where the words differ are inventory, not a gate |
+| messages | 447 one-sided entries, 221 on the shared surface |
+| reach | 170 diagnostics nothing provokes, each listed |
+| project | 8 applications: every golden holds, and `zytw`/`zyvm` agree on every one |
+| ZyDDT | GREEN: 45 axes, 1363 cells, 12 pins, 11 declared debts reported as KNOWN |
+
+Three things the gate could not see until that day, because the verdict was
+green over them: eight exclusions whose reason was the colour of the CLI's
+output, which hid four real divergences and five corpus files that had not run
+in any engine since the import; a diagnostic inventory whose baseline was half
+dead entries; and `reach`, outside the gate on a reason that was no longer true,
+red under an `all gates pass`.
+
+### History
+
+**2026-08-17, v0.0.9, 599 files, three engines.**
 
 **Consensus** — `./zyq consensus`:
 
@@ -278,44 +309,31 @@ consensus compares what programs print and a refused program prints nothing.
 
 ## Grading the grader
 
-`./zyq selftest` runs 48 checks over the pattern matcher, the globs, the golden
-line matcher, the skip-marker parser and the two output filters, against cases
-whose answer is known by reading them. It is the first step of `zyq suite`.
+`./zyq selftest` runs 56 checks (2026-10-02) over the pattern matcher, the
+globs, the golden line matcher, the skip-marker parser, the output filters and
+the diagnostic normalisation, against cases whose answer is known by reading
+them — one of them on stderr captured from two engines. It is the first step of
+`zyq suite`.
 
 The two harness defects found while producing the first consensus numbers — an
 argv list reversed by a double `List.rev`, and a missing module resolver that
 made every `<#` import fail — both inflated the divergence count, and neither
-was visible in the output. A bench that grades 589 files has to be graded too.
+was visible in the output. A bench that grades the whole corpus has to be graded too.
 
 ## Roadmap
 
 - **Phase 1 — consensus** ✅
 - **Phase 2 — goldens, rejections, hygiene, one verdict** ✅
-- **Phase 3 — oracles.** `cases/` holds a curated case plus the same computation
-  in `.py` / `.js` / `.ml`, with the authoritative one declared in `case.toml`.
-  This is what settles `10 ^ 20`: comparing engines against each other says
-  *that* they disagree, never *who is right*, and the goldens cannot settle it
-  either — they were recorded from the tree-walker, so they freeze its bugs.
-- **Phase 4 — benchmarks.** `bench/` holds the programs and
-  `interpreter/tests/scripts/bench_gate.sh` gates them against a per-machine
-  baseline; what is missing is `zyq bench`, running Zymbol against Python,
-  JavaScript and native OCaml on the same algorithm.
-
-### `corpus/` is wide; `cases/` is deep
-
-| | `corpus/` | `cases/` |
-|---|---|---|
-| Origin | the engines' test suites, merged | hand-written, curated |
-| Size | 589 files, grows with each feature | small, grows slowly |
-| Coverage | **wide**: touches the whole language | **deep**: hard cases |
-| Authority | consensus between engines, plus goldens | external oracle |
-| Cost per case | one `.zy` | one `.zy` + three implementations |
-
-`cases/` is not a port of the corpus to Python. A case earns its place by having
-revealed a divergence, by having a correct answer that is not obvious by
-inspection, or by being complex enough that a small error amplifies into a
-visible one. A case whose answer is obvious gains nothing from an oracle and
-belongs in the corpus.
+- **Phase 3 — oracles: moved to ZyDDT.** A ZyDDT cell may carry `oracle.py` /
+  `oracle.js`, the same computation in another language, and 130 do. `cases/`,
+  the eight curated cases seeded here on 2026-08-07 for this phase, was never
+  run by anything; it was retired on 2026-10-02 (`dropped.tsv`), and two of its
+  eight still diverged — `"hello"$?? ""` and `"hello" $/ ""`, now GLB-078 and
+  GLB-079. The `zyq oracle` and `zyq bench` stubs, which exited 3, went with it.
+- **Phase 4 — benchmarks** — `bench/` is a suite (`zyq suite --only bench`),
+  gated against a per-machine baseline; `cost/` asserts what a baseline cannot,
+  ratios against a control. Running Zymbol against Python, JavaScript and OCaml
+  on the same algorithm is not built.
 
 ## Licence
 
