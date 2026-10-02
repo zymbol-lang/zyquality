@@ -187,9 +187,14 @@ def main() -> int:
                     rc = RED if rc != NOVERDICT else rc
             elif known:
                 # The other direction, which is the one nobody builds: debt that
-                # got fixed and whose marker stayed behind.
-                print(f"          {C['green']}{known} now passes — close the "
-                      f"finding and drop `open_finding`{C['off']}")
+                # got fixed and whose marker stayed behind. Red since 2026-10-02:
+                # printed in green, the marker outlived the fix and would have
+                # covered the next regression of the same case in silence — the
+                # open door `@reject-pending` (PROMOTE), ZyDDT's STALE WORDING
+                # and its own `open_finding` (VERDICTS.md § 12) all refuse.
+                print(f"          {C['red']}DEBT PAID — {known} now passes: close "
+                      f"the finding and drop `open_finding`{C['off']}")
+                rc = RED if rc != NOVERDICT else rc
         print()
 
     for f in tmp:
