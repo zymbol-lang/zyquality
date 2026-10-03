@@ -44,7 +44,7 @@
 
     // Obtener solo el código de estado HTTP
     get_status_code(url) {
-        resultado = <\ "curl -s -o /dev/null -w '%{http_code}' {url}" \>
+        resultado = <\ "curl -s -o /dev/null -w '%\{http_code\}' {url}" \>
         <~ resultado
     }
 
