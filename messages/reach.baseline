@@ -143,8 +143,6 @@ semántica	undefined function: '{}'
 semántica	use '_' to indicate where the piped value should go
 semántica	variable with non-literal initializer
 semántica	{} does not export a constant '{}'
-sintaxis	a bracket after a bracket is what the navigator is for: write `d[\"x\">\"y\"]$~ value`
-sintaxis	a write reaches one place, so its path has no ranges
 sintaxis	catch blocks start with :! { } or :! ##Type { }
 sintaxis	expected '!?' to start try block
 sintaxis	expected '##' for error type
