@@ -1,0 +1,5 @@
+##Type(>>~ slot expects Int, got String)
+##Type(>>~ slot expects Int, got Float)
+##Type(>>~ slot expects Int, got Bool)
+##Type(>>~ slot expects Int, got Array)
+##Type(>>~ slot expects Int, got Unit)
