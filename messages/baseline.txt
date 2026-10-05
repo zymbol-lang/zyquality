@@ -251,7 +251,6 @@ rust	shared	a navigation step is a position or a key, got §
 rust	shared	all array elements must have the same type — write `#[…]` if the mix is deliberate
 rust	shared	an optional zone string
 rust	shared	argument type § incompatible with function parameter §
-rust	shared	argument § has type §, but function '§' expects §
 rust	shared	array element § has type §, but expected § (same as first element)
 rust	shared	array index must be int, got §
 rust	shared	cannot re-export items that are not exported by the source module
