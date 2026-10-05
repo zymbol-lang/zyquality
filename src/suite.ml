@@ -95,6 +95,9 @@ let missing ~(root : string) (need : string) : string option =
   | "zyddt" ->
     let d = Filename.concat root "../ZyDDT/bin/zyddt" in
     if Sys.file_exists d then None else Some "the ZyDDT/ checkout"
+  | "aprende_zymbol" ->
+    let d = Filename.concat root "../aprende_zymbol/index.html" in
+    if Sys.file_exists d then None else Some "the aprende_zymbol/ checkout"
   | other -> Some ("unknown requirement `" ^ other ^ "`")
 
 let unmet ~root (s : spec) = List.filter_map (missing ~root) s.needs

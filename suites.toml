@@ -204,3 +204,18 @@ needs = ["zymbol", "python3"]
 # naming an `open_finding` is reported as KNOWN and does not turn the gate red —
 # declared debt is not a regression, and a gate that is permanently red stops
 # meaning anything.
+
+[[suite]]
+id = "course"
+cmd = ["python3", "docs/course_highlighter.py"]
+desc = "the course colours its code with the playground's highlighter, not a copy of it"
+needs = ["python3", "aprende_zymbol"]
+# The course (aprende_zymbol/) carried a copy of the playground's highlighter
+# that drifted twice: on the corpus it left 2555 lines with unmarked text where
+# the playground leaves none (GLB-006). Decided 2026-10-05: the course imports
+# the playground's own module from the published site, and the copy is gone.
+# This holds that decision, and is cheap on purpose — it reads files and runs
+# nothing: the import is there and names a file the web repository has, no
+# script in the course defines a highlighter of its own, and the course's CSS
+# styles every class the highlighter emits.
+gate = true
