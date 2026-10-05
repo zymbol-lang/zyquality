@@ -1,0 +1,34 @@
+// An arithmetic operator refused for its operands' types: the text and the kind.
+//
+// GLB-088 (decided 2026-10-05): every one of these is a `##Type` — a wrong type,
+// by D1. They were `##_` in the three engines, because the kind was read from
+// the message's words and none of them says "type".
+//
+// GLB-059 (decided 2026-10-05): `+` names the types like the rest of its family
+// when no operand is text. Its guidance about juxtaposition is for the mistake
+// it was written for, `"a" + b`, and it stays there; `x + 1` with `x` empty used
+// to talk about concatenating strings in a program that has none.
+//
+// `id` only hides each value's type from the analysers, so nothing here warns
+// and the program reaches every refusal at run time.
+
+id(v) { <~ v }
+vacio = id(##_)
+si = id(#1)
+lista = id([1])
+letra = id('c')
+texto = id("a")
+
+!? { r1 = vacio + 1   >> r1 ¶ } :! { >> _err ¶ }
+!? { r2 = 1 + si      >> r2 ¶ } :! { >> _err ¶ }
+!? { r3 = lista + 1   >> r3 ¶ } :! { >> _err ¶ }
+!? { r4 = letra + 1   >> r4 ¶ } :! { >> _err ¶ }
+!? { r5 = texto + 1   >> r5 ¶ } :! { >> _err ¶ }
+!? { r6 = 1 + texto   >> r6 ¶ } :! { >> _err ¶ }
+!? { r7 = vacio - 1   >> r7 ¶ } :! { >> _err ¶ }
+!? { r8 = si * 2      >> r8 ¶ } :! { >> _err ¶ }
+!? { r9 = texto % 2   >> r9 ¶ } :! { >> _err ¶ }
+!? { r10 = vacio ^ 2  >> r10 ¶ } :! { >> _err ¶ }
+!? { r11 = vacio / 2  >> r11 ¶ } :! { >> _err ¶ }
+!? { r12 = -texto     >> r12 ¶ } :! { >> _err ¶ }
+!? { r13 = +si        >> r13 ¶ } :! { >> _err ¶ }
