@@ -7,7 +7,8 @@
 // GLB-059 (decided 2026-10-05): `+` names the types like the rest of its family
 // when no operand is text. Its guidance about juxtaposition is for the mistake
 // it was written for, `"a" + b`, and it stays there; `x + 1` with `x` empty used
-// to talk about concatenating strings in a program that has none.
+// to talk about concatenating strings in a program that has none. `/` follows
+// the same rule with its guidance about `$/` (GLB-090, decided 2026-10-05).
 //
 // `id` only hides each value's type from the analysers, so nothing here warns
 // and the program reaches every refusal at run time.
@@ -30,5 +31,6 @@ texto = id("a")
 !? { r9 = texto % 2   >> r9 ¶ } :! { >> _err ¶ }
 !? { r10 = vacio ^ 2  >> r10 ¶ } :! { >> _err ¶ }
 !? { r11 = vacio / 2  >> r11 ¶ } :! { >> _err ¶ }
+!? { r14 = texto / 2  >> r14 ¶ } :! { >> _err ¶ }
 !? { r12 = -texto     >> r12 ¶ } :! { >> _err ¶ }
 !? { r13 = +si        >> r13 ¶ } :! { >> _err ¶ }
