@@ -1,0 +1,9 @@
+##Type(logical AND requires boolean operands, got Int)
+##Type(logical OR requires boolean operands, got Unit)
+##Type(logical NOT requires boolean operand, got Int)
+##Type(cannot compare values with operator '<': Bool and Int)
+##Type(cannot compare values with operator '<': Unit and Int)
+##Type(cannot compare values with operator '<': Array and Array)
+#1
+##_(cannot compare string 'a' with integer 10 using operator '<')
+##_(cannot compare integer 10 with string 'a' using operator '<')

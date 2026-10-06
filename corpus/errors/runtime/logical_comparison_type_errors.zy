@@ -1,0 +1,30 @@
+// A logical operator or an ordering refused for its operands: the text and the kind.
+//
+// GLB-091 (decided 2026-10-05): `&&`, `||` and `!` on something that is not a
+// Bool, and an ordering between two types that never compare, are a wrong TYPE —
+// a `##Type` (D1). They were `##_` in the three engines.
+//
+// A string against a number is another case: `"5" < 10` compares, because the
+// text is a number. `"a" < 10` fails on the VALUE of the text, so its message
+// names the value, and its kind is not decided yet (GLB-094): this golden holds
+// what the three engines answer today.
+//
+// `id` only hides each value's type from the analysers.
+
+id(v) { <~ v }
+n = id(10)
+si = id(#1)
+vacio = id(##_)
+lista = id([1])
+cinco = id("5")
+letra = id("a")
+
+!? { r1 = n && #1      >> r1 ¶ } :! { >> _err ¶ }
+!? { r2 = #0 || vacio  >> r2 ¶ } :! { >> _err ¶ }
+!? { r3 = !n           >> r3 ¶ } :! { >> _err ¶ }
+!? { r4 = si < n       >> r4 ¶ } :! { >> _err ¶ }
+!? { r5 = vacio < n    >> r5 ¶ } :! { >> _err ¶ }
+!? { r6 = lista < lista >> r6 ¶ } :! { >> _err ¶ }
+>> (cinco < n) ¶
+!? { r7 = letra < n    >> r7 ¶ } :! { >> _err ¶ }
+!? { r8 = n < letra    >> r8 ¶ } :! { >> _err ¶ }
