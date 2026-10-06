@@ -8,6 +8,7 @@
 ##Type(arithmetic requires numeric operands: Bool, Int)
 ##Type(arithmetic requires numeric operands: String, Int)
 ##Type(power operator requires numeric operands: Unit, Int)
+##Type(arithmetic requires numeric operands: Unit, Int)
 ##Type(/ requires numeric operands — use $/ to split strings)
 ##Type(negation requires numeric operand, got String)
 ##Type(unary plus requires numeric operand, got Bool)
