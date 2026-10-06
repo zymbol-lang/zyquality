@@ -6,18 +6,23 @@
 //
 // A string against a number is another case: `"5" < 10` compares, because the
 // text is a number. `"a" < 10` fails on the VALUE of the text, so its message
-// names the value, and its kind is not decided yet (GLB-094): this golden holds
-// what the three engines answer today.
+// names the value; reading the text as a number is what failed, so its kind is
+// `##Parse` (GLB-094, decided 2026-10-06) — one line per arm: text and Int, Int
+// and text, text and Float, Float and text. The kind used to be read from the
+// words of the message, and the message carries the text: `"index" < 10` was an
+// `##Index`, which the last line holds.
 //
 // `id` only hides each value's type from the analysers.
 
 id(v) { <~ v }
 n = id(10)
+medio = id(1.5)
 si = id(#1)
 vacio = id(##_)
 lista = id([1])
 cinco = id("5")
 letra = id("a")
+palabra = id("index")
 
 !? { r1 = n && #1      >> r1 ¶ } :! { >> _err ¶ }
 !? { r2 = #0 || vacio  >> r2 ¶ } :! { >> _err ¶ }
@@ -28,3 +33,6 @@ letra = id("a")
 >> (cinco < n) ¶
 !? { r7 = letra < n    >> r7 ¶ } :! { >> _err ¶ }
 !? { r8 = n < letra    >> r8 ¶ } :! { >> _err ¶ }
+!? { r9 = letra < medio >> r9 ¶ } :! { >> _err ¶ }
+!? { r10 = medio < letra >> r10 ¶ } :! { >> _err ¶ }
+!? { r11 = palabra < n >> r11 ¶ } :! { >> _err ¶ }
