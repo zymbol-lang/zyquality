@@ -5,5 +5,8 @@
 ##Type(cannot compare values with operator '<': Unit and Int)
 ##Type(cannot compare values with operator '<': Array and Array)
 #1
-##_(cannot compare string 'a' with integer 10 using operator '<')
-##_(cannot compare integer 10 with string 'a' using operator '<')
+##Parse(cannot compare string 'a' with integer 10 using operator '<')
+##Parse(cannot compare integer 10 with string 'a' using operator '<')
+##Parse(cannot compare string 'a' with float 1.5 using operator '<')
+##Parse(cannot compare float 1.5 with string 'a' using operator '<')
+##Parse(cannot compare string 'index' with integer 10 using operator '<')
