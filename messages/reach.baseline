@@ -138,7 +138,6 @@ semántica	remove it, or use it — `>> name ¶` to print it
 semántica	the enclosing loops have no labels — write '@:{wanted} {{ }}' on the one you mean to target
 semántica	this statement does nothing: '{}' is read and discarded
 semántica	tuple index {} is out of bounds (tuple has {} elements)
-semántica	unary {} on non-numeric type: {}
 semántica	undefined function: '{}'
 semántica	use '_' to indicate where the piped value should go
 semántica	variable with non-literal initializer
