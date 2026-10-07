@@ -269,7 +269,6 @@ rust	shared	comparison pattern did not produce a boolean
 rust	shared	comparison pattern requires scalar scrutinee, got §
 rust	shared	connection string
 rust	shared	consider removing this variable or prefixing with '_' if intentionally unused
-rust	shared	consider removing this variable or using its value
 rust	shared	constant with non-literal initializer
 rust	shared	db: cannot bind § as a parameter
 rust	shared	db: expected string §
@@ -406,7 +405,6 @@ rust	shared	use := to declare constants (immutable values)
 rust	shared	use `[…]` — `#[…]` is for declaring a mix that is deliberate
 rust	shared	use `°` only on the first assignment to auto-initialize
 rust	shared	use a different alias for this import
-rust	shared	variable '§' is assigned but never read
 rust	shared	variable with non-literal initializer
 rust	shared	write `#(` here: `#(nombre: valor)`. a bare `(…)` is a positional tuple, and `#()` is the empty dictionary — which `()` cannot be, since it would have to be the empty tuple as well
 rust	shared	zymbol: no posix shell found (§); running `<\ \>` through cmd.exe. commands written in posix shell syntax will not work — install git for windows or set zymbol_sh to get the portable behaviour back
