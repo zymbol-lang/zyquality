@@ -243,7 +243,6 @@ rust	shared	'§' §s the enclosing '@' loop; there is none here. a function or l
 rust	shared	'§°' hot-initialized to 0 — '^' will always produce 0
 rust	shared	(year, month, day) or (year, month, day, hour, minute, second), each ###, plus an optional zone
 rust	shared	--keys: the key script ran out while the program waited for a key
-rust	shared	`<~ 0` for success and `<~ 1` (or another number) for failure; to print something before leaving, use `>>` on the line above
 rust	shared	`°` has no effect in output context — use `§`
 rust	shared	a dictionary is written `#(…)`
 rust	shared	a navigation step is a position or a key, got §
