@@ -125,6 +125,22 @@ why       = "two owners of one Rc across a load/store make every append copy the
 open_finding = { zyvm = "ZYVM-003" }
 
 [[case]]
+id        = "growth/sort-with-comparator"
+kind      = "growth-ratio"
+template  = "casos/sort_comparador.zy.in"
+n         = 500
+n_by_engine = { zyvm = 1000, zyjs = 500 }
+factor    = 4
+max_ratio = 6.0
+what      = "sorting with a comparator of one's own grows as n log n, like the natural order"
+# Measured 2026-10-08: zytw 14.0, zyvm 13.9 — the three engines run the same
+# bubble sort with no early exit, the rule B of GLB-073 asking the comparator a
+# second time on a #0 (GLB-108, open). An n log n sort would be about 5 at ×4.
+why       = "a bubble sort visits every pair: n(n-1)/2 comparisons, one or two calls each"
+engines   = ["zytw", "zyvm", "zyjs"]
+open_finding = { zytw = "GLB-108", zyvm = "GLB-108", zyjs = "GLB-108" }
+
+[[case]]
 id        = "growth/caught-errors"
 kind      = "growth-ratio"
 template  = "casos/errores_capturados.zy.in"
