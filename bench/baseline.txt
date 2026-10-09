@@ -1,18 +1,18 @@
 # Benchmark baseline — median wall-time ms (machine-specific).
-# Recorded: 2026-09-02T21:06:45Z host=zymbol runs=5
-tw/stress 237
-vm/stress 93
-tw/bench_match 188
-vm/bench_match 62
-tw/bench_recursion 1624
-vm/bench_recursion 273
-tw/bench_collections 77
-vm/bench_collections 55
-tw/bench_strings 104
-vm/bench_strings 69
-tw/bench_strings_stress 150
-vm/bench_strings_stress 76
-tw/bench_strings_modify 83
-vm/bench_strings_modify 67
-tw/bench_index_read 161
-vm/bench_index_read 90
+# Recorded: 2026-10-09T17:47:20Z host=zymbol runs=5
+tw/stress 206
+vm/stress 49
+tw/bench_match 172
+vm/bench_match 44
+tw/bench_recursion 1718
+vm/bench_recursion 167
+tw/bench_collections 22
+vm/bench_collections 23
+tw/bench_strings 36
+vm/bench_strings 17
+tw/bench_strings_stress 79
+vm/bench_strings_stress 38
+tw/bench_strings_modify 27
+vm/bench_strings_modify 18
+tw/bench_index_read 91
+vm/bench_index_read 41

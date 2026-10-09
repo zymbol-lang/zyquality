@@ -1,13 +1,16 @@
 # lib_time {
+    <# std/time => clock
+
     // Timing utilities for Zymbol-Lang benchmarks.
-    // Uses <\ "date +%s%6N" \> (Unix epoch MICROseconds via system call) — no built-ins.
-    // Microseconds, not nanoseconds: an epoch in nanoseconds is ~1.7e18, past the
-    // integer range (±(2^53 − 1) ≈ 9.007e15), so `#|...|` returns the text
-    // unchanged and the division below fails. In microseconds it is ~1.7e15,
-    // which fits with room until the year 2255 and still resolves far finer than
-    // the shell round-trip being measured.
-    // Note: BashExec args are Zymbol expressions; shell commands with non-Zymbol tokens
-    //       (like +%s%N) must be quoted as string literals.
+    // Reads the clock with `std/time`'s `now()`: native in the three engines,
+    // milliseconds since the epoch, and no process per reading.
+    //
+    // Until 2026-10-09 it read `<\ "date +%s%6N" \>` — `std/time` did not exist
+    // when this was written — and every reading spawned a process: an empty
+    // block measured 2–4 ms, so every benchmark line carried that floor, and a
+    // test that does 1 ms of work could not be told from one that does none
+    // (zyquality/notes/VM_VS_PYTHON.md). `bench/baseline.txt` was recorded again
+    // the same day.
     //
     // Usage:
     //   <# ./lib_time => T
@@ -18,14 +21,14 @@
 
     #> { now, elapsed, total }
 
-    // Return current time in milliseconds (epoch microseconds / 1_000).
+    // Return current time in milliseconds since the epoch.
     now() {
-        <~ #|<\ "date +%s%6N" \>| / 1000
+        <~ clock::now()
     }
 
     // Format elapsed time since start_ms as "(X.XXXs)".
     elapsed(start_ms) {
-        diff = #|<\ "date +%s%6N" \>| / 1000 - start_ms
+        diff = clock::now() - start_ms
         s    = diff / 1000
         ms   = diff - (s * 1000)
         ? ms < 10 {
@@ -41,7 +44,7 @@
 
     // Format elapsed time since start_ms as "X.XXXs total".
     total(start_ms) {
-        diff = #|<\ "date +%s%6N" \>| / 1000 - start_ms
+        diff = clock::now() - start_ms
         s    = diff / 1000
         ms   = diff - (s * 1000)
         ? ms < 10 {
