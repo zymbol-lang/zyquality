@@ -73,11 +73,11 @@ Where each finding went:
 
 ## Limits
 
-- **The Zymbol timer has a floor of 2–4 ms.** `lib_time.zy` reads the clock by
-  running `date` in a process, so a test that reports 5 ms or less on the Zymbol
-  side measured the timer, not the work. Read only the ratios where both sides
-  ran well over 10 ms, or measure whole programs; `notes/VM_VS_PYTHON.md`
-  (2026-10-09) does the second, with a copy of the timer on `std/time`.
+- **The Zymbol timer had a floor of 2–4 ms until 2026-10-09.** `lib_time.zy`
+  read the clock by running `date` in a process, so a Zymbol test under ~5 ms
+  measured the timer, not the work; ZyBench's text figures carry it. It reads
+  `std/time` now. Both timers print whole milliseconds, so a ratio is still a
+  bound until both sides run well over 10 ms.
 - **9 of 12.** `bench_index_read`, `stress`, `bench_pipeline` and
   `bench_recursion_loop` have no port.
 - **Idiomatic, not identical.** The ports `append` where Zymbol writes `a$+ x`:

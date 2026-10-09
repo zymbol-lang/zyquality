@@ -98,9 +98,10 @@ sort, which is GLB-108's bubble: `H8` alone is 26 ms of `bench_hof`'s 126, and
 `T4` is 4 ms against Python's 1. Integer loops win: `N2`–`N5` 0.84–0.90,
 `ackermann` 0.50.
 
-`bench/lib_time.zy` itself is **not** changed: the gate's `baseline.txt` was
-recorded with the floor in it, and moving the timer means re-recording the
-baseline, which is the author's call.
+`bench/lib_time.zy` was moved to `std/time` the same day, with the author's
+agreement, and `bench/baseline.txt` recorded again: the short programs dropped the
+most (`vm/bench_strings` 69 → 17 ms, `vm/bench_collections` 55 → 23 ms), which is
+how much of each line had been the clock.
 
 ## What the documents claim
 
