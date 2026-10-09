@@ -1,9 +1,9 @@
 // Named tuple sort — extended
 //
-// No two people share an age or a score, on purpose. Which of two tied
-// elements `$^` puts first is not decided — the engines answered it
-// differently the day this file first ran (GLB-073) — and a file asks only
-// what the language has decided.
+// No two people share an age or a score, on purpose: this file asks about
+// sorting by a field, not about ties. The day it first ran, the engines left
+// tied elements in different orders (GLB-073); since 2026-10-03 `$^` is
+// stable — ties keep their input order — and ZyDDT's GLB-073 cells hold that.
 people = [
     #(name: "Zara",  age: 22, score: 88),
     #(name: "Inti",  age: 35, score: 72),
