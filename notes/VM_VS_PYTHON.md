@@ -66,5 +66,9 @@ The direction holds: the VM wins the integer loop and loses the call-heavy one b
   the `bench/` microbenchmarks, more on search-shaped programs — and says to quote
   the workload. Its twin `web/install.html` does not carry the figure: the
   Markdown twin says something the page does not, which `web/tests/test_markdown.mjs`
-  cannot see, since it compares versions, release URLs and digests only. Not
-  changed (2026-10-08).
+  cannot see, since it compares versions, release URLs and digests only.
+  Corrected 2026-10-09: the comment now reads *"register VM (faster; how much
+  depends on the program)"*. The page has no command block at all, so there was
+  no factor to align with — the twin stops claiming one. `web/changelog.md`'s
+  *"~4× faster"* stays: it is the v0.0.x entry that introduced the VM, a record
+  of what was measured then.
