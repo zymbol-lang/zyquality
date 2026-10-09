@@ -1,0 +1,41 @@
+// Test: ##' (ToChar) turns an Int code point into its Char — the pair of
+// 06_char_to_int, where ##! turns a Char into its code point (GLB-109).
+
+>> ##'65 ¶           // A
+>> ##'122 ¶          // z
+>> ##'12354 ¶        // あ  (hiragana A)
+>> ##'0x41 ¶         // A   — a Char stays itself
+
+// Result type is Char
+c = ##'66
+meta = c#?
+>> meta[1] ¶         // ##'
+
+// A computed code, which no literal can spell: shift each letter by 3
+shifted = ""
+@ ch:"abc" {
+    next = ##'(##!ch + 3)
+    shifted = shifted next
+}
+>> shifted ¶         // def
+
+// Round trip at the edges of Unicode
+@ code:[0, 55295, 57344, 1114111] {
+    >> (##!##'code == code) ¶
+}
+
+// A code with no character is ##Range: past 0x10FFFF, a surrogate, below 0
+@ code:[1114112, 55296, -1] {
+    !? {
+        >> ##'code ¶
+    } :! ##Range {
+        >> "range" ¶
+    }
+}
+
+// Only an Int is a code: a Float, even a whole one, is ##Type
+!? {
+    >> ##'65.0 ¶
+} :! ##Type {
+    >> "type" ¶
+}
