@@ -74,6 +74,14 @@ collection to a function cloned it too (HLZ-014). It read 2.165 s and now reads
 0.009 s. It stays — a benchmark that only covers what is already fast finds
 nothing.
 
+## `python/` — the same programs, in Python
+
+Nine of these programs have a Python port in `python/`, from ZyBench
+(2026-10-04 to 2026-10-07). Each prints the same labels, so it is an oracle for
+the result as well as a reference for the time: `python/measure.py` checks every
+result against the Zymbol program before it compares a single millisecond, and
+exits 1 when one differs. See `python/README.md`.
+
 ## Adding one
 
 Drop the `.zy` here and add it to `BENCHES=(…)` in `bench_gate.sh`, then

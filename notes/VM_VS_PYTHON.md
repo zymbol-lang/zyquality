@@ -5,6 +5,10 @@
 > the same measurement produced are filed in ZyDDT: the comparator sort as
 > `GLB-108` (`ZyDDT/HALLAZGOS/GLOBAL.md`), the frame cost as evidence in
 > `ZYVM-010` (`ZyDDT/HALLAZGOS/zyvm.md`).
+>
+> **2026-10-09:** the ports, a rewritten `measure.py` and ZyBench's log are now in
+> `bench/python/` (its `README.md` says what changed and what was not brought), and
+> `web/install.md` no longer gives a single factor.
 
 ## Where it comes from
 
@@ -16,7 +20,9 @@ ZyBench, a measurement made in another session between 2026-10-04 and
 agree with Zymbol's in all 65, under Python 3.12. Its log calls the comparison
 `IDEA-BEN-003` and the documentation claim `ERROR-BEN-004`.
 
-**Not in this workspace:** the ports, their `measure.py` and the log itself. The
+**In `bench/python/` since 2026-10-09:** the ports, a rewritten `measure.py` and
+the log itself (`HALLAZGOS.md`). Re-run here that day, the 65 results agree with
+Zymbol's in all 65 again, under Python 3.13.5. The
 figures below that are ZyBench's are quoted as such; they were taken from the
 published v0.0.9 VM and from builds of `820a60a` at opt-level 1 without LTO,
 slower than this repository's release profile — a ratio between two of them
@@ -51,7 +57,8 @@ included, three runs each:
 | a 2 000 000-turn integer loop, `(s + (i * i) % 1000) % 1000003` | 243–250 ms | 276–288 ms |
 
 The direction holds: the VM wins the integer loop and loses the call-heavy one by
-1.5–1.8×. Nothing more was re-measured — the ports are not here.
+1.5–1.8×. Nothing more was re-measured that day; since 2026-10-09
+`bench/python/measure.py` repeats the whole comparison.
 
 ## What the documents claim
 
