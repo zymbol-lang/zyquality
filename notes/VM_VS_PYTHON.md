@@ -103,6 +103,14 @@ agreement, and `bench/baseline.txt` recorded again: the short programs dropped t
 most (`vm/bench_strings` 69 → 17 ms, `vm/bench_collections` 55 → 23 ms), which is
 how much of each line had been the clock.
 
+**Again after GLB-108, the same day** (the comparator sort is a merge sort now;
+20 runs per measurement, twice): the programs long enough to read hold still —
+`stress_v2/bench_hof` **1.71 → 1.28–1.32**, `bench_recursion` 1.26, `bench_match`
+1.23–1.24, `stress_v2/bench_numeric` 0.82–0.83. The rest run 10–30 ms on each side,
+where Python's own start-up (9–21 ms between runs) is as large as the work, and
+their ratios moved by up to half between two runs of 20: they are not readable at
+these sizes, and no figure for them is quoted here.
+
 ## What the documents claim
 
 - `interpreter/MANUAL.md` line 121: *"VM: production, ~1.1–1.5× faster than
