@@ -60,6 +60,48 @@ The direction holds: the VM wins the integer loop and loses the call-heavy one b
 1.5–1.8×. Nothing more was re-measured that day; since 2026-10-09
 `bench/python/measure.py` repeats the whole comparison.
 
+## Measured again, 2026-10-09 — after ZYVM-010, and without the timer's floor
+
+**The timer has a floor of 2–4 ms.** `bench/lib_time.zy` reads the clock with
+`<\ "date +%s%6N" \>`, a process per reading, so `T::elapsed` reports 2–4 ms
+around a block that does nothing (ten readings of an empty block: 0.002–0.004 s).
+Python's `time.perf_counter()` has no such floor. Every Zymbol test that reports
+5 ms or less is therefore indistinguishable from no work at all — which is most
+of the text group. ZyBench's *"text: 0 of 14, median 3.00"* was largely that
+floor: with a copy of `bench/` whose `lib_time` reads `std/time`'s `now()`
+instead (native, in all three engines; an empty block then reads 0.000 s), the
+text tests come out at 0–2 ms on both sides, mostly level.
+
+Milliseconds that small are bounds either way, so the figures below are each
+program's **whole CPU time** (`perf stat` task-clock, median of 10) minus what
+each interpreter takes to start an empty program (Zymbol 3.0 ms, Python 13.5 ms).
+Release build of `v0.0.10` after ZYVM-010's frame half (`8a1726c`), VM, Python
+3.13.5, the `std/time` copy of the timer; all 65 results agree with the ports.
+
+| program | Python ms | VM ms | VM / Python |
+|---|---:|---:|---:|
+| `bench_strings_modify` | 10.5 | 8.5 | **0.81** |
+| `stress_v2/bench_numeric` | 310.0 | 263.0 | **0.85** |
+| `bench_collections` | 14.0 | 14.5 | 1.04 |
+| `bench_strings_stress` | 25.0 | 26.0 | 1.04 |
+| `bench_recursion` | 131.5 | 170.5 | 1.30 |
+| `bench_strings` | 13.0 | 22.0 | 1.69 |
+| `stress_v2/bench_hof` | 73.5 | 126.0 | 1.71 |
+| `stress_v2/bench_text` | 14.5 | 26.5 | 1.83 |
+| `bench_match` | 19.5 | 38.0 | 1.95 |
+
+Median 1.30, geometric mean 1.29 — against ZyBench's 1.79 (general) and 3.00
+(text) for the published v0.0.9 VM. Where the rest of the gap is, by the tests
+long enough to read (the same run, per test): a call — `fib(30)` 1.50 —, a
+lambda per element — `H1`–`H5` 1.3–2.7 —, `??` — 1.3 —, and the comparator
+sort, which is GLB-108's bubble: `H8` alone is 26 ms of `bench_hof`'s 126, and
+`T4` is 4 ms against Python's 1. Integer loops win: `N2`–`N5` 0.84–0.90,
+`ackermann` 0.50.
+
+`bench/lib_time.zy` itself is **not** changed: the gate's `baseline.txt` was
+recorded with the floor in it, and moving the timer means re-recording the
+baseline, which is the author's call.
+
 ## What the documents claim
 
 - `interpreter/MANUAL.md` line 121: *"VM: production, ~1.1–1.5× faster than
