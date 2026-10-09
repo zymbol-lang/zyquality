@@ -18,6 +18,7 @@ compilación	unsupported construct: {0}
 compilación	unsupported op {:?} in comparison pattern
 compilación	{} label '{}' not found
 ejecución	$~ writes into a collection, and this is {}\nhelp: use a[1]$~ v on an array or tuple, d[\"key\"]$~ v on a #(…)
+ejecución	'{}' is undefined — did you mean '{}°' (hot definition)?
 ejecución	(year, month, day) or (year, month, day, hour, minute, second), each ###, plus an optional zone
 ejecución	Module '{}' not loaded
 ejecución	ZyStr requires a 64-bit platform
@@ -40,6 +41,7 @@ ejecución	deep update ($~) does not support ranges in the path
 ejecución	failed to enter alternate screen: {}
 ejecución	failed to run `{}`: {}
 ejecución	function expects {} argument(s), got {}
+ejecución	function expects {} arguments, got {}
 ejecución	index 0 is invalid — Zymbol uses 1-based indexing
 ejecución	index out of bounds: index {} for named tuple of length {}
 ejecución	input read error: {}
