@@ -49,6 +49,9 @@
 # asking, and it is how BUG-GOL-002 was found. Its `όλα.zy` still does; its
 # `έξοδος.zy` (2026-09-30) runs the program as a subscript to check what it
 # says, and the browser engine has no process to run one in.
+#
+# `zybf` (2026-10-09) agrees under all three as well: its suite imports the
+# interpreter as a module and reads no input.
 
 [[app]]
 id = "go"
@@ -94,3 +97,8 @@ desc = "ZyBank, personal ledger in Spanish — money as integers with a per-curr
 id = "gol"
 dir = "../GoL/δοκιμές"
 desc = "Conway's Game of Life, written in Greek — B/S rules, torus and bounded worlds, stop diagnosis, four locales incl. Devanagari digits; the one app whose tests are all Zymbol, runner included"
+
+[[app]]
+id = "zybf"
+dir = "../ZyBrainfuck/pruebas"
+desc = "ZyBF, a Brainf*** interpreter in Spanish — a mini LDV of v0.0.10: its three findings changed the language, and its `.` is `##'` now; 13 cases against an independent Python oracle"
