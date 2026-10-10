@@ -131,19 +131,19 @@ why       = "two owners of one Rc across a load/store make every append copy the
 id        = "growth/append-several-local"
 kind      = "growth-ratio"
 template  = "casos/append_varios.zy.in"
-n         = 2000
-n_by_engine = { zyvm = 4000, zyjs = 3000 }
+n         = 200000
+n_by_engine = { zyvm = 600000, zyjs = 3000 }
 factor    = 4
 max_ratio = 6.0
 what      = "`a$++ x y` as an edit adds at the end: building an array with it is linear"
-# Measured 2026-10-10: 16 000 of them are 23 338 M instructions in the
-# tree-walker and 9 382 M in the VM, ×15.9 over 4 000. `a$+ x` twice is 31 M.
-# The VM's `ConcatBuild` clones the vector; the tree-walker's holds a second
-# reference to it while it pushes. Asked small: at the size of
-# `growth/append-local` this takes minutes.
+# Measured 2026-10-10: 16 000 of them were 23 338 M instructions in the
+# tree-walker and 9 382 M in the VM, ×15.9 over 4 000 — the VM's `ConcatBuild`
+# cloned the vector, and the tree-walker's held a second reference to it while
+# it pushed (GLB-118). Closed the same day: 56 M and 16 M. zyjs still copies on
+# every edit and is asked small.
 why       = "the bulk append builds a new collection even when its result goes back into its receiver"
 engines   = ["zytw", "zyvm", "zyjs"]
-open_finding = { zytw = "GLB-118", zyvm = "GLB-118", zyjs = "ZYJS-014" }
+open_finding = { zyjs = "ZYJS-014" }
 
 [[case]]
 id        = "growth/update-local"
@@ -179,6 +179,49 @@ what      = "writing one element of a module's own state costs the same whatever
 # 2000 writes over 16 000 elements were 5 898 M instructions in the VM. Closed
 # the same day: 24 M.
 why       = "two owners of one Rc across a load/store make every write copy the collection"
+
+[[case]]
+id        = "growth/module-call-that-reads-one-cell"
+kind      = "growth-ratio"
+template  = "casos/modulo_lee_por_llamada.zy.in"
+n         = 40000
+n_by_engine = { zyvm = 200000 }
+factor    = 4
+max_ratio = 6.0
+what      = "a call into a module that reads one cell of its state costs the same whatever the size of the state"
+# Measured 2026-10-10: 2000 such calls over 16 000 cells were 1 401 M
+# instructions in the tree-walker — 91 % of them comparing the table with
+# itself. A frame is given a copy of each module variable its body names and,
+# on the way out, decides what it changed by comparing the two; an untouched
+# table was compared element by element (ZYTW-010). The comparison asks for
+# identity first now: 66 M.
+#
+# Not zyjs, yet: its calls do not depend on the size of the state — 5000 of
+# them take the same over 5 000 cells as over 20 000 — but BUILDING the table
+# is quadratic there (ZYJS-014), and that is all its run would measure: 10 s,
+# then 159 s. It joins when ZYJS-014 closes.
+why       = "a call that compares or copies the module's state to find out it did not change costs the size of the state"
+engines   = ["zytw", "zyvm"]
+
+[[case]]
+id        = "growth/module-call-that-writes-one-cell"
+kind      = "growth-ratio"
+template  = "casos/modulo_escribe_por_llamada.zy.in"
+n         = 3000
+n_by_engine = { zyvm = 200000, zyjs = 5000 }
+factor    = 4
+max_ratio = 6.0
+what      = "a call into a module that writes one cell of its state costs the same whatever the size of the state"
+# Measured 2026-10-10: 2000 such calls over 16 000 cells are 2 911 M
+# instructions in the tree-walker and 25 M in the VM. The tree-walker's frame
+# works on a COPY of the module's variable — the store keeps the original — so
+# the first write of every call copies the collection, and the way out compares
+# the two. Removing that means keeping module state in one place, as the VM and
+# zyjs do: it is a decision about the tree-walker, not a patch (ZYTW-010, open).
+# zyjs copies on every edit anyway (ZYJS-014).
+why       = "a frame that works on a copy of the module's state copies it on its first write, every call"
+engines   = ["zytw", "zyvm", "zyjs"]
+open_finding = { zytw = "ZYTW-010", zyjs = "ZYJS-014" }
 
 [[case]]
 id        = "growth/write-through-an-output-parameter"

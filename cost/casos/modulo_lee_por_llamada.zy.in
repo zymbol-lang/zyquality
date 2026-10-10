@@ -1,0 +1,8 @@
+// «N» calls that each READ one cell of a module's state of «N» cells. Reading
+// one cell does not depend on how many there are, so the whole is linear; an
+// engine whose call costs the size of the state is quadratic.
+<# ./mod/mesa => M
+M::crear(«N»)
+s = 0
+@ k:1..«N» { s = s + M::leer((k % «N») + 1) }
+>> s + M::cuanto() ¶
