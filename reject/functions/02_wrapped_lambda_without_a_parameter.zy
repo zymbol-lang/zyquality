@@ -1,0 +1,9 @@
+// @reject: a lambda wrapped in parentheses, `(x -> body)`, takes one parameter
+// @reject: or more; the one with none is written `() -> body`. `(-> 1)` is
+// @reject: neither, and the grammar has no third form.
+// @reject: Both Rust parsers always refused it — `expected expression, found
+// @reject: '->'`. The browser engine read it as a lambda with no parameters and
+// @reject: ran it, so a program written in the playground failed outside it
+// @reject: (ZYJS-056, found and corrected 2026-10-10).
+f = (-> 1)
+>> f() ¶
