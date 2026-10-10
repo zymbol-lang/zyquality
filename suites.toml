@@ -25,6 +25,8 @@
 #                                         runner — without it the shell answers
 #                                         127 and a missing clone reads as a
 #                                         broken formatter
+#              node                       a program on PATH
+#              web                        the sibling web/ checkout (ZYQ_WEB_DIR)
 #   gate     true  = a failure makes `zyq suite` red
 #            false = reported, but does not fail the gate.  For suites that
 #                    measure something machine-dependent, or that grade a
@@ -219,3 +221,18 @@ needs = ["python3", "aprende_zymbol"]
 # script in the course defines a highlighter of its own, and the course's CSS
 # styles every class the highlighter emits.
 gate = true
+
+[[suite]]
+id = "web"
+cmd = ["bash", "web/run.sh"]
+desc = "the web repository's own suites: example pool, Markdown twins, licences, published skill, playground translations and symbol cards, shell stand-ins"
+needs = ["node", "zymbol", "web", "interpreter"]
+# `web/` keeps suites for the things that are not the language, and until
+# 2026-10-10 none of them was here: `zyq suite` could be green over a playground
+# whose published games could not seed their generator (ZYJS-059, red for days
+# in `test_shell.mjs`) and over a symbol card that taught a form that no longer
+# compiles. Decided by the author that day: the ones that need node and nothing
+# else run in the gate. The two that drive a real browser do not, and the
+# script says so by name — a test file it does not classify fails it.
+gate = true
+

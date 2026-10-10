@@ -101,7 +101,7 @@ it was missing.
 
 `zyq` answers *do the engines agree*. Many questions are not that shape and are
 scripts, registered in `suites.toml` so `zyq suite` runs them anyway — `zyq
-suites` lists all twelve and what each needs. Four of them, at length:
+suites` lists all fourteen and what each needs. Five of them, at length:
 
 - **`fmt/`** — only one engine has a formatter, so there is nothing to compare;
   what is checked is that formatting preserves reparse, idempotence, semantics
@@ -128,6 +128,17 @@ suites` lists all twelve and what each needs. Four of them, at length:
   goldens instead found two of Zofia's programs erroring where their goldens
   record numbers, and running GO's suites on more than the tree-walker — which
   nothing had ever done — found two that zyml gets wrong.
+- **`web/`** — the web repository's own suites, the ones that need `node` and
+  nothing else: the example pool through the CLI and the browser engine, the
+  Markdown twins, the licences, the published skill, the playground's
+  translations and symbol cards, the stand-ins the browser has for a shell.
+  They ask what `zyq consensus` cannot, and until 2026-10-10 nothing in the
+  gate asked it: `test_shell.mjs` was red for days while `zyq suite` was green,
+  because the browser refused the command the published games seed their
+  generator with (ZYJS-059). `run.sh` classifies every `tests/test_*.mjs` of
+  that checkout — run, or left out with its reason — and a test file in neither
+  list fails it, so a new one cannot stay outside by not being mentioned. The
+  two that drive a real browser are left out by name.
 
 ### `bench/` is not part of the corpus
 
