@@ -227,18 +227,20 @@ open_finding = { zytw = "ZYTW-010", zyjs = "ZYJS-014" }
 id        = "growth/write-through-an-output-parameter"
 kind      = "growth-ratio"
 template  = "casos/salida_por_llamada.zy.in"
-n         = 2000
-n_by_engine = { zyvm = 4000, zyjs = 6000 }
+n         = 60000
+n_by_engine = { zyvm = 400000, zyjs = 6000 }
 factor    = 4
 max_ratio = 6.0
 what      = "a call that writes one element through `<~` costs what the write costs"
-# Measured 2026-10-10: 2000 calls over 16 000 elements are 2 808 M instructions
+# Measured 2026-10-10: 2000 calls over 16 000 elements were 2 808 M instructions
 # in the tree-walker and 1 204 M in the VM; the same writes in line are 33 M in
-# the tree-walker. An output parameter is copied in and written back, so while
-# the call lasts the caller's variable and the parameter are two owners.
+# the tree-walker. An output parameter was copied in and written back, so while
+# the call lasted the caller's variable and the parameter were two owners
+# (GLB-117). Closed the same day — the variable is LENT to the parameter:
+# 55 M and 19 M. zyjs lends too, and still copies on every edit (ZYJS-014).
 why       = "an output parameter that is copied in and written back copies the collection on every call"
 engines   = ["zytw", "zyvm", "zyjs"]
-open_finding = { zytw = "GLB-117", zyvm = "GLB-117", zyjs = "GLB-117" }
+open_finding = { zyjs = "ZYJS-014" }
 
 [[case]]
 id        = "growth/sort-with-comparator"
