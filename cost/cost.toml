@@ -115,47 +115,70 @@ id        = "growth/append-module-state"
 kind      = "growth-ratio"
 template  = "casos/append_modulo.zy.in"
 n         = 400000
-n_by_engine = { zyvm = 8000 }
+# The VM is asked at three times the size, as in `growth/append-local`: it is
+# the faster engine, and under the floor its ratio would measure a process
+# starting.
+n_by_engine = { zyvm = 1200000 }
 factor    = 4
 max_ratio = 6.0
 what      = "accumulating into a module's own state is linear, like a local"
-# Measured 2026-09-12: zytw 1.2, zyvm 18.0 — ZYVM-003, open. The VM is the
-# future default engine and a module that accumulates is an ordinary module.
+# Measured 2026-09-12: zytw 1.2, zyvm 18.0 — that was ZYVM-003, and the VM was
+# asked at 8 000 because 400 000 took minutes. Closed 2026-10-10: the edit takes
+# the value out of the module's slot, so it is its only owner.
 why       = "two owners of one Rc across a load/store make every append copy the vector"
-open_finding = { zyvm = "ZYVM-003" }
+
+[[case]]
+id        = "growth/append-several-local"
+kind      = "growth-ratio"
+template  = "casos/append_varios.zy.in"
+n         = 2000
+n_by_engine = { zyvm = 4000, zyjs = 3000 }
+factor    = 4
+max_ratio = 6.0
+what      = "`a$++ x y` as an edit adds at the end: building an array with it is linear"
+# Measured 2026-10-10: 16 000 of them are 23 338 M instructions in the
+# tree-walker and 9 382 M in the VM, ×15.9 over 4 000. `a$+ x` twice is 31 M.
+# The VM's `ConcatBuild` clones the vector; the tree-walker's holds a second
+# reference to it while it pushes. Asked small: at the size of
+# `growth/append-local` this takes minutes.
+why       = "the bulk append builds a new collection even when its result goes back into its receiver"
+engines   = ["zytw", "zyvm", "zyjs"]
+open_finding = { zytw = "GLB-118", zyvm = "GLB-118", zyjs = "ZYJS-014" }
 
 [[case]]
 id        = "growth/update-local"
 kind      = "growth-ratio"
 template  = "casos/actualizar_local.zy.in"
-# The tree-walker writes in place and needs a large N to clear the floor; the
-# VM and zyjs copy the collection on every write and are asked where that is
-# still seconds, not minutes.
+# The Rust engines write in place and need a large N to clear the floor; zyjs
+# copies the collection on every write and is asked where that is still
+# seconds, not minutes.
 n         = 200000
-n_by_engine = { zyvm = 4000, zyjs = 5000 }
+n_by_engine = { zyvm = 600000, zyjs = 5000 }
 factor    = 4
 max_ratio = 6.0
 what      = "writing one element of a collection in place costs the same whatever its size"
-# Measured 2026-10-10: 2000 writes over 16 000 elements are 33 M instructions in
-# the tree-walker and 1 202 M in the VM. The compiler emits `CopyReg` before
-# every `DeepSet`, so the register and the copy are two owners and the write
-# copies the vector — on a plain local, in a function, with a literal index.
+# Measured 2026-10-10: 2000 writes over 16 000 elements were 33 M instructions
+# in the tree-walker and 1 202 M in the VM, whose compiler emitted `CopyReg`
+# before every `DeepSet` — two owners, so the write copied the vector, on a
+# plain local, in a function, with a literal index (ZYVM-013). Closed the same
+# day: 16 M.
 why       = "a second owner of the collection at the moment of the write makes the write copy all of it"
 engines   = ["zytw", "zyvm", "zyjs"]
-open_finding = { zyvm = "ZYVM-013", zyjs = "ZYJS-014" }
+open_finding = { zyjs = "ZYJS-014" }
 
 [[case]]
 id        = "growth/update-module-state"
 kind      = "growth-ratio"
 template  = "casos/actualizar_modulo.zy.in"
 n         = 200000
-n_by_engine = { zyvm = 3000 }
+n_by_engine = { zyvm = 600000 }
 factor    = 4
 max_ratio = 6.0
 what      = "writing one element of a module's own state costs the same whatever its size"
-# Measured 2026-10-10: ZYVM-003 is every edit of module state, not only `$+`.
+# Measured 2026-10-10: ZYVM-003 was every edit of module state, not only `$+` —
+# 2000 writes over 16 000 elements were 5 898 M instructions in the VM. Closed
+# the same day: 24 M.
 why       = "two owners of one Rc across a load/store make every write copy the collection"
-open_finding = { zyvm = "ZYVM-003" }
 
 [[case]]
 id        = "growth/write-through-an-output-parameter"
