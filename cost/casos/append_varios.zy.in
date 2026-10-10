@@ -1,0 +1,6 @@
+// `a$++ i i`, «N» times: the bulk append, written as an edit. It adds at the
+// end, so the whole is linear; an engine that rebuilds the collection to add
+// to it is quadratic.
+a = []
+@ i:1..«N» { a$++ i i }
+>> a$# ¶
