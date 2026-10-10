@@ -1,0 +1,9 @@
+// One element written per call through an output parameter, «N» calls over
+// «N» elements. `<~` works on the caller's variable, so a call costs what the
+// write costs; an engine that copies in and writes back copies the collection
+// on every call.
+poner(t<~, i, v) { t[i]$~ v }
+t = []
+@ i:1..«N» { t$+ 0 }
+@ k:1..«N» { poner(t<~, (k % «N») + 1, k) }
+>> t[1] + t$# ¶
