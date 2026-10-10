@@ -1,0 +1,11 @@
+# tablero {
+    #> { correr }
+    t = []
+
+    // «n» writes of one element into the module's own state, over «n» elements
+    correr(n) {
+        @ i:1..n { t$+ 0 }
+        @ k:1..n { t[(k % n) + 1]$~ k }
+        <~ t[1] + t$#
+    }
+}

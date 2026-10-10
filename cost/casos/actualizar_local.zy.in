@@ -1,0 +1,7 @@
+// `t[i]$~ v` on a variable of its own, «N» times over «N» elements. Writing one
+// element in place does not depend on how many there are, so the whole is
+// linear; an engine that copies the collection to write it is quadratic.
+t = []
+@ i:1..«N» { t$+ 0 }
+@ k:1..«N» { t[(k % «N») + 1]$~ k }
+>> t[1] + t$# ¶

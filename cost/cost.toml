@@ -125,6 +125,56 @@ why       = "two owners of one Rc across a load/store make every append copy the
 open_finding = { zyvm = "ZYVM-003" }
 
 [[case]]
+id        = "growth/update-local"
+kind      = "growth-ratio"
+template  = "casos/actualizar_local.zy.in"
+# The tree-walker writes in place and needs a large N to clear the floor; the
+# VM and zyjs copy the collection on every write and are asked where that is
+# still seconds, not minutes.
+n         = 200000
+n_by_engine = { zyvm = 4000, zyjs = 5000 }
+factor    = 4
+max_ratio = 6.0
+what      = "writing one element of a collection in place costs the same whatever its size"
+# Measured 2026-10-10: 2000 writes over 16 000 elements are 33 M instructions in
+# the tree-walker and 1 202 M in the VM. The compiler emits `CopyReg` before
+# every `DeepSet`, so the register and the copy are two owners and the write
+# copies the vector — on a plain local, in a function, with a literal index.
+why       = "a second owner of the collection at the moment of the write makes the write copy all of it"
+engines   = ["zytw", "zyvm", "zyjs"]
+open_finding = { zyvm = "ZYVM-013", zyjs = "ZYJS-014" }
+
+[[case]]
+id        = "growth/update-module-state"
+kind      = "growth-ratio"
+template  = "casos/actualizar_modulo.zy.in"
+n         = 200000
+n_by_engine = { zyvm = 3000 }
+factor    = 4
+max_ratio = 6.0
+what      = "writing one element of a module's own state costs the same whatever its size"
+# Measured 2026-10-10: ZYVM-003 is every edit of module state, not only `$+`.
+why       = "two owners of one Rc across a load/store make every write copy the collection"
+open_finding = { zyvm = "ZYVM-003" }
+
+[[case]]
+id        = "growth/write-through-an-output-parameter"
+kind      = "growth-ratio"
+template  = "casos/salida_por_llamada.zy.in"
+n         = 2000
+n_by_engine = { zyvm = 4000, zyjs = 6000 }
+factor    = 4
+max_ratio = 6.0
+what      = "a call that writes one element through `<~` costs what the write costs"
+# Measured 2026-10-10: 2000 calls over 16 000 elements are 2 808 M instructions
+# in the tree-walker and 1 204 M in the VM; the same writes in line are 33 M in
+# the tree-walker. An output parameter is copied in and written back, so while
+# the call lasts the caller's variable and the parameter are two owners.
+why       = "an output parameter that is copied in and written back copies the collection on every call"
+engines   = ["zytw", "zyvm", "zyjs"]
+open_finding = { zytw = "GLB-117", zyvm = "GLB-117", zyjs = "GLB-117" }
+
+[[case]]
 id        = "growth/sort-with-comparator"
 kind      = "growth-ratio"
 template  = "casos/sort_comparador.zy.in"
