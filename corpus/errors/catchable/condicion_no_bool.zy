@@ -1,0 +1,50 @@
+// A condition is a Bool and nothing else (GLB-121). Through a parameter the
+// analyser cannot know the type, so the refusal is a `##Type` at run time —
+// before either block runs — and a `!?` meets it. The static half is in
+// `reject/conditions/`.
+
+prueba(v) {
+    ? v { <~ "si" }
+    <~ "no"
+}
+
+intenta(v) {
+    !? {
+        <~ prueba(v)
+    } :! ##Type {
+        <~ "##Type"
+    }
+}
+
+>> intenta(#1) ¶
+>> intenta(#0) ¶
+>> intenta(5) ¶
+>> intenta(0) ¶
+>> intenta(1.5) ¶
+>> intenta("a") ¶
+>> intenta("") ¶
+>> intenta([1, 2]) ¶
+>> intenta([]) ¶
+>> intenta((1, 2)) ¶
+>> intenta(#(a: 1)) ¶
+
+// `_?`: the first condition is a Bool and false, the second is refused
+segunda(v, k) {
+    ? k > 2 { <~ "nunca" }
+    _? v { <~ "si" }
+    <~ "no"
+}
+!? { >> segunda([1], 1) ¶ } :! ##Type { >> "##Type en _?" ¶ }
+
+// a `_?` that is not reached is not asked
+>> segunda([1], 3) ¶
+
+// neither block ran before the refusal
+ramas(v) {
+    ? v { >> "bloque" ¶ } _ { >> "otro" ¶ }
+    <~ 0
+}
+!? { ramas("") } :! ##Type { >> "ninguno" ¶ }
+
+// the message
+!? { prueba([1]) } :! { >> _err ¶ }

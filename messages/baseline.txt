@@ -289,7 +289,6 @@ rust	shared	e011: import alias '§' conflicts with existing import
 rust	shared	e012: module '§' does not export item '§'
 rust	shared	e013: executable statement '§' is not allowed in a module body
 rust	shared	each item can only be exported once
-rust	shared	else-if condition should be bool, got §
 rust	shared	ensure the path is valid and does not go above the root
 rust	shared	expected '!?' to start try block
 rust	shared	expected '##' for error type
@@ -322,7 +321,6 @@ rust	shared	function '§::§' expects § argument(s), but § were provided
 rust	shared	function expects § argument(s), got §
 rust	shared	function expects § arguments, got §
 rust	shared	functions must be defined before use, or imported with a module alias (e.g. `math::cos`)
-rust	shared	if condition should be bool, got §
 rust	shared	index 0 is invalid — zymbol uses 1-based indexing
 rust	shared	index out of bounds: index § for named tuple of length §
 rust	shared	indexed assignment does not exist: '§[…] =' is not a form of zymbol
@@ -440,7 +438,6 @@ zyjs	shared	unknown collection operator: §
 zyjs	shared	unknown nav spec kind: §
 zyjs	shared	unknown operator: §
 zyjs	shared	unused variable '§' = help: consider removing this variable or prefixing with '_' if intentionally unused
-zyjs	shared	§ condition should be bool, got §
 zyjs	shared	§ not supported on §
 zyjs	shared	§ requires a numeric value§, got §
 zyjs	shared	§: status code §

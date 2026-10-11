@@ -1,0 +1,7 @@
+// @reject: the same rule for `_?`: its condition is a Bool and nothing else.
+// @reject: It was a second site in every engine — a second warning text in the
+// @reject: analyser, a second jump in the VM — which is how a rule gets
+// @reject: enforced in one place and not in the one beside it (GLB-121).
+n = 1
+x = ""
+? n > 2 { >> "uno" ¶ } _? x { >> "dos" ¶ } _ { >> "tres" ¶ }
