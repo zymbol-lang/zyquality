@@ -28,6 +28,12 @@ tree-walker. The limit, 1.30, guards the call path; it does not claim the 14 %
 is understood — see the case's comment in `cost.toml` for what was measured and
 what was not.
 
+**Does a call cost what the function needs, or what it is long?** The same
+function with one statement and with 64 in a branch that is never taken, so both
+programs execute the same instructions (`time-ratio`). It is 1.0 where a frame
+holds what is alive at once. Under the VM it was 2.76 until 2026-10-10, when its
+frame held a register for every temporary the body ever asked for (`ZYVM-010`).
+
 ## Why ratios and not a baseline
 
 `bench/baseline.txt` records milliseconds and says so in its own header —
@@ -75,7 +81,6 @@ reporting a pass nobody should trust.
 
 ## What is open
 
-| finding | case | measured |
-|---|---|---|
-| [`ZYVM-003`](../../ZyDDT/HALLAZGOS/zyvm.md) | `growth/append-module-state` | 19.6 where the tree-walker is 3.8 |
-| [`ZYJS-014`](../../ZyDDT/HALLAZGOS/zyjs.md) | `growth/append-local` | 12.9 where both Rust engines are ~3.3 |
+Nothing, since 2026-10-10. `ZYTW-010` (`growth/module-call-that-writes-one-cell`, 13.8 under the tree-walker)
+and `ZYVM-010` (`call/frame-as-large-as-every-temporary`, 2.76 under the VM) were declared here as `KNOWN` and
+fixed that day; both cases are plain `PASS` now, and a ratio that climbs back is a regression.
