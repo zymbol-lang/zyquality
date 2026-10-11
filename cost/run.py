@@ -22,7 +22,9 @@ Exit: 0 green, 1 red, 2 no verdict (an engine could not be measured).
 from __future__ import annotations
 
 import os
+import re
 import statistics
+import subprocess
 import sys
 import time
 import tomllib
@@ -76,6 +78,27 @@ def measure(cmd: list[str], cwd: Path) -> tuple[float, float, int]:
         os._exit(127)
     _, status, ru = os.wait4(pid, 0)
     return ru.ru_maxrss / 1024.0, time.monotonic() - t0, status
+
+
+COUNT_LINE = re.compile(r"^count  (.+)$", re.MULTILINE)
+
+
+def counted(cmd: list[str], cwd: Path) -> dict[str, int]:
+    """→ the five counters `zymbol run --count` prints, for ONE run.
+
+    Exact: the same program gives the same numbers on every run, on every
+    machine, whatever else the machine is doing. So one run is enough, there is
+    no floor below which the answer is noise, and the limit can sit just above
+    the true ratio instead of half way to the next complexity class.
+    """
+    cmd = cmd[:2] + ["--count"] + cmd[2:]             # zymbol run --count [--vm] FILE
+    r = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True,
+                       stdin=subprocess.DEVNULL, timeout=300)
+    m = COUNT_LINE.search(r.stderr)
+    if r.returncode != 0 or not m:
+        raise RuntimeError(f"engine exited {r.returncode}"
+                           + ("" if m else " and printed no `count` line"))
+    return {k: int(v) for k, v in (pair.split("=") for pair in m.group(1).split())}
 
 
 def median_time(cmd, cwd, runs) -> tuple[float, int]:
@@ -195,6 +218,40 @@ def main() -> int:
                 print(f"          {C['red']}DEBT PAID — {known} now passes: close "
                       f"the finding and drop `open_finding`{C['off']}")
                 rc = RED if rc != NOVERDICT else rc
+        # ── The same question, counted instead of timed ───────────────────────
+        #
+        # A growth case is also asked in `zymbol run --count`'s units, where the
+        # answer is exact. Three ratios, because each sees what the others do
+        # not: `steps` is the engine's own work, `bytes` is what it asked the
+        # allocator for, and `copied` is elements duplicated because a
+        # collection being written had another owner — the shape of every
+        # quadratic cost this harness was built after. Only the Rust engines
+        # count; zyjs is asked by the clock above and nowhere else.
+        limits = {**defaults.get("count", {}), **case.get("count", {})}
+        if kind == "growth-ratio" and limits and not case.get("count_off"):
+            n, f = case.get("count_n", defaults.get("count_n", 2000)), case["factor"]
+            tpl = ROOT / case["template"]
+            for eng in case.get("engines", defaults.get("engines", [])):
+                if eng not in ("zytw", "zyvm"):
+                    continue
+                try:
+                    a, b = render(tpl, n), render(tpl, n * f)
+                    tmp += [a, b]
+                    ca, cb = counted(ENGINES[eng](a), ROOT), counted(ENGINES[eng](b), ROOT)
+                except Exception as e:                  # noqa: BLE001
+                    print(f"    {C['yellow']}NO VERDICT{C['off']}  {eng:5s}  counted: {e}")
+                    rc = max(rc, NOVERDICT)
+                    continue
+                for metric, lim in limits.items():
+                    x, y = ca[metric], cb[metric]
+                    ratio = (y / x) if x else (0.0 if y == 0 else float("inf"))
+                    ok = ratio <= lim
+                    tag = f"{C['green']}PASS{C['off']}" if ok else f"{C['red']}FAIL{C['off']}"
+                    print(f"    {tag}  {eng:5s}  ratio {ratio:5.2f}  limit {lim:4.2f}   "
+                          f"{C['dim']}{metric} {x}→{y} at ×{f}, counted{C['off']}")
+                    if not ok:
+                        print(f"          {C['dim']}{case['why']}{C['off']}")
+                        rc = RED if rc != NOVERDICT else rc
         print()
 
     for f in tmp:
