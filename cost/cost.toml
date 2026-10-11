@@ -204,20 +204,21 @@ engines   = ["zytw", "zyvm", "zyjs"]
 id        = "growth/module-call-that-writes-one-cell"
 kind      = "growth-ratio"
 template  = "casos/modulo_escribe_por_llamada.zy.in"
-n         = 3000
-n_by_engine = { zyvm = 200000, zyjs = 40000 }
+n         = 40000
+n_by_engine = { zyvm = 200000 }
 factor    = 4
 max_ratio = 6.0
 what      = "a call into a module that writes one cell of its state costs the same whatever the size of the state"
-# Measured 2026-10-10: 2000 such calls over 16 000 cells are 2 911 M
-# instructions in the tree-walker and 25 M in the VM. The tree-walker's frame
-# works on a COPY of the module's variable — the store keeps the original — so
-# the first write of every call copies the collection, and the way out compares
-# the two. Removing that means keeping module state in one place, as the VM and
-# zyjs do: it is a decision about the tree-walker, not a patch (ZYTW-010, open).
+# Measured 2026-10-10 before the fix: 2000 such calls over 16 000 cells were
+# 2 911 M instructions in the tree-walker and 25 M in the VM, and this case was
+# 13.8 at n = 3000 (140 ms → 1 930 ms). The tree-walker's frame worked on a COPY
+# of the module's variable — the store kept the original — so the first write
+# of every call copied the collection, and the way out compared the two.
+# ZYTW-010, fixed the same day: the module's table is the frame's outermost
+# scope, moved and never copied. The size went from 3000 to 40 000 with it: at
+# 3000 the base run is 20 ms now, under the floor.
 why       = "a frame that works on a copy of the module's state copies it on its first write, every call"
 engines   = ["zytw", "zyvm", "zyjs"]
-open_finding = { zytw = "ZYTW-010" }
 
 [[case]]
 id        = "growth/write-through-an-output-parameter"
@@ -303,7 +304,32 @@ what      = "a Life generation with a call per cell costs little more than the s
 # down the callee's frame (34 registers, because alloc_temp never reuses a
 # temporary) and the drop every register write makes of the old value. That
 # second cost is ~11 % of the run even inline, so it is not this cell's: it is
-# ZYVM-010 (ZyDDT/HALLAZGOS/zyvm.md). The limit catches a regression of the
-# call path, not that.
+# ZYVM-010 (ZyDDT/HALLAZGOS/zyvm.md), most of it since paid: the frame is no
+# longer filled by cloning Unit nor dropped scalar by scalar (2026-10-09), and a
+# register write no longer drops a scalar (2026-10-10) — 1.04 here that day. The
+# limit catches a regression of the call path; the size of the frame is the
+# next case's.
 why       = "if this climbs, a call in a hot loop got dearer — frame setup, argument copy, or what runs at return"
 
+[[case]]
+id        = "call/frame-as-large-as-every-temporary"
+kind      = "time-ratio"
+subject   = "casos/marco_temporales.zy.in"
+control   = "casos/marco_minimo.zy.in"
+n         = 2000000
+n_by_engine = { zytw = 400000, zyjs = 200000 }
+max_ratio = 1.30
+what      = "a call costs what the function needs at once, not every temporary its body ever asked for"
+# The two programs EXECUTE the same instructions: the function carries a branch
+# that is never taken, with one statement in the control and 64 in the subject,
+# none of which declares a variable. Measured 2026-10-10, 2 000 000 calls:
+# zyvm 280 ms → 815 ms (2.9), zytw 1.00, zyjs 0.98. The compiler's `alloc_temp`
+# only ever advanced `next_reg`, so the frame held a register for every
+# temporary of the whole body, and every call filled that many with Unit on the
+# way in and walked them on the way out. ZYVM-010, the part deferred as R4 and
+# fixed the same day: a statement hands its temporaries back when it ends, and
+# the VM answers 1.02. A register reused while still live is a silent wrong
+# value, which this case cannot see — `ZYMBOL_POISON_TEMPS` is what looks for
+# it (interpreter/crates/zymbol-compiler, `FunctionCtx::poison_temps`).
+why       = "a frame sized by every temporary of the body is prepared and torn down in full on each call"
+engines   = ["zytw", "zyvm", "zyjs"]
