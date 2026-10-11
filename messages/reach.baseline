@@ -114,7 +114,6 @@ semántica	comparison pattern requires scalar scrutinee, got {}
 semántica	constant with non-literal initializer
 semántica	destructure assignment
 semántica	did you mean '{}::{}'?
-semántica	else-if condition should be Bool, got {}
 semántica	expression statement
 semántica	filter operation requires a lambda, got {}
 semántica	functions must be defined before use, or imported with a module alias (e.g. `math::cos`)
