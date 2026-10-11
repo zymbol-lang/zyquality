@@ -1,0 +1,4 @@
+// claim: A lambda reads the scope it is written in and writes only the names it declares.
+factor = 3
+triple = x -> x * factor
+>> triple(2) ¶        // → 6

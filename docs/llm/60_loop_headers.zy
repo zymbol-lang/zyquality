@@ -1,0 +1,20 @@
+// claim: @ i:1..3 { }        // inclusive range        @ i:1..9:2 { }   // step
+// claim: @ 5 { }             // times — Int specifier, evaluated ONCE; ≤0 runs zero times
+// claim: @ items$# { }       // any Int expression is a count
+@ _i:1..3 { >> _i }
+>> ¶                  // → 123
+@ _i:1..9:2 { >> _i }
+>> ¶                  // → 13579
+@ _i:3..1:1 { >> _i }
+>> ¶                  // → 321
+@ _c:"hola" { >> _c "." }
+>> ¶                  // → h.o.l.a.
+n = 1
+@ n <= 64 { n = n * 2 }
+>> n ¶                // → 128
+@ 3 { °veces += 1 }
+>> veces ¶            // → 3
+@ 0 { °nunca += 1 }
+items = [1, 2]
+@ items$# { °cuenta += 1 }
+>> cuenta ¶           // → 2

@@ -1,0 +1,10 @@
+// claim: Its mutable bindings cannot be exported
+// verdict: error
+// file: lib.zy
+# lib {
+    #> { n }
+    n = 0
+}
+// file: main.zy
+<# ./lib => L
+>> L.n ¶

@@ -1,0 +1,4 @@
+// claim: a base-prefixed literal is a character code, in any range: `0x41` is `'A'`, `0xFF` is `'ÿ'`; its Int is `##!0x41`
+>> 0x41 ¶             // → A
+>> 0xFF ¶             // → ÿ
+>> ##!0x41 ¶          // → 65

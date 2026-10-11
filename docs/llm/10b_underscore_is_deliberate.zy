@@ -1,0 +1,5 @@
+// claim: Prefix `_` when deliberate: `_unused`, `@ _i:1..3`.
+// quiet: yes
+_unused = 1
+@ _i:1..3 { >> "." }
+>> ¶                  // → ...

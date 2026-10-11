@@ -1,0 +1,13 @@
+// claim: `v$!` is-error · `v$!!` propagate to caller.
+// claim: Std-library environmental failures come back as **soft error values** to test
+// engines: zytw,zyvm
+<# std/io => io
+leer(ruta) {
+    v = io::read(ruta)
+    v$!!
+    <~ "leido"
+}
+r = io::read("/no/existe/este/fichero")
+>> (r$!) ¶            // → #1
+s = leer("/no/existe/este/fichero")
+>> (s$!) ¶            // → #1

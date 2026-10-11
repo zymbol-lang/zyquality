@@ -1,0 +1,4 @@
+// claim: **Bracket shape is typed:**
+// verdict: error
+[a, b] = (1, 2)
+>> a b ¶

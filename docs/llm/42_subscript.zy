@@ -1,0 +1,7 @@
+// claim: Sub-script: `out = </ ./sub.zy />`.
+// engines: zytw,zyvm
+// file: sub.zy
+>> "desde el subscript"
+// file: main.zy
+out = </ ./sub.zy />
+>> "[" out "]" ¶              // → [desde el subscript]

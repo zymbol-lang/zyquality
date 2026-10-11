@@ -1,0 +1,9 @@
+// claim: **Writes do not escape a call.**
+// claim: `~` is a working copy; unmarked is by value.
+cambia(v) { v$+ 9  <~ v$# }
+copia(w~) { w = w$+ 9  <~ w$# }
+a = [1, 2]
+b = a
+>> cambia(a) " " copia(a) " " a ¶     // → 3 3 [1, 2]
+b$+ 7
+>> a " " b ¶                          // → [1, 2] [1, 2, 7]

@@ -1,0 +1,5 @@
+// claim: Shell: `out = <\ "ls {dir}" \>` (stdout+stderr, trailing `\n` stripped).
+// engines: zytw,zyvm
+palabra = "hola"
+out = <\ "echo {palabra}" \>
+>> "[" out "]" ¶              // → [hola]

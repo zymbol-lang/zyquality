@@ -1,0 +1,7 @@
+// claim: through a parameter it is a catchable `##Type` at run time
+prueba(v) {
+    ? v { <~ "si" }
+    <~ "no"
+}
+!? { >> prueba([1, 2]) ¶ } :! ##Type { >> "##Type" ¶ }    // → ##Type
+>> prueba(#1) ¶                                           // → si

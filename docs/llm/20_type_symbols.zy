@@ -1,0 +1,6 @@
+// claim: `x#?` → `(type_symbol, count, display)`.
+// claim: an array holding >1 type. NOT a second type
+>> [1,2,3]#? ¶        // → (##], 3, [1, 2, 3])
+>> #[1,"x"]#? ¶       // → (##[, 2, [1, x])
+>> (1,"x")#? ¶        // → (##), 2, (1, x))
+>> #(k: 1, j: 2)#? ¶  // → (##(, 2, #(k: 1, j: 2))

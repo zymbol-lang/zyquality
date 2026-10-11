@@ -1,0 +1,6 @@
+// claim: **Indices are 1-based.**
+// claim: Slices include **both** ends
+a = [10, 20, 30, 40]
+>> a[1] ¶             // → 10
+>> a[-1] ¶            // → 40
+>> (a$[1..3])$# ¶     // → 3

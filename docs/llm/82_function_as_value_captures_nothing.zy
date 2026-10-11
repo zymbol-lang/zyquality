@@ -1,0 +1,8 @@
+// claim: A named function used as a value captures
+// claim: nothing: it sees only its parameters, however it is reached.
+// verdict: error
+// says: is read from outside this function
+fuera = 1
+lee() { <~ fuera }
+g = lee
+>> g() ¶

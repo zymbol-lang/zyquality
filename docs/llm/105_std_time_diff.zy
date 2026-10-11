@@ -1,0 +1,10 @@
+// claim: **`diff(a, b)` is `a - b`**, so the earlier instant first gives a *negative* answer —
+// claim: `diff(of(2026,1,1), of(2026,3,1), "day")` → `-59`, and swapping them → `59`.
+// claim: of the month (clamped: 31 Jan + 1 month = 28 Feb)
+<# std/time => t
+a = t::of(2026, 1, 1)
+b = t::of(2026, 3, 1)
+>> t::diff(a, b, "day") ¶     // → -59
+>> t::diff(b, a, "day") ¶     // → 59
+f = t::add(t::of(2026, 1, 31), 1, "month")
+>> t::format(f, "%F") ¶       // → 2026-02-28

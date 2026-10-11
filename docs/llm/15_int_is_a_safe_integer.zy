@@ -1,0 +1,10 @@
+// claim: **`Int` is ±(2⁵³−1), fail-closed.**
+// claim: Overflow is a catchable `##Range` error, never a wrap, never a promotion to Float.
+// claim: no silent overflow
+m = 9007199254740991
+!? {
+    n = m + 1
+    >> n ¶
+} :! ##Range {
+    >> "##Range" ¶    // → ##Range
+}
