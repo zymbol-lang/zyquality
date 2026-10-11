@@ -69,6 +69,7 @@ ejecución	this needs {expected} and got {got}
 ejecución	transaction already active (use savepoints to nest)
 ejecución	undefined function index {0}
 ejecución	undefined module alias: '{}'
+ejecución	undefined variable '{}' in match pattern
 ejecución	undefined variable in input prompt: '{}'
 ejecución	unknown builtin id {}
 ejecución	unknown connection '{}'
