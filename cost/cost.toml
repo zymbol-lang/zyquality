@@ -32,6 +32,28 @@
 #                 written two ways, so the ratio is the price of the one
 #                 difference between them. Added for the cost of a function call
 #                 in a hot loop (IDEA-GOL-007).
+#
+# ── Counted, not timed ───────────────────────────────────────────────────────
+#
+# Since 2026-10-11 every `growth-ratio` case is ALSO asked in the units of
+# `zymbol run --count`, which are exact: the same program gives the same numbers
+# on every run and on every machine. The clock's limit has to sit half way
+# between linear and quadratic (6.0 at ×4) to survive a loaded machine; a counted
+# ratio is 4.00 to the hundredth, so its limit can sit just above it.
+#
+#   steps    the engine's own unit of work — a bytecode instruction in the VM, a
+#            statement or an expression in the tree-walker. Blind to a copy:
+#            appending to a shared collection is one step at any size.
+#   bytes    what the run asked the allocator for. This is where a copy shows.
+#   copied   elements duplicated because the collection being written had
+#            another owner. It is 0 in every case here, and that zero is the
+#            assertion: the day a value gets a second owner on a hot path, this
+#            goes from 0 to N² and the ratio from 0 to infinity.
+#
+# Only the Rust engines count; zyjs is asked by the clock. `[defaults] count`
+# gives the three limits, `count_n` the base size — small, since nothing here
+# needs a run long enough to out-shout process start-up — and a case overrides
+# either with its own `count` / `count_n`.
 
 # ── `open_finding` ───────────────────────────────────────────────────────────
 #
@@ -58,6 +80,8 @@ min_base_ms = 40       # a growth ratio whose base run is faster than this is
                        # measuring process startup, not the program: reported as
                        # NO VERDICT rather than as a pass nobody should trust
 engines   = ["zytw", "zyvm"]
+count_n   = 2000       # exact, so it need not be large: see "Counted, not timed"
+count     = { steps = 4.2, bytes = 4.2, copied = 4.2 }
 
 # ── Auto-free ────────────────────────────────────────────────────────────────
 
@@ -248,6 +272,9 @@ template  = "casos/sort_comparador.zy.in"
 # the `$+` that builds the array (ZYJS-014) would be what grows.
 n         = 8000
 n_by_engine = { zyvm = 32000, zyjs = 500 }
+# A sort is n·log n: at ×4 from 2000 the steps are ×4.51 in the tree-walker and
+# ×4.59 in the VM, and the tree-walker's bytes ×4.77. Quadratic would be 16.
+count     = { steps = 5.0, bytes = 5.0 }
 factor    = 4
 max_ratio = 6.0
 what      = "sorting with a comparator of one's own grows as n log n, like the natural order"
