@@ -1,0 +1,5 @@
+// claim: ? x > 100 { … } _? x > 0 { … } _ { … }      // braces always required
+clase(x) {
+    ? x > 100 { <~ "grande" } _? x > 0 { <~ "positivo" } _ { <~ "resto" }
+}
+>> clase(500) " " clase(5) " " clase(-5) ¶    // → grande positivo resto

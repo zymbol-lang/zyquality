@@ -1,0 +1,5 @@
+// claim: **No capability enforcement and no shell quoting.**
+// engines: zytw,zyvm
+cmd = "hola; echo inyectado"
+out = <\ "echo {cmd}" \>
+>> (out$? "inyectado") ¶      // → #1

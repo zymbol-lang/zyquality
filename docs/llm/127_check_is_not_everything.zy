@@ -1,0 +1,9 @@
+// claim: **`check` does not catch everything it looks like it should**
+// The other half of this bullet — `zymbol check` saying nothing — is asserted by
+// `// quiet` in 128; here: the program is refused only when it runs.
+// verdict: error
+// says: use after destruction
+x = [1, 2]
+>> "antes" ¶
+\ x
+>> x ¶

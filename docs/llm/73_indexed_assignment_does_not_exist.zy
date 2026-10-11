@@ -1,0 +1,5 @@
+// claim: `a[2] = 99` does not exist, in any collection
+// verdict: error
+a = [1, 2, 3]
+a[2] = 99
+>> a ¶

@@ -1,0 +1,8 @@
+// claim: _tmp = 1          // '_' prefix = exact block scope: invisible to inner AND outer blocks
+// claim: `_x` is strictly block-local (error from
+// verdict: error
+? 1 == 1 {
+    _tmp = 1
+    >> _tmp ¶
+}
+>> _tmp ¶

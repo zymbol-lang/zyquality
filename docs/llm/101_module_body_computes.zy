@@ -1,0 +1,13 @@
+// claim: and function definitions may appear in a module body — any executable statement is **E013**.
+// claim: **Importing executes nothing.**
+// verdict: error
+// says: E013
+// file: lib.zy
+# lib {
+    #> { f }
+    >> "efecto al importar" ¶
+    f() { <~ 1 }
+}
+// file: main.zy
+<# ./lib => L
+>> L::f() ¶

@@ -1,0 +1,5 @@
+// claim: **The effect surface is a closed lexical list**
+// claim: and there is **no `eval`**
+// verdict: error
+codigo = ">> 1 ¶"
+eval(codigo)

@@ -1,0 +1,4 @@
+// claim: **ancestor** (a sibling is an error), and a function/lambda body is a hard boundary.
+// verdict: error
+@:a _i:1..2 { >> _i }
+@:b _j:1..2 { @:a! }

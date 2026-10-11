@@ -1,0 +1,8 @@
+// claim: **A named function sees only its parameters.**
+// claim: Reading a file-level name inside it is a static error (`'x' is read from outside this function`)
+// claim: a named function sees only its parameters, and a file-level name read inside it is refused statically
+// verdict: error
+// says: 'x' is read from outside this function
+x = 1
+f() { <~ x }
+>> f() ¶

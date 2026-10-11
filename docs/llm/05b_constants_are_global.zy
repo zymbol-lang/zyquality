@@ -1,0 +1,5 @@
+// claim: Constants (`:=`) are global by definition.
+// claim: constants (`:=`) are the one exception, global by definition.
+PI := 3
+f() { <~ PI * 2 }
+>> f() ¶              // → 6

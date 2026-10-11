@@ -76,6 +76,22 @@ needs = ["zymbol", "python3", "interpreter"]
 gate = false
 
 [[suite]]
+id = "llm"
+cmd = ["python3", "docs/llm_verify.py"]
+desc = "the interpreter's LLM.md: every rule and safeguard behind a probe that runs in all three engines"
+needs = ["zymbol", "python3", "interpreter"]
+# Not a gate, for the reason `guide` is not: it grades a document against the
+# language. It differs from `guide` in what it reads. GUIDE.md annotates its
+# examples with `// →` and can be executed; LLM.md is tables of forms and cannot,
+# so each probe in docs/llm/ quotes the sentence it stands behind, and the suite
+# goes red three ways: a probe stops holding (the language moved), a quoted
+# sentence is gone (the document moved), or a rule of § 1 or a bullet of § 12 has
+# no probe (a claim was added and nobody ran it). Its first run, on 2026-10-11,
+# found one false claim in the document and two divergences between engines
+# (ZYJS-061, GLB-124) — the second through a probe that was itself written wrong.
+gate = false
+
+[[suite]]
 id = "lsp"
 cmd = ["python3", "lsp/lsp_parity.py"]
 desc = "the corpus through the language server, against `zymbol check` — the editor's answer and the command line's"

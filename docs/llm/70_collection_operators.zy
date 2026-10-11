@@ -1,0 +1,18 @@
+// claim: a$#            length            a$+ v      append (returns new)     a$+[2] v   insert at 2
+// claim: a$- v          remove first      a$-- v     remove all               a$-[1]     remove index
+// claim: a$-[2..3]      remove range      a$-[2:2]   remove count-based       a$? v      contains
+// claim: a$?? v         all indices       a$[1..3]   slice (both ends)        a$[1:2]    slice by count
+a = [3, 1, 3, 2]
+>> a$# ¶              // → 4
+>> (a$+ 9) ¶          // → [3, 1, 3, 2, 9]
+>> (a$+[2] 9) ¶       // → [3, 9, 1, 3, 2]
+>> (a$- 3) ¶          // → [1, 3, 2]
+>> (a$-- 3) ¶         // → [1, 2]
+>> (a$-[1]) ¶         // → [1, 3, 2]
+>> (a$-[2..3]) ¶      // → [3, 2]
+>> (a$-[2:2]) ¶       // → [3, 2]
+>> (a$? 2) ¶          // → #1
+>> (a$?? 3) ¶         // → [1, 3]
+>> (a$[1..3]) ¶       // → [3, 1, 3]
+>> (a$[1:2]) ¶        // → [3, 1]
+>> a ¶                // → [3, 1, 3, 2]
