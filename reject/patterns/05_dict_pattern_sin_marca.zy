@@ -1,0 +1,15 @@
+// @reject: a dictionary pattern is written `#(…)`, and the bare `(name: n)`
+// @reject: is refused — as the literal is, and for the literal's reason
+// @reject: (`collections/06_dict_sin_marca.zy`): two ways to write one thing
+// @reject: is what the mark was introduced to end.
+// @reject:
+// @reject: The literal was migrated in v0.0.9 and the pattern was not. It kept
+// @reject: running in all three engines for a release, on the one side of `=`
+// @reject: nobody had looked at, and it was found by reading a document rather
+// @reject: than by any test: no program anywhere wrote it, so no engine could
+// @reject: disagree with another about it (GLB-122, decided 2026-10-11).
+// @reject:
+// @reject: `(a, b) = t` is still how a tuple is taken apart, by position.
+person = #(name: "A", age: 3)
+(name: n, age: y) = person
+>> n y ¶

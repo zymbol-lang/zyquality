@@ -1,0 +1,10 @@
+// @reject: `#(` says "dictionary", so what is inside it is `key: name` pairs.
+// @reject: A positional pattern under that mark — `#(a, b) = t` — is refused.
+// @reject:
+// @reject: It is the other half of `05_dict_pattern_sin_marca.zy`: there the
+// @reject: pairs had lost their mark, here the mark has lost its pairs. The
+// @reject: two Rust engines ran this and took a TUPLE apart by position, a
+// @reject: second spelling of `(a, b) = t`; the browser engine refused it with
+// @reject: the words of a missing `:` (GLB-123, decided 2026-10-11).
+#(a, b) = (1, 2)
+>> a b ¶
