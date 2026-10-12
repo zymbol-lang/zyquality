@@ -46,6 +46,10 @@ ENGINES = {
     "zyjs": lambda f: ["node", ZYJS, str(f)],
 }
 
+# The engines `zymbol run --count` exists for. zyjs has no counters, so the
+# clock is the only instrument it can be asked with.
+COUNTING = ("zytw", "zyvm")
+
 C = {"red": "\033[31m", "green": "\033[32m", "yellow": "\033[33m",
      "dim": "\033[2m", "bold": "\033[1m", "off": "\033[0m"}
 if not sys.stdout.isatty():
@@ -125,7 +129,7 @@ def off_file(fid: str) -> str:
 def main() -> int:
     doc = tomllib.loads((ROOT / "cost.toml").read_text(encoding="utf-8"))
     defaults = doc.get("defaults", {})
-    rc, tmp = GREEN, []
+    rc, tmp, skipped = GREEN, [], 0
 
     print(f"{C['bold']}  Cost gate — ratios measured against their own control{C['off']}")
     print(f"{C['dim']}  no baseline: every limit is a ratio declared in cost.toml{C['off']}\n")
@@ -133,6 +137,18 @@ def main() -> int:
     for case in doc["case"]:
         kind, cid = case["kind"], case["id"]
         limit = case["max_ratio"]
+        # A growth case is also asked in `--count`'s units (the end of this
+        # body), unless it opted out. Known up front because it decides what a
+        # timed ratio under the floor means: see `too_fast`.
+        limits = {**defaults.get("count", {}), **case.get("count", {})}
+        counted_here = kind == "growth-ratio" and bool(limits) and not case.get("count_off")
+        # engine → why the clock refused to answer. Only for an engine that is
+        # ALSO counted: the counted ratios are exact and have no floor, so the
+        # case is answered there, and the line saying so is printed with them,
+        # where it is known whether they passed. An engine the counters do not
+        # reach (zyjs, a `count_off` case, a `time-ratio`) keeps NO VERDICT: the
+        # clock is the only thing that could have answered it.
+        too_fast: dict[str, str] = {}
         print(f"  {C['bold']}{cid}{C['off']}  {C['dim']}{case['what']}{C['off']}")
         for eng in case.get("engines", defaults.get("engines", [])):
             if eng not in ENGINES:
@@ -185,6 +201,9 @@ def main() -> int:
                     ratio = tb / ta if ta else float("inf")
                     unit = f"{ta*1000:.0f}ms→{tb*1000:.0f}ms at ×{f}"
             except Exception as e:                      # noqa: BLE001
+                if isinstance(e, TooFast) and counted_here and eng in COUNTING:
+                    too_fast[eng] = str(e)
+                    continue
                 print(f"    {C['yellow']}NO VERDICT{C['off']}  {eng:5s}  {e}")
                 rc = max(rc, NOVERDICT)
                 continue
@@ -227,12 +246,11 @@ def main() -> int:
         # collection being written had another owner — the shape of every
         # quadratic cost this harness was built after. Only the Rust engines
         # count; zyjs is asked by the clock above and nowhere else.
-        limits = {**defaults.get("count", {}), **case.get("count", {})}
-        if kind == "growth-ratio" and limits and not case.get("count_off"):
+        if counted_here:
             n, f = case.get("count_n", defaults.get("count_n", 2000)), case["factor"]
             tpl = ROOT / case["template"]
             for eng in case.get("engines", defaults.get("engines", [])):
-                if eng not in ("zytw", "zyvm"):
+                if eng not in COUNTING:
                     continue
                 try:
                     a, b = render(tpl, n), render(tpl, n * f)
@@ -240,12 +258,31 @@ def main() -> int:
                     ca, cb = counted(ENGINES[eng](a), ROOT), counted(ENGINES[eng](b), ROOT)
                 except Exception as e:                  # noqa: BLE001
                     print(f"    {C['yellow']}NO VERDICT{C['off']}  {eng:5s}  counted: {e}")
+                    if eng in too_fast:
+                        # The clock was set aside on the strength of a count
+                        # that never came: nothing answered this engine.
+                        print(f"    {C['yellow']}NO VERDICT{C['off']}  {eng:5s}  "
+                              f"{too_fast[eng]} — and the counted ratios could not be taken")
                     rc = max(rc, NOVERDICT)
                     continue
+                rows = []
                 for metric, lim in limits.items():
                     x, y = ca[metric], cb[metric]
                     ratio = (y / x) if x else (0.0 if y == 0 else float("inf"))
-                    ok = ratio <= lim
+                    rows.append((metric, lim, x, y, ratio, ratio <= lim))
+                if eng in too_fast:
+                    # Said in the same breath as its reason, and before the rows
+                    # that answer it: an exclusion whose reason is somewhere
+                    # else is indistinguishable from a bug somebody hid. When
+                    # the counts fail the line still says so — they are the
+                    # verdict, and the gate is RED on them.
+                    how = ("answer it, exactly and with no floor"
+                           if all(r[-1] for r in rows)
+                           else "do not pass, and they are the verdict")
+                    print(f"    {C['dim']}SKIPPED{C['off']}  {eng:5s}  timed ratio: "
+                          f"{too_fast[eng]}; the counted ratios below {how}")
+                    skipped += 1
+                for metric, lim, x, y, ratio, ok in rows:
                     tag = f"{C['green']}PASS{C['off']}" if ok else f"{C['red']}FAIL{C['off']}"
                     print(f"    {tag}  {eng:5s}  ratio {ratio:5.2f}  limit {lim:4.2f}   "
                           f"{C['dim']}{metric} {x}→{y} at ×{f}, counted{C['off']}")
@@ -258,7 +295,11 @@ def main() -> int:
         f.unlink(missing_ok=True)
 
     if rc == GREEN:
-        print(f"  {C['green']}{C['bold']}GREEN{C['off']} — every ratio within its declared limit")
+        # Not folded into the word GREEN: how many clock readings the floor
+        # set aside is part of what the verdict stands on.
+        note = (f"; {skipped} timed ratio(s) under the floor, answered by the counted ones"
+                if skipped else "")
+        print(f"  {C['green']}{C['bold']}GREEN{C['off']} — every ratio within its declared limit{note}")
     elif rc == RED:
         print(f"  {C['red']}{C['bold']}RED{C['off']} — a declared cost ratio was exceeded")
     else:
