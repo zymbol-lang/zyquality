@@ -73,14 +73,6 @@ lang = "js"
 oracle = true
 desc = "Node — f64 semantics, BigInt available"
 
-[[engine]]
-id = "ml"
-cmd = ["{exe}"]
-lang = "ocaml"
-oracle = true
-build = "ocamlopt -O3 -unsafe -w -a {file} -o {exe}"
-desc = "OCaml, compiled native — the fast reference for benchmarks"
-
 # ── Retired engines ──────────────────────────────────────────────────────────
 # An engine that vanishes from this file with no trace is indistinguishable
 # from one somebody deleted by accident.  Adding an exclusion requires a
@@ -116,3 +108,22 @@ desc = "OCaml, compiled native — the fast reference for benchmarks"
 #     lang = "zymbol"
 #     unsupported = ["Lex error:", "Parse error:", "Compile error:"]
 #     desc = "OCaml closure-compiling engine"
+#
+# `ml` — an oracle, not an engine under test: the same computation written in
+# OCaml and compiled native, "the fast reference for benchmarks".  Removed
+# 2026-10-11, by the author's decision: OCaml is discontinued in this project
+# and is not a valid engine in Zymbol any more.  Nothing used it.  There is no
+# OCaml oracle program anywhere in the workspace and no cell, case or script
+# names the id, so no verdict changes (`zyq suite`, `zyddt` and the 14 cost
+# cases were run before and after).  `zyq` itself is still written in OCaml;
+# that is a tool, and it is not what this entry declared.
+#
+# Reviving it: restore the [[engine]] block below.
+#
+#     [[engine]]
+#     id = "ml"
+#     cmd = ["{exe}"]
+#     lang = "ocaml"
+#     oracle = true
+#     build = "ocamlopt -O3 -unsafe -w -a {file} -o {exe}"
+#     desc = "OCaml, compiled native — the fast reference for benchmarks"
