@@ -343,8 +343,8 @@ was visible in the output. A bench that grades the whole corpus has to be graded
   GLB-079. The `zyq oracle` and `zyq bench` stubs, which exited 3, went with it.
 - **Phase 4 — benchmarks** — `bench/` is a suite (`zyq suite --only bench`),
   gated against a per-machine baseline; `cost/` asserts what a baseline cannot,
-  ratios against a control. Running Zymbol against Python, JavaScript and OCaml
-  on the same algorithm is not built.
+  ratios against a control. Running Zymbol against Python and JavaScript on the
+  same algorithm is not built.
 
 ## Licence
 
