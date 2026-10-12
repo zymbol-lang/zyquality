@@ -92,6 +92,8 @@ line says how many readings were set aside this way.
 
 ## What is open
 
-Nothing, since 2026-10-10. `ZYTW-010` (`growth/module-call-that-writes-one-cell`, 13.8 under the tree-walker)
+One finding, declared as `KNOWN` since 2026-10-12: `ZYVM-022` (`autofree/call-result`, 1.8 under the VM — what a
+call returns and the caller uses once stays in its temporary register until something reuses it). Before it,
+nothing since 2026-10-10: `ZYTW-010` (`growth/module-call-that-writes-one-cell`, 13.8 under the tree-walker)
 and `ZYVM-010` (`call/frame-as-large-as-every-temporary`, 2.76 under the VM) were declared here as `KNOWN` and
 fixed that day; both cases are plain `PASS` now, and a ratio that climbs back is a regression.
