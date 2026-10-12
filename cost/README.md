@@ -61,7 +61,8 @@ ZYMBOL_BIN=/usr/bin/zymbol ./run.py
 | `PASS` | the ratio is within its declared limit |
 | `FAIL` | it is not, and nobody wrote down why — a regression |
 | `KNOWN` | it is not, and the case names an open finding: declared debt, printed in full every run, not counted against the gate |
-| `NO VERDICT` | it could not be measured — usually a base run below `min_base_ms`, where the ratio would be measuring process startup |
+| `SKIPPED` | a timed ratio whose base run fell below `min_base_ms`, for an engine that is also *counted* (`zytw`, `zyvm`): the counted ratios printed under it are exact and have no floor, so they answer the case — and the line says so, and says it too when they fail, because then they are the verdict |
+| `NO VERDICT` | it could not be measured — a base run below `min_base_ms` on an engine nothing counts for (`zyjs`, a `count_off` case, a `time-ratio`), or counted ratios that could not be taken |
 
 `KNOWN` is keyed by engine, because a finding belongs to an engine. And when a
 `KNOWN` case starts passing the runner says so and asks for the finding to be
@@ -78,6 +79,16 @@ would notice the other still asking the same thing.
 **The faster the engine, the larger its case has to be** for its own ratio to
 mean anything. `min_base_ms` is what refuses the measurement instead of
 reporting a pass nobody should trust.
+
+**What answers under the floor.** Sizes are calibrated on one machine, and a
+CI runner two times faster than it puts the base runs of six cases under 40 ms
+(GLB-128) — not because anything regressed. For `zytw` and `zyvm` the same case
+is *also* asked in `--count` units, which are exact and have no floor, so a
+timed ratio the floor refuses is reported `SKIPPED` and the counted ratios are
+the verdict. Nothing is lowered: the floor is the same, and where nothing counts
+— `zyjs`, a case with `count_off`, a `time-ratio` — the clock is the only
+instrument there is, and an unreachable floor is still `NO VERDICT`. The `GREEN`
+line says how many readings were set aside this way.
 
 ## What is open
 

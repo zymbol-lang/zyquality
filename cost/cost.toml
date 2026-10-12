@@ -78,7 +78,12 @@
 runs_time = 3          # median; memory is deterministic enough to take once
 min_base_ms = 40       # a growth ratio whose base run is faster than this is
                        # measuring process startup, not the program: reported as
-                       # NO VERDICT rather than as a pass nobody should trust
+                       # NO VERDICT rather than as a pass nobody should trust —
+                       # unless the engine is also COUNTED (zytw, zyvm): the
+                       # exact ratios below have no floor and answer the same
+                       # case, so the clock is SKIPPED, with its reason, and the
+                       # verdict is theirs (GLB-128: a CI runner 2× faster than
+                       # the machine this was calibrated on)
 engines   = ["zytw", "zyvm"]
 count_n   = 2000       # exact, so it need not be large: see "Counted, not timed"
 count     = { steps = 4.2, bytes = 4.2, copied = 4.2 }
