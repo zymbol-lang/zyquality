@@ -744,7 +744,7 @@ let cmd_audit o =
            [| "git"; "-C"; root; "ls-files"; "-z"; "--"; "." |] with
    | exception Unix.Unix_error _ -> ()
    | ic ->
-     let listing = In_channel.input_all ic in
+     let listing = Toml.read_channel ic in
      (match Unix.close_process_in ic with
       | Unix.WEXITED 0 ->
         List.iter (fun f -> if f <> "" && not (material f) then
