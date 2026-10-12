@@ -1,0 +1,60 @@
+// `\ c`, with `c` a variable of a module, written in one of its functions.
+//
+// A module's state is the module's, and so is its end (GLB-120, decided
+// 2026-10-11 — MEM-8 where no engine applied it whole):
+//   - it ends for the MODULE: every function finds it destroyed, and reading
+//     it is a run-time error a `!?` catches — however it is read;
+//   - assigning it, from any function, gives it back to the module;
+//   - a second `\` with no assignment in between is a use after the first;
+//   - a `\` in a branch that did not run ended nothing;
+//   - a parameter or a lambda's copy of that name is its own, not the module's.
+//
+// Before: the tree-walker ended it for the one frame, the VM did nothing at
+// all, and zyjs ended it for the module and never gave it back.
+
+<# ./destruir_estado_m => F
+t(etq, f) {
+    !? {
+        r = f()
+        >> etq " " r ¶
+    } :! { >> etq " ERROR" ¶ }
+}
+t("01", () -> F::mostrar())
+t("02", () -> F::destruye())
+t("03", () -> F::mostrar())
+t("04", () -> F::lee())
+t("05", () -> F::interp())
+t("06", () -> F::arg())
+t("07", () -> F::escribe("nueva"))
+t("08", () -> F::lee())
+t("09", () -> F::destruye())
+t("10", () -> F::comparten())
+t("11", () -> F::lee())
+t("12", () -> F::destruye_y_lee())
+t("13", () -> F::mostrar())
+t("13b", () -> F::escribe("viva"))
+t("14", () -> F::destruye_y_escribe())
+t("15", () -> F::lee())
+t("16", () -> F::destruye())
+t("17", () -> F::destruye())
+t("18", () -> F::escribe("otra"))
+t("19", () -> F::rama(0))
+t("20", () -> F::lee())
+t("21", () -> F::param("x"))
+t("22", () -> F::lee())
+t("23", () -> F::lam())
+t("24", () -> F::lee())
+t("25", () -> F::rama(1))
+t("26", () -> F::lee())
+t("27", () -> F::lista())
+t("28", () -> F::largo())
+t("29", () -> F::indice())
+t("30", () -> F::suma())
+t("31", () -> F::edita())
+t("32", () -> F::edita2())
+t("33", () -> F::recorre())
+t("34", () -> F::presta())
+t("35", () -> F::renace())
+t("36", () -> F::largo())
+t("37", () -> F::bucle())
+t("38", () -> F::largo())

@@ -1,0 +1,15 @@
+// A slot of `>>~` that is not an Int: the text and the kind.
+//
+// GLB-042 (decided 2026-10-05): a wrong TYPE is named by its type, never by its
+// value (GLB-033), and it is a `##Type` (D1). The three engines printed the
+// value — `got fila`, `got 2.5` — and raised `##_`.
+//
+// `id` only hides each value's type from the analysers.
+
+id(v) { <~ v }
+
+!? { >>~ (id("fila"), 1) > "A" } :! { >> _err ¶ }
+!? { >>~ (1, id(2.5)) > "A" } :! { >> _err ¶ }
+!? { >>~ (id(#1), 1) > "A" } :! { >> _err ¶ }
+!? { >>~ (id([1]), 1) > "A" } :! { >> _err ¶ }
+!? { >>~ (id(##_), 1) > "A" } :! { >> _err ¶ }

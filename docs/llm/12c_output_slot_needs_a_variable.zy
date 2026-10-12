@@ -1,0 +1,6 @@
+// claim: A `<~` slot needs a variable, never an expression.
+// verdict: error
+bump(b<~) { b = b + 100 }
+y = 1
+bump((y + 1)<~)
+>> y ¶

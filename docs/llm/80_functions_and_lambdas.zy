@@ -1,0 +1,15 @@
+// claim: double = x -> x * 2                 // lambda; captures scope BY VALUE at creation
+// claim: work(p~)  { p = p * 2 }             // '~'  working copy — caller untouched
+add(a, b) { <~ a + b }
+double = x -> x * 2
+sum2   = (a, b) -> a + b
+thunk  = () -> 42
+block  = x -> { ? x > 0 { <~ "pos" }  <~ "neg" }
+work(p~) { p = p * 2  <~ p }
+>> add(1, 2) " " double(4) " " sum2(1, 2) " " thunk() " " block(1) " " block(-1) ¶    // → 3 8 3 42 pos neg
+z = 5
+>> work(z) " " z ¶            // → 10 5
+base = 10
+suma = x -> x + base
+base = 100
+>> suma(1) ¶                  // → 11

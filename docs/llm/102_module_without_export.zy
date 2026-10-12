@@ -1,0 +1,10 @@
+// claim: Omitting `#>` is **E014**
+// verdict: error
+// says: E014
+// file: lib.zy
+# lib {
+    f() { <~ 1 }
+}
+// file: main.zy
+<# ./lib => L
+>> L::f() ¶

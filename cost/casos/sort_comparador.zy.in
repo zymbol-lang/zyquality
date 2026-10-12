@@ -1,0 +1,11 @@
+// `$^` with a comparator of its own, on «N» pseudo-random integers (GLB-108).
+// The values come from a small congruential generator, so no step leaves the
+// i53 integers and every engine sorts the same array.
+x = 7
+a = []
+@ «N» {
+    x = (x * 75 + 74) % 65537
+    a$+ x
+}
+b = a$^ (p, q -> p < q)
+>> b[1] " " b[b$#] ¶

@@ -1,0 +1,15 @@
+// @reject: a `?` condition is a Bool and nothing else. There is no
+// @reject: truthiness: an Int, a String or a collection is not read as a
+// @reject: condition, by any table.
+// @reject:
+// @reject: Until 2026-10-11 this was a warning, and under that one warning the
+// @reject: three engines each took their own branch: with `x = [1, 2]` the
+// @reject: tree-walker ran the `_` block and the VM and the browser engine ran
+// @reject: the `?` block, all three exiting 0. Nine of thirteen types diverged
+// @reject: (GLB-121). The same rule had already been closed for the loop
+// @reject: specifier, for `&&` / `||` / `!`, for the `$|` predicate and for
+// @reject: the `$^` comparator; this was the surface nobody had closed.
+// @reject:
+// @reject: Ask the question that is meant: `? x$# > 0 { … }`.
+x = [1, 2]
+? x { >> "SI" ¶ } _ { >> "NO" ¶ }

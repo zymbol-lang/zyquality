@@ -1,0 +1,6 @@
+// claim: **`<~` on a parameter is written at the signature AND the call site**
+// claim: **Mutation is declared twice.**
+bump(b<~) { b = b + 100 }
+y = 1
+bump(y<~)
+>> y ¶                // → 101

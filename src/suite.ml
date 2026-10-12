@@ -70,6 +70,7 @@ let missing ~(root : string) (need : string) : string option =
     let b = env_or "ZYMBOL_BIN" "zymbol" in
     if on_path b || Sys.file_exists b then None else Some ("zymbol (" ^ b ^ ")")
   | "python3" -> if on_path "python3" then None else Some "python3"
+  | "node" -> if on_path "node" then None else Some "node"
   | "zymbol-lsp" ->
     (* The language server is a separate binary from the CLI and is overridden
        separately, the same way engines.toml overrides an engine.  A suite that
@@ -95,6 +96,14 @@ let missing ~(root : string) (need : string) : string option =
   | "zyddt" ->
     let d = Filename.concat root "../ZyDDT/bin/zyddt" in
     if Sys.file_exists d then None else Some "the ZyDDT/ checkout"
+  | "aprende_zymbol" ->
+    let d = Filename.concat root "../aprende_zymbol/index.html" in
+    if Sys.file_exists d then None else Some "the aprende_zymbol/ checkout"
+  (* The web repository's own tests. `ZYQ_WEB_DIR` moves it, as the script that
+     runs them reads it. *)
+  | "web" ->
+    let d = Filename.concat (env_or "ZYQ_WEB_DIR" (Filename.concat root "../web")) "tests" in
+    if Sys.file_exists d then None else Some "the web/ checkout"
   | other -> Some ("unknown requirement `" ^ other ^ "`")
 
 let unmet ~root (s : spec) = List.filter_map (missing ~root) s.needs

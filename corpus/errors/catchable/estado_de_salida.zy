@@ -1,0 +1,35 @@
+// Test: el estado de salida de lo que un programa ejecuta (GAP-GOL-011, D2 y D8).
+//
+// Una orden que fallaba y una que no escribía nada eran la misma cadena vacía,
+// y un subscript que daba `<~ 3` devolvía su salida sin el 3. Ahora un estado
+// distinto de 0 es un error SUAVE ##IO que lo lleva delante — `exit N`, y tras
+// `: ` lo que la orden dijo (su stderr, o su stdout si no escribió en stderr).
+// Se lee con el patrón `##IO(m)`.
+//
+// Un subscript que REVIENTA no es un estado que dé: se sigue LANZANDO, como
+// decidió GLB-017 I, y `:!` lo captura (D8).
+//
+// Las órdenes son de sh y no dependen del idioma del sistema: nada de `ls` de
+// un fichero que falta, cuyo mensaje sale traducido.
+
+ver(r) {
+    <~ ?? r {
+        ##IO(m) => ("##IO: " m)
+        _       => ("ok: «" r "»")
+    }
+}
+
+>> ver(<\ "echo hola" \>) ¶
+>> ver(<\ "exit 3" \>) ¶
+>> ver(<\ "echo por stderr >&2; exit 2" \>) ¶
+>> ver(<\ "echo por stdout; exit 4" \>) ¶
+>> ver(<\ "true" \>) ¶
+
+>> ver(</ ./sub_da_estado.zy />) ¶
+
+!? {
+    r = </ ./sub_revienta.zy />
+    >> "no llega" ¶
+} :! ##Div {
+    >> "lanzado como ##Div" ¶
+}

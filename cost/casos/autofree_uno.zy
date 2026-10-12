@@ -1,0 +1,4 @@
+// The scale: one array, so the other two can be read in units of it.
+a = []
+@ i:1..2000000 { a$+ i }
+>> a$# ¶

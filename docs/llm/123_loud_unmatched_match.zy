@@ -1,0 +1,9 @@
+// claim: **Loud where models go wrong**
+// claim: an unmatched `??` aborts
+// verdict: error
+clase(n) {
+    <~ ?? n {
+        1 => "uno"
+    }
+}
+>> clase(2) ¶

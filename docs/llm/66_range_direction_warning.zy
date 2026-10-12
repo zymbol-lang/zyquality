@@ -1,0 +1,8 @@
+// claim: `range direction is decided at runtime` — emitted when a bound is not a literal
+// verdict: warn
+// says: range direction is decided at runtime
+cuenta(tope) {
+    @ _i:1..tope { °n += 1 }
+    <~ n
+}
+>> cuenta(3) ¶        // → 3

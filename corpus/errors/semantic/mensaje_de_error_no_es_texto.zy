@@ -1,0 +1,6 @@
+// Test: `##Parse(42)` se rechaza antes de ejecutar: el analizador sabe que el
+// mensaje es un Int, y el mensaje de un error es texto. La ayuda enseña las
+// dos salidas — escribirlo, o convertir el valor con `"" x`.
+
+e = ##Parse(42)
+>> e ¶

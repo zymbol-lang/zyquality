@@ -1,0 +1,5 @@
+// claim: <# std/math => M
+// claim: Stdlib (same module system, native): `std/math`
+<# std/math => M
+>> M::sqrt(16.0) ¶    // → 4
+>> M::abs(-3) ¶       // → 3

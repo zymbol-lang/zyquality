@@ -8,7 +8,7 @@ c = 0o101
 d = 0d65
 >> d ¶
 
-// Higher hex values (Int result)
+// Higher values: still a Char, the character with that code
 e = 0xFF
 >> e ¶
 f = 0b11111111

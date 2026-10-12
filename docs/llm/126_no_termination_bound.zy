@@ -1,0 +1,10 @@
+// claim: **No termination bound.**
+// The claim is an absence, which no program can show by finishing. What runs
+// here is the nearest thing that does finish: a loop bounded by nothing but
+// its own `@!` goes round as many times as it is told.
+n = 0
+@ {
+    n = n + 1
+    ? n >= 200000 { @! }
+}
+>> n ¶                // → 200000

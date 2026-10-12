@@ -1,0 +1,4 @@
+// claim: (`width pad_left pad_right center truncate` — **display columns**, not graphemes: CJK and
+<# std/term => t
+>> t::width("ab") " " t::width("日本") ¶      // → 2 4
+>> ("日本"$#) ¶                               // → 2

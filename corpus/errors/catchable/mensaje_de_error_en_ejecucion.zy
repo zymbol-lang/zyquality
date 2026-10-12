@@ -1,0 +1,14 @@
+// Test: el mensaje de `##Tipo(…)` es texto, y cuando el analizador no puede
+// saberlo lo decide la ejecución con un ##Type — que un `:!` sí captura, porque
+// ESO sí es un error lanzado: lo que falló es construir el valor.
+
+hacer(x) {
+    <~ ##Parse(x)
+}
+
+!? {
+    >> hacer(42) ¶
+} :! ##Type {
+    >> "##Type: " _err ¶
+}
+>> hacer("bien") ¶

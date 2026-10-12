@@ -1,0 +1,19 @@
+// claim: `??` match — seven pattern kinds, first match wins, `||` joins alternatives of any kinds:
+nota(score, weekdays) {
+    <~ ?? score {
+        90..100 => 'A'
+        == 0 || < 0 => "none"
+        weekdays => "wk"
+        _ => 'F'
+    }
+}
+forma(v) {
+    <~ ?? v {
+        [1, 2] => "low"
+        ["run", _] => "cmd"
+        _ => "otro"
+    }
+}
+dias = [1, 2, 3, 4, 5]
+>> nota(95, dias) " " nota(0, dias) " " nota(-3, dias) " " nota(4, dias) " " nota(50, dias) ¶    // → A none none wk F
+>> forma([1, 2]) " " forma(["run", "x"]) " " forma([9]) ¶         // → low cmd otro

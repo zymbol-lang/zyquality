@@ -1,0 +1,3 @@
+// claim: **Juxtaposition concatenates in `>>`; `+` does not.**
+n = 3
+>> "n=" n ¶           // → n=3

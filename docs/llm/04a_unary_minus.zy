@@ -1,0 +1,4 @@
+// claim: **Unary minus loses to juxtaposition:**
+// verdict: error
+n = 3
+>> "x=" -n ¶

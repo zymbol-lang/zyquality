@@ -1,0 +1,5 @@
+// claim: a$^+  a$^-     sort asc/desc     a$^ (x,y -> x.f < y.f)              // comparator sort
+a = [3, 1, 2]
+ps = [#(f: 2), #(f: 1)]
+>> (a$^+) " " (a$^-) ¶                // → [1, 2, 3] [3, 2, 1]
+>> (ps$^ (x, y -> x.f < y.f)) ¶       // → [#(f: 1), #(f: 2)]

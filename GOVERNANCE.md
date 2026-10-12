@@ -28,8 +28,9 @@ Concretely:
 | the project | `zyq suite` | all of it, one verdict |
 
 `zyq suite` is the whole thing: selftest, corpus hygiene, rejections, goldens,
-consensus, and then the script suites registered in `suites.toml` — the
-formatter audit, the pty harness, the GUIDE verification, the benchmark gate.
+consensus, and then the script suites registered in `suites.toml` — twelve on
+2026-10-02, from the formatter audit and the pty harness to ZyDDT and the cost
+gate.
 `zyq suites` lists them and says what each needs; `zyq suite --only bench` runs
 one, which is what a CI runner that owns the benchmark baseline wants.
 
@@ -75,20 +76,25 @@ does is anywhere else.
 ```text
 zyquality/
     zyq                 the differential runner (OCaml, no dependencies)
-    corpus/             614 .zy, 612 with a .expected golden
+    corpus/             675 .zy, 669 with a .expected golden (2026-10-02)
     corpus.toml         who may be judged on what, and why not
+    dropped.tsv         what left the corpus, when, and what asks its question now
     reject/             forms every engine must refuse
     suites.toml         the script suites, so `zyq suite` runs them too
     fmt/                formatter properties P1-P4 + its baseline
     tui/                key input through a real pty + its cases
     bench/              benchmark programs, their runners and baseline
+    cost/               auto-free and complexity, as ratios against a control
+    messages/           the diagnostic inventory, and which of it is provoked
+    addressing/         the bracket rule crossed with every action
+    lsp/                the language server against `zymbol check`
+    coverage/           what no test executes (outside the gate, on purpose)
     docs/               GUIDE.md example verification
     project/            the real programs written in Zymbol
         apps.toml       where each application's suites live
-        run.sh          drives them through zyq: goldens gate, engines report
+        run.sh          drives them through zyq: goldens and engines, both gated
     platform/           the native Windows runner (no bash, no WSL)
     notes/              historical measurement records
-    cases/              external oracles (phase 3)
 ```
 
 | was | is |
@@ -120,7 +126,7 @@ What stayed, and why:
   that skipped the static-check pass, and deleting that copy fixed 14 files.
 - **`web/tests/test_*.mjs`** (licences, Markdown twins, catalog, DOM, symbols,
   i18n, `.zyp`, limits) — they grade a website, not the language.
-- **`interpreter`'s 969 `#[test]` functions** — they live inside the crates and
+- **`interpreter`'s `#[test]` functions** — they live inside the crates and
   test units rather than behaviour. `cargo test` is unaffected.
 - **`interpreter/examples/`** — that repository's own example programs.
   `fmt/fmt_property.sh` sweeps them when the checkout is there.
@@ -145,7 +151,7 @@ corpus can never compare does not belong in it.
 
 **Not here.** Tests of a *product* rather than of the language. `web/` keeps its
 own suites for licences, Markdown twins, the example catalog, the DOM and the
-playground's translations: those grade a website. `interpreter/` keeps its 969
+playground's translations: those grade a website. `interpreter/` keeps its
 Rust unit tests, which live inside the crates and test units, not behaviour, and
 `fmt_property.sh`, which exercises a feature only one engine has. All of them
 read the shared corpus where they need `.zy` files.
@@ -213,6 +219,22 @@ One inconsistency stands, named rather than tidied away: an in-file marker
 requires one. So the report prints an empty reason for those, which is honest —
 there is nothing to print.
 
+**Same words means the same words, not the same colour.** Until 2026-10-02 the
+strong bar compared stderr byte for byte, and the CLI writes ANSI colour into a
+pipe and draws the source line under each diagnostic while the browser engine
+does neither: no exclusion of a refused program could ever expire, whatever the
+engines said. Eight ANSI_FORMAT rules lived on that: three were stale the moment
+stderr was normalised (`Compare.normalise_diagnostics`, the rules of ZyDDT's
+`[normalise]`), and five excused corpus files that had not run in any engine
+since the import. A reason that is about presentation is not a reason an engine
+cannot be judged.
+
+**A reason has to be true, not only present.** The audit asks whether an
+exclusion is still NEEDED — whether the excused engine now agrees. It cannot ask
+whether what the reason says is so. Six files were excused from the browser
+because "`<\ shell \>` has no browser equivalent", and none of them ever reached
+a shell: they did not parse in the CLI. That is read, not computed.
+
 **An engine.** A `[[engine]]` entry in `engines.toml`, never a patch to the
 runner. If it cannot run something, declare the stderr prefixes it uses to say
 so — a missing feature must be reported apart from a wrong answer.
@@ -254,49 +276,36 @@ reason. Inventing a marker for it would be encoding a schedule in the gate.
 
 ## What a red gate means
 
-`zyq suite` is red today, and honestly so:
+**A red is a regression.** Measured 2026-10-02, `zyq suite` is green — all
+gates pass — and every red it can produce means something changed: a golden, a
+rejection, an agreement, a baseline that rose, a dead entry left in a baseline,
+or a declared debt that was paid and not closed. Declared debt is not red:
+`cost/` and ZyDDT report a filed, open finding as KNOWN on every run, by its id,
+and turn red the day it passes.
 
-Measured 2026-08-18, `zymbol 0.0.9`:
+The other way round is the one to watch. A gate is only as green as the
+questions it asks, and three things sat under a green verdict until that day
+(the README's *Current state* has them): exclusions whose reason was the colour
+of the output, a baseline half made of dead entries, and a suite outside the
+gate — red — on a reason that had stopped being true. `zyq suite` printed *all
+gates pass* over all three.
 
-- `expect` — 607 goldens (586 via `run`, 21 via `check`): all match, nothing
-  unchecked, nothing stale.
-- `reject` — 17 forms: 13 refused everywhere, **3 accepted somewhere**, 1 pending.
-  All three live ones are the browser engine, and all three are the same family:
-  `m[i][j] = v` at one level and at three (`assignment/01`, `02`) and `$~` dropped
-  as a statement (`03`). The pending one is `t$+ 3` as a bare statement, decision
-  12, refused by nobody yet.
-
-  Recorded because it cost a suite: the three loop-specifier forms were added and
-  closed in the same change, and the fourth assignment form closed with them for a
-  reason worth keeping — the browser engine *did* refuse it, but `runZymbol`
-  catches its own errors so the playground can render them, and
-  `tests/run_one.mjs` never read the result, so a refused program exited 0 and the
-  gate scored it as accepted. A rejection suite that cannot see a rejection was
-  measuring the runner, not the engine.
-- `consensus` — 609 files: 607 agree, **0 diverge**, 2 with too few engines. The
-  browser engine declines 40 (shell-out, `std/db`, timing); the two Rust engines
-  decline 2 each.
-- `project` — two of Zofia's eleven goldens are stale: `forward_pass.zy` and
-  `matmul.zy` now say *cannot access underscore variable*. They were recorded when
-  the programs worked. The per-project runners cannot see it — they grep the
-  output for `FAIL`, and a program that errors prints neither.
-
-Each repository's own wrapper is scoped to its own engine, on purpose. A gate
-that goes red for a defect in another repository is a gate its owner learns to
-ignore. The four-engine question is `zyq suite`, and it belongs to the project
-rather than to any one engine.
+The record of 2026-08-18, when the gate was red with three rejections the
+browser engine accepted and two stale goldens of Zofia, is in the history of
+this file.
 
 ## Grading the grader
 
-`zyq selftest` runs 51 checks over the pattern matcher, the globs, the golden
-line matcher, the skip-marker parser and the two output filters — against cases
-whose answer is known by reading them. It is the first step of `zyq suite`.
+`zyq selftest` runs 56 checks (2026-10-02) over the pattern matcher, the globs,
+the golden line matcher, the skip-marker parser, the output filters and the
+diagnostic normalisation — against cases whose answer is known by reading them.
+It is the first step of `zyq suite`.
 
 This is not ceremony. The two harness defects found while producing the first
 consensus numbers — an argv list reversed by a double `List.rev`, and a missing
 module resolver that made every `<#` import fail — both inflated the divergence
-count, and neither was visible in the output. A bench that grades 585 files has
-to be graded itself.
+count, and neither was visible in the output. A bench that grades the whole
+corpus has to be graded itself.
 
 Two more came from this exercise. The in-file skip marker was read from the
 first ten lines, and the first file to carry one had a fourteen-line header

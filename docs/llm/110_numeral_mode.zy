@@ -1,0 +1,7 @@
+// claim: `#०९#` switches the digit script used for **output** process-wide
+// claim: booleans (`#१` / `#०`), not arithmetic.
+#०९#
+>> 12 + 30 ¶          // → ४२
+>> (1 == 1) ¶         // → #१
+#09#
+>> 12 + 30 ¶          // → 42

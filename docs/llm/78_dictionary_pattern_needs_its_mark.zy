@@ -1,0 +1,6 @@
+// claim: refused, and `(a, b) = t` takes a tuple apart by position.
+// verdict: error
+// says: a dictionary pattern is written
+person = #(name: "Ana", age: 25)
+(name: n, age: y) = person
+>> n y ¶

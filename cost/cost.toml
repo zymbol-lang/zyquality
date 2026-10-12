@@ -1,0 +1,379 @@
+# What a program may cost, stated as a RATIO and never as a number.
+#
+# ── Why not a baseline ───────────────────────────────────────────────────────
+#
+# `bench/baseline.txt` records milliseconds and says so in its own header:
+# "machine-specific … host=zymbol". That is the right instrument for "did this
+# get slower", and the wrong one for "does this mechanism still work": the
+# number has to be re-recorded on every machine, and a re-recording is exactly
+# the move that makes a regression disappear.
+#
+# Every case here carries its own control, measured in the same run, on the same
+# machine, within seconds of the subject. What is asserted is the RATIO between
+# them. A ratio needs no baseline, survives a faster laptop, and cannot be
+# quietly re-recorded — to move it you have to change the number in this file,
+# where it is read as what it is.
+#
+# ── The two kinds ────────────────────────────────────────────────────────────
+#
+#   peak-ratio    subject vs control, peak RSS.  Auto-free is required to be
+#                 INVISIBLE — same output with and without it — so memory is the
+#                 only place it can be observed at all. The pair differs in the
+#                 LIFETIMES of its values and in nothing else: same allocations,
+#                 same loops, same output shape.
+#
+#   growth-ratio  the same program at N and at N × factor, wall time. Detects a
+#                 change of COMPLEXITY, which no single measurement can: linear
+#                 is `factor`, quadratic is `factor²`, and the limit sits
+#                 between them. This is what `bench/` structurally cannot see —
+#                 it runs each program at one size.
+#
+#   time-ratio    subject vs control, wall time, at one size: the same work
+#                 written two ways, so the ratio is the price of the one
+#                 difference between them. Added for the cost of a function call
+#                 in a hot loop (IDEA-GOL-007).
+#
+# ── Counted, not timed ───────────────────────────────────────────────────────
+#
+# Since 2026-10-11 every `growth-ratio` case is ALSO asked in the units of
+# `zymbol run --count`, which are exact: the same program gives the same numbers
+# on every run and on every machine. The clock's limit has to sit half way
+# between linear and quadratic (6.0 at ×4) to survive a loaded machine; a counted
+# ratio is 4.00 to the hundredth, so its limit can sit just above it.
+#
+#   steps    the engine's own unit of work — a bytecode instruction in the VM, a
+#            statement or an expression in the tree-walker. Blind to a copy:
+#            appending to a shared collection is one step at any size.
+#   bytes    what the run asked the allocator for. This is where a copy shows.
+#   copied   elements duplicated because the collection being written had
+#            another owner. It is 0 in every case here, and that zero is the
+#            assertion: the day a value gets a second owner on a hot path, this
+#            goes from 0 to N² and the ratio from 0 to infinity.
+#
+# Only the Rust engines count; zyjs is asked by the clock. `[defaults] count`
+# gives the three limits, `count_n` the base size — small, since nothing here
+# needs a run long enough to out-shout process start-up — and a case overrides
+# either with its own `count` / `count_n`.
+
+# ── `open_finding` ───────────────────────────────────────────────────────────
+#
+# A case that names one is KNOWN rather than FAILED: it is reported, in full,
+# with the finding's id, and it does not turn the gate red. Debt that has been
+# written down is not a regression, and a gate that is permanently red stops
+# meaning anything — which is the whole value of `zyquality`'s green baseline.
+#
+# It is keyed BY ENGINE, because a finding belongs to an engine: writing it for
+# the case made the runner announce "ZYJS-014 now passes" every time zytw met
+# the limit, which is an engine reporting on another engine's bug.
+#
+# It is not an exclusion and it is not a skip: the case still RUNS and its ratio
+# is still printed, so the number moves in the report as the work progresses.
+# And the day it passes, the case is RED until the finding is closed and the
+# marker removed — a `open_finding` that nobody removes is the way debt becomes
+# permanent, and the way the next regression of the same case gets in unseen.
+# It used to print in green and move on (changed 2026-10-02, the rule ZyDDT's
+# `open_finding` follows: VERDICTS.md § 12).
+
+[defaults]
+runs_time = 3          # median; memory is deterministic enough to take once
+min_base_ms = 40       # a growth ratio whose base run is faster than this is
+                       # measuring process startup, not the program: reported as
+                       # NO VERDICT rather than as a pass nobody should trust
+engines   = ["zytw", "zyvm"]
+count_n   = 2000       # exact, so it need not be large: see "Counted, not timed"
+count     = { steps = 4.2, bytes = 4.2, copied = 4.2 }
+
+# ── Auto-free ────────────────────────────────────────────────────────────────
+
+[[case]]
+id       = "autofree/two-aggregates"
+kind     = "peak-ratio"
+subject  = "casos/autofree_secuencial.zy"
+control  = "casos/autofree_solapado.zy"
+max_ratio = 0.70
+what     = "two aggregates used one after the other must not cost two aggregates"
+# Measured 2026-09-12: zytw 237/465 = 0.51, zyvm 38.7/70.4 = 0.55. The limit is
+# 0.70, which leaves room for allocator noise and still fails loudly: with
+# auto-free off the subject IS the control and the ratio is 1.00.
+why      = "if the ratio approaches 1, the first aggregate is surviving its last use"
+
+[[case]]
+id       = "autofree/scale"
+kind     = "peak-ratio"
+subject  = "casos/autofree_secuencial.zy"
+control  = "casos/autofree_uno.zy"
+max_ratio = 1.25
+what     = "two aggregates used in sequence cost about the same as one"
+# The sharper half. Measured 2026-09-12: zytw 1.00, zyvm 1.03.
+why      = "states the mechanism positively: the second array reuses the first one's ground"
+
+[[case]]
+id       = "autofree/call-result"
+kind     = "peak-ratio"
+subject  = "casos/autofree_resultado_secuencial.zy"
+control  = "casos/autofree_resultado_uno.zy"
+max_ratio = 1.25
+open_finding = { zyvm = "ZYVM-022" }
+what     = "what a call returns and the caller uses once is released before the next call builds its own"
+# The shape the two cases above do not have: the array is never in a named
+# variable, only in the register a call's result lands in. Measured 2026-10-11:
+# zytw 1.00, zyvm 1.79 (68 MB against 38 MB; 2.05 once the 8.5 MB of an empty
+# process are taken out) — as much as the control that keeps both alive on
+# purpose. A `$` expression used as a value does not have it (0.98), and one
+# array is still 6x smaller in the VM than in the tree-walker, so this is the
+# relative win being smaller and not the VM being worse.
+why      = "the result waits in a temporary register until something reuses it; `emit_auto_free` clears only named variables"
+
+# ── Cost curves ──────────────────────────────────────────────────────────────
+
+# `n_by_engine` — one question, asked at the size each engine can answer it at.
+#
+# The sizes cannot be shared: at 5 000 the Rust engines spend most of the run
+# starting a process (a ratio of two startup times measures the startup, which
+# is what `min_base_ms` refuses), and at 200 000 the browser engine needs
+# minutes. Splitting this into two cases would make it two questions, and the
+# day one is fixed nobody would notice the other still asks the same thing.
+
+[[case]]
+id        = "growth/append-local"
+kind      = "growth-ratio"
+template  = "casos/append_local.zy.in"
+# 600 000 and not less: the VM builds 200 000 in 16 ms, which is under the
+# floor — the faster the engine, the larger the case has to be for its own ratio
+# to mean anything.
+n         = 600000
+n_by_engine = { zyjs = 100000, zyvm = 1200000 }
+factor    = 4
+max_ratio = 6.0
+what      = "building an array element by element is linear in its length"
+# Linear would be 4.0; quadratic 16.0. Measured 2026-09-12: zyjs 13.2.
+# Closed 2026-10-10: zyjs writes in place when the variable is the array's only
+# holder. It was asked at 5 000, where 20 000 took seconds; at 100 000 now.
+why       = "an aggregate rebuilt on every append is quadratic in its length"
+engines   = ["zytw", "zyvm", "zyjs"]
+
+[[case]]
+id        = "growth/append-module-state"
+kind      = "growth-ratio"
+template  = "casos/append_modulo.zy.in"
+n         = 400000
+# The VM is asked at three times the size, as in `growth/append-local`: it is
+# the faster engine, and under the floor its ratio would measure a process
+# starting.
+n_by_engine = { zyvm = 1200000 }
+factor    = 4
+max_ratio = 6.0
+what      = "accumulating into a module's own state is linear, like a local"
+# Measured 2026-09-12: zytw 1.2, zyvm 18.0 — that was ZYVM-003, and the VM was
+# asked at 8 000 because 400 000 took minutes. Closed 2026-10-10: the edit takes
+# the value out of the module's slot, so it is its only owner.
+why       = "two owners of one Rc across a load/store make every append copy the vector"
+
+[[case]]
+id        = "growth/append-several-local"
+kind      = "growth-ratio"
+template  = "casos/append_varios.zy.in"
+n         = 200000
+n_by_engine = { zyvm = 600000, zyjs = 50000 }
+factor    = 4
+max_ratio = 6.0
+what      = "`a$++ x y` as an edit adds at the end: building an array with it is linear"
+# Measured 2026-10-10: 16 000 of them were 23 338 M instructions in the
+# tree-walker and 9 382 M in the VM, ×15.9 over 4 000 — the VM's `ConcatBuild`
+# cloned the vector, and the tree-walker's held a second reference to it while
+# it pushed (GLB-118). Closed the same day: 56 M and 16 M — and zyjs with them
+# (ZYJS-014).
+why       = "the bulk append builds a new collection even when its result goes back into its receiver"
+engines   = ["zytw", "zyvm", "zyjs"]
+
+[[case]]
+id        = "growth/update-local"
+kind      = "growth-ratio"
+template  = "casos/actualizar_local.zy.in"
+# The Rust engines write in place and need a large N to clear the floor; zyjs
+# copies the collection on every write and is asked where that is still
+# seconds, not minutes.
+n         = 200000
+n_by_engine = { zyvm = 600000, zyjs = 100000 }
+factor    = 4
+max_ratio = 6.0
+what      = "writing one element of a collection in place costs the same whatever its size"
+# Measured 2026-10-10: 2000 writes over 16 000 elements were 33 M instructions
+# in the tree-walker and 1 202 M in the VM, whose compiler emitted `CopyReg`
+# before every `DeepSet` — two owners, so the write copied the vector, on a
+# plain local, in a function, with a literal index (ZYVM-013). Closed the same
+# day: 16 M.
+why       = "a second owner of the collection at the moment of the write makes the write copy all of it"
+engines   = ["zytw", "zyvm", "zyjs"]
+
+[[case]]
+id        = "growth/update-module-state"
+kind      = "growth-ratio"
+template  = "casos/actualizar_modulo.zy.in"
+n         = 200000
+n_by_engine = { zyvm = 600000 }
+factor    = 4
+max_ratio = 6.0
+what      = "writing one element of a module's own state costs the same whatever its size"
+# Measured 2026-10-10: ZYVM-003 was every edit of module state, not only `$+` —
+# 2000 writes over 16 000 elements were 5 898 M instructions in the VM. Closed
+# the same day: 24 M.
+why       = "two owners of one Rc across a load/store make every write copy the collection"
+
+[[case]]
+id        = "growth/module-call-that-reads-one-cell"
+kind      = "growth-ratio"
+template  = "casos/modulo_lee_por_llamada.zy.in"
+n         = 40000
+n_by_engine = { zyvm = 200000, zyjs = 40000 }
+factor    = 4
+max_ratio = 6.0
+what      = "a call into a module that reads one cell of its state costs the same whatever the size of the state"
+# Measured 2026-10-10: 2000 such calls over 16 000 cells were 1 401 M
+# instructions in the tree-walker — 91 % of them comparing the table with
+# itself. A frame is given a copy of each module variable its body names and,
+# on the way out, decides what it changed by comparing the two; an untouched
+# table was compared element by element (ZYTW-010). The comparison asks for
+# identity first now: 66 M.
+#
+# zyjs joined when ZYJS-014 closed: building the table was quadratic there, and
+# that was all its run measured — 10 s, then 159 s.
+why       = "a call that compares or copies the module's state to find out it did not change costs the size of the state"
+engines   = ["zytw", "zyvm", "zyjs"]
+
+[[case]]
+id        = "growth/module-call-that-writes-one-cell"
+kind      = "growth-ratio"
+template  = "casos/modulo_escribe_por_llamada.zy.in"
+n         = 40000
+n_by_engine = { zyvm = 200000 }
+factor    = 4
+max_ratio = 6.0
+what      = "a call into a module that writes one cell of its state costs the same whatever the size of the state"
+# Measured 2026-10-10 before the fix: 2000 such calls over 16 000 cells were
+# 2 911 M instructions in the tree-walker and 25 M in the VM, and this case was
+# 13.8 at n = 3000 (140 ms → 1 930 ms). The tree-walker's frame worked on a COPY
+# of the module's variable — the store kept the original — so the first write
+# of every call copied the collection, and the way out compared the two.
+# ZYTW-010, fixed the same day: the module's table is the frame's outermost
+# scope, moved and never copied. The size went from 3000 to 40 000 with it: at
+# 3000 the base run is 20 ms now, under the floor.
+why       = "a frame that works on a copy of the module's state copies it on its first write, every call"
+engines   = ["zytw", "zyvm", "zyjs"]
+
+[[case]]
+id        = "growth/write-through-an-output-parameter"
+kind      = "growth-ratio"
+template  = "casos/salida_por_llamada.zy.in"
+n         = 60000
+n_by_engine = { zyvm = 400000, zyjs = 40000 }
+factor    = 4
+max_ratio = 6.0
+what      = "a call that writes one element through `<~` costs what the write costs"
+# Measured 2026-10-10: 2000 calls over 16 000 elements were 2 808 M instructions
+# in the tree-walker and 1 204 M in the VM; the same writes in line are 33 M in
+# the tree-walker. An output parameter was copied in and written back, so while
+# the call lasted the caller's variable and the parameter were two owners
+# (GLB-117). Closed the same day — the variable is LENT to the parameter:
+# 55 M and 19 M. zyjs lends too, and writes in place since ZYJS-014 closed.
+why       = "an output parameter that is copied in and written back copies the collection on every call"
+engines   = ["zytw", "zyvm", "zyjs"]
+
+[[case]]
+id        = "growth/sort-with-comparator"
+kind      = "growth-ratio"
+template  = "casos/sort_comparador.zy.in"
+# Sizes chosen so each engine's base run clears the 40 ms floor: after the merge
+# sort the old 500 ran in 16 ms on the tree-walker and 1000 in 8 ms on the VM,
+# which would have measured process start-up. zyjs stays at 500 — larger, and
+# the `$+` that builds the array (ZYJS-014) would be what grows.
+n         = 8000
+n_by_engine = { zyvm = 32000, zyjs = 500 }
+# A sort is n·log n: at ×4 from 2000 the steps are ×4.51 in the tree-walker and
+# ×4.59 in the VM, and the tree-walker's bytes ×4.77. Quadratic would be 16.
+count     = { steps = 5.0, bytes = 5.0 }
+factor    = 4
+max_ratio = 6.0
+what      = "sorting with a comparator of one's own grows as n log n, like the natural order"
+# Measured 2026-10-08: zytw 14.0, zyvm 13.9 — the three engines ran the same
+# bubble sort with no early exit (GLB-108). Corrected 2026-10-09: a bottom-up
+# merge sort, the same call for call in the three, stable by GLB-073's rule B.
+why       = "a sort that visits every pair grows as n²: the bubble sort GLB-108 replaced"
+engines   = ["zytw", "zyvm", "zyjs"]
+
+[[case]]
+id        = "growth/caught-errors"
+kind      = "growth-ratio"
+template  = "casos/errores_capturados.zy.in"
+# The VM catches 1 600 000 in about the time the tree-walker takes for 400 000,
+# so each engine is asked at a size where its own base run clears the floor.
+n         = 400000
+n_by_engine = { zyvm = 1600000, zyjs = 20000 }
+factor    = 4
+max_ratio = 6.0
+what      = "catching an error costs the same on the thousandth turn as on the first"
+# Measured 2026-09-14 before the fix: zytw 19.5 (20 000 → 0.61 s, 80 000 →
+# 11.9 s, and 33 MB → 110 MB). ZYTW-003: every caught error left the scopes it
+# was raised in open, so every later lookup walked all of them.
+why       = "an error that leaves blocks without popping their scopes makes each lookup slower than the last"
+engines   = ["zytw", "zyvm", "zyjs"]
+
+# ── The price of a call ──────────────────────────────────────────────────────
+
+[[case]]
+id        = "call/function-in-hot-loop"
+kind      = "time-ratio"
+subject   = "casos/llamada_por_celda.zy.in"
+control   = "casos/en_linea.zy.in"
+n         = 160
+n_by_engine = { zytw = 64 }
+max_ratio = 1.30
+what      = "a Life generation with a call per cell costs little more than the same code inline"
+# Measured 2026-09-30, side 160, median of 12 interleaved runs: zyvm 1.14,
+# zytw 0.87 (the tree-walker is FASTER with the call: its per-scope cost is
+# lower in a fresh frame). GoL's own bench had said 1.39 for the VM on
+# 2026-09-04; it says 1.22 today, and its call variant also does work the
+# inline one does not, so it overstated the call.
+#
+# What the 14 % is made of, as far as could be measured without a profiler
+# (none on this machine): the call machinery itself is 2-5 % — the same
+# control with an EMPTY five-argument call per cell; preparing and dropping a
+# 34-register frame instead of a 5-register one is ~55 ns of the ~280 ns
+# extra per call; the six auto-free LoadUnits before the callee's `<~` were
+# measured, removed, made no difference, and were put back.
+#
+# Profiled 2026-10-01 with perf (side 160, binaries with symbols and frame
+# pointers): the call is work, not layout — ~1 900 machine instructions and
+# ~1 500 cycles more per call. Over half the gap is dropping Values: tearing
+# down the callee's frame (34 registers, because alloc_temp never reuses a
+# temporary) and the drop every register write makes of the old value. That
+# second cost is ~11 % of the run even inline, so it is not this cell's: it is
+# ZYVM-010 (ZyDDT/HALLAZGOS/zyvm.md), most of it since paid: the frame is no
+# longer filled by cloning Unit nor dropped scalar by scalar (2026-10-09), and a
+# register write no longer drops a scalar (2026-10-10) — 1.04 here that day. The
+# limit catches a regression of the call path; the size of the frame is the
+# next case's.
+why       = "if this climbs, a call in a hot loop got dearer — frame setup, argument copy, or what runs at return"
+
+[[case]]
+id        = "call/frame-as-large-as-every-temporary"
+kind      = "time-ratio"
+subject   = "casos/marco_temporales.zy.in"
+control   = "casos/marco_minimo.zy.in"
+n         = 2000000
+n_by_engine = { zytw = 400000, zyjs = 200000 }
+max_ratio = 1.30
+what      = "a call costs what the function needs at once, not every temporary its body ever asked for"
+# The two programs EXECUTE the same instructions: the function carries a branch
+# that is never taken, with one statement in the control and 64 in the subject,
+# none of which declares a variable. Measured 2026-10-10, 2 000 000 calls:
+# zyvm 280 ms → 815 ms (2.9), zytw 1.00, zyjs 0.98. The compiler's `alloc_temp`
+# only ever advanced `next_reg`, so the frame held a register for every
+# temporary of the whole body, and every call filled that many with Unit on the
+# way in and walked them on the way out. ZYVM-010, the part deferred as R4 and
+# fixed the same day: a statement hands its temporaries back when it ends, and
+# the VM answers 1.02. A register reused while still live is a silent wrong
+# value, which this case cannot see — `ZYMBOL_POISON_TEMPS` is what looks for
+# it (interpreter/crates/zymbol-compiler, `FunctionCtx::poison_temps`).
+why       = "a frame sized by every temporary of the body is prepared and torn down in full on each call"
+engines   = ["zytw", "zyvm", "zyjs"]

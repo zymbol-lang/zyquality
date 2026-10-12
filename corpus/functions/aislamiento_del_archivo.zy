@@ -1,0 +1,53 @@
+// Test: una función con nombre NO ve las variables del archivo. El valor cruza
+// por parámetro, y sólo por parámetro.
+//
+// Tres capítulos, y el archivo lleva los tres porque una regla cuya razón se
+// borró es indistinguible de una que nadie puede justificar:
+//
+//   · hasta v0.0.9 el mismo cuerpo significaba dos cosas según cómo se
+//     alcanzara — `adder(5)` fallaba y `f = adder ; f(5)` contestaba 15.
+//     Dos reglas para una función, ninguna escrita como tal;
+//   · el 2026-08-24 se resolvió la incoherencia unificando hacia CAPTURAR
+//     (ERROR-ZYB-002), con el argumento «una regla en vez de dos». Este archivo
+//     se llamaba `captura_del_archivo.zy` y afirmaba eso;
+//   · el 2026-09-13 se unificó hacia AISLAR, que era la otra salida. MEM-2 de
+//     `zymbol-design/PREMISES.md` lo declara: una variable del ámbito principal
+//     se ve sólo en el ámbito principal. Se midió antes de decidir — cuatro
+//     archivos del corpus la incumplían, todos ellos pruebas de esta misma
+//     regla, y ninguna de las nueve aplicaciones.
+//
+// La lambda sigue capturando y eso NO es una excepción olvidada: se escribe en
+// el punto donde se crea, así que el lector ve a su lado lo que toma. Una
+// función con nombre se define lejos de donde se llama. Hoy avisa; la decisión
+// es aparte.
+
+base = 10
+
+// ── el cruce es el parámetro ───────────────────────────────────────────────
+lee(b) { <~ b }
+>> "1 por parámetro   " lee(base) ¶
+
+// ── y tomada como valor se comporta igual, que es lo que faltaba en v0.0.9 ─
+f = lee
+>> "2 como valor      " f(base) ¶
+
+// ── la escritura de dentro no sale ─────────────────────────────────────────
+escribe(b) { b = 777
+<~ b }
+>> "3 dentro vale     " escribe(base) ¶
+>> "4 y fuera sigue   " base ¶
+
+// ── a cualquier profundidad, y siempre pasando el valor ────────────────────
+hondo(b) { <~ lee(b) }
+>> "5 a dos niveles   " hondo(base) ¶
+
+// ── un parámetro con el nombre del archivo es legítimo: otro entorno fuerte ─
+// MEM-7 prohíbe reusar un nombre DENTRO de un entorno fuerte, no entre dos.
+// Si esto fuera un choque, cuatro módulos importados no podrían convivir.
+tapa(base) { <~ base }
+>> "6 el parámetro    " tapa(1) ¶
+
+// ── no es ámbito dinámico: `lee` no ve el local de quien la llama ──────────
+intermedia(b) { base = 999
+<~ lee(b) }
+>> "7 no es dinámico  " intermedia(50) ¶

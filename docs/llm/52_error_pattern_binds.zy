@@ -1,0 +1,7 @@
+// claim: pattern, `##Parse(msg) => …`, matches an error of that kind and puts its message in
+e = ##Parse("mal escrito")
+r = ?? e {
+    ##Parse(msg) => msg
+    _ => "otro"
+}
+>> r ¶                // → mal escrito

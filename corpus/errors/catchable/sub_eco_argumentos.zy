@@ -1,0 +1,4 @@
+// Subscript de `argumentos_del_subscript.zy`, y un programa por sí mismo:
+// escribe los argumentos con que lo llamaron.
+>< a
+>> a$# " " a ¶

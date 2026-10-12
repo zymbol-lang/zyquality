@@ -1,0 +1,6 @@
+// claim: **A variable never read is a warning.**
+// claim: an unread variable warns
+// verdict: warn
+// says: unused variable 'sobra'
+sobra = 1
+>> "fin" ¶            // → fin

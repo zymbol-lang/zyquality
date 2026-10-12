@@ -1,0 +1,11 @@
+// @reject: decision 15, with an element the analyser cannot type. `p` is a
+// @reject: parameter, so nothing says what it holds — but `9` and "x" are
+// @reject: literals, and they already disagree. The two Rust engines compare
+// @reject: each element with the FIRST and treat an untyped one as compatible
+// @reject: with anything, so they refuse this ("array element 2 has type
+// @reject: String"). The browser engine compared only when it knew every
+// @reject: element's type: one untyped element switched the check off for the
+// @reject: whole literal, and this ran as `[9, x, 1]`. A remainder of DM-04,
+// @reject: found debugging GO on 2026-09-27 (GO/Depurando_GO.md DG-05).
+f(p) { <~ [9, "x", p] }
+>> f(1) ¶

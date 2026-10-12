@@ -1,0 +1,12 @@
+// claim: Strings share the `$` operators, plus: `s$~~["l":"L"]` replace all, `s$~~["l":"L":1]` first N,
+// claim: `s$/ ','` split (char or substring), `s$* 3` repeat, `"x=" $++ n " y=" m` build.
+s = "hello"
+n = 1
+m = 2
+>> (s$~~["l":"L"]) ¶          // → heLLo
+>> (s$~~["l":"L":1]) ¶        // → heLlo
+>> ("a,b"$/ ',') ¶            // → [a, b]
+>> ("ab"$* 3) ¶               // → ababab
+t = "x=" $++ n " y=" m
+>> t ¶                        // → x=1 y=2
+>> s$# ¶                      // → 5

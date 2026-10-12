@@ -1,0 +1,22 @@
+// claim: One file, one closed block. Only imports, the export block, literal-initialised bindings
+// claim: count = 0                  // private state, persists across calls, never exported
+// claim: >> L::add(2,3) ¶     // :: calls a function
+// claim: >> L.PI ¶            // .  reads a constant
+// claim: **A module owns its environment.**
+// file: lib.zy
+# lib {
+    #> { add, PI, get, sube }
+    PI    := 3.14
+    count = 0
+    add(a, b) { <~ a + b }
+    get() { <~ count }
+    sube() { count = count + 1  <~ count }
+}
+// file: main.zy
+<# ./lib => L
+<# ./lib => M
+>> L::add(2, 3) ¶     // → 5
+>> L.PI ¶             // → 3.14
+L::sube()
+M::sube()
+>> L::get() ¶         // → 2

@@ -1,0 +1,5 @@
+// claim: **A condition is a Bool and nothing else.**
+// verdict: error
+// says: a condition must be a Bool, got [Int]
+x = [1, 2]
+? x { >> "SI" ¶ } _ { >> "NO" ¶ }

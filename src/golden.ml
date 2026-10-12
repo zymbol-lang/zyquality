@@ -56,20 +56,9 @@ let strip_warnings (s : string) =
            || l = ""))
   |> String.concat "\n"
 
-(* semantic_compare.sh's `strip_ansi`: sed 's/\x1b\[[0-9;]*m//g'. *)
-let strip_ansi (s : string) =
-  let n = String.length s in
-  let b = Buffer.create n in
-  let i = ref 0 in
-  while !i < n do
-    if s.[!i] = '\027' && !i + 1 < n && s.[!i + 1] = '[' then begin
-      let j = ref (!i + 2) in
-      while !j < n && (s.[!j] = ';' || (s.[!j] >= '0' && s.[!j] <= '9')) do incr j done;
-      if !j < n && s.[!j] = 'm' then i := !j + 1
-      else begin Buffer.add_char b s.[!i]; incr i end
-    end else begin Buffer.add_char b s.[!i]; incr i end
-  done;
-  Buffer.contents b
+(* semantic_compare.sh's `strip_ansi`, now in Compare beside the rest of the
+   diagnostic normalisation, so there is one of it. *)
+let strip_ansi = Compare.strip_ansi
 
 (* Both scripts captured with `$(...)`, which drops trailing newlines from the
    command's output and from `cat`ting the golden.  Reproduce it on both sides

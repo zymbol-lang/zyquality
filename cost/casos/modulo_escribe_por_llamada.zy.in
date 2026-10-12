@@ -1,0 +1,7 @@
+// «N» calls that each WRITE one cell of a module's state of «N» cells — the
+// shape of a module with an API (`tablero::poner(i, v)`). Linear when a call
+// costs what the cell costs; quadratic when it costs the size of the state.
+<# ./mod/mesa => M
+M::crear(«N»)
+@ k:1..«N» { M::poner((k % «N») + 1, k) }
+>> M::leer(1) + M::cuanto() ¶

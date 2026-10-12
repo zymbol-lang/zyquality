@@ -1,0 +1,9 @@
+// claim: `##.x` Float, `###x` Int (round),
+// claim: `##!x` Int (truncate; `Char`→code point), `##'x` Char (an Int code point → its character;
+x = 2.7
+n = 65
+>> ###x ¶             // → 3
+>> ##!x ¶             // → 2
+>> ##.n + 0.5 ¶       // → 65.5
+>> ##'n ¶             // → A
+>> ##!'A' ¶           // → 65

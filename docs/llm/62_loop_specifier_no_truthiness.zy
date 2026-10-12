@@ -1,0 +1,9 @@
+// claim: A specifier that is neither Int nor Bool (array, float) is a runtime error in all three
+// claim: engines — there is no truthiness.
+// verdict: error
+// says: loop expects a count or a condition
+vuelta(v) {
+    @ v { <~ "entra" }
+    <~ "sale"
+}
+>> vuelta([1, 2]) ¶

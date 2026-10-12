@@ -1,1 +1,5 @@
-Runtime error: module 'm' does not export function 'not_exported_fn'
+[1m[31merror[39m[0m: module 'm' does not export function 'not_exported_fn'
+  [1m[34m-->[39m[0m errors/runtime/E012_no_export.zy:3:4
+[1m[34m   3[39m[0m [34m|[39m
+[1m[34m   3[39m[0m [34m|[39m >> m::not_exported_fn() ¶
+[34m     |[39m [1m[31m   ^^^^^^^^^^^^^^^^^^^^[39m[0m

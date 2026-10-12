@@ -1,0 +1,6 @@
+error: 'externa' is read from outside this function
+  --> errors/semantic/funcion_lee_el_archivo.zy:21:12
+  21 |
+  21 | lee() { <~ externa }
+     |            ^^^^^^^
+  = help: a function is a self-contained space: a value crosses into it as a parameter, never by being in view — pass 'externa' as one

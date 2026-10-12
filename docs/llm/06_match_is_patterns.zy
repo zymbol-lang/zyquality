@@ -1,0 +1,9 @@
+// claim: **`??` is pattern matching, never a boolean chain.**
+grade(score) {
+    <~ ?? score {
+        < 0 => "neg"
+        90..100 => "A"
+        _ => "F"
+    }
+}
+>> grade(-1) " " grade(95) " " grade(50) ¶    // → neg A F

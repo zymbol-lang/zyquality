@@ -1,0 +1,33 @@
+// A block lambda that ends without `<~` gives `##_`, as a named function does
+// (ZYTW-015). The tree-walker alone used to abort here — `block lambda must use
+// <~ to return value` — on the natural shape of a callback, while the VM and
+// the browser engine went on.
+
+// called for its effect
+lam = () -> { >> "efecto" ¶ }
+lam()
+>> "sigo" ¶
+
+// its value is Unit, like the named form's
+f() { >> "con nombre" ¶ }
+v = lam()
+w = f()
+>> (v == ##_) " " (w == ##_) ¶
+
+// a `<~` on one path only
+signo = x -> { ? x > 0 { <~ "pos" } }
+>> signo(1) ¶
+u = signo(-1)
+>> (u == ##_) ¶
+
+// as the callback of a higher-order operator
+xs = [1, 2, 3]
+ys = xs$> (x -> { >> "visto " x ¶ })
+>> ys$# ¶
+
+// and inside a function, taken as a value
+aplica(g, n) {
+    g(n)
+    <~ n + 1
+}
+>> aplica(x -> { >> "dentro " x ¶ }, 7) ¶

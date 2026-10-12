@@ -1,0 +1,7 @@
+// The control: identical work, both aggregates alive at the last statement, so
+// auto-free may NOT release either. Peak should be ~two arrays.
+a = []
+@ i:1..2000000 { a$+ i }
+b = []
+@ i:1..2000000 { b$+ i }
+>> a$# " " b$# ¶

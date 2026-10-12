@@ -1,0 +1,5 @@
+// claim: **The reachable program is static.**
+// verdict: error
+x = 1
+<# std/math => M
+>> M::abs(x) ¶

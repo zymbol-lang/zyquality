@@ -1,0 +1,10 @@
+warning: type mismatch: 'm' was String but assigned Int
+  --> errors/semantic/iterador_cambia_el_tipo.zy:11:1
+
+warning: type mismatch: 't' was Int but assigned Char
+  --> errors/semantic/iterador_cambia_el_tipo.zy:17:1
+
+warning: type mismatch: 'r' was String but assigned Int
+  --> errors/semantic/iterador_cambia_el_tipo.zy:23:1
+
+Checked with 3 warning(s)

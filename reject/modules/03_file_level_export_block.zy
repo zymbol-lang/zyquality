@@ -9,8 +9,10 @@
 // @reject: A module path whose last component starts with a digit fails to lex in
 // @reject: every engine (`expected module path` in Rust, `Expected IDENT, got '0'`
 // @reject: in JS), so such a file is refused for the path and never reaches the
-// @reject: rule under test. 02_computed_module_initializer.zy has that defect
-// @reject: today: all three engines reject it at line 14 for its `./02_…` path,
-// @reject: not for the computed initialiser it claims to test. Found 2026-08-31.
+// @reject: rule under test. 02 and 04 had that defect — found 2026-08-31 and
+// @reject: written down HERE, in the file that got it right, where it sat
+// @reject: unacted-on. Their modules were renamed 2026-09-19 (step 3.7): 02 now
+// @reject: reaches E013 and 04 reaches E014, in all three engines. The rule
+// @reject: stands: an imported module file takes no numeric prefix.
 <# ./export_block_at_file_level_m => m
 >> m::publica() ¶
