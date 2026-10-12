@@ -16,6 +16,7 @@
   <img src="https://img.shields.io/badge/corpus-661%20files-brightgreen?style=flat-square"/>
   <img src="https://img.shields.io/badge/goldens-659-brightgreen?style=flat-square"/>
   <img src="https://img.shields.io/badge/engines-3-brightgreen?style=flat-square"/>
+  <a href="https://zymbol-lang.org"><img alt="web: zymbol-lang.org" src="https://img.shields.io/badge/web-zymbol--lang.org-7c3aed?style=flat-square"/></a>
 </p>
 
 ---
