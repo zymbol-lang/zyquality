@@ -1,0 +1,4 @@
+// claim: `#|"४२"|` → `42` (69 digit scripts, fail-safe:
+// claim: returns the input unchanged on failure)
+>> #|"४२"| ¶          // → 42
+>> #|"hola"| ¶        // → hola

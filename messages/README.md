@@ -32,9 +32,31 @@ pudre; éste medía 1183 diferencias y llevaba meses callado.
 
 ```bash
 python3 zyquality/messages/extract.py             # compara contra baseline.txt
-python3 zyquality/messages/extract.py --baseline  # regraba (deliberadamente)
+python3 zyquality/messages/extract.py --prune     # quita lo que ya no es de un solo lado; sólo quita
+python3 zyquality/messages/extract.py --baseline  # regraba entera (deliberadamente)
 ./zyq suite --only messages                       # lo mismo, dentro del gate
 ```
+
+### Desde el 2026-10-02: una entrada muerta es roja
+
+Una entrada de la superficie compartida que **ya no es de un solo lado** pone el
+gate en rojo hasta que se quita, con `--prune`, que sólo puede quitar y por eso no
+puede absorber nada. Antes se informaba como mejora (`↑ N cerrada(s)`) y nada la
+quitaba: la base no se regrababa entera desde el 2026-08-27, y el 2026-10-01
+llevaba **437 entradas muertas de 896** — 346 en la superficie compartida, cada
+una una puerta abierta: mientras está en la lista, ese mensaje puede volver a
+partirse y el gate lo acepta en silencio. Es la regla de `STALE WORDING` en ZyDDT
+(GLB-040).
+
+El mismo día el escáner aprendió a no cosechar lo que **no es un mensaje**: el
+argumento de `TokenKind::Error(…)` — la carga de un token de error, que el parser
+descarta como cascada del diagnóstico del lexer y `run` no llega a ver — y el de
+`unreachable!`, `panic!` y `.expect`, que son invariantes del motor. Sacó 14
+entradas compartidas que eran eso (`unterminated string`, `invalid operator '!='`,
+`parse_bash_exec_expr called on non-BashOpen token`…).
+
+Estado medido ese día: **447 entradas, 221 en la superficie compartida** (185 sólo
+Rust, 36 sólo zyjs). La cifra que imprimía el gate, 581, contaba las muertas.
 
 **La cifra que importa es la superficie COMPARTIDA.** Rust implementa cosas que
 `zymbol.js` no tiene ni debe tener —el CLI, el REPL, el empaquetador, el

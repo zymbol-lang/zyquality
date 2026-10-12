@@ -1,0 +1,20 @@
+error: 'H' is read from outside this function
+  --> errors/semantic/funcion_lee_lo_desestructurado.zy:18:17
+  18 |
+  18 | de_tupla() { <~ H$# }
+     |                 ^
+  = help: a function is a self-contained space: a value crosses into it as a parameter, never by being in view — pass 'H' as one
+
+error: 'V' is read from outside this function
+  --> errors/semantic/funcion_lee_lo_desestructurado.zy:19:17
+  19 |
+  19 | de_array() { <~ V }
+     |                 ^
+  = help: a function is a self-contained space: a value crosses into it as a parameter, never by being in view — pass 'V' as one
+
+error: 'R' is read from outside this function
+  --> errors/semantic/funcion_lee_lo_desestructurado.zy:20:17
+  20 |
+  20 | de_resto() { <~ R$# }
+     |                 ^
+  = help: a function is a self-contained space: a value crosses into it as a parameter, never by being in view — pass 'R' as one

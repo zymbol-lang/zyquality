@@ -1,0 +1,6 @@
+// claim: **Lifetime is explicit or invisible**
+// verdict: error
+// says: use after destruction
+x = 1
+\ x
+\ x

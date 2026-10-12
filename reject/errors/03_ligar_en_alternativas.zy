@@ -1,0 +1,8 @@
+// @reject: a pattern that names an error's message stands alone in its arm:
+// @reject: `m` would not exist when the other alternative matched. `##A(_) ||
+// @reject: ##B` is fine. Decided with the pattern, 2026-09-29 (D7, GAP-GOL-016).
+r = ##A("x")
+?? r {
+    ##A(m) || ##B(m) => { >> m ¶ }
+    _                => { >> "o" ¶ }
+}

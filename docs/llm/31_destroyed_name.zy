@@ -1,0 +1,7 @@
+// claim: \ x               // explicit destruction; use after this is a lifetime error
+// claim: `\ x` destroys and a later use aborts
+// verdict: error
+// says: use after destruction
+x = [1, 2]
+\ x
+>> x ¶

@@ -186,10 +186,22 @@ let subst ~file ~exe s =
    has the engines racing over the same paths, and the loser reports a
    divergence that says nothing about the language.  Isolation makes the
    comparison about the program, not about who got there first. *)
+(* Data a program reads from beside it, copied into every sandbox before it
+   runs (`--fixture`, declared per application in project/apps.toml).  A suite
+   that reads `源文件/计算器.zy` relative to where it runs found an empty
+   directory here, and ZyAudit's goldens recorded the shell's "No such file" as
+   if it were the audit (D9, 2026-09-30).  Copied rather than run in place, so
+   what a suite writes still lands in the scratch directory and nowhere else. *)
+let fixtures : string list ref = ref []
+
 let sandbox_of () =
   let d = Filename.concat (Filename.get_temp_dir_name ())
       (Printf.sprintf "zyq_%d_%d" (Unix.getpid ()) (Random.bits ())) in
   (try Unix.mkdir d 0o700 with Unix.Unix_error (Unix.EEXIST, _, _) -> ());
+  List.iter (fun f ->
+      if Sys.command (Filename.quote_command "cp" [ "-R"; f; d ]) <> 0 then
+        Printf.eprintf "zyq: could not copy fixture %s\n%!" f)
+    !fixtures;
   d
 
 let rec rm_rf path =
@@ -238,6 +250,21 @@ let argv_for (e : engine) (how : how) =
 
 let can (e : engine) (how : how) = argv_for e how <> []
 
+(* The argv one engine runs one file with.  One place, for the sequential
+   runner and the parallel one: `{keys}` was first expanded in only one of them,
+   and every golden taken through the other ran `zymbol run {keys} x.zy`.
+
+   `{keys}` is `--keys x.keys` when a key script sits beside `x.zy`, and nothing
+   otherwise — the way `x.input` becomes stdin.  A full-screen program then runs
+   on a virtual screen and leaves its last frame as output (D11). *)
+let argv_of (e : engine) (how : how) ~(file : string) =
+  let exe = Filename.remove_extension file ^ ".exe" in
+  let keys = Filename.remove_extension file ^ ".keys" in
+  List.concat_map (fun a ->
+      if a = "{keys}" then (if Sys.file_exists keys then [ "--keys"; keys ] else [])
+      else [ subst ~file ~exe a ])
+    (argv_for e how)
+
 (* Run one engine over one file.  [timeout] is seconds; the coreutils `timeout`
    does the enforcing, which keeps signal handling out of this process.
 
@@ -258,8 +285,7 @@ let can (e : engine) (how : how) = argv_for e how <> []
 let run ?(timeout = 10) ?stdin_file ?(how : how = `Run) ?(merge = false)
     (e : engine) ~(file : string) : result =
   let file = if Filename.is_relative file then Filename.concat (Sys.getcwd ()) file else file in
-  let exe = Filename.remove_extension file ^ ".exe" in
-  let argv = List.map (subst ~file ~exe) (argv_for e how) in
+  let argv = argv_of e how ~file in
   match argv with
   | [] -> { eid = e.id; stdout = ""; stderr = "no command for this mode"; code = 127;
             wall_ms = 0.0; status = Unavailable }
@@ -321,8 +347,7 @@ let run_all ?(timeout = 10) ?stdin_file ?(how : how = `Run) ?(merge = false)
   let file = if Filename.is_relative file then Filename.concat (Sys.getcwd ()) file else file in
   let started =
     List.map (fun e ->
-        let exe = Filename.remove_extension file ^ ".exe" in
-        let argv = List.map (subst ~file ~exe) (argv_for e how) in
+        let argv = argv_of e how ~file in
         match argv with
         | [] -> (e, None)
         | _ ->

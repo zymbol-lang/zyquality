@@ -1,0 +1,7 @@
+ok: «hola»
+##IO: exit 3
+##IO: exit 2: por stderr
+##IO: exit 4: por stdout
+ok: «»
+##IO: exit 3: hola
+lanzado como ##Div

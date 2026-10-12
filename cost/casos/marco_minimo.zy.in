@@ -1,0 +1,15 @@
+// cost/marco_minimo — el control de `marco_temporales.zy.in`: la misma función,
+// con una sola sentencia en la rama que nunca se ejecuta. Mismas llamadas,
+// mismas operaciones ejecutadas, misma salida.
+
+paso(x, a, b) {
+    ? x < 0 {
+        >> ((x + a) * (b + 1) - (a * 2 + b)) % 97 ¶
+    }
+    <~ x + a
+}
+
+N := «N»
+s = 0
+@ i:1..N { s = paso(i % 7, s % 3, 2) % 1000 }
+>> s ¶

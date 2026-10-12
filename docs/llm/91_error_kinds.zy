@@ -1,0 +1,10 @@
+// claim: Kinds: `##Div` `##Index` `##Key` `##Range` (numeric limits) `##Type` `##Parse` `##IO`
+clase(v) {
+    !? { <~ v() } :! ##Div { <~ "Div" } :! ##Index { <~ "Index" } :! ##Key { <~ "Key" } :! ##Type { <~ "Type" } :! { <~ "otra" }
+}
+a = [1]
+d = #(k: 1)
+>> clase(() -> 1 / 0) ¶           // → Div
+>> clase(() -> a[9]) ¶            // → Index
+>> clase(() -> d["nada"]) ¶       // → Key
+>> clase(() -> !a) ¶              // → Type

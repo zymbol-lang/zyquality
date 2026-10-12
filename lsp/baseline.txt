@@ -25,9 +25,10 @@ corpus/modules_scope/circ_mod_b.zy	LSP-ONLY
 corpus/modules_scope/circ_mod_c.zy	LSP-ONLY
 corpus/modules_scope/test_circular_modules.zy	LSP-ONLY
 
-# Reaching for something a module does not export — E006, E008, E010, E012.
-corpus/errors/runtime/E008_private_access.zy	LSP-ONLY
-corpus/errors/runtime/E012_no_export.zy	LSP-ONLY
+# Re-exporting something the source module does not export — E006, E007,
+# E010. A re-export is not an expression, so the type checker does not see it.
+# Calling or reading one (E008, E012) left this list on 2026-09-26: since
+# ZYVM-008 both the CLI and the LSP refuse it, in the same words.
 corpus/errors/semantic/E006_reexport_missing.zy	LSP-ONLY
 corpus/errors/semantic/E007_reexport_type.zy	LSP-ONLY
 corpus/errors/semantic/E010_reexport_private.zy	LSP-ONLY

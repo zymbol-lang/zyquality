@@ -1,0 +1,4 @@
+// claim: `"a" + b` is a type error.
+// verdict: error
+b = 2
+>> ("a" + b) ¶

@@ -1,0 +1,92 @@
+// The module of `destruir_estado.zy`: three variables of state, and every way
+// one of its functions can end one, read one, and give one back.
+# destruir_estado_m {
+    #> { destruye, lee, escribe, comparten, destruye_y_lee, destruye_y_escribe, mostrar, rama, param, lam, interp, largo, indice, arg, suma, lista, edita, edita2, recorre, presta, renace, bucle }
+    c = "inicio"
+    v = [1, 2, 3]
+    n = 5
+
+    destruye() {
+        \ c
+        <~ "destruida"
+    }
+    lee() { <~ c }
+    escribe(x) {
+        c = x
+        <~ c
+    }
+    _pone() { c = "de la hermana" }
+    comparten() {
+        c = "propia"
+        _pone()
+        <~ c
+    }
+    destruye_y_lee() {
+        \ c
+        <~ c
+    }
+    destruye_y_escribe() {
+        \ c
+        c = "renacida"
+        <~ c
+    }
+    mostrar() {
+        !? { <~ c } :! { <~ "no hay c" }
+    }
+    rama(k) {
+        ? k > 0 { \ c }
+        <~ "rama"
+    }
+    param(c) {
+        \ c
+        <~ "param"
+    }
+    lam() {
+        g = () -> {
+            \ c
+            <~ "lam"
+        }
+        <~ g()
+    }
+    interp() { <~ "<{c}>" }
+    _id(x) { <~ x }
+    arg() { <~ _id(c) }
+    lista() {
+        \ v
+        <~ "sin v"
+    }
+    largo() { <~ v$# }
+    indice() { <~ v[1] }
+    suma() {
+        \ n
+        n += 1
+        <~ n
+    }
+    edita() {
+        v$+ 4
+        <~ v$#
+    }
+    edita2() {
+        v[1]$~ 9
+        <~ v[1]
+    }
+    recorre() {
+        s = 0
+        @ x:v { s += x }
+        <~ s
+    }
+    _mas(a<~) { a$+ 1 }
+    presta() {
+        _mas(v<~)
+        <~ v$#
+    }
+    renace() {
+        (v, n) = ([7], 1)
+        <~ v$# + n
+    }
+    bucle() {
+        \ n
+        @ n:1..3 { v$+ n }
+        <~ n
+    }
+}

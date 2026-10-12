@@ -1,18 +1,21 @@
-[1m[31merror[39m[0m: unexpected '(' at statement level
-  [1m[34m-->[39m[0m collections/22_sort_named.zy:11:20
-[1m[34m  11[39m[0m [34m|[39m
-[1m[34m  11[39m[0m [34m|[39m by_age = people$^+ (a, b -> a.age < b.age)
-[34m     |[39m [1m[31m                   ^[39m[0m
-  [1m[32m= help:[39m[0m use '(a, b) = expr' for tuple destructuring
-[1m[31merror[39m[0m: unexpected '(' at statement level
-  [1m[34m-->[39m[0m collections/22_sort_named.zy:19:27
-[1m[34m  19[39m[0m [34m|[39m
-[1m[34m  19[39m[0m [34m|[39m by_score_desc = people$^- (a, b -> a.score > b.score)
-[34m     |[39m [1m[31m                          ^[39m[0m
-  [1m[32m= help:[39m[0m use '(a, b) = expr' for tuple destructuring
-[1m[31merror[39m[0m: unexpected '(' at statement level
-  [1m[34m-->[39m[0m collections/22_sort_named.zy:28:21
-[1m[34m  28[39m[0m [34m|[39m
-[1m[34m  28[39m[0m [34m|[39m by_name = people$^+ (a, b -> a.name < b.name)
-[34m     |[39m [1m[31m                    ^[39m[0m
-  [1m[32m= help:[39m[0m use '(a, b) = expr' for tuple destructuring
+Sort by Age ascending
+Age|Name|Score
+22|Zara|88
+24|Luna|95
+29|Omar|74
+31|Mia|60
+35|Inti|72
+Sort by Score descending
+Score|Name|Age
+95|Luna|24
+88|Zara|22
+74|Omar|29
+72|Inti|35
+60|Mia|31
+Sort by Name ascending
+Name|Age|Score
+Inti|35|72
+Luna|24|95
+Mia|31|60
+Omar|29|74
+Zara|22|88

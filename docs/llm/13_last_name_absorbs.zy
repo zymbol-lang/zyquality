@@ -1,0 +1,4 @@
+// claim: **The last name of a destructuring pattern absorbs the remainder**
+// claim: `(a,b,c) = (1,2,3,4,5)` gives `c = (3,4,5)`.
+(a, b, c) = (1, 2, 3, 4, 5)
+>> a " " b " " c ¶    // → 1 2 (3, 4, 5)

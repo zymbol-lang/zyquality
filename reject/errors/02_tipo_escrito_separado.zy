@@ -1,0 +1,7 @@
+// @reject: the constructor is written together, like every operator since
+// @reject: GLB-031: `## Parse("x")` and `##Parse ("x")` are refused with the
+// @reject: constructor's own diagnostic. The browser engine used to report
+// @reject: `undefined variable '##'` for the first (2026-09-29).
+a = ## Parse("x")
+b = ##Parse ("x")
+>> a b ¶

@@ -171,3 +171,104 @@ let first_difference a b =
     | [], y :: _ -> Some (i, "<no line>", y)
   in
   go 1 la lb
+
+(* -------------------------------------------------------- diagnostic text *)
+
+(* What an engine says ABOUT a program — stderr — normalised the way ZyDDT
+   normalises it (ZyDDT/engines.toml, [normalise]), so `--strict` and
+   `--audit-exclusions` compare what the engines said and not how each one drew
+   it.  Without this, every diagnostic of the Rust CLI and of the browser
+   engine differed by construction: the CLI writes ANSI colour into a pipe and
+   draws the source line under every message, and the browser engine does
+   neither.  That difference was answered with exclusions — eight ANSI_FORMAT
+   rules — and an exclusion compared this way can never expire, so they hid
+   four real divergences behind a reason that was about colour.
+
+   Applied to stderr only.  stdout is what the program printed, and some
+   programs print escapes on purpose: the TUI cases are made of them. *)
+
+(* `sed 's/\x1b\[[0-9;]*m//g'` *)
+let strip_ansi (s : string) =
+  let n = String.length s in
+  let b = Buffer.create n in
+  let i = ref 0 in
+  while !i < n do
+    if s.[!i] = '\027' && !i + 1 < n && s.[!i + 1] = '[' then begin
+      let j = ref (!i + 2) in
+      while !j < n && (s.[!j] = ';' || (s.[!j] >= '0' && s.[!j] <= '9')) do incr j done;
+      if !j < n && s.[!j] = 'm' then i := !j + 1
+      else begin Buffer.add_char b s.[!i]; incr i end
+    end else begin Buffer.add_char b s.[!i]; incr i end
+  done;
+  Buffer.contents b
+
+let is_blank c = c = ' ' || c = '\t' || c = '\r'
+
+(* `  12 | >> x ¶` and `     |    ^^^`: the excerpt the Rust engines draw under a
+   diagnostic.  The same fact drawn twice. *)
+let is_excerpt (l : string) =
+  let n = String.length l in
+  let i = ref 0 in
+  while !i < n && is_blank l.[!i] do incr i done;
+  while !i < n && is_digit l.[!i] do incr i done;
+  while !i < n && is_blank l.[!i] do incr i done;
+  !i < n && l.[!i] = '|'
+
+(* `--> path:12:4`, `--> path:12` and `--> line 12` all become `--> 12`.  The
+   path is where the corpus sits on this machine; the column only two of the
+   three engines can produce (ZyDDT: keep_location = "line", compare_column =
+   false).  A location this does not recognise is kept, never dropped. *)
+let normalise_location (l : string) =
+  let t = String.trim l in
+  let n = String.length t in
+  if n < 3 || String.sub t 0 3 <> "-->" then None
+  else begin
+    let rest = String.trim (String.sub t 3 (n - 3)) in
+    let all_digits s = s <> "" && String.for_all is_digit s in
+    if String.length rest > 5 && String.sub rest 0 5 = "line " then
+      Some ("--> " ^ String.trim (String.sub rest 5 (String.length rest - 5)))
+    else
+      match List.rev (String.split_on_char ':' rest) with
+      | col :: line :: _ :: _ when all_digits col && all_digits line -> Some ("--> " ^ line)
+      | line :: _ :: _ when all_digits line -> Some ("--> " ^ line)
+      | _ -> Some ("--> " ^ rest)
+  end
+
+(* A path inside the text of a message becomes its last component: an absolute
+   path, or one ending in `.zy` (ZyDDT's PATHISH).  `failed to parse module …
+   in '/home/…/m/x.zy'` against `… in 'm/x.zy'` was one engine printing an
+   absolute path and another a relative one.  A module name like `std/math` is
+   neither, and is information, so it is kept. *)
+let normalise_paths (s : string) =
+  let n = String.length s in
+  let pathish c =
+    (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || is_digit c
+    || c = '_' || c = '.' || c = '~' || c = '-' || c = '/' || Char.code c >= 0x80
+  in
+  let b = Buffer.create n in
+  let i = ref 0 in
+  while !i < n do
+    if pathish s.[!i] then begin
+      let j = ref !i in
+      while !j < n && pathish s.[!j] do incr j done;
+      let tok = String.sub s !i (!j - !i) in
+      let last = match String.rindex_opt tok '/' with
+        | Some k -> String.sub tok (k + 1) (String.length tok - k - 1)
+        | None -> tok
+      in
+      let absolute = String.length tok > 1 && tok.[0] = '/' in
+      let zy = Filename.check_suffix tok ".zy" && String.contains tok '/' in
+      Buffer.add_string b (if last <> "" && (absolute || zy) then last else tok);
+      i := !j
+    end else begin Buffer.add_char b s.[!i]; incr i end
+  done;
+  Buffer.contents b
+
+let normalise_diagnostics (s : string) =
+  String.split_on_char '\n' (strip_ansi s)
+  |> List.filter_map (fun l ->
+      if String.trim l = "" || is_excerpt l then None
+      else match normalise_location l with
+        | Some loc -> Some loc
+        | None -> Some (normalise_paths (String.trim l)))
+  |> String.concat "\n"

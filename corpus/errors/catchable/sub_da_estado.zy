@@ -1,0 +1,4 @@
+// Subscript de `estado_de_salida.zy`, y un programa por sí mismo: escribe y
+// termina dando el estado 3.
+>> "hola" ¶
+<~ 3

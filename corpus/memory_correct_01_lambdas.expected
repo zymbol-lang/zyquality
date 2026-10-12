@@ -1,6 +1,19 @@
-[1m[31merror[39m[0m: undefined variable 'first'
-  [1m[34m-->[39m[0m memory_correct_01_lambdas.zy:44:13
-[1m[34m  44[39m[0m [34m|[39m
-[1m[34m  44[39m[0m [34m|[39m     <~ func(first)
-[34m     |[39m [1m[31m            ^^^^^[39m[0m
-  [1m[32m= help:[39m[0m variables must be defined before use
+=== Correct Lambda Usage ===
+Lambdas receive all data via parameters
+--- Test 1: Simple lambda with parameter ---
+double(5) = 10
+Expected: 10
+--- Test 2: Lambda with multiple parameters ---
+add(3, 7) = 10
+Expected: 10
+--- Test 3: Using lambda as multiplier factory ---
+make_multiplier(10, 5) = 50
+make_multiplier(3, 7) = 21
+Expected: 50 and 21
+--- Test 4: Higher-order function ---
+apply_twice(increment, 5) = 7
+Expected: 7
+--- Test 5: Lambda with calculation ---
+calculate(100, 20, 5) = 125
+Expected: 125
+=== All tests passed! ===

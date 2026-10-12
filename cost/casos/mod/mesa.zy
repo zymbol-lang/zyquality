@@ -1,0 +1,11 @@
+# mesa {
+    #> { crear, leer, poner, cuanto }
+    t = []
+
+    // A module with an API: the state is touched one cell per call, from
+    // outside. A call costs what the cell costs, whatever the size of `t`.
+    crear(n) { @ i:1..n { t$+ 0 } }
+    leer(i) { <~ t[i] }
+    poner(i, v) { t[i]$~ v }
+    cuanto() { <~ t$# }
+}

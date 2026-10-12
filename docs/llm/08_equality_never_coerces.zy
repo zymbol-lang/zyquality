@@ -1,0 +1,4 @@
+// claim: **`==` never coerces; ordering does.**
+// claim: no coercion in `==`
+>> ("5" == 5) ¶       // → #0
+>> ("5" > 4) ¶        // → #1

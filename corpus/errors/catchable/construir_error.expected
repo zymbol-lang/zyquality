@@ -1,0 +1,10 @@
+##Parse(regla vacía)
+##Regla(demasiado larga: B3/S23x)
+B3
+#1 #1 #0
+(##Parse, 11, ##Parse(regla vacía))
+usada: B3
+##Parse(regla vacía)
+sigue: ##IO(no lanzado)
+##Parse(línea 3)
+##Κανόνας(κενός)

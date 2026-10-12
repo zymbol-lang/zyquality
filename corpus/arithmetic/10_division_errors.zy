@@ -6,8 +6,10 @@
     >> "div zero caught" ¶
 }
 
-// Modulo by zero: WT panics (Rust panic), VM raises ##Div
-// → No testar modulo by zero aquí (comportamiento difiere)
+// Modulo by zero is a ##Div in every engine; it is tested in
+// 15_mixed_int_float.zy (int, float and mixed) and in ZyDDT's
+// runtime-operators/modulo-by-zero. The note that used to be here said the
+// tree-walker panicked, which stopped being true long before it was removed.
 
 // Verificar que div normal funciona post-error
 r = 20 / 4

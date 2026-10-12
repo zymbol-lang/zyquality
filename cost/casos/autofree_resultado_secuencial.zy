@@ -1,0 +1,10 @@
+// Two such results, one after the other: the first is dead once its statement
+// ends, so the second may reuse its ground. Peak should be ~one array.
+big() {
+    a = []
+    @ i:1..2000000 { a$+ i }
+    <~ a
+}
+x = big()$#
+y = big()$#
+>> x + y ¶

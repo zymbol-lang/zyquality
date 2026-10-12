@@ -1,0 +1,6 @@
+// claim: arity
+// claim: checked statically
+// verdict: error
+f(a, b) { <~ a + b }
+>> "antes" ¶
+>> f(1) ¶

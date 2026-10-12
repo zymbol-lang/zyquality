@@ -1,0 +1,4 @@
+// claim: A bare iterator that is only read does not warn.
+// quiet: yes
+@ i:1..3 { >> i }
+>> ¶                  // → 123

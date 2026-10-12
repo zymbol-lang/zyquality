@@ -1,0 +1,4 @@
+// claim: `>>?` returns a **tuple** → `(H, W) = >>?`.
+// claim: `(H,W) = >>?` size (`(24,80)` with no tty)
+(H, W) = >>?
+>> H " " W ¶          // → 24 80

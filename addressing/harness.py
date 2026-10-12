@@ -78,9 +78,17 @@ def engines() -> list[tuple[str, list[str]]]:
 
 
 def expand(argv: list[str], f: Path) -> list[str]:
-    """`${NAME:-default}` from the environment, `{file}` from the case."""
+    """`${NAME:-default}` from the environment, `{file}` from the case.
+
+    `{keys}` is dropped: it becomes `--keys x.keys` in `zyq` only when a key
+    script sits beside the program (D11), and no cell here has one. Passed on
+    literally, every engine answered "failed to read file: {keys}" — which this
+    harness counted as twelve refusals of legal programs.
+    """
     out = []
     for a in argv:
+        if a == "{keys}":
+            continue
         if a.startswith("${") and a.endswith("}"):
             body = a[2:-1]
             name, _, default = body.partition(":-")

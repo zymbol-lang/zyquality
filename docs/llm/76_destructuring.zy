@@ -1,0 +1,16 @@
+// claim: **Destructuring** — the pattern's bracket shape is enforced, and the **last name absorbs
+// claim: (a, b, *c) = (1,2,3)       // c = (3) — '*' forces a collection, always
+// claim: #(name: n, age: y) = person // dictionary destructuring
+[p, q, r] = [1, 2, 3, 4, 5]
+>> r ¶                // → [3, 4, 5]
+(a, b, c) = (1, 2)
+>> (c == ##_) ¶       // → #1
+(d, e, f) = (1, 2, 3)
+>> d e f ¶            // → 123
+(g, h, *resto) = (1, 2, 3)
+>> g h " " resto ¶    // → 12 (3)
+[solo] = [1, 2, 3]
+>> solo ¶             // → [1, 2, 3]
+person = #(name: "Ana", age: 25)
+#(name: n, age: y) = person
+>> n " " y ¶          // → Ana 25

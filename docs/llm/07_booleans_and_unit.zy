@@ -1,0 +1,6 @@
+// claim: **Booleans are `#1` / `#0`. There is no null.**
+// claim: Absence is `##_` (Unit).
+nada() { }
+v = nada()
+>> (1 == 1) " " (1 == 2) ¶    // → #1 #0
+>> (v == ##_) ¶               // → #1

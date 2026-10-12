@@ -1,0 +1,4 @@
+// claim: `m[i][j]` is refused by name.
+// verdict: error
+m = [[1, 2], [3, 4]]
+>> m[1][2] ¶

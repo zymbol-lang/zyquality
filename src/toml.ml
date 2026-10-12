@@ -106,6 +106,19 @@ let read_file path =
   let s = really_input_string ic n in
   close_in ic; s
 
+(* Everything [ic] has left to give.  [read_file] cannot do this for a process:
+   [in_channel_length] means nothing on a pipe.  [In_channel.input_all] is
+   OCaml 4.14, and the compiler a CI runner installs from apt is 4.13 — which
+   is how this tool stopped building there (GLB-126). *)
+let read_channel ic =
+  let b = Buffer.create 4096 and chunk = Bytes.create 4096 in
+  let rec go () =
+    let n = input ic chunk 0 (Bytes.length chunk) in
+    if n > 0 then (Buffer.add_subbytes b chunk 0 n; go ())
+  in
+  go ();
+  Buffer.contents b
+
 let is_table_header l =
   let n = String.length l in
   n > 4 && String.sub l 0 2 = "[[" && String.sub l (n - 2) 2 = "]]"

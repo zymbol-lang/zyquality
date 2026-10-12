@@ -1,0 +1,6 @@
+# almacen {
+    #> { llenar, cuanto }
+    datos = []
+    llenar(n) { @ i:1..n { datos$+ i } }
+    cuanto() { <~ datos$# }
+}

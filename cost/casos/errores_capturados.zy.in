@@ -1,0 +1,8 @@
+// A loop that catches one error per turn. What it measures is the turn after
+// the catch: if the catch leaves anything behind, the next lookup of `c` pays
+// for all of it.
+c = 0
+@ _i:1..«N» {
+    !? { >> 10 / 0 ¶ } :! { c += 1 }
+}
+>> c ¶

@@ -1,0 +1,9 @@
+// claim: `@!` break, `@>` continue. Labels: `@:outer i:1..4 { … @:outer! … @:outer> }`.
+@:outer i:1..4 {
+    @ j:1..4 {
+        ? j == 2 { @:outer> }
+        ? i == 3 { @:outer! }
+        >> i j " "
+    }
+}
+>> ¶                  // → 11 21

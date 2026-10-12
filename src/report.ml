@@ -91,10 +91,13 @@ let record t (o : Consensus.outcome) =
       | None -> t.per_engine_skips <- (id, ref 1) :: t.per_engine_skips)
     o.skipped
 
-let rule = bold "─────────────────────────────────────────────"
+(* A function, not a value.  As a value it was evaluated when this module was
+   loaded — before `--no-colour` and `--json` had been read — so every report
+   carried a bold escape in its separator whatever the flags said. *)
+let rule () = bold "─────────────────────────────────────────────"
 
 let print_summary t total =
-  Printf.printf "\n%s\n" rule;
+  Printf.printf "\n%s\n" (rule ());
   Printf.printf "%s  %d files: %s agree, %s diverge, %d with too few engines\n"
     (bold "consensus")
     total
@@ -125,9 +128,22 @@ let print_golden (o : Golden.outcome) ~verbose =
           Printf.printf "    %-8s %s\n" eid (dim "differs, but no line does")
         | _ -> ())
       bad
-  end else if verbose then
-    Printf.printf "  %s  %s  %s\n" (green "MATCH") o.rel
-      (dim (String.concat "," (List.map fst o.per_engine)))
+  end else if verbose then begin
+    (* Only an engine that was compared against the golden can match it.  A file
+       every engine is excused from was never checked, and the summary already
+       counts it as `unchecked` — printing MATCH beside it read "nothing ran" as
+       "nothing failed", the one thing this tool exists not to do. *)
+    let judged = List.filter (fun (_, v) ->
+        match v with Golden.Pass | Golden.Mismatch _ -> true | _ -> false)
+        o.per_engine
+    in
+    if judged = [] then
+      Printf.printf "  %s  %s  %s\n" (yellow "UNCHECKED") o.rel
+        (dim "no engine was compared against this golden")
+    else
+      Printf.printf "  %s  %s  %s\n" (green "MATCH") o.rel
+        (dim (String.concat "," (List.map fst judged)))
+  end
 
 type gtally = {
   mutable gpass : int;
@@ -149,7 +165,7 @@ let grecord t (o : Golden.outcome) =
   t.gskip <- t.gskip + List.length o.per_engine - List.length judged
 
 let print_gsummary t total how =
-  Printf.printf "\n%s\n" rule;
+  Printf.printf "\n%s\n" (rule ());
   Printf.printf "%s  %d goldens via `%s`: %s match, %s stale, %d unchecked\n"
     (bold "expect") total how
     (green (string_of_int t.gpass))

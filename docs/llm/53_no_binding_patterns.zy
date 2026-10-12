@@ -1,0 +1,6 @@
+// claim: No binding patterns (`n => n * 2` is not implemented)
+// verdict: error
+r = ?? 5 {
+    n => n * 2
+}
+>> r ¶

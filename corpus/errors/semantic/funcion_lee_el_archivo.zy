@@ -1,0 +1,23 @@
+// Test: una función con nombre que lee una variable del archivo se rechaza
+// antes de ejecutar nada. MEM-2.
+//
+// Este archivo ha dicho las tres cosas posibles, y el recorrido es el registro
+// de una decisión que se tomó dos veces:
+//
+//   · se llamaba «function trying to access external variable» y su última
+//     línea decía «If you see this, there's a problem!». Era verdad: reventaba
+//     en EJECUCIÓN, con media salida ya escrita;
+//   · el 2026-08-24 se retiró el aislamiento (ERROR-ZYB-002) y el archivo pasó
+//     a afirmar la captura, con el nombre `memory05_function_error.zy`;
+//   · el 2026-09-13 se restauró, y ahora se rechaza **antes** de ejecutar, que
+//     es la mitad que faltaba: la regla vieja tenía razón en el qué y llegaba
+//     tarde en el cuándo.
+//
+// El aislamiento no es una restricción sin salida: `aislamiento_del_archivo.zy`
+// es el mismo programa escrito con el valor cruzando por parámetro.
+
+externa = "soy del archivo"
+
+lee() { <~ externa }
+
+>> lee() ¶

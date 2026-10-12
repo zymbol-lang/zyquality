@@ -1,0 +1,4 @@
+// claim: Use a tuple return when the values are new (`(v, next) = step(3)`)
+step(n) { <~ (n * 2, n + 1) }
+(v, next) = step(3)
+>> v " " next ¶       // → 6 4

@@ -1,0 +1,4 @@
+// claim: **`/` divides, `$/` splits.**
+// claim: `/` on two Ints is integer division
+>> 7 / 2 ¶            // → 3
+>> ("a,b"$/ ',') ¶    // → [a, b]

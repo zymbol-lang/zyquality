@@ -1,0 +1,4 @@
+// claim: **`>>` never adds a newline.**
+>> "a"
+>> "b" ¶              // → ab
+>> "c" \\             // → c

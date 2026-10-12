@@ -32,6 +32,8 @@
 #   id     short name, used in the report and in --only
 #   dir    the suite directory, relative to zyquality/
 #   desc   what the application is
+#   fixtures  optional: data the suites read from beside the app, copied into
+#             each engine's scratch directory before every run (D9)
 #
 # Engines are not declared per app: `zyq` works out per file which of them can
 # run a given suite, and reports "unsupported" apart from "gave a different
@@ -40,6 +42,16 @@
 # the browser engine has no terminal, no filesystem and no shell, so it diverges
 # on every one of them and the number means nothing. Ask for it with `--engines`
 # when there is a reason to.
+#
+# One exception, measured when it joined (2026-09-29): `gol` agrees under all
+# three — its tests call the program as modules instead of reaching for a shell
+# or a file — so `--only gol --engines zytw,zyvm,zyjs` is a question worth
+# asking, and it is how BUG-GOL-002 was found. Its `όλα.zy` still does; its
+# `έξοδος.zy` (2026-09-30) runs the program as a subscript to check what it
+# says, and the browser engine has no process to run one in.
+#
+# `zybf` (2026-10-09) agrees under all three as well: its suite imports the
+# interpreter as a module and reads no input.
 
 [[app]]
 id = "go"
@@ -69,9 +81,24 @@ desc = "neural-network library — activations, gradients, attention, forward pa
 [[app]]
 id = "zyaudit"
 dir = "../ZyAudit/测试"
+# The suites read 源文件/计算器.zy and i18n.json relative to where they run.
+# Without the copy they found an empty scratch directory, and six of the eight
+# goldens recorded the shell's "No such file" — and empty labels — as the audit
+# (D9, 2026-09-30).
+fixtures = ["../ZyAudit/源文件", "../ZyAudit/i18n.json"]
 desc = "code auditor, written in Chinese — parsing, metrics, reports, translation"
 
 [[app]]
 id = "zybank"
 dir = "../ZyBank/pruebas"
 desc = "ZyBank, personal ledger in Spanish — money as integers with a per-currency exponent, SQLite through std/db, four locales, two digit scripts"
+
+[[app]]
+id = "gol"
+dir = "../GoL/δοκιμές"
+desc = "Conway's Game of Life, written in Greek — B/S rules, torus and bounded worlds, stop diagnosis, four locales incl. Devanagari digits; the one app whose tests are all Zymbol, runner included"
+
+[[app]]
+id = "zybf"
+dir = "../ZyBrainfuck/pruebas"
+desc = "ZyBF, a Brainf*** interpreter in Spanish — a mini LDV of v0.0.10: its three findings changed the language, and its `.` is `##'` now; 13 cases against an independent Python oracle"

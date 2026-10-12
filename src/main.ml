@@ -104,6 +104,7 @@ let usage code =
   p "  zyq expect [options]         check the corpus against its .expected goldens";
   p "  zyq reject [options]         forms every engine must refuse";
   p "  zyq audit                    corpus hygiene: dead rules, orphans, gaps";
+  p "  zyq excused [--engines a,b]  files corpus.toml excuses, one per line, for scripts";
   p "  zyq selftest                 zyq's own matcher, globs and config reader";
   p "  zyq suites                   list the script suites and what they need";
   p "  zyq engines                  list engines and availability";
@@ -127,6 +128,7 @@ let usage code =
   p "  --audit-exclusions  consensus: run the excused engines too and report";
   p "                   every exclusion that has stopped being true";
   p "  --timeout N      seconds per engine (default: 10)";
+  p "  --fixture PATH   copy PATH into every engine's scratch directory (repeatable)";
   p "  -v, --verbose    show agreeing files too";
   p "  --json           machine-readable output";
   p "  --only a,b       suite: run only these script suites (fmt, tui, guide, bench)";
@@ -165,6 +167,10 @@ let parse_args argv =
   let rec go = function
     | [] -> ()
     | "--corpus" :: v :: t -> o.corpus <- v; go t
+    | "--fixture" :: v :: t ->
+      if not (Sys.file_exists v) then die 2 "--fixture: no such file or directory: %s" v;
+      let v = if Filename.is_relative v then Filename.concat (Sys.getcwd ()) v else v in
+      Engine.fixtures := !Engine.fixtures @ [ v ]; go t
     | "--reject" :: v :: t -> o.reject_dir <- v; go t
     | "--engines-file" :: v :: t -> o.engines_file <- v; go t
     | "--corpus-file" :: v :: t -> o.corpus_file <- v; go t
@@ -426,7 +432,7 @@ let cmd_regen o corpus engines root files want_via =
           Printf.printf "  %s %s %s\n" (Report.yellow "SKIP ") rel
             (Report.dim (Engine.status_name st)))
     files;
-  Printf.printf "\n%s\n" Report.rule;
+  Printf.printf "\n%s\n" (Report.rule ());
   Printf.printf "%s      %d rewritten, %d newly recorded, %d already current, %d could not be recorded\n"
     (Report.bold "regen") !wrote !made !same !cannot;
   Printf.printf "%s\n"
@@ -613,7 +619,7 @@ let cmd_reject o =
       end else if o.verbose then
         Printf.printf "  %s %s\n" (Report.green "refused ") rel)
     files;
-  Printf.printf "\n%s\n" Report.rule;
+  Printf.printf "\n%s\n" (Report.rule ());
   Printf.printf "%s     %d forms: %s refused everywhere, %s accepted somewhere"
     (Report.bold "reject")
     (List.length files)
@@ -708,7 +714,11 @@ let cmd_audit o =
       note "dead rule    " (Printf.sprintf "`%s` matches no file in the corpus" r.pat))
     (Corpus.dead_rules corpus ~files:rels);
 
-  (* A .expected with no .zy is a golden for a program that no longer exists. *)
+  (* A .expected with no .zy is a golden for a program that no longer exists.
+     And one beside a program corpus.toml excuses for EVERY engine is a golden
+     nobody compares: it goes on describing what the file did the day it was
+     last recorded. Four sat in i18n/ recording parse errors their programs had
+     stopped having, and `expect` counted them as `unchecked` in silence. *)
   let rec walk dir =
     if Sys.is_directory dir then
       Array.iter (fun e -> walk (Filename.concat dir e)) (Sys.readdir dir)
@@ -716,9 +726,31 @@ let cmd_audit o =
       let zy = Filename.remove_extension dir ^ ".zy" in
       if not (Sys.file_exists zy) then
         note "orphan golden" (relative_to root dir)
+      else if Corpus.excused_everywhere ~path:zy corpus ~rel:(relative_to root zy) <> None then
+        note "dead golden  " (relative_to root dir ^ " — every engine is excused from its program")
     end
   in
   walk root;
+
+  (* Only test material belongs in the corpus: a program, its golden, its input,
+     its key script, and prose about them. What git CARRIES is read, not what
+     the disk holds: a run's leftovers ignored by .gitignore are this machine's
+     business, and committing them is the defect — an empty file called `25`
+     came in with the initial import, seven logs of a manual session with it. *)
+  let material f =
+    List.exists (Filename.check_suffix f) [ ".zy"; ".expected"; ".input"; ".keys"; ".md" ]
+  in
+  (match Unix.open_process_args_in "git"
+           [| "git"; "-C"; root; "ls-files"; "-z"; "--"; "." |] with
+   | exception Unix.Unix_error _ -> ()
+   | ic ->
+     let listing = Toml.read_channel ic in
+     (match Unix.close_process_in ic with
+      | Unix.WEXITED 0 ->
+        List.iter (fun f -> if f <> "" && not (material f) then
+                      note "not a test   " (f ^ " — tracked in the corpus, and not test material"))
+          (String.split_on_char '\000' listing)
+      | _ -> ()));
 
   (* A rejection with no reason is indistinguishable from a program that
      happens to fail today — the same argument corpus.toml makes about an
@@ -758,7 +790,7 @@ let cmd_audit o =
         if Corpus.excused_everywhere ~path:f corpus ~rel <> None then Some rel else None)
       files in
 
-  Printf.printf "\n%s\n" Report.rule;
+  Printf.printf "\n%s\n" (Report.rule ());
   Printf.printf "%s        %d .zy · %d with goldens · %d consensus-only · %d excused for every engine\n"
     (Report.bold "corpus")
     (List.length files)
@@ -778,6 +810,33 @@ let cmd_audit o =
   end else begin
     Printf.printf "%s %d\n" (Report.red "hygiene problems:") !problems; 1
   end
+
+(* ------------------------------------------------------------------- excused *)
+
+(* The files corpus.toml excuses, one corpus-relative path per line, for the
+   scripts that execute the corpus without going through zyq.  They have to
+   honour the same table, and a second TOML reader written in bash would be one
+   more list that drifts from this one.  fmt/fmt_property.sh is why it exists:
+   it ran every program it formatted, including the ones this table says can
+   never be part of a gate, and one of those wrote a file called `25` into the
+   repository — twice, into two commits.
+
+   With `--engines a,b`, the files excused for every one of those engines;
+   without it, the files excused for every engine there is. *)
+let cmd_excused o =
+  let corpus = load_corpus_cfg o in
+  let root = corpus_root o in
+  List.iter (fun f ->
+      let rel = relative_to root f in
+      let excused =
+        match o.only with
+        | [] -> Corpus.excused_everywhere ~path:f corpus ~rel <> None
+        | ids ->
+          List.for_all (fun id -> Corpus.excused ~path:f corpus ~engine:id ~rel <> None) ids
+      in
+      if excused then print_endline rel)
+    (zy_files root);
+  0
 
 (* ------------------------------------------------------------------ selftest *)
 
@@ -903,6 +962,41 @@ let cmd_selftest () =
     (Golden.strip_ansi "\027[0;31merror\027[0m: x" = "error: x");
   ok "chomp"             (Golden.chomp "a\n\n\n" = "a");
 
+  (* Diagnostic normalisation, against stderr captured from the engines
+     (arithmetic/04_comparison_ops.zy, 2026-10-01): the CLI's colour, excerpt
+     and caret, and the browser's bare form, must come out as one text. *)
+  let rust =
+    "\027[1m\027[31merror\027[39m\027[0m: '!=' is not a valid Zymbol operator\n\
+    \  \027[1m\027[34m-->\027[39m\027[0m arithmetic/04_comparison_ops.zy:5:7\n\
+     \027[1m\027[34m   5\027[39m\027[0m \027[34m|\027[39m\n\
+     \027[1m\027[34m   5\027[39m\027[0m \027[34m|\027[39m >> (a != 5) \194\182\n\
+     \027[34m     |\027[39m \027[1m\027[31m      ^^\027[39m\027[0m\n\
+    \  \027[1m\027[32m= help:\027[39m\027[0m use '<>' for not-equal  \226\134\146  a <> b\n" in
+  let browser =
+    "error: '!=' is not a valid Zymbol operator\n\
+    \  --> arithmetic/04_comparison_ops.zy:5:7\n\
+    \  = help: use '<>' for not-equal  \226\134\146  a <> b\n" in
+  ok "diag: the CLI's colour and excerpt are presentation"
+    (Compare.normalise_diagnostics rust = Compare.normalise_diagnostics browser);
+  ok "diag: a location keeps its line, not its path or column"
+    (Compare.normalise_diagnostics "  --> /tmp/zyq_1/x.zy:12:4" = "--> 12"
+     && Compare.normalise_diagnostics "  --> line 12" = "--> 12"
+     && Compare.normalise_diagnostics "  --> x.zy:12" = "--> 12");
+  ok "diag: an absolute or .zy path is its last component"
+    (Compare.normalise_diagnostics "in '/home/u/corpus/m/x.zy'" = "in 'x.zy'"
+     && Compare.normalise_diagnostics "in 'm/x.zy'" = "in 'x.zy'");
+  ok "diag: a module name, an operator and a lone slash are information"
+    (Compare.normalise_diagnostics "std/math: `$/` and </ f />" = "std/math: `$/` and </ f />");
+
+  (* The separator used to be a value built when Report was loaded, before
+     `--no-colour` had been read, so it carried a bold escape whatever the flag
+     said.  Asked with colour off, it must not contain one. *)
+  let colour = !Report.use_colour in
+  Report.use_colour := false;
+  ok "report: the separator honours --no-colour"
+    (not (String.contains (Report.rule ()) '\027'));
+  Report.use_colour := colour;
+
   Printf.printf "%s   %d checks, %s\n"
     (Report.bold "selftest") !total
     (if !fails = 0 then Report.green "all passed"
@@ -943,7 +1037,7 @@ let cmd_suite o =
      differential answers are already on screen. *)
   let f = ("suites", cmd_script_suites o) in
   let results = [ a; b; c; d; e; f ] in
-  Printf.printf "\n%s\n" Report.rule;
+  Printf.printf "\n%s\n" (Report.rule ());
   Printf.printf "%s\n" (Report.bold "zyq suite");
   List.iter (fun (name, code) ->
       Printf.printf "  %-10s %s\n" name
@@ -975,16 +1069,10 @@ let () =
   | "expect" :: rest -> run rest cmd_expect
   | "reject" :: rest -> run rest cmd_reject
   | "audit" :: rest -> run rest cmd_audit
+  | "excused" :: rest -> run rest cmd_excused
   | "suite" :: rest -> run rest cmd_suite
-  | "selftest" :: _ -> exit (cmd_selftest ())
+  | "selftest" :: rest -> ignore (parse_args rest); exit (cmd_selftest ())
   | "show" :: file :: rest -> cmd_show (parse_args rest) file
   | "show" :: [] -> die 2 "show needs a file"
-  | "oracle" :: _ ->
-    prerr_endline "zyq: `oracle` is not implemented yet (phase 2)";
-    prerr_endline "  it will run cases/ against their .py / .js / .ml equivalents";
-    exit 3
-  | "bench" :: _ ->
-    prerr_endline "zyq: `bench` is not implemented yet (phase 3)";
-    exit 3
   | [] -> usage 2
   | a :: _ -> prerr_endline ("zyq: unknown command: " ^ a); usage 2

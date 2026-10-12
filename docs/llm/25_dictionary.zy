@@ -1,0 +1,7 @@
+// claim: `d.name`, `d["k"]`, mutable; `#()` is the empty one.
+d = #(name: "Ana", age: 25)
+>> d.name " " d["age"] ¶      // → Ana 25
+d["age"]$~ 26
+>> d.age ¶                    // → 26
+vacio = #()
+>> vacio$# ¶                  // → 0

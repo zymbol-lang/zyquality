@@ -80,16 +80,28 @@ reason = "std/db is ODBC; a browser has no equivalent"
 # deleting one file does not silently widen the exclusion.
 
 [[rule]]
-match = "i18n/test_bash.zy"
+match = "output/pantalla_virtual.zy"
 engines = ["zyjs"]
-tag = "BASH_EXEC"
-reason = "`<\\ shell \\>` has no browser equivalent"
+tag = "TUI"
+reason = "raw mode and key input need a real terminal — and the virtual screen `zymbol run --keys` gives in its place exists only in the Rust CLI"
 
 [[rule]]
-match = "i18n/test_bash_simple.zy"
+match = "errors/catchable/argumentos_del_subscript.zy"
 engines = ["zyjs"]
 tag = "BASH_EXEC"
-reason = "`<\\ shell \\>` has no browser equivalent"
+reason = "`</ … />` runs another file as a process, and a browser has none"
+
+[[rule]]
+match = "errors/catchable/estado_de_salida.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "`<\\ shell \\>` has no browser equivalent, and neither has `</ … />` — the exit status these read belongs to a process, and a browser has none"
+
+[[rule]]
+match = "bugs/bug03_bashexec_void_statement.zy"
+engines = ["zyjs"]
+tag = "BASH_EXEC"
+reason = "`<\\ shell \\>` has no browser equivalent — this file agreed until 2026-09-29 only because the browser answered `true`, `mkdir` and `rmdir` with a random number and discarded it (BUG-GOL-014); now it refuses them"
 
 [[rule]]
 match = "i18n/test_archivos.zy"
@@ -110,31 +122,7 @@ tag = "BASH_EXEC"
 reason = "`<\\ shell \\>` has no browser equivalent"
 
 [[rule]]
-match = "i18n/test_integration_all.zy"
-engines = ["zyjs"]
-tag = "BASH_EXEC"
-reason = "`<\\ shell \\>` has no browser equivalent"
-
-[[rule]]
-match = "i18n/test_interpolacion_simple.zy"
-engines = ["zyjs"]
-tag = "BASH_EXEC"
-reason = "`<\\ shell \\>` has no browser equivalent"
-
-[[rule]]
 match = "i18n/test_modulos_sistema.zy"
-engines = ["zyjs"]
-tag = "BASH_EXEC"
-reason = "`<\\ shell \\>` has no browser equivalent"
-
-[[rule]]
-match = "i18n/test_sqlite_direct.zy"
-engines = ["zyjs"]
-tag = "BASH_EXEC"
-reason = "`<\\ shell \\>` has no browser equivalent"
-
-[[rule]]
-match = "i18n/test_sqlite_simple.zy"
 engines = ["zyjs"]
 tag = "BASH_EXEC"
 reason = "`<\\ shell \\>` has no browser equivalent"
@@ -157,62 +145,35 @@ engines = ["zyjs"]
 tag = "BASH_EXEC"
 reason = "`<\\ shell \\>` has no browser equivalent"
 
-[[rule]]
-match = "scope04_match_block.zy"
-engines = ["zyjs"]
-tag = "ANSI_FORMAT"
-reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
-
-[[rule]]
-match = "arithmetic/04_comparison_ops.zy"
-engines = ["zyjs"]
-tag = "ANSI_FORMAT"
-reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
-
-[[rule]]
-match = "strings/09_length.zy"
-engines = ["zyjs"]
-tag = "ANSI_FORMAT"
-reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
-
-[[rule]]
-match = "collections/11_hof_filter_reduce.zy"
-engines = ["zyjs"]
-tag = "ANSI_FORMAT"
-reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
-
-[[rule]]
-match = "collections/22_sort_named.zy"
-engines = ["zyjs"]
-tag = "ANSI_FORMAT"
-reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
-
-[[rule]]
-match = "collections/34_homogeneous_type_error.zy"
-engines = ["zyjs"]
-tag = "ANSI_FORMAT"
-reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
-
-[[rule]]
-match = "memory02_function_isolation.zy"
-engines = ["zyjs"]
-tag = "ANSI_FORMAT"
-reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
-
-[[rule]]
-match = "memory_correct_01_lambdas.zy"
-engines = ["zyjs"]
-tag = "ANSI_FORMAT"
-reason = "the CLI prints ANSI escapes and a file location the browser has no way to produce"
+# ── ANSI_FORMAT, retired 2026-10-02 ──────────────────────────────────────
+#
+# Eight rules excused the browser engine from eight files because "the CLI prints
+# ANSI escapes and a file location the browser has no way to produce". It was
+# true of the CLI and it was not the reason the files differed. Measured once
+# zyq compared stderr the way ZyDDT does (no colour, no excerpt, the line of a
+# location — src/compare.ml, normalise_diagnostics):
+#
+#   · three agreed already — scope04_match_block, collections/11_hof_filter_reduce
+#     and collections/34_homogeneous_type_error. `--audit-exclusions` reported
+#     the three rules stale the moment it could read the text;
+#   · five were fossils that had never run in any engine since the corpus was
+#     imported: `!=` (arithmetic/04_comparison_ops, collections/11_…), `$^+` with
+#     a comparator (collections/22_sort_named), `s$++[5:"!!!"]`
+#     (strings/09_length) and `+` between strings (memory02_function_isolation).
+#     Their goldens recorded the parse error. Each is rewritten to the form the
+#     language has, verified identical in the three engines, its golden
+#     re-recorded from a run; 22_sort_named lost its tied keys, because the order
+#     of ties under `$^` is not decided (GLB-073) and a file asks only what is;
+#   · memory_correct_01_lambdas agrees on stdout. Its golden keeps a warning the
+#     Rust engines give and should not (`unused variable 'base'` for a variable
+#     that is read — GLB-074); when that is fixed the golden goes stale, which is
+#     the point.
+#
+# An exclusion compared through ANSI could never expire: --audit-exclusions
+# asks for the same words, and the colour alone guaranteed different ones.
 
 [[rule]]
 match = "manual/tui/05_key_input.zy"
-engines = ["zyjs"]
-tag = "TUI"
-reason = "raw mode and key input need a real terminal"
-
-[[rule]]
-match = "manual/tui/06_tui_block.zy"
 engines = ["zyjs"]
 tag = "TUI"
 reason = "raw mode and key input need a real terminal"
@@ -265,6 +226,12 @@ by = "zytw"
 # stay because `zymbol check` still sweeps them, so a parse regression is caught
 # — which is more than they did before — and their four `matematicas/` modules
 # ARE graded now, by all three engines, as the module-file refusals they are.
+#
+# Their goldens went on 2026-10-02: they still recorded the parse errors of the
+# form these files no longer have, and nothing compared them — `zyq audit` calls
+# a golden beside a program every engine is excused from a dead golden now. Six
+# more files written in the same nonexistent form, which GLB-004 had not reached,
+# were retired the same day: see dropped.tsv.
 #
 # See ZyDDT HALLAZGOS/GLOBAL.md GLB-004 for the measurement.
 

@@ -1,0 +1,48 @@
+// cost/en_linea — la misma generación que `llamada_por_celda.zy.in`, con el
+// recuento de vecinos escrito dentro del bucle: el control. Mismos datos, mismas
+// operaciones, misma salida; lo único que falta es la llamada.
+
+DF := [-1, -1, -1,  0,  0,  1,  1,  1]
+DC := [-1,  0,  1, -1,  1, -1,  0,  1]
+
+paso(m, nace, vive) {
+    filas = m$#
+    cols = m[1]$#
+    sig = []
+    f = 0
+    @ fila:m {
+        f += 1
+        nueva = []
+        c = 0
+        @ celda:fila {
+            c += 1
+            n = 0
+            k = 0
+            @ df:DF {
+                k += 1
+                ff = ((f + df - 1 + filas) % filas) + 1
+                cc = ((c + DC[k] - 1 + cols) % cols) + 1
+                n += m[ff>cc]
+            }
+            ? celda == 1 { nueva$+ vive[n + 1] } _ { nueva$+ nace[n + 1] }
+        }
+        sig$+ nueva
+    }
+    <~ sig
+}
+
+LADO := «N»
+m = []
+@ f:1..LADO {
+    linea = []
+    @ c:1..LADO {
+        ? (f * 7 + c * 13) % 5 == 0 { linea$+ 1 } _ { linea$+ 0 }
+    }
+    m$+ linea
+}
+nace = [0, 0, 0, 1, 0, 0, 0, 0, 0]
+vive = [0, 0, 1, 1, 0, 0, 0, 0, 0]
+@ 10 { m = paso(m, nace, vive) }
+vivas = 0
+@ fila:m { @ celda:fila { vivas += celda } }
+>> vivas ¶
