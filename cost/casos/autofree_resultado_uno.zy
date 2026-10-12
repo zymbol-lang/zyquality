@@ -1,0 +1,9 @@
+// The scale: the array only ever exists as a call's result — never in a named
+// variable — and is used once. One of them, so the sequence can be read in units of it.
+big() {
+    a = []
+    @ i:1..2000000 { a$+ i }
+    <~ a
+}
+x = big()$#
+>> x ¶

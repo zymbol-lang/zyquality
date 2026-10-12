@@ -107,6 +107,23 @@ what     = "two aggregates used in sequence cost about the same as one"
 # The sharper half. Measured 2026-09-12: zytw 1.00, zyvm 1.03.
 why      = "states the mechanism positively: the second array reuses the first one's ground"
 
+[[case]]
+id       = "autofree/call-result"
+kind     = "peak-ratio"
+subject  = "casos/autofree_resultado_secuencial.zy"
+control  = "casos/autofree_resultado_uno.zy"
+max_ratio = 1.25
+open_finding = { zyvm = "ZYVM-022" }
+what     = "what a call returns and the caller uses once is released before the next call builds its own"
+# The shape the two cases above do not have: the array is never in a named
+# variable, only in the register a call's result lands in. Measured 2026-10-11:
+# zytw 1.00, zyvm 1.79 (68 MB against 38 MB; 2.05 once the 8.5 MB of an empty
+# process are taken out) — as much as the control that keeps both alive on
+# purpose. A `$` expression used as a value does not have it (0.98), and one
+# array is still 6x smaller in the VM than in the tree-walker, so this is the
+# relative win being smaller and not the VM being worse.
+why      = "the result waits in a temporary register until something reuses it; `emit_auto_free` clears only named variables"
+
 # ── Cost curves ──────────────────────────────────────────────────────────────
 
 # `n_by_engine` — one question, asked at the size each engine can answer it at.
