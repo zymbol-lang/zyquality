@@ -112,7 +112,7 @@ for bench in "${BENCHES[@]}"; do
         if [[ "$engine" == "vm" ]]; then
             ms=$(median_ms "$BINARY" run --vm "$file")
         else
-            ms=$(median_ms "$BINARY" run "$file")
+            ms=$(median_ms "$BINARY" run --tw "$file")
         fi
         RESULTS+=("$name $ms")
 

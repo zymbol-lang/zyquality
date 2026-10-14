@@ -67,7 +67,7 @@ LLM    = Path(os.environ.get("ZY_LLM") or (ROOT / ".." / "interpreter" / "LLM.md
 ZYJS   = Path(os.environ.get("ZYJS_HARNESS") or (ROOT / ".." / "web" / "tests" / "run_one.mjs"))
 
 ENGINES = {
-    "zytw": lambda f: [ZYMBOL, "run", f],
+    "zytw": lambda f: [ZYMBOL, "run", "--tw", f],
     "zyvm": lambda f: [ZYMBOL, "run", "--vm", f],
     "zyjs": lambda f: ["node", str(ZYJS), f],
 }

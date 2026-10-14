@@ -46,7 +46,7 @@ command -v python3 >/dev/null 2>&1 || {
 declare -a NAMES=() CMDS=()
 ZYMBOL="${ZYMBOL_BIN:-zymbol}"
 if command -v "$ZYMBOL" >/dev/null 2>&1 || [[ -x "$ZYMBOL" ]]; then
-    NAMES+=(zytw); CMDS+=("$ZYMBOL run")
+    NAMES+=(zytw); CMDS+=("$ZYMBOL run --tw")
     NAMES+=(zyvm); CMDS+=("$ZYMBOL run --vm")
 fi
 
