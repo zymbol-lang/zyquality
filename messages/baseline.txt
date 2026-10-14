@@ -64,7 +64,6 @@ rust	rust-only	duplicate [[script]] name '§' in zyp.toml
 rust	rust-only	dynamic range in match
 rust	rust-only	enter - execute current line\r
 rust	rust-only	esc - cancel current input\r
-rust	rust-only	execute using the register vm (experimental)
 rust	rust-only	explicit |> f(_) must keep the placeholder: §
 rust	rust-only	extra explicit args must be preserved: §
 rust	rust-only	extract '§' to function
