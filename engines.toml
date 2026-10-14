@@ -37,17 +37,17 @@
 
 [[engine]]
 id = "zytw"
-cmd = ["${ZYMBOL_BIN:-zymbol}", "run", "{keys}", "{file}"]
+cmd = ["${ZYMBOL_BIN:-zymbol}", "run", "--tw", "{keys}", "{file}"]
 check_cmd = ["${ZYMBOL_BIN:-zymbol}", "check", "{file}"]
 lang = "zymbol"
-desc = "Rust tree-walker (default engine)"
+desc = "Rust tree-walker"
 
 [[engine]]
 id = "zyvm"
 cmd = ["${ZYMBOL_BIN:-zymbol}", "run", "--vm", "{keys}", "{file}"]
 check_cmd = ["${ZYMBOL_BIN:-zymbol}", "check", "{file}"]
 lang = "zymbol"
-desc = "Rust register VM"
+desc = "Rust register VM (default engine)"
 
 [[engine]]
 id = "zyjs"

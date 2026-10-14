@@ -67,11 +67,11 @@ rm -rf "$OUT"; mkdir -p "$OUT"
 # raw profiles and filled a 7 GB tmpfs.
 export LLVM_PROFILE_FILE="$OUT/zy-%8m.profraw"
 
-echo "── running the corpus through run / --vm / check / fmt ──────"
+echo "── running the corpus through run --tw / --vm / check / fmt ──────"
 cd "$ZQ_DIR"
 n=0
 while IFS= read -r f; do
-    timeout 10 "$BIN" run      "$f" >/dev/null 2>&1
+    timeout 10 "$BIN" run --tw "$f" >/dev/null 2>&1
     timeout 10 "$BIN" run --vm "$f" >/dev/null 2>&1
     timeout 10 "$BIN" check    "$f" >/dev/null 2>&1
     timeout 10 "$BIN" fmt      "$f" >/dev/null 2>&1

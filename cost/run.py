@@ -41,7 +41,7 @@ class TooFast(RuntimeError):
 
 
 ENGINES = {
-    "zytw": lambda f: [ZYMBOL, "run", str(f)],
+    "zytw": lambda f: [ZYMBOL, "run", "--tw", str(f)],
     "zyvm": lambda f: [ZYMBOL, "run", "--vm", str(f)],
     "zyjs": lambda f: ["node", ZYJS, str(f)],
 }
