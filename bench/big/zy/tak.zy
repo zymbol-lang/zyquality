@@ -1,0 +1,9 @@
+tak(x, y, z) {
+    ? y < x {
+        <~ tak(tak(x - 1, y, z), tak(y - 1, z, x), tak(z - 1, x, y))
+    }
+    <~ z
+}
+r = 0
+@ _i:1..3 { r = tak(24, 16, 8) }
+>> "tak(24,16,8) x3 = " r ¶

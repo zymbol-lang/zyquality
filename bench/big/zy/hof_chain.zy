@@ -1,0 +1,10 @@
+nums = []
+@ i:1..100000 { nums = nums $+ i }
+total = 0
+@ _r:1..25 {
+    sq = nums $> (x -> x * x)
+    ev = sq $| (x -> x % 3 == 0)
+    s = ev $< (0, (acc, x) -> acc + x)
+    total = total + s
+}
+>> "hof_chain total = " total ¶

@@ -1,0 +1,20 @@
+primes = []
+count = 0
+@ n:2..300000 {
+    isp = #1
+    k = 1
+    @ k <= count {
+        p = primes[k]
+        ? p * p > n { @! }
+        ? n % p == 0 {
+            isp = #0
+            @!
+        }
+        k = k + 1
+    }
+    ? isp {
+        primes = primes $+ n
+        count = count + 1
+    }
+}
+>> "primes " count " " primes[count] ¶

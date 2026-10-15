@@ -1,0 +1,13 @@
+>< 引数
+u = #|引数[1]|
+r = #|引数[2]|
+unit = "the quick brown fox jumps over the lazy dog "
+text = ""
+@ _i:1..u { text = text unit }
+vow = 0
+@ _k:1..r {
+    @ ch:text {
+        ? ch == 'a' { vow = vow + 1 }
+    }
+}
+>> vow ¶
