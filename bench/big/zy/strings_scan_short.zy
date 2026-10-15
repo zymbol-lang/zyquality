@@ -1,0 +1,12 @@
+unit = "the quick brown fox jumps over the lazy dog "
+text = ""
+@ _i:1..100 { text = text unit }
+vow = 0
+@ _r:1..200 {
+    @ ch:text {
+        ? ch == 'a' { vow = vow + 1 }
+        ? ch == 'e' { vow = vow + 1 }
+        ? ch == 'o' { vow = vow + 1 }
+    }
+}
+>> "strings_scan_short len=" text$# " vow=" vow ¶

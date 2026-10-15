@@ -1,0 +1,22 @@
+<# std/time => clock
+>< 引数
+n = #|引数[1]|
+k = #|引数[2]|
+d = #()
+@ i:1..n {
+    kk = "k" i
+    d[kk]$~ i
+}
+last = "k" n
+mid = "k" (n / 2)
+t0 = clock::now()
+m = 0
+@ i:1..k { m = d["k1"] }
+t1 = clock::now()
+@ i:1..k { m = d[mid] }
+t2 = clock::now()
+@ i:1..k { m = d[last] }
+t3 = clock::now()
+@ i:1..200 { d[last]$~ i }
+t4 = clock::now()
+>> "lectura primera=" (t1 - t0) "ms  media=" (t2 - t1) "ms  ultima=" (t3 - t2) "ms | actualizar ultima x200=" (t4 - t3) "ms" ¶

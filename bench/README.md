@@ -82,6 +82,16 @@ the result as well as a reference for the time: `python/measure.py` checks every
 result against the Zymbol program before it compares a single millisecond, and
 exits 1 when one differs. See `python/README.md`.
 
+## `big/` — long programs, and growth curves (ZyBigBench)
+
+Sixteen programs that run 0.1–1.5 s on the VM, each with a Python twin that
+prints the same output, from ZyBigBench (2026-10-10 to 2026-10-13, brought here
+2026-10-14). Beside them, two runners that measure single operations rather than
+programs: `gap.py` (each operation against Python, at n and 2n) and
+`scaling.py` (the exponent of its growth curve). They found the performance
+findings in `big/HALLAZGOS.md`, five of them still open on v0.0.11. `run.py` is
+registered as the `bigbench` suite, not a gate. See `big/README.md`.
+
 ## Adding one
 
 Drop the `.zy` here and add it to `BENCHES=(…)` in `bench_gate.sh`, then
