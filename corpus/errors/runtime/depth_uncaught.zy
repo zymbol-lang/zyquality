@@ -1,0 +1,8 @@
+// The same limit, uncaught: a runtime error with its line, after the output
+// the program had already written (GLB-133).
+f(n) {
+    ? n == 0 { <~ 0 }
+    <~ 1 + f(n - 1)
+}
+>> "antes" ¶
+>> f(20000) ¶

@@ -1,0 +1,38 @@
+// How deep a program may call (D7, decided by the author 2026-10-16; GLB-133).
+//
+// At most 10 000 calls active at once, the same number in the three engines;
+// the next one is a `##Depth` error that `!?` catches like any other. It used
+// to abort the process with "stack overflow" and no Zymbol error — the
+// tree-walker near 9 000 levels, the VM near 2 500 through `$>`.
+//
+// A call is any function or lambda: one reached through `$>` counts as much as
+// a direct one. A call in tail position replaces the one that made it, in the
+// three engines, and does not count.
+
+f(n) {
+    ? n == 0 { <~ 0 }
+    <~ 1 + f(n - 1)
+}
+// f(9 999) is 10 000 calls at once: the last one allowed
+>> f(9999) ¶
+!? { >> f(10000) ¶ } :! ##Depth { >> _err ¶ }
+
+// two calls a level: g, and the lambda `$>` calls
+g(n) {
+    ? n == 0 { <~ 0 }
+    r = [n]$> (x -> g(x - 1))
+    <~ 1 + r[1]
+}
+>> g(4999) ¶
+!? { >> g(5000) ¶ } :! ##Depth { >> _err ¶ }
+
+// a tail call does not count
+t(n) {
+    ? n == 0 { <~ "cola" }
+    <~ t(n - 1)
+}
+>> t(50000) ¶
+
+// caught, the program goes on, and so does the next deep call
+!? { >> f(20000) ¶ } :! { >> "otra vez: " _err ¶ }
+>> f(9999) ¶
