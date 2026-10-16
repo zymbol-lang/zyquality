@@ -156,7 +156,18 @@ def main() -> int:
         readings: dict[str, int] = {}
         failed: dict[str, bool] = {}
         print(f"  {C['bold']}{cid}{C['off']}  {C['dim']}{case['what']}{C['off']}")
-        for eng in case.get("engines", defaults.get("engines", [])):
+        # `clock_off`, the other half of `count_off`: a growth case the clock
+        # cannot answer, because what it guards is a COPY and the time is
+        # dominated by a scan that is declared elsewhere. Its value is the
+        # reason, printed every run: an exclusion without one is
+        # indistinguishable from a bug somebody hid.
+        clock_off = kind == "growth-ratio" and case.get("clock_off")
+        if clock_off:
+            if not counted_here:
+                print(f"    {C['yellow']}NO VERDICT{C['off']}  `clock_off` on a case nothing counts")
+                rc = max(rc, NOVERDICT)
+            print(f"    {C['dim']}clock off: {clock_off}{C['off']}")
+        for eng in ([] if clock_off else case.get("engines", defaults.get("engines", []))):
             if eng not in ENGINES:
                 print(f"    {C['yellow']}NO VERDICT{C['off']}  unknown engine {eng!r}")
                 rc = max(rc, NOVERDICT)

@@ -68,6 +68,14 @@ ZYMBOL_BIN=/usr/bin/zymbol ./run.py
 `KNOWN` case starts passing the runner says so and asks for the finding to be
 closed — an `open_finding` nobody removes is how debt becomes permanent.
 
+## A copy the clock cannot see
+
+`clock_off = "<reason>"` asks a growth case by the counters alone. It is for a
+copy that a scan hides: `s$[a..b]` stopped copying the whole text on 2026-10-16,
+and each slice still counts the text's characters, so the clock stays quadratic
+while `bytes` goes linear. The reason is printed on every run, and a
+`clock_off` case that nothing counts is `NO VERDICT`.
+
 ## Sizes are per engine
 
 One question, asked at the size each engine can answer it at (`n_by_engine`).
