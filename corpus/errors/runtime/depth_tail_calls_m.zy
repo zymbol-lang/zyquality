@@ -1,0 +1,8 @@
+// The module of `depth_tail_calls.zy`: a tail call inside a module.
+# depth_tail_calls_m {
+    #> { baja }
+    baja(n) {
+        ? n == 0 { <~ "modulo" }
+        <~ baja(n - 1)
+    }
+}

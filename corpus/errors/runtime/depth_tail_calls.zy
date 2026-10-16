@@ -1,0 +1,58 @@
+// Which calls count towards the depth limit (GLB-133), the same in the three
+// engines: every active call, except `<~ f(…)` to the function itself — a tail
+// call, which takes the place of the one that made it — when no `!?` of that
+// function is open around it, in its body, its `:!` or its `:>`.
+//
+// The engines disagreed about it before the limit gave the question a number:
+// the tree-walker did not take a tail call inside a function called from a
+// `!?` (ZYTW-017), nor the VM one inside a module (ZYVM-027), and zyjs took
+// none and needed none — its calls live on the heap.
+<# ./depth_tail_calls_m => M
+
+// itself, in tail position: does not count
+cuenta(n) {
+    ? n == 0 { <~ "cuerpo" }
+    <~ cuenta(n - 1)
+}
+>> cuenta(30000) ¶
+
+// inside a `?` block: still a tail call
+rama(n) {
+    ? n == 0 { <~ "rama" }
+    ? n > 0 { <~ rama(n - 1) }
+    <~ "nunca"
+}
+>> rama(30000) ¶
+
+// called from a `!?` of the caller: the callee's frame has no handler of its own
+!? { >> cuenta(30000) ¶ } :! { >> "no: " _err ¶ }
+
+// in a module
+>> M::baja(30000) ¶
+
+// mutual: each call is to another function, so every one counts
+par(n) {
+    ? n == 0 { <~ "par" }
+    <~ impar(n - 1)
+}
+impar(n) {
+    ? n == 0 { <~ "impar" }
+    <~ par(n - 1)
+}
+>> par(9999) ¶
+!? { >> par(10000) ¶ } :! ##Depth { >> "mutua: " _err ¶ }
+
+// inside its own `!?`: owes the handler, so it counts — and the deepest
+// handler catches it
+dentro(n) {
+    ? n == 0 { <~ "fondo" }
+    !? { <~ dentro(n - 1) } :! { <~ "atrapado en el fondo" }
+}
+>> dentro(30000) ¶
+
+// inside its own `:!`: counts too
+en_captura(n) {
+    ? n == 0 { <~ "fondo" }
+    !? { x = 1 / 0 } :! { <~ en_captura(n - 1) }
+}
+!? { >> en_captura(30000) ¶ } :! ##Depth { >> "en :!: " _err ¶ }
