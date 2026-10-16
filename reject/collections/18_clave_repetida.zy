@@ -1,0 +1,8 @@
+// @reject: GLB-131, decided by the author 2026-10-16 — a key appears once in
+// @reject: a dictionary literal. The three engines kept both entries: `$#`
+// @reject: counted two, a read and a `$~` went to the first, `@ k:d` walked
+// @reject: the key twice, and `check` said nothing. A key written twice is a
+// @reject: typing mistake far more often than an intention, and it is what a
+// @reject: dictionary indexed by key (PERF-03) cannot hold.
+d = #(a: 1, b: 2, a: 3)
+>> d ¶
