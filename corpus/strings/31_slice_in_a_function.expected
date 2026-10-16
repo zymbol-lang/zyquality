@@ -1,0 +1,10 @@
+an | an
+nañ | nañ
+dú | dú
+údnañ | údnañ
+ña | ña
+n | n
+##Index(slice indices out of bounds: [2..9] for collection of length 5)
+##Index(slice indices out of bounds: [2..9] for collection of length 5)
+##Index(slice indices out of bounds: [3..1] for collection of length 1)
+##Index(slice indices out of bounds: [-9..2] for collection of length 5)
