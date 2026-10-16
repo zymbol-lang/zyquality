@@ -191,6 +191,50 @@ what      = "`a$++ x y` as an edit adds at the end: building an array with it is
 why       = "the bulk append builds a new collection even when its result goes back into its receiver"
 engines   = ["zytw", "zyvm", "zyjs"]
 
+# `s = s "x"` — the way any program builds a text. Three cases because the
+# compiler has three receivers for it, and each one is its own code path: a
+# script's variable (its register is mirrored in a slot), a function's local,
+# and a module's state.
+[[case]]
+id        = "growth/concat-local"
+kind      = "growth-ratio"
+template  = "casos/concat_local.zy.in"
+n         = 400000
+# The VM at three times the size: it builds 400 000 in 55 ms, at the floor.
+n_by_engine = { zyvm = 1200000, zyjs = 20000 }
+factor    = 4
+max_ratio = 6.0
+what      = "building a text by appending to it is linear in its length"
+# Measured 2026-10-16, `--count` bytes from 2 000 to 8 000 to 32 000: zyvm 4.2 MB
+# → 34.5 MB → 515 MB (×8.1, ×14.9), zytw 42 KB → 78 KB → 223 KB. ZyBigBench's
+# PERF-06: 128 000 appends were 968 M instructions against 290 M for half.
+# ZYVM-023, closed the same day: the append is written into the receiver's own
+# register, where `ConcatStr` grows the buffer — zyvm 2.3 MB → 2.5 MB → 3.6 MB.
+why       = "a concatenation that writes to a new register copies the whole text on every append"
+engines   = ["zytw", "zyvm", "zyjs"]
+
+[[case]]
+id        = "growth/concat-in-function"
+kind      = "growth-ratio"
+template  = "casos/concat_funcion.zy.in"
+n         = 400000
+n_by_engine = { zyvm = 1200000 }
+factor    = 4
+max_ratio = 6.0
+what      = "building a text in a function's local is linear in its length"
+why       = "a concatenation that writes to a new register copies the whole text on every append"
+
+[[case]]
+id        = "growth/concat-module-state"
+kind      = "growth-ratio"
+template  = "casos/concat_modulo.zy.in"
+n         = 400000
+n_by_engine = { zyvm = 1200000 }
+factor    = 4
+max_ratio = 6.0
+what      = "building a text in a module's own state is linear in its length"
+why       = "a concatenation that writes to a new register copies the whole text on every append"
+
 [[case]]
 id        = "growth/update-local"
 kind      = "growth-ratio"
