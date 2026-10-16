@@ -370,6 +370,7 @@ rust	shared	remove it, or use it — `>> name ¶` to print it
 rust	shared	remove one of the two '°' markers
 rust	shared	savepoint name
 rust	shared	sh.exe on path
+rust	shared	slice count must be an integer, got §
 rust	shared	slice end must be an integer, got §
 rust	shared	slice start must be an integer, got §
 rust	shared	sort comparator must be a lambda (a, b) -> bool

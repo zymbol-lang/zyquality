@@ -1,0 +1,13 @@
+an [2, 3] an [2, 3]
+dú [4, 5]
+[] [] []
+ú [5]
+Index: ##Index(slice indices out of bounds: [4:9] for collection of length 5)
+Index: ##Index(slice indices out of bounds: [4:9] for collection of length 5)
+Index: ##Index(slice indices out of bounds: [-2:9] for collection of length 5)
+Index: ##Index(slice indices out of bounds: [7:0] for collection of length 5)
+Index: ##Index(slice count must be non-negative, got -1)
+Index: ##Index(slice count must be non-negative, got -1)
+Type: ##Type(slice count must be an integer, got Float)
+Type: ##Type(slice count must be an integer, got String)
+Type: ##Type(slice start must be an integer, got String)
