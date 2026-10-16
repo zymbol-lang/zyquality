@@ -1,0 +1,4 @@
+// A count that is not an integer, uncaught: the refusal names the count
+// (GLB-129). `slice_count_errors.zy` catches the rest of the form's refusals.
+t = "ñandú"
+>> t$[2:2.0] ¶
