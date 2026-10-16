@@ -1,0 +1,58 @@
+// `@ ch:s` walks the text `s` held when the loop began (ZYVM-024, 2026-10-16).
+//
+// An array already does: the loop holds its own reference. The VM's path for a
+// text read the variable's register on every turn instead, with the length it
+// counted at the start — so a body that rewrote `s` was walked over the new
+// text, and past its end each turn gave the character 0, in silence.
+
+// shorter: four turns, over "abcd"
+s = "abcd"
+@ ch:s {
+    >> ch
+    s = "zz"
+}
+>> " " s ¶
+
+// longer: three turns, over "abc"
+t = "abc"
+@ ch:t {
+    >> ch
+    t = "XYZXYZ"
+}
+>> " " t ¶
+
+// grown at the end: three turns
+u = "abc"
+@ ch:u {
+    >> ch
+    u = u ch
+}
+>> " " u ¶
+
+// not ASCII, rewritten as ASCII
+v = "ñandú"
+@ ch:v {
+    >> ch
+    v = "aaaaaaaaaa"
+}
+>> " " v ¶
+
+// in a function
+f(x) {
+    r = ""
+    w = x
+    @ ch:w {
+        r = r ch
+        w = "-"
+    }
+    <~ r
+}
+>> f("hola") ¶
+
+// an array, for comparison: the same answer
+a = [1, 2, 3]
+@ e:a {
+    >> e
+    a = [9]
+}
+>> " " a ¶
