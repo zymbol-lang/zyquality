@@ -1,0 +1,85 @@
+// `s = s x y` — a text grown in its own receiver (ZYVM-023, 2026-10-16).
+//
+// The VM writes the append into the receiver's register so that `ConcatStr`
+// can grow the buffer instead of copying it. Nothing here may tell: every
+// operand is evaluated before the first append (left to right), a value that
+// shares the text keeps what it had, and module state rewritten by an operand
+// loses to the read on the left — as `t[i]$~ v` does (GLB-115).
+<# ./concat_receptor_m => E
+
+// the receiver is also an operand
+a = "abcdefghij"
+a = a "-" a
+>> a ¶
+
+// another name holds the same text
+b = "compartido-largo"
+c = b
+b = b "X"
+>> b " " c ¶
+
+// numbers, and a receiver that is not a text
+n = "n="
+n = n 3 " " 2.5 " " (0 - 4)
+>> n ¶
+k = 7
+k = k "x"
+>> k ¶
+
+// a short text that grows past its inline size
+q = "ab"
+@ i:1..5 { q = q i }
+>> q ¶
+
+// in a function, with a name that keeps the old text
+f() {
+    t = "texto-de-funcion"
+    u = t
+    t = t "!" t
+    <~ t " / " u
+}
+>> f() ¶
+
+// module state, read before and after
+E::crece("uno")
+E::crece(2)
+>> E::lee() ¶
+x = E::lee()
+E::crece("tres")
+>> x ¶
+>> E::lee() ¶
+E::doble()
+>> E::largo() ¶
+
+// an operand that rewrites the state: the read on the left wins
+E::mete()
+>> E::lee() ¶
+
+// a lambda that captured the variable sees it as it was
+g = "captura-larga"
+ver = () -> g
+g = g "+"
+>> ver() " " g ¶
+
+// grouping, and a text that is not ASCII
+p = "paren-larga"
+p = (p "a") "b"
+>> p ¶
+w = "ñandú-"
+@ _j:1..3 { w = w "ü" }
+>> w w$# ¶
+
+// an operand that writes the receiver through `<~`
+escribe(o<~) {
+    o = "escrito-por-la-llamada"
+    <~ "?"
+}
+r = "receptor-largo"
+r = r escribe(r<~)
+>> r ¶
+h() {
+    v = "local-de-funcion"
+    v = v "-" escribe(v<~) v
+    <~ v
+}
+>> h() ¶

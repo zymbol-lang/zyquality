@@ -1,0 +1,6 @@
+# texto {
+    #> { crecer, largo }
+    s = ""
+    crecer(n) { @ _i:1..n { s = s "x" } }
+    largo() { <~ s$# }
+}

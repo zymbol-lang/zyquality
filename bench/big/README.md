@@ -120,7 +120,7 @@ cost of musl's allocator against glibc's; `LEEME.txt` says how to build them.
 | PERF-03 dictionary lookup is linear, both engines | Reproduced; not filed |
 | PERF-04 `@ ch:text` is quadratic, VM | Reproduced; not filed |
 | PERF-05 `s$#`, `s$[a..b]`, `s[i]` cost the length of the string, both engines | Reproduced; not filed. More than a scan: `s$[a..b]` copies the whole string into a `Vec<char>` before cutting (VM `StrSlice`, tree-walker `collection_ops.rs`), so a 10-character slice of 73 728 asks the allocator for 516 KB on the VM and 590 KB on the tree-walker — `--count` bytes, exact. And the tree-walker's `s$#` asks for exactly n bytes per call: it copies the string to measure it |
-| PERF-06 `s = s "x"` is quadratic, VM | Reproduced; not filed |
+| PERF-06 `s = s "x"` is quadratic, VM | Fixed 2026-10-16 as ZYVM-023; held by `cost/` `growth/concat-local`, `growth/concat-in-function` and `growth/concat-module-state` |
 | PERF-07 deep recursion aborts the process (exit 134), no Zymbol error | Reproduced; not filed |
 | PERF-08 the static musl binary, up to 11× slower | Not reproduced here: no musl target on this machine |
 
