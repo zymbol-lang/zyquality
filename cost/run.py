@@ -149,6 +149,12 @@ def main() -> int:
         # reach (zyjs, a `count_off` case, a `time-ratio`) keeps NO VERDICT: the
         # clock is the only thing that could have answered it.
         too_fast: dict[str, str] = {}
+        # engine → how many readings answered it, and whether any failed. A
+        # finding is paid when EVERY reading of its engine passes, timed and
+        # counted together: a defect the counters are blind to (a scan inside
+        # one instruction) passes every counted ratio while it is still open.
+        readings: dict[str, int] = {}
+        failed: dict[str, bool] = {}
         print(f"  {C['bold']}{cid}{C['off']}  {C['dim']}{case['what']}{C['off']}")
         for eng in case.get("engines", defaults.get("engines", [])):
             if eng not in ENGINES:
@@ -227,16 +233,8 @@ def main() -> int:
                           f"ZyDDT/HALLAZGOS/{off_file(known)}{C['off']}")
                 else:
                     rc = RED if rc != NOVERDICT else rc
-            elif known:
-                # The other direction, which is the one nobody builds: debt that
-                # got fixed and whose marker stayed behind. Red since 2026-10-02:
-                # printed in green, the marker outlived the fix and would have
-                # covered the next regression of the same case in silence — the
-                # open door `@reject-pending` (PROMOTE), ZyDDT's STALE WORDING
-                # and its own `open_finding` (VERDICTS.md § 12) all refuse.
-                print(f"          {C['red']}DEBT PAID — {known} now passes: close "
-                      f"the finding and drop `open_finding`{C['off']}")
-                rc = RED if rc != NOVERDICT else rc
+            readings[eng] = readings.get(eng, 0) + 1
+            failed[eng] = failed.get(eng, False) or not ok
         # ── The same question, counted instead of timed ───────────────────────
         #
         # A growth case is also asked in `zymbol run --count`'s units, where the
@@ -282,13 +280,37 @@ def main() -> int:
                     print(f"    {C['dim']}SKIPPED{C['off']}  {eng:5s}  timed ratio: "
                           f"{too_fast[eng]}; the counted ratios below {how}")
                     skipped += 1
+                known = case.get("open_finding", {}).get(eng)
                 for metric, lim, x, y, ratio, ok in rows:
-                    tag = f"{C['green']}PASS{C['off']}" if ok else f"{C['red']}FAIL{C['off']}"
+                    readings[eng] = readings.get(eng, 0) + 1
+                    failed[eng] = failed.get(eng, False) or not ok
+                    if ok:
+                        tag = f"{C['green']}PASS{C['off']}"
+                    elif known:
+                        tag = f"{C['yellow']}KNOWN{C['off']}"
+                    else:
+                        tag = f"{C['red']}FAIL{C['off']}"
                     print(f"    {tag}  {eng:5s}  ratio {ratio:5.2f}  limit {lim:4.2f}   "
                           f"{C['dim']}{metric} {x}→{y} at ×{f}, counted{C['off']}")
                     if not ok:
                         print(f"          {C['dim']}{case['why']}{C['off']}")
-                        rc = RED if rc != NOVERDICT else rc
+                        if known:
+                            print(f"          {C['dim']}declared: {known} — "
+                                  f"ZyDDT/HALLAZGOS/{off_file(known)}{C['off']}")
+                        else:
+                            rc = RED if rc != NOVERDICT else rc
+        # The other direction, which is the one nobody builds: debt that got
+        # fixed and whose marker stayed behind. Red since 2026-10-02: printed in
+        # green, the marker outlived the fix and would have covered the next
+        # regression of the same case in silence — the open door
+        # `@reject-pending` (PROMOTE), ZyDDT's STALE WORDING and its own
+        # `open_finding` (VERDICTS.md § 12) all refuse. Decided once per engine,
+        # over all its readings (see `readings`).
+        for eng, known in case.get("open_finding", {}).items():
+            if readings.get(eng) and not failed.get(eng):
+                print(f"    {C['red']}DEBT PAID — {known} now passes: close "
+                      f"the finding and drop `open_finding`{C['off']}")
+                rc = RED if rc != NOVERDICT else rc
         print()
 
     for f in tmp:

@@ -97,3 +97,8 @@ call returns and the caller uses once stays in its temporary register until some
 nothing since 2026-10-10: `ZYTW-010` (`growth/module-call-that-writes-one-cell`, 13.8 under the tree-walker)
 and `ZYVM-010` (`call/frame-as-large-as-every-temporary`, 2.76 under the VM) were declared here as `KNOWN` and
 fixed that day; both cases are plain `PASS` now, and a ratio that climbs back is a regression.
+`ZYVM-023` (`growth/concat-*`, `s = s "x"` copying the whole text on every append) was the first debt declared
+on a **counted** ratio, `bytes`, on 2026-10-16, and was fixed the same day. Until then the runner read
+`open_finding` only on the clock's ratios; it reads it on the counted ones too, and calls a debt paid only
+when every reading of its engine passes — a defect `--count` is blind to passes every counted ratio while
+it is still open.
