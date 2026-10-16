@@ -47,6 +47,7 @@ ejecución	index out of bounds: index {} for named tuple of length {}
 ejecución	input read error: {}
 ejecución	input: failed to disable raw mode: {}
 ejecución	input: failed to restore raw mode: {}
+ejecución	internal: string cursor {} outside the text
 ejecución	internal: use of '{}' after auto-destruction (string interpolation) — this is a bug in the last-use analyzer, please report it
 ejecución	internal: use of '{}' after auto-destruction — this is a bug in the last-use analyzer, please report it (workaround: add a later `>> {}` mention or a `\\ {}` at the intended end of life)
 ejecución	invalid savepoint name '{}'
