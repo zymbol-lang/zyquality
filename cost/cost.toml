@@ -236,6 +236,28 @@ what      = "building a text in a module's own state is linear in its length"
 why       = "a concatenation that writes to a new register copies the whole text on every append"
 
 [[case]]
+id        = "growth/foreach-over-text"
+kind      = "growth-ratio"
+template  = "casos/recorrer_texto.zy.in"
+n         = 160000
+# The VM at four times the size once it walks in a straight line: 80 000 is
+# 34 ms, under the floor.
+n_by_engine = { zyvm = 320000, zyjs = 10000 }
+factor    = 4
+max_ratio = 6.0
+what      = "walking a text character by character is linear in its length"
+# The counters are blind to this one: each turn is one instruction whatever it
+# scans, so `steps` is 4.00 while the clock says 8. Asked by the clock, and on a
+# text that is not ASCII, where a scan per turn shows soonest. Measured
+# 2026-10-16: zyvm 47 ms → 387 ms over 20 000 → 80 000 «ñ», and 6 s at 320 000;
+# ASCII hides it longer — 1.26 s → 21.4 s over 320 000 → 1 280 000, zytw
+# 135 ms → 471 ms. ZyBigBench's PERF-04. ZYVM-025, closed the same day: the
+# loop keeps a byte cursor and `StrCharNext` decodes the character there —
+# 320 000 «ñ» in 58 ms, 1 280 000 ASCII in 207 ms.
+why       = "each turn finds its character by scanning the text from the start"
+engines   = ["zytw", "zyvm", "zyjs"]
+
+[[case]]
 id        = "growth/update-local"
 kind      = "growth-ratio"
 template  = "casos/actualizar_local.zy.in"
