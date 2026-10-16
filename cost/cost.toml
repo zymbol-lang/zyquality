@@ -257,6 +257,47 @@ what      = "walking a text character by character is linear in its length"
 why       = "each turn finds its character by scanning the text from the start"
 engines   = ["zytw", "zyvm", "zyjs"]
 
+# A slice of a text and a read of one. Asked by the counters alone: each
+# slice and each `s$#` still counts the text's characters — PERF-05 b in
+# interpreter/ROADMAP_V0011_ES.md, deferred by D8 — so the clock is quadratic
+# whatever is copied, and `bytes` is what sees the copy.
+[[case]]
+id        = "growth/slice-a-text"
+kind      = "growth-ratio"
+template  = "casos/cortar_texto.zy.in"
+n         = 2000
+factor    = 4
+max_ratio = 6.0
+clock_off = "each slice counts the text's characters (PERF-05 b, deferred by D8): the clock is quadratic whatever the slice copies"
+open_finding = { zytw = "ZYTW-016" }
+what      = "a slice of a text costs what it takes, not what the text is long"
+# The three ways the VM slices a text — StrSlice, StrSliceCount, and ArraySlice
+# when the text comes through a parameter — one character each, N times over a
+# text of N «ñ». Measured 2026-10-16, `--count` bytes from 2 000 to 8 000:
+# zyvm 74 MB → 1 155 MB (×15.5), zytw 105 MB → 1 666 MB. ZyBigBench's PERF-05.
+# GLB-130, closed the same day: the piece is found where it is and copied
+# alone — zyvm 2.33 MB → 2.66 MB. The tree-walker still pays ZYTW-016 here,
+# 32 MB → 514 MB: each read of `s` copies it, slice or no slice.
+why       = "a slice copies the whole text into a Vec<char> to cut a piece of it"
+engines   = ["zytw", "zyvm"]
+
+[[case]]
+id        = "growth/read-a-text"
+kind      = "growth-ratio"
+template  = "casos/leer_texto.zy.in"
+n         = 2000
+factor    = 4
+max_ratio = 6.0
+clock_off = "`s$#` counts the text's characters (PERF-05 b, deferred by D8): the clock is quadratic whatever the read copies"
+open_finding = { zytw = "ZYTW-016" }
+what      = "reading a text that a variable holds does not copy it"
+# The control of the case above, and a case of its own: the same loop with
+# only `s$#`. Measured 2026-10-16, `--count` bytes from 2 000 to 8 000: zyvm
+# 2.29 MB → 2.58 MB, zytw 8.1 MB → 128 MB (×15.9) — the tree-walker's text is
+# a `String`, and a read of the variable clones it.
+why       = "the tree-walker's text has no Rc: every read of the variable copies it"
+engines   = ["zytw", "zyvm"]
+
 [[case]]
 id        = "growth/update-local"
 kind      = "growth-ratio"
