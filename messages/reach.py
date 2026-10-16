@@ -187,7 +187,11 @@ def emitted(verbose: bool = True) -> set[str]:
                     ran.append(os.path.join(d, f))
 
     jobs = [["zymbol", "check", f] for f in checked]
-    jobs += [["zymbol", "run", *flag, f] for f in ran for flag in ([], ["--vm"])]
+    # Each Rust engine by name. `run` with no flag was the tree-walker until
+    # 2026-10-13, when the VM became the default — and from then on both
+    # passes ran the VM, so no tree-walker runtime diagnostic could be seen
+    # provoked here (the trap ROADMAP_V0011_ES.md describes for engines.toml).
+    jobs += [["zymbol", "run", *flag, f] for f in ran for flag in (["--tw"], ["--vm"])]
     if verbose:
         print(f"  {len(checked)} ficheros con `check`, {len(ran)} con `run` "
               f"en dos motores — {len(jobs)} ejecuciones…", flush=True)
