@@ -257,6 +257,24 @@ what      = "walking a text character by character is linear in its length"
 why       = "each turn finds its character by scanning the text from the start"
 engines   = ["zytw", "zyvm", "zyjs"]
 
+[[case]]
+id        = "growth/dictionary-by-key"
+kind      = "growth-ratio"
+template  = "casos/diccionario.zy.in"
+n         = 64000
+n_by_engine = { zyvm = 128000, zyjs = 16000 }
+factor    = 4
+max_ratio = 6.0
+what      = "adding and reading keys of a dictionary costs the same whatever its size"
+# Asked by the clock: a lookup is one instruction whatever it walks, so the
+# counters see 4.00. Measured 2026-10-16, n keys added with `d[k]$~ i` and
+# each read once, 4 000 → 16 000: zyvm 57 → 438 ms, zytw 66 → 651 ms, zyjs
+# 302 → 2 685 ms. ZyBigBench's PERF-03. GLB-132, closed the same day: an
+# IndexMap in the Rust engines, and in zyjs a key index plus the in-place write
+# ZYJS-014 gave arrays. 16 000 keys: zyvm 14 ms, zytw 28 ms, zyjs 399 ms.
+why       = "a dictionary that finds a key by walking its pairs makes n insertions cost n²"
+engines   = ["zytw", "zyvm", "zyjs"]
+
 # A slice of a text and a read of one. Asked by the counters alone: each
 # slice and each `s$#` still counts the text's characters — PERF-05 b in
 # interpreter/ROADMAP_V0011_ES.md, deferred by D8 — so the clock is quadratic
