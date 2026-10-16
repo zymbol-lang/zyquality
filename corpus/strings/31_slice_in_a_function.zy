@@ -1,0 +1,23 @@
+// A text sliced where its type is not known when the program is compiled — a
+// parameter — follows the same rule as one whose type is (ZYVM-026,
+// 2026-10-16): a range that runs backwards reverses, one past the end is an
+// error, a negative position counts from the end.
+//
+// The VM chose its instruction by the static type, and the one it took for a
+// value of unknown type still clamped the range, the rule before D3: the
+// backwards slice was empty and the one past the end was cut short in silence.
+
+hasta(s, a, b) { <~ s$[a..b] }
+
+t = "ñandú"
+>> hasta(t, 2, 3) " | " t$[2..3] ¶
+>> hasta(t, 3, 1) " | " t$[3..1] ¶
+>> hasta(t, -2, -1) " | " t$[-2..-1] ¶
+>> hasta(t, 5, 1) " | " t$[5..1] ¶
+>> hasta(t, 0, 2) " | " t$[0..2] ¶
+>> hasta(t, 3, 3) " | " t$[3..3] ¶
+
+!? { >> hasta(t, 2, 9) ¶ } :! { >> _err ¶ }
+!? { >> t$[2..9] ¶ } :! { >> _err ¶ }
+!? { >> hasta("a", 3, 1) ¶ } :! { >> _err ¶ }
+!? { >> hasta(t, -9, 2) ¶ } :! { >> _err ¶ }
