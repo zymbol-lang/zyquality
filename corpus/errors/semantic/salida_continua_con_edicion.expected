@@ -1,0 +1,10 @@
+warning: this line continues the `>>` above: an edit here is printed, not made — end the output with ¶ to make it a statement
+  --> errors/semantic/salida_continua_con_edicion.zy:9:1
+
+warning: this line continues the `>>` above: an edit here is printed, not made — end the output with ¶ to make it a statement
+  --> errors/semantic/salida_continua_con_edicion.zy:12:1
+
+warning: this line continues the `>>` above: an edit here is printed, not made — end the output with ¶ to make it a statement
+  --> errors/semantic/salida_continua_con_edicion.zy:15:1
+
+Checked with 3 warning(s)
