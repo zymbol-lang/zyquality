@@ -1,0 +1,21 @@
+// `_err` in a `:!` nested inside another `:!` is the same name (ZYJS-066;
+// zone 3 of the v0.0.11 probe).
+//
+// A clause binds `_err` the way `m = …` binds `m` — MEM-7, the rule
+// `##Kind(m)` follows: one already visible is assigned. So after a `!?` nested
+// in a clause, that clause reads the error of the inner one. zyjs defined a
+// second `_err` in every clause, and the outer clause read its own again.
+f() {
+    !? { y = [1][3] } :! {
+        !? { z = 1 / 0 } :! { >> "in:" _err " " }
+        >> "out:" _err ¶
+    }
+}
+f()
+!? { y = [1][3] } :! {
+    !? { z = 1 / 0 } :! { >> "in:" _err " " }
+    >> "out:" _err ¶
+}
+!? { y = 1 / 0 } :! {
+    >> "solo:" _err ¶
+}
