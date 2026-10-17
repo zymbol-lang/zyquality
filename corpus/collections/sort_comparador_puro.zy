@@ -1,0 +1,43 @@
+// A comparator that is a comparison of its two parameters is evaluated by the
+// VM without a call (option B, decided by the author on 2026-10-17): the same
+// merge sort, the same questions in the same order, the same values and the
+// same errors, reported where a call would have reported them. This file is
+// what holds the "same": every form the VM evaluates in place, an error of each
+// kind it can raise there, and the bodies it must still call — a block that
+// reassigns a parameter, a captured name, a literal on either side.
+g = [#(name: "Ana", age: 31), #(name: "Luis", age: 25), #(name: "Eva", age: 31)]
+>> g $^ (a, b -> a.age < b.age) ¶
+>> g $^ (a, b -> a.age >= b.age) ¶
+>> g $^ (a, b -> a.name > b.name) ¶
+t = [(1, "x"), (0, "y"), (1, "z")]
+>> t $^ (a, b -> a[1] < b[1]) ¶
+>> t $^ (a, b -> a[-1] > b[-1]) ¶
+w = ["ccc", "a", "bb", ""]
+>> w $^ (a, b -> a$# <= b$#) ¶
+>> [3, 1, 2] $^ (a, b -> a == b) ¶
+>> [3, 1, 2] $^ (a, b -> a <> b) ¶
+>> [1.5, 1.0, 0.5, 2.0] $^ (a, b -> a < b) ¶
+>> ['c', 'a', 'b'] $^ (a, b -> a < b) ¶
+k = 3
+>> [5, 1, 4, 2] $^ (a, b -> a < k) ¶
+>> [5, 1, 4, 2] $^ (a, b -> {
+    <~ a > b
+}) ¶
+!? { >> g $^ (a, b -> a.edad < b.edad) ¶ } :! { >> "P1 " _err ¶ }
+!? { >> #[1, "a"] $^ (a, b -> a < b) ¶ } :! { >> "P2 " _err ¶ }
+!? { >> t $^ (a, b -> a[3] < b[3]) ¶ } :! { >> "P3 " _err ¶ }
+!? { >> [1, 2] $^ (a, b -> a$# < b$#) ¶ } :! { >> "P4 " _err ¶ }
+!? { >> [(1, 2), (3, 4)] $^ (a, b -> a.x < b.x) ¶ } :! { >> "P5 " _err ¶ }
+!? { >> [#(a: 1), #(a: 2)] $^ (p, q -> p[1] < q[1]) ¶ } :! { >> "P6 " _err ¶ }
+>> [#(a: 2), #(a: 1)] $^ (p, q -> p["a"] < q["a"]) ¶
+>> "fin" ¶
+h = [#(x: 3), #(x: 1), #(x: 2)]
+>> h $^ (a, b -> {
+    a = a.x
+    <~ a < b.x
+}) ¶
+k2 = 2
+>> [5, 1, 4, 2] $^ (a, b -> a < k2) ¶
+>> [5, 1, 4, 2] $^ (a, b -> b > a) ¶
+>> [5, 1, 4, 2] $^ (a, b -> 3 < a) ¶
+>> ["b", "a"] $^ (a, b -> a < "b") ¶

@@ -83,6 +83,9 @@ branch that morning) against `71141c1`, each against its Python twin. The counte
 (`RangeStep`, ZYVM-029), `$>`/`$|`/`$<` on the VM's frames (`HofNext`), no `LoadUnit` before a `Return`, and a
 call that pushes its frame inline. Every program still prints what its twin prints. Above Python: `tak` 1.27,
 `sort_cmp_300k` 1.25, `fib_rec` 1.10, `nqueens` 1.06 — what is left is the cost of a call.
+Later the same day, `call_callable` writing its arguments in place and option B — `$^` evaluating a comparator
+that is a comparison of its parameters without a call — took `sort_cmp_300k` to **0.69** of Python
+(`30ad8ae` −9.8 %, then −39.0 %).
 
 | program | before | after | after/before | before / Python | after / Python |
 |---|---:|---:|---:|---:|---:|
