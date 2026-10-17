@@ -78,6 +78,31 @@ compiled dispatch loop and not `StrLen` — the scan itself is PERF-05 b, deferr
 would make it O(1). `bench/baseline.txt` (2026-10-09) passes 16 of 16; its `vm/bench_recursion`
 reads +15 % against a figure of another day, and interleaved with `b49fc26` the two are equal.
 
+**Stage 2, later on 2026-10-17, in instructions** (`perf_event_paranoid=1`, median of 7, VM): `d1c9554` (the
+branch that morning) against `71141c1`, each against its Python twin. The counted loop in one instruction
+(`RangeStep`, ZYVM-029), `$>`/`$|`/`$<` on the VM's frames (`HofNext`), no `LoadUnit` before a `Return`, and a
+call that pushes its frame inline. Every program still prints what its twin prints. Above Python: `tak` 1.27,
+`sort_cmp_300k` 1.25, `fib_rec` 1.10, `nqueens` 1.06 — what is left is the cost of a call.
+
+| program | before | after | after/before | before / Python | after / Python |
+|---|---:|---:|---:|---:|---:|
+| `array_update` | 18M | 10M | -41.5% | 0.45 | 0.26 |
+| `collatz` | 4509M | 4495M | -0.3% | 0.45 | 0.45 |
+| `fib_rec` | 10846M | 9960M | -8.2% | 1.19 | 1.10 |
+| `hof_chain` | 4042M | 3819M | -5.5% | 1.01 | 0.95 |
+| `loop_mod` | 9411M | 6211M | -34.0% | 0.49 | 0.32 |
+| `mandelbrot` | 2809M | 2792M | -0.6% | 0.36 | 0.36 |
+| `match_loop` | 4431M | 3324M | -25.0% | 0.68 | 0.51 |
+| `matmul` | 4533M | 3427M | -24.4% | 0.51 | 0.39 |
+| `nqueens` | 3478M | 3399M | -2.3% | 1.08 | 1.06 |
+| `primes_trial` | 2801M | 2710M | -3.2% | 0.36 | 0.35 |
+| `sort_builtin` | 1028M | 835M | -18.7% | 0.63 | 0.52 |
+| `sort_cmp_300k` | 6073M | 5840M | -3.8% | 1.30 | 1.25 |
+| `sort_cmp_4k` | 53M | 50M | -4.6% | 0.60 | 0.57 |
+| `strings_scan_long` | 389M | 388M | -0.3% | 0.72 | 0.72 |
+| `strings_scan_short` | 773M | 772M | -0.1% | 0.80 | 0.80 |
+| `tak` | 5256M | 4628M | -12.0% | 1.45 | 1.27 |
+
 **What `--count` cannot see, and why each runner carries both.** A scan inside
 one instruction is one step whatever the length of what it scans. `scaling.py`
 says so per curve: when the time grows faster than expected and neither steps
