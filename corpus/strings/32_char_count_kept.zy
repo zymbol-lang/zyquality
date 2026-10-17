@@ -1,0 +1,26 @@
+// A text keeps how many characters it has, counted the first time it is
+// asked (PERF-05 b, 2026-10-17): `s$#`, `s[i]` and a slice no longer walk it
+// every time. The count must never outlive the text it counts — a text grown
+// in place is a new one, and a text another name holds is not touched.
+s = "ñandú_largo"
+>> s$# " " s[1] " " s[-1] " " s$[2..4] ¶
+@ i:1..3 {
+    s = s "é"
+    >> s$# " " s[s$#] " " s$[-3..-1] ¶
+}
+t = s
+s = s "xyz"
+>> t$# " " s$# " " t[-1] " " s[-1] ¶
+a = "abcdefghij"
+>> a$# " " a[5] " " a$[3..6] " " a$[6..3] " " a$[2:3] ¶
+a = a "ñ"
+>> a$# " " a[-1] " " a$[9..11] ¶
+b = a$[1..10]
+>> b$# " " b[-1] ¶
+c = "😀😀😀😀😀😀😀😀"
+>> c$# " " c$[2..3] " " c[8] ¶
+d = c
+c = c "a"
+>> d$# " " c$# " " c[-1] ¶
+@ ch:"añb" { >> ch }
+>> ¶
