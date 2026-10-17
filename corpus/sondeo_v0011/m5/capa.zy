@@ -1,0 +1,10 @@
+# capa {
+    <# ./cuenta => c
+    #> { c::sube => avanza, c.LIM => TOPE, propio, via }
+    m = 0
+    propio() {
+        m = m + 1
+        <~ m
+    }
+    via() { <~ c::lee() }
+}

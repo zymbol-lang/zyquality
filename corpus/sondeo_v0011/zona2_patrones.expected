@@ -1,0 +1,42 @@
+1 escrutado:
+<5>cinco
+2 comparacion:
+<10><20>b
+3 alternativas:
+<1><7>si
+4 lista con expr:
+esta
+5 valor del brazo:
+<dos>dos
+6 int float:
+int float
+8 negativos:
+neg lit
+9 rango invertido:
+fuera
+10 bool:
+v
+11 ident escalar y arreglo:
+lim grupo
+12 lista estructural:
+anidada vacia
+13 lista sobre texto:
+en
+14 error:
+P:mal IO valor 
+15 nombre ya visible:
+mal mal
+16 Depth:
+depth
+17 sin coincidencia:
+##_(no pattern matched in match expression)
+18 control en brazo:
+13
+19 retorno en brazo:
+neg nonneg
+20 anidado:
+dos-tres
+21 funcion:
+doble
+24 rango float:
+Runtime error: range pattern type mismatch
