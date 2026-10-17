@@ -50,6 +50,34 @@ findings — with no `noisy` row, and without the clock's false positive on
 `dict_update_existing`. Instructions are not time: on the VM the sixteen
 programs come out at 1.02× Python in instructions and 0.86× in CPU time.
 
+**Stage 2 measured, 2026-10-17** — CPU time (`perf` was locked, `perf_event_paranoid=3`), the
+VM, against `b49fc26` (the branch when stage 2 began, built here with the same profile) and
+against the official v0.0.10 `.deb` binary, each pair interleaved in one session. `run.py`: 16 of
+16 programs agree with Python; geometric mean of the 15 compared, after/before — cpu-ms **0.842**
+against `b49fc26` and **0.785** against v0.0.10, bytes **0.784**, steps 1.000. The gain is the
+string programs: `strings_scan_long` 487 → 42 ms (bytes 90.4 MB → 2.6 MB), `strings_scan_short`
+140 → 70 ms; the rest move within the clock's ±10 %. Zymbol/Python over the 13 programs above
+50 ms: **0.80**. The tree-walker is unchanged (1.07, noise) — stage 2 did not aim at it.
+
+`gap.py`, 27 operations, every value equal to Python's in both engines, VM at 2n:
+
+| operation | before | after | after/before | growth ×2n, before → after |
+|---|---:|---:|---:|---|
+| `str_iter` (PERF-04) | 1 025 ms | 24 ms | 0.02 | 4.00 → linear |
+| `dict_lookup_last` (PERF-03) | 202 ms | 4 ms | 0.02 | — |
+| `dict_insert` (PERF-03) | 102 ms | 7 ms | 0.07 | 2.91 → 1.75 |
+| `str_concat` (PERF-06) | 264 ms | 26 ms | 0.10 | 6.77 → 2.36 |
+| `str_slice_small` (PERF-05 a) | 146 ms | 17 ms | 0.12 | — |
+
+Two things it found that were not wins. **A call got dearer**: the depth limit of GLB-133 read the
+thread's stack on every call, ~8 % of a loop of 3 000 000 one-line calls; the direct call does not
+recurse in Rust, so the check was dropped there and kept where `$>` re-enters the loop — ~4 % is
+left, inside the clock's reach and not attributable without `perf`. And **`s$#` over a 147 KB
+ASCII text** runs ~18 % slower, 200 000 times over: the same code and the same steps, so the
+compiled dispatch loop and not `StrLen` — the scan itself is PERF-05 b, deferred by D8, whose fix
+would make it O(1). `bench/baseline.txt` (2026-10-09) passes 16 of 16; its `vm/bench_recursion`
+reads +15 % against a figure of another day, and interleaved with `b49fc26` the two are equal.
+
 **What `--count` cannot see, and why each runner carries both.** A scan inside
 one instruction is one step whatever the length of what it scans. `scaling.py`
 says so per curve: when the time grows faster than expected and neither steps
