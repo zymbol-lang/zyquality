@@ -93,7 +93,18 @@ restore() { if [[ -n "$CURF" && -f "$WORK/cur" ]]; then cp "$WORK/cur" "$CURF"; 
 trap restore EXIT
 
 # Diagnostics legitimately shift line/col after formatting; normalize spans.
-normalize_spans() { sed -E 's/:[0-9]+:[0-9]+/:L:C/g'; }
+# A position names a line the formatter is free to move: a diagnostic's
+# `:line:col`, and a runtime error's `--> file:line`, which has no column and
+# went through untouched — so formatting a program that ends in an uncaught
+# error failed P3 for the line number alone (found 2026-10-16).
+normalize_spans() { sed -E 's/:[0-9]+:[0-9]+/:L:C/g; s/^( *--> .*):[0-9]+$/\1:L/'; }
+
+# P3 asks whether the program DOES the same, so the analysis warnings printed
+# before it runs are left out: they describe the layout of the source, which
+# is what the formatter changes on purpose. The case that showed it: a `>>`
+# continued on the next line by an edit is warned about (GLB-137), and the
+# formatter joins the two lines — the warning goes, the output stays.
+drop_warnings() { awk '/^warning:/ { w = 1 } w && /^$/ { w = 0; next } !w { print }'; }
 
 run_file() { # $1 = absolute .zy path; its .input is stdin and its .keys the key script
     local input_file="${1%.zy}.input" keys_file="${1%.zy}.keys" here
@@ -104,7 +115,7 @@ run_file() { # $1 = absolute .zy path; its .input is stdin and its .keys the key
     # there, and a second run cannot read what the first one left behind.
     here="$(mktemp -d "$WORK/run.XXXXXX")"
     (cd "$here" && timeout "$TIMEOUT_SEC" "$ZYMBOL" run ${keys[@]+"${keys[@]}"} "$1" < "$input_file" 2>&1) \
-        | normalize_spans
+        | drop_warnings | normalize_spans
     rm -rf "$here"
     return 0
 }
