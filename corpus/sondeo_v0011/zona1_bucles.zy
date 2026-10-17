@@ -1,0 +1,127 @@
+// The five-zone probe of v0.0.11, zone 1 (loops and hot variables), 2026-10-16.
+//
+// Every operand that could be evaluated twice, or in another order, is a call
+// that prints: the output says how many times and in which order, which a
+// golden of values alone cannot. What it found is filed in ZyDDT/HALLAZGOS:
+// GLB-135, ZYJS-063.
+
+eco(x) {
+    >> "<" x ">"
+    <~ x
+}
+>> "1 rango: "
+@ i:eco(1)..eco(3) { >> i }
+>> ¶
+>> "2 paso: "
+@ i:eco(1)..eco(9):eco(4) { >> i }
+>> ¶
+>> "3 veces: "
+@ eco(3) { >> "." }
+>> ¶
+>> "4 mientras: "
+k = 0
+@ eco(k) < 3 { k = k + 1 }
+>> " k=" k ¶
+>> "5 iterable: "
+@ e:eco([1, 2]) { >> e }
+>> ¶
+>> "6 limite cambia: "
+n = 3
+@ i:1..n {
+    >> i
+    n = 1
+}
+>> " n=" n ¶
+>> "7 var de bucle: "
+@ i:1..3 {
+    i = i * 10
+    >> i " "
+}
+>> ¶
+>> "8 arreglo crece: "
+a = [1, 2]
+@ e:a {
+    >> e
+    a = a$+ 9
+}
+>> " " a ¶
+>> "9 dicc crece: "
+d = #(x: 1)
+@ c:d {
+    >> c
+    d["z"]$~ 2
+}
+>> " " d ¶
+>> "10 descendente: "
+@ i:3..1 { >> i }
+>> " paso neg: "
+@ i:10..1:3 { >> i " " }
+>> ¶
+>> "11 veces 0: "
+@ 0 { >> "x" }
+>> "fin" ¶
+>> "12 caliente: "
+@ v:[1, 2, 3] { t = °t + eco(v) }
+>> " t=" t ¶
+>> "13 cadena caliente: "
+@ ch:"abc" { °s = s ch }
+>> s ¶
+>> "14 producto: "
+@ v:[2, 3, 4] { °p *= v }
+>> p ¶
+>> "15 anidado: "
+@ _j:[1, 2] {
+    @ q:[10, 20] { °acum += q }
+    >> acum " "
+}
+>> ¶
+>> "16 postfijo: "
+@ v:[1, 2, 3] {
+    cnt° += v
+    >> cnt " "
+}
+>> ¶
+suma(xs) {
+    @ v:xs { °tot += v }
+    <~ tot
+}
+>> "17 funcion: "
+@ r:[1, 2] { >> suma([r, r]) " " }
+>> ¶
+>> "18 cierres: "
+fs = []
+@ i:1..3 { fs = fs$+ (() -> i * 100) }
+@ f:fs { >> f() " " }
+>> ¶
+>> "19 etiquetas: "
+@:fuera i:1..3 {
+    @ j:1..3 {
+        ? j == 2 { @> }
+        ? i == 2 { @:fuera> }
+        ? i == 3 { @:fuera! }
+        >> i j " "
+    }
+}
+>> ¶
+busca(m) {
+    @ i:1..5 {
+        @ j:1..5 { ? i * j == m { <~ (i, j) } }
+    }
+    <~ ##_
+}
+>> "20 retorno: "
+>> busca(6) " " busca(7) ¶
+!? { >> "21 rango float: "
+    @ x:1.0..3.0 { >> x " " } } :! { >> _err }
+>> ¶
+!? { >> "22 paso 0: "
+    @ i:1..3:0 { >> i } } :! { >> _err }
+>> ¶
+c = 0
+pide() {
+    >> "?"
+    <~ #1
+}
+>> "23 mientras efecto: "
+@ pide() && c < 2 { c = c + 1 }
+>> ¶

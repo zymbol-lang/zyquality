@@ -1,0 +1,36 @@
+1 efectos antes del fallo:
+cf n=1
+2 finally con retorno:
+ <t>Ft
+3 finally en bucle:
+1FFF
+4 sin captura con finally:
+F1 fuera:##Index(array index out of bounds: index 5 for array of length 1)
+5 error en la captura:
+F2 ##Index(array index out of bounds: index 9 for array of length 1)
+6 error en el finally:
+c ##Index(array index out of bounds: index 9 for array of length 1)
+7 retorno en finally:
+t
+8 tipadas en orden:
+div
+9 _err anidado:
+##Index(array index out of bounds: index 9 for array of length 1) | ##Index(array index out of bounds: index 9 for array of length 1)
+10 valor no se lanza:
+#1
+11 propaga valor:
+20 ##Parse(p)
+12 variables tras fallo en funcion:
+fuera
+13 error en lambda de map:
+##Div(division by zero)
+14 captura modifica fuera:
+20
+15 finally solo:
+tF
+16 tipo nativo:
+type
+17 escrutado con efecto en catch:
+<9>idx
+18 cuantas veces finally:
+ F1F22
