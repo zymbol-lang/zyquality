@@ -1,0 +1,23 @@
+// A line break does not end `>>`, so an edit that starts a line inside one is
+// an item of the output: it prints what it would build and the variable does
+// not change. `check` says so, in the three engines (GLB-137, decided by the
+// author 2026-10-16). Spreading one output over several lines is a form
+// programs use, and an assignment there still starts a statement.
+d = #(x: 1)
+v = [3, 1]
+>> "a"
+d["z"]$~ 2
+>> ¶
+>> "b"
+v$+ 5
+>> ¶
+>> "c"
+v$^+
+>> ¶
+>> "varias "
+   "lineas" ¶
+n = 1
+>> "d"
+n = 7
+>> n ¶
+>> d v ¶
