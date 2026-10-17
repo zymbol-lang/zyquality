@@ -1,0 +1,27 @@
+// A list pattern inside a list pattern, and the operand of a comparison
+// pattern evaluated once (ZYJS-064, ZYJS-065; zone 2 of the v0.0.11 probe).
+//
+// zyjs parsed the inner list as an array literal, so its `_` was read as a
+// variable and the match aborted with "'_' is undefined"; and it evaluated
+// the operand of `==` and `<>` a second time, so each call in it ran twice.
+eco(x) {
+    >> "<" x ">"
+    <~ x
+}
+>> (?? #[1, [2, 3]] { [1, [2, _]] => "a" _ => "no" }) ¶
+>> (?? #[1, [2, 3]] { [1, [2, 3]] => "b" _ => "no" }) ¶
+>> (?? [[1, 2], [3, 4]] { [[1, _], _] => "c" _ => "no" }) ¶
+>> (?? [1, 2] { [1, [2, 3]] => "d" _ => "no" }) ¶
+>> (?? #[1, [2, 3]] { [1, [_, 3]] || [9] => "e" _ => "no" }) ¶
+>> (?? #[#[1, [2]], 4] { [[1, [_]], _] => "f" _ => "no" }) ¶
+r = ?? 7 {
+    == eco(1) || == eco(7) || == eco(9) => "si"
+    _ => "no"
+}
+>> " " r ¶
+r = ?? 7 {
+    <> eco(7) => "distinto"
+    < eco(10) => "menor"
+    _ => "otro"
+}
+>> " " r ¶
