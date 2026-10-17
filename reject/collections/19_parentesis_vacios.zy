@@ -1,0 +1,7 @@
+// @reject: ZYJS-063 — `()` is not a value: there is no empty tuple in Zymbol
+// @reject: (REFERENCE.md, GUIDE.md), and the empty dictionary is `#()`. Unit,
+// @reject: the absence of a value, is `##_`. The two Rust parsers refused it;
+// @reject: zyjs read it as Unit, so a program that returned `()` ran only in
+// @reject: the browser.
+f() { <~ () }
+>> f() ¶
