@@ -21,10 +21,12 @@ which:
 Julia's twins put their code in a `main()` function: in Julia a global is
 untyped, and measuring that would measure a use nobody writes.
 
-Each figure is the median of `--runs` processes, start-up included, in CPU
-time — user + system, as the kernel accounts the child (`wait4`), which needs
-no privilege — and, where `perf_event_paranoid` allows, in user-space
-instructions. The start-up of each runtime alone — an empty program — is
+Each figure is the median of `--runs` processes, start-up included, in
+elapsed (wall-clock) time and in CPU time — user + system, as the kernel
+accounts the child (`wait4`), which needs no privilege — and, where
+`perf_event_paranoid` allows, in user-space instructions. Elapsed time leads:
+a runtime that compiles on other threads (Julia) spends CPU time no one waits
+for. Run it on a machine that is otherwise idle. The start-up of each runtime alone — an empty program — is
 measured too, because for the short programs it is most of the figure.
 
     python3 langs.py --json out.json          # ZYMBOL_BIN chooses the binary
@@ -80,13 +82,20 @@ def perf_counts(cmd, events):
     return got
 
 
-def cpu_ms(cmd):
-    """CPU time of one run, user + system, from the kernel's accounting of the
-    child (`wait4`): the same quantity as perf's task-clock, and it needs no
-    privilege — perf does, when `perf_event_paranoid` is above 1."""
+def wall_and_cpu_ms(cmd):
+    """One run: elapsed (wall-clock) time, and CPU time — user + system from
+    the kernel's accounting of the child (`wait4`), which needs no privilege.
+
+    Both, because they part ways for a runtime that works on several threads:
+    Julia compiles on other cores while it starts, and its CPU time was three
+    times its elapsed time (fib_rec: 648 ms of CPU in 223 ms). Elapsed time is
+    what whoever runs the program waits, and the figure the page leads with;
+    for a single-threaded interpreter the two agree within a few percent."""
+    import time
+    t0 = time.perf_counter()
     p = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     _pid, _status, ru = os.wait4(p.pid, 0)
-    return (ru.ru_utime + ru.ru_stime) * 1000.0
+    return (time.perf_counter() - t0) * 1000.0, (ru.ru_utime + ru.ru_stime) * 1000.0
 
 
 def perf_works():
@@ -98,14 +107,17 @@ def perf_works():
 def measure(cmd, runs, events):
     """Median CPU time in ms, and median user-space instructions when perf is
     allowed to count them (None otherwise)."""
-    times = [cpu_ms(cmd) for _ in range(runs)]
+    runs_ = [wall_and_cpu_ms(cmd) for _ in range(runs)]
+    times = [c for _w, c in runs_]
+    walls = [w for w, _c in runs_]
     ins = []
     if 'instructions:u' in events:
         for _ in range(runs):
             got = perf_counts(cmd, ['instructions:u'])
             if 'instructions:u' in got:
                 ins.append(got['instructions:u'])
-    return {'task-clock': statistics.median(times), 'instructions:u': statistics.median(ins) if ins else None}
+    return {'task-clock': statistics.median(times), 'wall': statistics.median(walls),
+            'instructions:u': statistics.median(ins) if ins else None}
 
 
 def main():
@@ -166,28 +178,30 @@ def main():
             c = cmd(zy, f)
             out = subprocess.run(c, capture_output=True, text=True).stdout.strip()
             ok = out == ref
-            m = measure(c, a.runs, events) if ok else {e: None for e in events}
-            row['langs'][key] = {'ok': ok, 'ms': m['task-clock'], 'instructions': m['instructions:u']}
+            m = measure(c, a.runs, events) if ok else {'task-clock': None, 'wall': None, 'instructions:u': None}
+            row['langs'][key] = {'ok': ok, 'wall_ms': m['wall'], 'ms': m['task-clock'],
+                                 'instructions': m['instructions:u']}
         rows.append(row)
-        line = '  '.join('%s %s' % (k, ('%7.0f ms' % v['ms']) if v['ok'] else 'WRONG')
+        line = '  '.join('%s %s' % (k, ('%6.0f ms' % v['wall_ms']) if v['ok'] else 'WRONG')
                          for k, v in row['langs'].items())
         print('%-20s %s' % (p, line), flush=True)
 
-    print('\nstart-up (empty program): ' + '  '.join(
-        '%s %.0f ms' % (k, v['task-clock']) for k, v in startup.items() if v['task-clock']))
+    print('\nstart-up (empty program, elapsed): ' + '  '.join(
+        '%s %.0f ms' % (k, v['wall']) for k, v in startup.items() if v['wall']))
     wrong = [(r['program'], k) for r in rows for k, v in r['langs'].items() if not v['ok']]
     print('%d of %d twins agree with Python' % (
         sum(len(r['langs']) for r in rows) - len(wrong), sum(len(r['langs']) for r in rows)))
 
     if a.json:
         doc = {
-            'what': 'bench/big, each program as a twin per language, CPU time and instructions per process',
+            'what': 'bench/big, each program as a twin per language: elapsed time, CPU time and instructions per process',
             'runs': a.runs,
             'cpu': cpu,
             'os': '%s %s' % (platform.system(), platform.release()),
             'versions': versions,
             'langs': [{'key': k, 'label': l, 'kind': kind} for k, l, kind, _e, _c in langs],
-            'startup': {k: {'ms': v['task-clock'], 'instructions': v['instructions:u']} for k, v in startup.items()},
+            'startup': {k: {'wall_ms': v['wall'], 'ms': v['task-clock'], 'instructions': v['instructions:u']}
+                        for k, v in startup.items()},
             'rows': rows,
         }
         with open(a.json, 'w') as fh:
