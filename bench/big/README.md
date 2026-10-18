@@ -10,13 +10,28 @@ account of its own, in a 4 GB container — between 2026-10-10 and 2026-10-13, a
 were brought here on 2026-10-14. Its findings log is `HALLAZGOS.md`, kept
 verbatim and in Spanish, like every findings log in the workspace.
 
-## Three runners, three questions
+## Four runners, four questions
 
 | Runner | Question | Time unit | Exact unit |
 |---|---|---|---|
 | `run.py` | What does a whole program cost, against Python? | The process, start-up subtracted | `--count` of the whole run |
 | `gap.py` | How far is each operation from Python, and does the gap grow with n? | The operation alone | `--count` steps of the operation alone |
 | `scaling.py` | Does an operation grow as it should — linear, or one per call? | The exponent `b` of `y ~ n^b` | `b` in steps and in bytes too |
+| `langs.py` | What does each program cost in other languages? | The process, start-up included, per language | instructions where `perf` allows |
+
+## Other languages — `langs.py` (2026-10-18)
+
+Every program has a twin in `js/` (Node), `jl/` (Julia) and `pl/` (Perl) beside the one in `py/`,
+written as the Python twin is — same algorithm, same shape, same printed line — and `langs.py`
+keeps no figure from a twin whose line differs from Python's. Python and Perl are interpreters, as
+Zymbol is; Node and Julia are JIT compilers and are the reference of what compiling buys. Julia's
+twins wrap their code in `main()`, because a global in Julia is untyped. Start-up is measured on an
+empty program per language, since for the short programs it is most of the figure — Julia's, which
+compiles each program before running it, most of all.
+
+`langs_2026-10-18.json` is the run behind the site's benchmarks page (zymbol-lang.org/benchmarks.html):
+geometric mean of CPU time against CPython — Node 0.26×, Zymbol v0.0.11 (`7ef269c`) 0.53×, Perl
+0.90×, Julia 2.99× with its compilation included; 80 of 80 twins agree.
 
 ## The instruments — the project's own, in `instruments.py`
 
