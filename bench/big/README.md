@@ -21,17 +21,21 @@ verbatim and in Spanish, like every findings log in the workspace.
 
 ## Other languages — `langs.py` (2026-10-18)
 
-Every program has a twin in `js/` (Node), `jl/` (Julia) and `pl/` (Perl) beside the one in `py/`,
-written as the Python twin is — same algorithm, same shape, same printed line — and `langs.py`
-keeps no figure from a twin whose line differs from Python's. Python and Perl are interpreters, as
-Zymbol is; Node and Julia are JIT compilers and are the reference of what compiling buys. Julia's
-twins wrap their code in `main()`, because a global in Julia is untyped. Start-up is measured on an
-empty program per language, since for the short programs it is most of the figure — Julia's, which
-compiles each program before running it, most of all.
+Every program has a twin in `pl/` (Perl), `php/` (PHP), `lua/` (Lua), `rb/` (Ruby), `js/` (Node) and
+`jl/` (Julia) beside the one in `py/`, written as the Python twin is — same algorithm, same shape, same
+printed line — and `langs.py` keeps no figure from a twin whose line differs from Python's. Python,
+Perl, PHP, Lua and Ruby are interpreters, as Zymbol is (PHP's opcache JIT is off on the command line,
+Ruby's YJIT needs `--yjit`); Node and Julia are JIT compilers and are the reference of what compiling
+buys. Julia's twins wrap their code in `main()`, because a global in Julia is untyped. CPU time is the
+kernel's user + system accounting of the child (`wait4`), which needs no privilege; instructions are
+added where `perf` may count them. Start-up is measured on an empty program per language, since for
+the short programs it is most of the figure — Julia's, which compiles each program before running
+it, most of all.
 
-`langs_2026-10-18.json` is the run behind the site's benchmarks page (zymbol-lang.org/benchmarks.html):
-geometric mean of CPU time against CPython — Node 0.26×, Zymbol v0.0.11 (`7ef269c`) 0.53×, Perl
-0.90×, Julia 2.99× with its compilation included; 80 of 80 twins agree.
+`langs_2026-10-18.json` is the run behind the site's benchmarks page (zymbol-lang.org/benchmarks.html),
+128 of 128 twins agreeing. Geometric mean of CPU time with Zymbol v0.0.11 (`7ef269c`) = 1.00: Node
+0.50, Lua 0.55, PHP 0.64, Perl 1.62, Ruby 1.75, Python 1.93, Julia 5.07 with its compilation included.
+Zymbol is the third fastest of the six interpreters; Lua and PHP are the bar now.
 
 ## The instruments — the project's own, in `instruments.py`
 
