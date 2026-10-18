@@ -3,7 +3,7 @@
 
 `run.py` asks one question: what does a whole program cost in Zymbol, against
 Python? This asks the same of more neighbours. Every program has a twin per
-language in py/, js/, jl/ and pl/, written as the Python twin is written —
+language in py/, pl/, php/, lua/, rb/, js/ and jl/, written as the Python twin is written —
 same algorithm, same shape, same printed line — and that line is checked
 against Python's before any figure is kept: a twin that answers something
 else is a different program.
@@ -11,7 +11,9 @@ else is a different program.
 Two kinds of neighbour, and the page that quotes these figures says which is
 which:
 
-  * interpreters, as Zymbol is: Python (CPython) and Perl;
+  * interpreters, as Zymbol is: Python (CPython), Perl, PHP, Lua (PUC) and
+    Ruby (CRuby) — PHP's opcache JIT is off on the command line by default,
+    and Ruby's YJIT needs `--yjit`, so both run here as interpreters;
   * JIT compilers, which turn the program into machine code: JavaScript
     (Node, V8) and Julia. They are expected to win; they are here as the
     reference of what compiling buys.
@@ -20,7 +22,8 @@ Julia's twins put their code in a `main()` function: in Julia a global is
 untyped, and measuring that would measure a use nobody writes.
 
 Each figure is the median of `--runs` processes, start-up included, in CPU
-time (`task-clock`) and, where `perf_event_paranoid` allows, in user-space
+time — user + system, as the kernel accounts the child (`wait4`), which needs
+no privilege — and, where `perf_event_paranoid` allows, in user-space
 instructions. The start-up of each runtime alone — an empty program — is
 measured too, because for the short programs it is most of the figure.
 
@@ -44,11 +47,14 @@ LANGS = [
     ('zymbol', 'Zymbol (VM)', 'interpreter', 'zy', lambda zy, f: [zy, 'run', f]),
     ('python', 'Python (CPython)', 'interpreter', 'py', lambda zy, f: ['python3', f]),
     ('perl', 'Perl', 'interpreter', 'pl', lambda zy, f: ['perl', f]),
+    ('php', 'PHP', 'interpreter', 'php', lambda zy, f: ['php', f]),
+    ('lua', 'Lua', 'interpreter', 'lua', lambda zy, f: ['lua', f]),
+    ('ruby', 'Ruby', 'interpreter', 'rb', lambda zy, f: ['ruby', f]),
     ('node', 'JavaScript (Node, V8)', 'jit', 'js', lambda zy, f: ['node', f]),
     ('julia', 'Julia', 'jit', 'jl', lambda zy, f: ['julia', '--startup-file=no', f]),
 ]
 
-EMPTY = {'zy': '', 'py': '', 'pl': '', 'js': '', 'jl': ''}
+EMPTY = {'zy': '', 'py': '', 'pl': '', 'php': '', 'lua': '', 'rb': '', 'js': '', 'jl': ''}
 
 
 def version(cmd):
@@ -74,14 +80,32 @@ def perf_counts(cmd, events):
     return got
 
 
+def cpu_ms(cmd):
+    """CPU time of one run, user + system, from the kernel's accounting of the
+    child (`wait4`): the same quantity as perf's task-clock, and it needs no
+    privilege — perf does, when `perf_event_paranoid` is above 1."""
+    p = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    _pid, _status, ru = os.wait4(p.pid, 0)
+    return (ru.ru_utime + ru.ru_stime) * 1000.0
+
+
+def perf_works():
+    r = subprocess.run(['env', 'LC_ALL=C', 'perf', 'stat', '-x,', '-e', 'instructions:u', 'true'],
+                       capture_output=True, text=True)
+    return r.returncode == 0 and 'instructions' in r.stderr
+
+
 def measure(cmd, runs, events):
-    samples = {e: [] for e in events}
-    for _ in range(runs):
-        got = perf_counts(cmd, events)
-        for e in events:
-            if e in got:
-                samples[e].append(got[e])
-    return {e: (statistics.median(v) if v else None) for e, v in samples.items()}
+    """Median CPU time in ms, and median user-space instructions when perf is
+    allowed to count them (None otherwise)."""
+    times = [cpu_ms(cmd) for _ in range(runs)]
+    ins = []
+    if 'instructions:u' in events:
+        for _ in range(runs):
+            got = perf_counts(cmd, ['instructions:u'])
+            if 'instructions:u' in got:
+                ins.append(got['instructions:u'])
+    return {'task-clock': statistics.median(times), 'instructions:u': statistics.median(ins) if ins else None}
 
 
 def main():
@@ -94,10 +118,10 @@ def main():
     zy = os.environ.get('ZYMBOL_BIN', 'zymbol')
     if not shutil.which(zy) and not os.path.exists(zy):
         sys.exit('langs.py: no `%s` — set ZYMBOL_BIN to a build' % zy)
-    if not shutil.which('perf'):
-        sys.exit('langs.py: needs `perf` (task-clock); none on PATH')
-
-    events = ['task-clock', 'instructions:u']
+    # CPU time always; instructions only where perf may count them.
+    events = ['task-clock'] + (['instructions:u'] if shutil.which('perf') and perf_works() else [])
+    if len(events) == 1:
+        print('langs.py: perf cannot count here (perf_event_paranoid?) — CPU time only', file=sys.stderr)
     langs = [l for l in LANGS if l[0] == 'zymbol' or shutil.which(l[4](zy, 'x')[0])]
     progs = sorted(f[:-3] for f in os.listdir(os.path.join(HERE, 'zy')) if f.endswith('.zy'))
     if a.only:
@@ -108,6 +132,9 @@ def main():
         'zymbol': version([zy, '--version']),
         'python': version(['python3', '--version']),
         'perl': version(['perl', '-e', 'print "perl $^V\\n"']),
+        'php': version(['php', '-v']),
+        'lua': version(['lua', '-v']),
+        'ruby': version(['ruby', '-v']),
         'node': version(['node', '--version']),
         'julia': version(['julia', '--version']),
     }
