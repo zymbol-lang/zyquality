@@ -360,6 +360,24 @@ why       = "a second owner of the collection at the moment of the write makes t
 engines   = ["zytw", "zyvm", "zyjs"]
 
 [[case]]
+id        = "growth/update-nested"
+kind      = "growth-ratio"
+template  = "casos/actualizar_anidado.zy.in"
+n         = 3000
+n_by_engine = { zyvm = 400000, zyjs = 8000 }
+factor    = 4
+max_ratio = 6.0
+open_finding = { zytw = "GLB-140", zyjs = "GLB-140" }
+what      = "writing one cell two steps down costs the same whatever the number of rows"
+# Measured 2026-10-19, `m[r>2]$~ k` N times over N rows: zytw copied
+# 4 006 000 → 64 024 000 over 2 000 → 8 000 (×16), and 133 → 2 006 ms over
+# 3 000 → 12 000; zyjs 384 → 5 916 ms over 8 000 → 32 000. zyvm copies 3 per
+# row, the first edit of a row it shares with `fila`, and is linear. The
+# one-step form above is linear in all three: the deep one takes another path.
+why       = "an edit through a path copies the outer collection, which has a second owner at the moment of the write"
+engines   = ["zytw", "zyvm", "zyjs"]
+
+[[case]]
 id        = "growth/update-module-state"
 kind      = "growth-ratio"
 template  = "casos/actualizar_modulo.zy.in"
