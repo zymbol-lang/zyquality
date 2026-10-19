@@ -50,8 +50,8 @@ hace con cada uno está en el «Plan de cierre» de `interpreter/ROADMAP_V0011_E
 | Ficha | Qué | Motores | Medido |
 |---|---|---|---|
 | `GLB-139` | `s[i]` y un corte buscan su posición recorriendo el texto. Es el resto de PERF-05 b. **Corregido en la VM el 2026-10-19** (una miga cada 64 caracteres: 128 000 «ñ», 941 → 39 ms); deuda de la v0.0.11 en el árbol y zyjs | VM y árbol con texto no ASCII; zyjs con cualquiera | VM ×13 de 32 000 a 128 000 «ñ»; ASCII plano |
-| `GLB-140` | `m[i>j]$~ v` copia el array exterior entero en cada edición | árbol y zyjs; la VM edita en el sitio | árbol: `copied` = filas + 3 por edición |
-| `ZYJS-068` | `m$+ [0, 0, 0]`: con un literal de colección como operando, zyjs copia el receptor | zyjs | ×21 de 8 000 a 32 000; con `m$+ fila`, lineal |
+| `GLB-140` | `m[i>j]$~ v` copia el array exterior entero en cada edición. **Corregido el 2026-10-19** en el árbol y zyjs | árbol y zyjs; la VM edita en el sitio | árbol: `copied` = filas + 3 por edición; ahora 0 |
+| `ZYJS-068` | `m$+ [0, 0, 0]`: con un literal de colección como operando, zyjs copia el receptor. **Corregido el 2026-10-19** | zyjs | ×21 de 8 000 a 32 000; ahora ×1,8 |
 
 ### Los «Falta probar» de abajo, contestados
 
