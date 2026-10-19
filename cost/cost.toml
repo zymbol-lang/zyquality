@@ -191,6 +191,24 @@ what      = "`a$++ x y` as an edit adds at the end: building an array with it is
 why       = "the bulk append builds a new collection even when its result goes back into its receiver"
 engines   = ["zytw", "zyvm", "zyjs"]
 
+[[case]]
+id        = "growth/append-rows"
+kind      = "growth-ratio"
+template  = "casos/append_filas.zy.in"
+n         = 200000
+n_by_engine = { zyjs = 8000 }
+factor    = 4
+max_ratio = 6.0
+open_finding = { zyjs = "ZYJS-068" }
+what      = "appending a row written as a literal is linear, like appending a number"
+# Measured 2026-10-19, `m$+ [i, 0, 0]`: zyjs 312 ms → 6 634 ms over 8 000 →
+# 32 000 (×21), while `m$+ 0` and `m$+ fila` stay linear. zyjs writes in place
+# only beside an operand that `plainOperand` lists, and a collection literal is
+# not listed. zytw 212 → 749 ms and zyvm 74 → 223 ms over 200 000 → 800 000,
+# `copied` 0 in both.
+why       = "an append whose operand is a collection literal copies its receiver"
+engines   = ["zytw", "zyvm", "zyjs"]
+
 # `s = s "x"` — the way any program builds a text. Three cases because the
 # compiler has three receivers for it, and each one is its own code path: a
 # script's variable (its register is mirrored in a slot), a function's local,

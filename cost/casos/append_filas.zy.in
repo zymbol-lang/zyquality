@@ -1,0 +1,7 @@
+// `m$+ [i, 0, 0]`: a row written as a literal, appended «N» times. Appending
+// does not depend on how many rows there already are, so the whole is linear;
+// an engine that copies the receiver because the operand is a literal is
+// quadratic.
+m = []
+@ i:1..«N» { m$+ [i, 0, 0] }
+>> m$# + m[«N»>1] ¶
