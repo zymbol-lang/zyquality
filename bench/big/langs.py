@@ -43,10 +43,17 @@ import sys
 import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+OLD = os.environ.get('ZYMBOL_OLD')
 
 LANGS = [
     # key, label, kind, extension, command
     ('zymbol', 'Zymbol (VM)', 'interpreter', 'zy', lambda zy, f: [zy, 'run', f]),
+    # The other engines of Zymbol, so a reader can fix any of them as the
+    # reference: the tree-walker of this build, and both engines of an older
+    # one (ZYMBOL_OLD) — v0.0.10 ran the tree-walker by default.
+    ('zymbol_tw', 'Zymbol (tree-walker)', 'zymbol-engine', 'zy', lambda zy, f: [zy, 'run', '--tw', f]),
+    ('zymbol_old', 'Zymbol, older build (VM)', 'zymbol-engine', 'zy', lambda zy, f: [OLD, 'run', '--vm', f]),
+    ('zymbol_old_tw', 'Zymbol, older build (tree-walker)', 'zymbol-engine', 'zy', lambda zy, f: [OLD, 'run', '--tw', f]),
     ('python', 'Python (CPython)', 'interpreter', 'py', lambda zy, f: ['python3', f]),
     ('perl', 'Perl', 'interpreter', 'pl', lambda zy, f: ['perl', f]),
     ('php', 'PHP', 'interpreter', 'php', lambda zy, f: ['php', f]),
@@ -134,7 +141,10 @@ def main():
     events = ['task-clock'] + (['instructions:u'] if shutil.which('perf') and perf_works() else [])
     if len(events) == 1:
         print('langs.py: perf cannot count here (perf_event_paranoid?) — CPU time only', file=sys.stderr)
-    langs = [l for l in LANGS if l[0] == 'zymbol' or shutil.which(l[4](zy, 'x')[0])]
+    langs = [l for l in LANGS
+             if l[0] in ('zymbol', 'zymbol_tw')
+             or (l[0].startswith('zymbol_old') and OLD and os.path.exists(OLD))
+             or (not l[0].startswith('zymbol') and shutil.which(l[4](zy, 'x')[0]))]
     progs = sorted(f[:-3] for f in os.listdir(os.path.join(HERE, 'zy')) if f.endswith('.zy'))
     if a.only:
         wanted = set(a.only.split(','))
@@ -142,6 +152,9 @@ def main():
 
     versions = {
         'zymbol': version([zy, '--version']),
+        'zymbol_tw': version([zy, '--version']),
+        'zymbol_old': version([OLD, '--version']) if OLD else '?',
+        'zymbol_old_tw': version([OLD, '--version']) if OLD else '?',
         'python': version(['python3', '--version']),
         'perl': version(['perl', '-e', 'print "perl $^V\\n"']),
         'php': version(['php', '-v']),
