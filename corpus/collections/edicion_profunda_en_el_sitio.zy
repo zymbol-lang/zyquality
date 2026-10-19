@@ -1,0 +1,67 @@
+// `m[i>j]$~ v` as a statement writes into `m` where it lives (GLB-140,
+// 2026-10-19): the tree-walker read the receiver as a second owner and copied
+// the outer collection on every edit. What the new path must keep: a name that
+// shares the value does not see the edit, a row shared by two places is copied
+// once and only for the place written, a key is added at the last step, a text
+// at the last step is still written, and a refused edit leaves the variable as
+// it was. Left to right: an operand that writes the receiver is overwritten
+// by the edit of what was read before it (GLB-115).
+
+// A name that shares the value keeps it.
+m = [[1, 2], [3, 4]]
+u = m
+m[1>2]$~ 20
+>> m " " u ¶
+
+// A row read out of it keeps what it had, edited once or twice.
+r = m[2]
+m[2>1]$~ 30
+m[2>1]$~ 31
+>> r " " m ¶
+
+// A row shared by two places.
+fila = [0, 0]
+p = [fila, fila]
+p[1>1]$~ 5
+>> p " " fila ¶
+
+// Three levels, negative positions, a tuple on the way and at the end.
+cubo = [[[1, 2], [3, 4]], [[5, 6], [7, 8]]]
+cubo[-1>-1>-1]$~ 80
+cubo[1>2>1]$~ 30
+>> cubo ¶
+pares = [(1, 2), (3, 4)]
+pares[2>1]$~ 33
+>> pares ¶
+
+// A dictionary on the way: a key that is there, and one that is added.
+d = #(a: #(b: 1), lista: [10, 20])
+d.a["b"]$~ 2
+d.a["c"]$~ 3
+k = "lista"
+d[k>2]$~ 200
+d.lista$+ 30
+>> d ¶
+
+// A text at the last step.
+nombres = ["hola", "mundo"]
+nombres[2>1]$~ 'M'
+>> nombres ¶
+
+// Refused: the variable is as it was after each.
+!? { m[9>1]$~ 0 } :! { >> "E1 " _err ¶ }
+!? { m[1>0]$~ 0 } :! { >> "E2 " _err ¶ }
+!? { m[1>3]$~ 0 } :! { >> "E3 " _err ¶ }
+!? { d["zz">1]$~ 0 } :! { >> "E4 " _err ¶ }
+!? { d[1>1]$~ 0 } :! { >> "E5 " _err ¶ }
+!? { nombres[1>1>1]$~ 'x' } :! { >> "E6 " _err ¶ }
+>> m " " d ¶
+
+// An operand that writes the receiver.
+crece(v<~) {
+    v$+ [100, 100]
+    <~ 1
+}
+w = [[1, 2], [3, 4]]
+w[(crece(w<~))>2]$~ 0
+>> w ¶

@@ -199,13 +199,13 @@ n         = 200000
 n_by_engine = { zyjs = 8000 }
 factor    = 4
 max_ratio = 6.0
-open_finding = { zyjs = "ZYJS-068" }
 what      = "appending a row written as a literal is linear, like appending a number"
 # Measured 2026-10-19, `m$+ [i, 0, 0]`: zyjs 312 ms → 6 634 ms over 8 000 →
 # 32 000 (×21), while `m$+ 0` and `m$+ fila` stay linear. zyjs writes in place
 # only beside an operand that `plainOperand` lists, and a collection literal is
 # not listed. zytw 212 → 749 ms and zyvm 74 → 223 ms over 200 000 → 800 000,
-# `copied` 0 in both.
+# `copied` 0 in both. ZYJS-068, fixed the same day: a collection literal of
+# plain operands is one — 171 → 317 ms over 8 000 → 32 000.
 why       = "an append whose operand is a collection literal copies its receiver"
 engines   = ["zytw", "zyvm", "zyjs"]
 
@@ -387,17 +387,19 @@ engines   = ["zytw", "zyvm", "zyjs"]
 id        = "growth/update-nested"
 kind      = "growth-ratio"
 template  = "casos/actualizar_anidado.zy.in"
-n         = 3000
+n         = 30000
 n_by_engine = { zyvm = 400000, zyjs = 8000 }
 factor    = 4
 max_ratio = 6.0
-open_finding = { zytw = "GLB-140", zyjs = "GLB-140" }
 what      = "writing one cell two steps down costs the same whatever the number of rows"
 # Measured 2026-10-19, `m[r>2]$~ k` N times over N rows: zytw copied
 # 4 006 000 → 64 024 000 over 2 000 → 8 000 (×16), and 133 → 2 006 ms over
 # 3 000 → 12 000; zyjs 384 → 5 916 ms over 8 000 → 32 000. zyvm copies 3 per
 # row, the first edit of a row it shares with `fila`, and is linear. The
-# one-step form above is linear in all three: the deep one takes another path.
+# one-step form above is linear in all three: the deep one took another path.
+# GLB-140, fixed the same day: the tree-walker writes the path where it is
+# (copied as the VM, 6 000 → 24 000; 46 → 150 ms over 25 000 → 100 000), and
+# zyjs the outermost level, copying only the row it writes (275 → 474 ms).
 why       = "an edit through a path copies the outer collection, which has a second owner at the moment of the write"
 engines   = ["zytw", "zyvm", "zyjs"]
 
