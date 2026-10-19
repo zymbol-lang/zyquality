@@ -20,6 +20,57 @@ lo reproduje con un programa mínimo en esta sesión; «Hipótesis», que lo inf
 > Tres (PERF-01, 02 y 04) son **de la VM**: el tree-walker hace lo mismo en tiempo lineal.
 > Esa asimetría es la pista más útil, porque el árbol ya contiene el camino rápido.
 
+## Estado en la rama `v0.0.11` (revisado el 2026-10-19)
+
+> **Esta sección manda sobre el resto del documento.** Lo que sigue debajo es el informe tal como se escribió entre
+> el 2026-10-10 y el 2026-10-11, contra la v0.0.10, y se deja intacto como registro de lo que se midió. Ahí PERF-03 a
+> 07 figuran como abiertos, y en la rama ya no lo están. El estado vivo de cada ficha lo calcula `./bin/zyddt findings`
+> en `ZyDDT/`, y las razones las sujeta `zyquality/cost/` en cada `zyq suite`.
+
+Revisado sobre `7ef269c` (`interpreter/`), con `zyq suite --only cost` en verde y una sonda por cada «Falta probar»
+de abajo.
+
+| ID | Estado | Ficha | Qué lo sujeta |
+|----|--------|-------|---------------|
+| PERF-01 `v[i]$~ x` | **Corregido** (2026-10-10) | `ZYVM-013` | `cost` `growth/update-local`, `update-module-state` |
+| PERF-02 `$-[idx]` | **Corregido** (2026-10-10) | `ZYVM-013` | el mismo mecanismo (`$-[1]` por el principio: ver «Falta probar», abajo) |
+| PERF-03 diccionario | **Corregido** en los tres motores (2026-10-16): `IndexMap`, y desde el 2026-10-18 hash foldhash | `GLB-131`, `GLB-132` | `growth/dictionary-by-key` |
+| PERF-04 `@ ch:texto` | **Corregido** (2026-10-16): un cursor de bytes, `StrCharNext` | `ZYVM-024`, `ZYVM-025` | `growth/foreach-over-text`, `corpus/loops/14_foreach_string_snapshot.zy` |
+| PERF-05 a, el corte | **Corregido** en la VM y el tree-walker (2026-10-16): copia sólo el trozo | `GLB-130`, `ZYVM-026` | `growth/slice-a-text` (por `bytes`) |
+| PERF-05 b, `s$#` y `s[i]` | **Corregido en la VM** (2026-10-17): el texto guarda su número de caracteres. **Queda** la posición en un texto no ASCII | `ZYVM-028` · `GLB-139` (abierto) · `ZYTW-016` (abierto) | `growth/read-a-text` (desde hoy también por reloj en la VM), `growth/index-a-text` |
+| PERF-06 `s = s "x"` | **Corregido** en la VM (2026-10-16); el árbol ya lo estaba en `d736ae6` | `ZYVM-023` | `growth/concat-local`, `concat-in-function`, `concat-module-state` |
+| PERF-07 recursión | **Corregido** (2026-10-16): `##Depth`, capturable con `!?`, a 10 000 llamadas activas, igual en los tres motores; pila de 512 MiB | `GLB-133`, `ZYTW-017`, `ZYVM-027` | `corpus/errors/runtime/depth_*.zy` |
+| PERF-08 musl | **Abierto**: reproducido con los binarios oficiales (×17 en `str_concat`); el asignador sigue siendo el del sistema | `GLB-134` | nada: esta máquina no tiene el target musl. Se decide en la release |
+
+### Lo que esta revisión encontró
+
+Tres hallazgos nuevos, archivados con su caso en `zyquality/cost/` como deuda declarada (`open_finding`), sin
+corregir:
+
+| Ficha | Qué | Motores | Medido |
+|---|---|---|---|
+| `GLB-139` | `s[i]` y un corte buscan su posición recorriendo el texto. Es el resto de PERF-05 b | VM y árbol con texto no ASCII; zyjs con cualquiera | VM ×13 de 32 000 a 128 000 «ñ»; ASCII plano |
+| `GLB-140` | `m[i>j]$~ v` copia el array exterior entero en cada edición | árbol y zyjs; la VM edita en el sitio | árbol: `copied` = filas + 3 por edición |
+| `ZYJS-068` | `m$+ [0, 0, 0]`: con un literal de colección como operando, zyjs copia el receptor | zyjs | ×21 de 8 000 a 32 000; con `m$+ fila`, lineal |
+
+### Los «Falta probar» de abajo, contestados
+
+- **`$+` de arreglos de arreglos:** lineal en los dos motores de Rust, con `copied = 0` en las cinco formas probadas.
+  En zyjs, cuadrático con un literal (`ZYJS-068`).
+- **`$-` por el principio:** sin copia (`copied = 0`, bytes lineales), pero cada `$-[1]` desplaza los elementos
+  que quedan, así que n de ellos cuestan n² en cualquier lenguaje: Python `pop(0)` 6 → 22 → 87 ms con 10 000, 20 000
+  y 40 000. La VM, 21 → 67 → 189 ms (~×2,2 de Python). El árbol, 100 → 418 → 3 141 ms (~×36): su `Value` mide
+  **120 bytes** contra los 16 de la VM, mueve 7,5 veces más memoria y se sale de la caché antes. No es un defecto de
+  algoritmo sino el tamaño del valor del árbol, que pesa igual en la memoria de cualquier colección suya.
+- **Cadenas muy largas no ASCII:** recorrerlas con `@ ch:s` es lineal en los dos motores. Indexarlas no lo es
+  (`GLB-139`).
+- **`$~` profundo (`m[i>j]$~ x`):** constante en la VM; O(filas) por edición en el árbol y en zyjs (`GLB-140`).
+- **`s[i]`** (PERF-05, «Qué falta»): ver `GLB-139`.
+- **Por qué `s = s "x"` era cuadrático en la VM:** el compilador mandaba `ConcatStr` a un temporal y la rama que
+  reutiliza el búfer exigía el mismo registro (`ZYVM-023`).
+
+---
+
 ## Resumen
 
 | ID | Operación | Qué pasa | Motores | Gravedad |
