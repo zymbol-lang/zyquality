@@ -293,17 +293,20 @@ what      = "adding and reading keys of a dictionary costs the same whatever its
 why       = "a dictionary that finds a key by walking its pairs makes n insertions cost n²"
 engines   = ["zytw", "zyvm", "zyjs"]
 
-# A slice of a text and a read of one. `bytes` is what sees a copy. The slice
-# is asked by the counters alone: on a text that is not ASCII each slice still
-# walks to its position (GLB-139), so its clock is quadratic whatever it copies.
+# A slice of a text and a read of one. `bytes` is what sees a copy, and the
+# clock what sees a walk. The clock was off on the slice until 2026-10-19: each
+# slice of a text that is not ASCII walked to its position (GLB-139). The VM
+# jumps to a crumb since that day — 121 → 420 ms over 200 000 → 800 000 — and
+# is asked at that size. The tree-walker still walks and copies; at 2 000 its
+# clock is under the floor and its counted ratios answer it.
 [[case]]
 id        = "growth/slice-a-text"
 kind      = "growth-ratio"
 template  = "casos/cortar_texto.zy.in"
 n         = 2000
+n_by_engine = { zyvm = 200000 }
 factor    = 4
 max_ratio = 6.0
-clock_off = "on a text that is not ASCII each slice walks to its position (GLB-139): the clock is quadratic whatever the slice copies"
 open_finding = { zytw = "ZYTW-016" }
 what      = "a slice of a text costs what it takes, not what the text is long"
 # The three ways the VM slices a text — StrSlice, StrSliceCount, and ArraySlice
@@ -343,17 +346,20 @@ id        = "growth/index-a-text"
 kind      = "growth-ratio"
 template  = "casos/indexar_texto.zy.in"
 n         = 16000
-n_by_engine = { zyvm = 32000, zyjs = 6000 }
+n_by_engine = { zyvm = 200000, zyjs = 6000 }
 factor    = 4
 max_ratio = 6.0
-open_finding = { zytw = "GLB-139", zyvm = "GLB-139", zyjs = "GLB-139" }
+open_finding = { zytw = "GLB-139", zyjs = "GLB-139" }
 what      = "reading the character at a position costs the same whatever the text's length"
 # Asked by the clock: each `s[i]` is one step and allocates nothing more, so
 # the counters see 4.00 while the clock does not. Measured 2026-10-19 over N
 # «ñ»: zyvm 71 → 941 ms over 32 000 → 128 000, zytw 140 → 1 820 ms over
 # 16 000 → 64 000, zyjs 378 → 5 609 ms over 6 000 → 24 000. On an ASCII text
 # the two Rust engines read a byte and are flat; zyjs spreads the whole text
-# into an array on every read, ASCII or not.
+# into an array on every read, ASCII or not. The VM was fixed on 2026-10-19:
+# a text that is not ASCII keeps a crumb every 64 characters, and 128 000 «ñ»
+# went from 941 ms to 39 ms. The tree-walker and zyjs stay declared debt for
+# v0.0.11, decided that day (interpreter/ROADMAP_V0011_ES.md, group 1).
 why       = "a position is found by walking the text from its start"
 engines   = ["zytw", "zyvm", "zyjs"]
 
