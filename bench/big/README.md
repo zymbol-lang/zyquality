@@ -17,7 +17,7 @@ verbatim and in Spanish, like every findings log in the workspace.
 | `run.py` | What does a whole program cost, against Python? | The process, start-up subtracted | `--count` of the whole run |
 | `gap.py` | How far is each operation from Python, and does the gap grow with n? | The operation alone | `--count` steps of the operation alone |
 | `scaling.py` | Does an operation grow as it should — linear, or one per call? | The exponent `b` of `y ~ n^b` | `b` in steps and in bytes too |
-| `langs.py` | What does each program cost in other languages? | The process, start-up included, per language | instructions where `perf` allows |
+| `langs.py` (+ `langs_page.py`) | What does each program cost in other languages, and in each Zymbol engine? | The process, start-up included, per language | instructions where `perf` allows |
 
 ## Other languages — `langs.py` (2026-10-18)
 
@@ -35,9 +35,13 @@ exactly that. Start-up is measured on an empty program per language (Julia's is 
 also shows each figure with it subtracted, over the programs Zymbol takes 100 ms or more on.
 
 `langs_2026-10-18.json` is the run behind the site's benchmarks page (zymbol-lang.org/benchmarks.html),
-128 of 128 twins agreeing. Geometric mean of elapsed time with Zymbol v0.0.11 (`7ef269c`) = 1.00:
-Node 0.48, PHP 0.63, Lua 0.64, Perl 1.75, Julia 1.81, Ruby 1.86, Python 1.89. Start-up subtracted
-(11 programs): Node 0.13, Julia 0.17, PHP 0.35, Lua 0.47, Ruby 0.83, Perl 1.67, Python 1.69.
+176 of 176 twins agreeing, with `ZYMBOL_OLD` set so the four Zymbol engines are in it — v0.0.11's VM
+and tree-walker, v0.0.10's VM and tree-walker. `langs_page.py` writes the page and its Markdown twin
+from it; the page lets the reader pick any language or engine as the reference. Geometric mean of
+elapsed time with Zymbol v0.0.11's VM (`7ef269c`) = 1.00: Node 0.46, PHP 0.63, Lua 0.64, v0.0.10's VM
+1.68, Perl 1.70, Julia 1.76, Ruby 1.77, Python 1.84, the tree-walkers 7.2–7.5. Start-up subtracted
+(11 programs, against the same reference): Node 0.11, Julia 0.14, PHP 0.38, Lua 0.45, Ruby 0.83,
+Zymbol 0.99, v0.0.10's VM 1.41, Perl 1.64, Python 1.65.
 
 ## The instruments — the project's own, in `instruments.py`
 

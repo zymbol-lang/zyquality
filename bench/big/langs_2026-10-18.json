@@ -5,6 +5,9 @@
  "os": "Linux 6.12.111+deb13-amd64",
  "versions": {
   "zymbol": "zymbol 0.0.11",
+  "zymbol_tw": "zymbol 0.0.11",
+  "zymbol_old": "zymbol 0.0.10",
+  "zymbol_old_tw": "zymbol 0.0.10",
   "python": "Python 3.13.5",
   "perl": "perl v5.40.1",
   "php": "PHP 8.4.26 (cli) (built: Sep 24 2026 17:16:18) (NTS)",
@@ -18,6 +21,21 @@
    "key": "zymbol",
    "label": "Zymbol (VM)",
    "kind": "interpreter"
+  },
+  {
+   "key": "zymbol_tw",
+   "label": "Zymbol (tree-walker)",
+   "kind": "zymbol-engine"
+  },
+  {
+   "key": "zymbol_old",
+   "label": "Zymbol, older build (VM)",
+   "kind": "zymbol-engine"
+  },
+  {
+   "key": "zymbol_old_tw",
+   "label": "Zymbol, older build (tree-walker)",
+   "kind": "zymbol-engine"
   },
   {
    "key": "python",
@@ -57,43 +75,58 @@
  ],
  "startup": {
   "zymbol": {
-   "wall_ms": 2.6550200418569148,
-   "ms": 2.382,
+   "wall_ms": 4.571797966491431,
+   "ms": 4.302,
+   "instructions": null
+  },
+  "zymbol_tw": {
+   "wall_ms": 3.9073090301826596,
+   "ms": 3.7169999999999996,
+   "instructions": null
+  },
+  "zymbol_old": {
+   "wall_ms": 3.3427660237066448,
+   "ms": 3.101,
+   "instructions": null
+  },
+  "zymbol_old_tw": {
+   "wall_ms": 2.6819100021384656,
+   "ms": 2.493,
    "instructions": null
   },
   "python": {
-   "wall_ms": 11.163601011503488,
-   "ms": 10.865,
+   "wall_ms": 12.016944994684309,
+   "ms": 11.574,
    "instructions": null
   },
   "perl": {
-   "wall_ms": 2.0383039955049753,
-   "ms": 1.81,
+   "wall_ms": 2.446188998874277,
+   "ms": 2.18,
    "instructions": null
   },
   "php": {
-   "wall_ms": 24.663947988301516,
-   "ms": 24.29,
+   "wall_ms": 15.466501994524151,
+   "ms": 14.977,
    "instructions": null
   },
   "lua": {
-   "wall_ms": 1.899806025903672,
-   "ms": 1.684,
+   "wall_ms": 2.3296200088225305,
+   "ms": 2.0100000000000002,
    "instructions": null
   },
   "ruby": {
-   "wall_ms": 68.62299499334767,
-   "ms": 68.058,
+   "wall_ms": 60.508953989483416,
+   "ms": 60.181,
    "instructions": null
   },
   "node": {
-   "wall_ms": 28.49100698949769,
-   "ms": 29.424,
+   "wall_ms": 36.18500498123467,
+   "ms": 36.803999999999995,
    "instructions": null
   },
   "julia": {
-   "wall_ms": 184.64656203286722,
-   "ms": 194.26,
+   "wall_ms": 194.16687899501994,
+   "ms": 201.828,
    "instructions": null
   }
  },
@@ -104,50 +137,68 @@
    "langs": {
     "zymbol": {
      "ok": true,
-     "wall_ms": 5.772751988843083,
-     "ms": 5.523,
+     "wall_ms": 6.174979032948613,
+     "ms": 5.9239999999999995,
+     "instructions": null
+    },
+    "zymbol_tw": {
+     "ok": true,
+     "wall_ms": 16.476365039125085,
+     "ms": 16.242,
+     "instructions": null
+    },
+    "zymbol_old": {
+     "ok": true,
+     "wall_ms": 9.211273049004376,
+     "ms": 8.988,
+     "instructions": null
+    },
+    "zymbol_old_tw": {
+     "ok": true,
+     "wall_ms": 16.32599299773574,
+     "ms": 15.991999999999999,
      "instructions": null
     },
     "python": {
      "ok": true,
-     "wall_ms": 19.748869992326945,
-     "ms": 19.493,
+     "wall_ms": 12.545449018944055,
+     "ms": 12.219000000000001,
      "instructions": null
     },
     "perl": {
      "ok": true,
-     "wall_ms": 12.250781001057476,
-     "ms": 11.866,
+     "wall_ms": 5.778618971817195,
+     "ms": 5.463,
      "instructions": null
     },
     "php": {
      "ok": true,
-     "wall_ms": 14.478641038294882,
-     "ms": 14.136,
+     "wall_ms": 23.681810998823494,
+     "ms": 23.369999999999997,
      "instructions": null
     },
     "lua": {
      "ok": true,
-     "wall_ms": 3.271038003731519,
-     "ms": 3.131,
+     "wall_ms": 3.0464910087175667,
+     "ms": 2.7099999999999995,
      "instructions": null
     },
     "ruby": {
      "ok": true,
-     "wall_ms": 77.43036601459607,
-     "ms": 77.072,
+     "wall_ms": 79.39169701421633,
+     "ms": 79.038,
      "instructions": null
     },
     "node": {
      "ok": true,
-     "wall_ms": 31.95194900035858,
-     "ms": 34.339999999999996,
+     "wall_ms": 40.126256993971765,
+     "ms": 43.467,
      "instructions": null
     },
     "julia": {
      "ok": true,
-     "wall_ms": 219.7355200187303,
-     "ms": 594.901,
+     "wall_ms": 221.2467020144686,
+     "ms": 617.2739999999999,
      "instructions": null
     }
    }
@@ -158,50 +209,68 @@
    "langs": {
     "zymbol": {
      "ok": true,
-     "wall_ms": 341.0309930332005,
-     "ms": 340.81199999999995,
+     "wall_ms": 336.8546930141747,
+     "ms": 336.193,
+     "instructions": null
+    },
+    "zymbol_tw": {
+     "ok": true,
+     "wall_ms": 2001.536293013487,
+     "ms": 2000.8530000000003,
+     "instructions": null
+    },
+    "zymbol_old": {
+     "ok": true,
+     "wall_ms": 460.5266419821419,
+     "ms": 460.18499999999995,
+     "instructions": null
+    },
+    "zymbol_old_tw": {
+     "ok": true,
+     "wall_ms": 2093.9936959766783,
+     "ms": 2093.4849999999997,
      "instructions": null
     },
     "python": {
      "ok": true,
-     "wall_ms": 789.5463120075874,
-     "ms": 789.1369999999998,
+     "wall_ms": 813.8230549520813,
+     "ms": 813.4619999999999,
      "instructions": null
     },
     "perl": {
      "ok": true,
-     "wall_ms": 557.7853260328993,
-     "ms": 557.4290000000001,
+     "wall_ms": 561.3037729635835,
+     "ms": 560.711,
      "instructions": null
     },
     "php": {
      "ok": true,
-     "wall_ms": 133.22455703746527,
-     "ms": 132.687,
+     "wall_ms": 135.84520301083103,
+     "ms": 135.309,
      "instructions": null
     },
     "lua": {
      "ok": true,
-     "wall_ms": 146.86200598953292,
-     "ms": 146.567,
+     "wall_ms": 147.5400320487097,
+     "ms": 147.099,
      "instructions": null
     },
     "ruby": {
      "ok": true,
-     "wall_ms": 286.29723202902824,
-     "ms": 285.963,
+     "wall_ms": 290.6624799943529,
+     "ms": 290.56499999999994,
      "instructions": null
     },
     "node": {
      "ok": true,
-     "wall_ms": 52.26871505146846,
-     "ms": 56.151999999999994,
+     "wall_ms": 56.37367605231702,
+     "ms": 60.318999999999996,
      "instructions": null
     },
     "julia": {
      "ok": true,
-     "wall_ms": 208.05319299688563,
-     "ms": 550.376,
+     "wall_ms": 211.76660095807165,
+     "ms": 603.338,
      "instructions": null
     }
    }
@@ -212,50 +281,68 @@
    "langs": {
     "zymbol": {
      "ok": true,
-     "wall_ms": 924.5867970166728,
-     "ms": 924.198,
+     "wall_ms": 910.9661729889922,
+     "ms": 910.6489999999999,
+     "instructions": null
+    },
+    "zymbol_tw": {
+     "ok": true,
+     "wall_ms": 8395.167772949208,
+     "ms": 8394.17,
+     "instructions": null
+    },
+    "zymbol_old": {
+     "ok": true,
+     "wall_ms": 1051.15100502735,
+     "ms": 1050.7959999999998,
+     "instructions": null
+    },
+    "zymbol_old_tw": {
+     "ok": true,
+     "wall_ms": 8486.00048100343,
+     "ms": 8484.81,
      "instructions": null
     },
     "python": {
      "ok": true,
-     "wall_ms": 761.8732419796288,
-     "ms": 760.502,
+     "wall_ms": 755.103821051307,
+     "ms": 754.696,
      "instructions": null
     },
     "perl": {
      "ok": true,
-     "wall_ms": 2551.144684024621,
-     "ms": 2550.5260000000003,
+     "wall_ms": 2553.283151006326,
+     "ms": 2552.609,
      "instructions": null
     },
     "php": {
      "ok": true,
-     "wall_ms": 303.27102402225137,
-     "ms": 302.659,
+     "wall_ms": 301.5769449993968,
+     "ms": 301.091,
      "instructions": null
     },
     "lua": {
      "ok": true,
-     "wall_ms": 396.5577590279281,
-     "ms": 396.1,
+     "wall_ms": 406.48516098735854,
+     "ms": 406.0319999999999,
      "instructions": null
     },
     "ruby": {
      "ok": true,
-     "wall_ms": 550.361345987767,
-     "ms": 549.8689999999999,
+     "wall_ms": 547.8408519993536,
+     "ms": 547.4839999999999,
      "instructions": null
     },
     "node": {
      "ok": true,
-     "wall_ms": 97.17902797274292,
-     "ms": 100.056,
+     "wall_ms": 99.72026303876191,
+     "ms": 103.411,
      "instructions": null
     },
     "julia": {
      "ok": true,
-     "wall_ms": 217.68562402576208,
-     "ms": 622.727,
+     "wall_ms": 223.32781396107748,
+     "ms": 642.821,
      "instructions": null
     }
    }
@@ -266,50 +353,68 @@
    "langs": {
     "zymbol": {
      "ok": true,
-     "wall_ms": 320.5679100356065,
-     "ms": 320.14,
+     "wall_ms": 330.3237839718349,
+     "ms": 329.902,
+     "instructions": null
+    },
+    "zymbol_tw": {
+     "ok": true,
+     "wall_ms": 2436.650276009459,
+     "ms": 2435.8559999999998,
+     "instructions": null
+    },
+    "zymbol_old": {
+     "ok": true,
+     "wall_ms": 427.79600201174617,
+     "ms": 427.427,
+     "instructions": null
+    },
+    "zymbol_old_tw": {
+     "ok": true,
+     "wall_ms": 2332.2104919934645,
+     "ms": 2331.6189999999997,
      "instructions": null
     },
     "python": {
      "ok": true,
-     "wall_ms": 413.82391401566565,
-     "ms": 413.50100000000003,
+     "wall_ms": 418.0436530150473,
+     "ms": 417.527,
      "instructions": null
     },
     "perl": {
      "ok": true,
-     "wall_ms": 268.8026250107214,
-     "ms": 268.354,
+     "wall_ms": 269.5787610136904,
+     "ms": 269.13100000000003,
      "instructions": null
     },
     "php": {
      "ok": true,
-     "wall_ms": 239.57812297157943,
-     "ms": 238.831,
+     "wall_ms": 248.16832196665928,
+     "ms": 247.45,
      "instructions": null
     },
     "lua": {
      "ok": true,
-     "wall_ms": 198.12484103022143,
-     "ms": 197.836,
+     "wall_ms": 186.4418630138971,
+     "ms": 186.052,
      "instructions": null
     },
     "ruby": {
      "ok": true,
-     "wall_ms": 443.6421539867297,
-     "ms": 443.34399999999994,
+     "wall_ms": 445.8332220092416,
+     "ms": 445.472,
      "instructions": null
     },
     "node": {
      "ok": true,
-     "wall_ms": 195.53945399820805,
-     "ms": 214.188,
+     "wall_ms": 187.82350094988942,
+     "ms": 212.461,
      "instructions": null
     },
     "julia": {
      "ok": true,
-     "wall_ms": 371.0338340024464,
-     "ms": 1022.343,
+     "wall_ms": 359.26185396965593,
+     "ms": 1009.0840000000001,
      "instructions": null
     }
    }
@@ -320,50 +425,68 @@
    "langs": {
     "zymbol": {
      "ok": true,
-     "wall_ms": 421.105072950013,
-     "ms": 420.773,
+     "wall_ms": 427.2116929641925,
+     "ms": 426.912,
+     "instructions": null
+    },
+    "zymbol_tw": {
+     "ok": true,
+     "wall_ms": 2667.824261006899,
+     "ms": 2667.257,
+     "instructions": null
+    },
+    "zymbol_old": {
+     "ok": true,
+     "wall_ms": 787.847989005968,
+     "ms": 787.467,
+     "instructions": null
+    },
+    "zymbol_old_tw": {
+     "ok": true,
+     "wall_ms": 2592.008466948755,
+     "ms": 2591.4889999999996,
      "instructions": null
     },
     "python": {
      "ok": true,
-     "wall_ms": 1272.4139759666286,
-     "ms": 1271.86,
+     "wall_ms": 1296.6196549823508,
+     "ms": 1296.042,
      "instructions": null
     },
     "perl": {
      "ok": true,
-     "wall_ms": 527.2788620204665,
-     "ms": 526.7610000000001,
+     "wall_ms": 532.805138034746,
+     "ms": 532.391,
      "instructions": null
     },
     "php": {
      "ok": true,
-     "wall_ms": 168.96375903161243,
-     "ms": 168.597,
+     "wall_ms": 170.08129798341542,
+     "ms": 169.694,
      "instructions": null
     },
     "lua": {
      "ok": true,
-     "wall_ms": 165.62294698087499,
-     "ms": 165.28699999999998,
+     "wall_ms": 167.34022996388376,
+     "ms": 167.05,
      "instructions": null
     },
     "ruby": {
      "ok": true,
-     "wall_ms": 663.1244990276173,
-     "ms": 662.713,
+     "wall_ms": 684.3244819901884,
+     "ms": 684.02,
      "instructions": null
     },
     "node": {
      "ok": true,
-     "wall_ms": 179.87913801334798,
-     "ms": 185.98999999999998,
+     "wall_ms": 187.6585310092196,
+     "ms": 192.63,
      "instructions": null
     },
     "julia": {
      "ok": true,
-     "wall_ms": 236.20337003376335,
-     "ms": 744.92,
+     "wall_ms": 231.0788729810156,
+     "ms": 728.511,
      "instructions": null
     }
    }
@@ -374,50 +497,68 @@
    "langs": {
     "zymbol": {
      "ok": true,
-     "wall_ms": 169.6631689555943,
-     "ms": 169.411,
+     "wall_ms": 184.5519040361978,
+     "ms": 184.35999999999999,
+     "instructions": null
+    },
+    "zymbol_tw": {
+     "ok": true,
+     "wall_ms": 2945.07940398762,
+     "ms": 2943.7889999999998,
+     "instructions": null
+    },
+    "zymbol_old": {
+     "ok": true,
+     "wall_ms": 239.53444097423926,
+     "ms": 239.24300000000002,
+     "instructions": null
+    },
+    "zymbol_old_tw": {
+     "ok": true,
+     "wall_ms": 2931.74807500327,
+     "ms": 2931.155,
      "instructions": null
     },
     "python": {
      "ok": true,
-     "wall_ms": 528.0348469968885,
-     "ms": 527.6659999999999,
+     "wall_ms": 529.1938920272514,
+     "ms": 528.837,
      "instructions": null
     },
     "perl": {
      "ok": true,
-     "wall_ms": 432.96787701547146,
-     "ms": 432.496,
+     "wall_ms": 452.27772096404806,
+     "ms": 451.948,
      "instructions": null
     },
     "php": {
      "ok": true,
-     "wall_ms": 75.34652500180528,
-     "ms": 74.87299999999999,
+     "wall_ms": 87.96278398949653,
+     "ms": 87.512,
      "instructions": null
     },
     "lua": {
      "ok": true,
-     "wall_ms": 96.01676801685244,
-     "ms": 95.67099999999999,
+     "wall_ms": 96.15539299556985,
+     "ms": 95.83599999999998,
      "instructions": null
     },
     "ruby": {
      "ok": true,
-     "wall_ms": 249.21188195003197,
-     "ms": 248.73999999999998,
+     "wall_ms": 234.85920595703647,
+     "ms": 234.49099999999999,
      "instructions": null
     },
     "node": {
      "ok": true,
-     "wall_ms": 44.37217098893598,
-     "ms": 48.378,
+     "wall_ms": 53.350300004240125,
+     "ms": 59.339999999999996,
      "instructions": null
     },
     "julia": {
      "ok": true,
-     "wall_ms": 215.31277301255614,
-     "ms": 614.4419999999999,
+     "wall_ms": 217.6809860393405,
+     "ms": 619.0219999999999,
      "instructions": null
     }
    }
@@ -428,50 +569,68 @@
    "langs": {
     "zymbol": {
      "ok": true,
-     "wall_ms": 248.5251829493791,
-     "ms": 248.076,
+     "wall_ms": 253.41990002198145,
+     "ms": 252.996,
+     "instructions": null
+    },
+    "zymbol_tw": {
+     "ok": true,
+     "wall_ms": 1901.0000409907661,
+     "ms": 1900.519,
+     "instructions": null
+    },
+    "zymbol_old": {
+     "ok": true,
+     "wall_ms": 378.4620999940671,
+     "ms": 378.212,
+     "instructions": null
+    },
+    "zymbol_old_tw": {
+     "ok": true,
+     "wall_ms": 1859.247344022151,
+     "ms": 1858.5639999999999,
      "instructions": null
     },
     "python": {
      "ok": true,
-     "wall_ms": 519.5340900099836,
-     "ms": 519.145,
+     "wall_ms": 510.45579300262034,
+     "ms": 510.027,
      "instructions": null
     },
     "perl": {
      "ok": true,
-     "wall_ms": 644.2775870091282,
-     "ms": 643.8269999999999,
+     "wall_ms": 667.9389090277255,
+     "ms": 667.334,
      "instructions": null
     },
     "php": {
      "ok": true,
-     "wall_ms": 135.4161009658128,
-     "ms": 135.06099999999998,
+     "wall_ms": 127.86197901004925,
+     "ms": 127.39999999999999,
      "instructions": null
     },
     "lua": {
      "ok": true,
-     "wall_ms": 108.23123104637489,
-     "ms": 107.78699999999999,
+     "wall_ms": 115.04931101808324,
+     "ms": 114.562,
      "instructions": null
     },
     "ruby": {
      "ok": true,
-     "wall_ms": 352.2604680038057,
-     "ms": 351.968,
+     "wall_ms": 353.2743990072049,
+     "ms": 352.931,
      "instructions": null
     },
     "node": {
      "ok": true,
-     "wall_ms": 50.2831430057995,
-     "ms": 56.501,
+     "wall_ms": 50.680753018241376,
+     "ms": 55.775999999999996,
      "instructions": null
     },
     "julia": {
      "ok": true,
-     "wall_ms": 211.00700896931812,
-     "ms": 565.1239999999999,
+     "wall_ms": 214.46072403341532,
+     "ms": 584.245,
      "instructions": null
     }
    }
@@ -482,50 +641,68 @@
    "langs": {
     "zymbol": {
      "ok": true,
-     "wall_ms": 394.26865498535335,
-     "ms": 393.97700000000003,
+     "wall_ms": 406.4539329847321,
+     "ms": 406.054,
+     "instructions": null
+    },
+    "zymbol_tw": {
+     "ok": true,
+     "wall_ms": 3863.5043539688922,
+     "ms": 3862.228,
+     "instructions": null
+    },
+    "zymbol_old": {
+     "ok": true,
+     "wall_ms": 520.1134319650009,
+     "ms": 519.848,
+     "instructions": null
+    },
+    "zymbol_old_tw": {
+     "ok": true,
+     "wall_ms": 3804.5910309883766,
+     "ms": 3803.9020000000005,
      "instructions": null
     },
     "python": {
      "ok": true,
-     "wall_ms": 674.6068020001985,
-     "ms": 674.156,
+     "wall_ms": 664.7071900079027,
+     "ms": 664.2589999999999,
      "instructions": null
     },
     "perl": {
      "ok": true,
-     "wall_ms": 353.1779989716597,
-     "ms": 352.651,
+     "wall_ms": 344.98980501666665,
+     "ms": 344.525,
      "instructions": null
     },
     "php": {
      "ok": true,
-     "wall_ms": 83.35544803412631,
-     "ms": 82.631,
+     "wall_ms": 82.80318498145789,
+     "ms": 82.32000000000001,
      "instructions": null
     },
     "lua": {
      "ok": true,
-     "wall_ms": 103.81811700062826,
-     "ms": 103.603,
+     "wall_ms": 96.22314001899213,
+     "ms": 95.90899999999999,
      "instructions": null
     },
     "ruby": {
      "ok": true,
-     "wall_ms": 328.28203099779785,
-     "ms": 327.707,
+     "wall_ms": 321.17110199760646,
+     "ms": 320.67699999999996,
      "instructions": null
     },
     "node": {
      "ok": true,
-     "wall_ms": 54.592888976912946,
-     "ms": 60.399,
+     "wall_ms": 63.298838038463145,
+     "ms": 78.069,
      "instructions": null
     },
     "julia": {
      "ok": true,
-     "wall_ms": 221.81441000429913,
-     "ms": 659.716,
+     "wall_ms": 226.4118050225079,
+     "ms": 708.54,
      "instructions": null
     }
    }
@@ -536,50 +713,68 @@
    "langs": {
     "zymbol": {
      "ok": true,
-     "wall_ms": 268.35444604512304,
-     "ms": 268.12199999999996,
+     "wall_ms": 269.60857899393886,
+     "ms": 269.365,
+     "instructions": null
+    },
+    "zymbol_tw": {
+     "ok": true,
+     "wall_ms": 2892.7377439686097,
+     "ms": 2892.1769999999997,
+     "instructions": null
+    },
+    "zymbol_old": {
+     "ok": true,
+     "wall_ms": 357.47281298972666,
+     "ms": 357.058,
+     "instructions": null
+    },
+    "zymbol_old_tw": {
+     "ok": true,
+     "wall_ms": 2827.9222559649497,
+     "ms": 2827.044,
      "instructions": null
     },
     "python": {
      "ok": true,
-     "wall_ms": 311.81781698251143,
-     "ms": 311.328,
+     "wall_ms": 303.38825000217184,
+     "ms": 302.88000000000005,
      "instructions": null
     },
     "perl": {
      "ok": true,
-     "wall_ms": 515.4845140059479,
-     "ms": 515.158,
+     "wall_ms": 504.3129380210303,
+     "ms": 503.8809999999999,
      "instructions": null
     },
     "php": {
      "ok": true,
-     "wall_ms": 91.04448999278247,
-     "ms": 90.54299999999999,
+     "wall_ms": 93.00790796987712,
+     "ms": 92.583,
      "instructions": null
     },
     "lua": {
      "ok": true,
-     "wall_ms": 141.3156900089234,
-     "ms": 140.976,
+     "wall_ms": 136.12345303408802,
+     "ms": 135.795,
      "instructions": null
     },
     "ruby": {
      "ok": true,
-     "wall_ms": 247.69915000069886,
-     "ms": 247.334,
+     "wall_ms": 243.0844290065579,
+     "ms": 243.23,
      "instructions": null
     },
     "node": {
      "ok": true,
-     "wall_ms": 69.1086879814975,
-     "ms": 77.41,
+     "wall_ms": 58.946349017787725,
+     "ms": 64.721,
      "instructions": null
     },
     "julia": {
      "ok": true,
-     "wall_ms": 512.649787007831,
-     "ms": 1163.0249999999999,
+     "wall_ms": 513.9179870020598,
+     "ms": 1165.834,
      "instructions": null
     }
    }
@@ -590,50 +785,68 @@
    "langs": {
     "zymbol": {
      "ok": true,
-     "wall_ms": 206.83960401220247,
-     "ms": 206.51899999999998,
+     "wall_ms": 204.45190998725593,
+     "ms": 204.14,
+     "instructions": null
+    },
+    "zymbol_tw": {
+     "ok": true,
+     "wall_ms": 2217.995891987812,
+     "ms": 2217.487,
+     "instructions": null
+    },
+    "zymbol_old": {
+     "ok": true,
+     "wall_ms": 294.2811830434948,
+     "ms": 293.939,
+     "instructions": null
+    },
+    "zymbol_old_tw": {
+     "ok": true,
+     "wall_ms": 2185.5236839619465,
+     "ms": 2185.093,
      "instructions": null
     },
     "python": {
      "ok": true,
-     "wall_ms": 539.1904240241274,
-     "ms": 538.709,
+     "wall_ms": 547.4809340084903,
+     "ms": 547.0279999999999,
      "instructions": null
     },
     "perl": {
      "ok": true,
-     "wall_ms": 382.6713290181942,
-     "ms": 382.171,
+     "wall_ms": 398.19189498666674,
+     "ms": 397.867,
      "instructions": null
     },
     "php": {
      "ok": true,
-     "wall_ms": 78.99590395390987,
-     "ms": 78.61099999999999,
+     "wall_ms": 76.40156499110162,
+     "ms": 76.00099999999999,
      "instructions": null
     },
     "lua": {
      "ok": true,
-     "wall_ms": 91.6446530027315,
-     "ms": 91.30099999999999,
+     "wall_ms": 83.61273800255731,
+     "ms": 83.331,
      "instructions": null
     },
     "ruby": {
      "ok": true,
-     "wall_ms": 226.60153597826138,
-     "ms": 226.286,
+     "wall_ms": 231.63901100633666,
+     "ms": 231.118,
      "instructions": null
     },
     "node": {
      "ok": true,
-     "wall_ms": 45.318966964259744,
-     "ms": 50.045,
+     "wall_ms": 48.89793402981013,
+     "ms": 52.949,
      "instructions": null
     },
     "julia": {
      "ok": true,
-     "wall_ms": 226.47819301346317,
-     "ms": 686.1259999999999,
+     "wall_ms": 225.4937850520946,
+     "ms": 706.6419999999999,
      "instructions": null
     }
    }
@@ -644,50 +857,68 @@
    "langs": {
     "zymbol": {
      "ok": true,
-     "wall_ms": 90.04684997489676,
-     "ms": 89.787,
+     "wall_ms": 94.47636100230739,
+     "ms": 93.95200000000001,
+     "instructions": null
+    },
+    "zymbol_tw": {
+     "ok": true,
+     "wall_ms": 466.3147340179421,
+     "ms": 461.71299999999997,
+     "instructions": null
+    },
+    "zymbol_old": {
+     "ok": true,
+     "wall_ms": 119.72391599556431,
+     "ms": 119.42499999999998,
+     "instructions": null
+    },
+    "zymbol_old_tw": {
+     "ok": true,
+     "wall_ms": 468.71447702869773,
+     "ms": 468.18199999999996,
      "instructions": null
     },
     "python": {
      "ok": true,
-     "wall_ms": 288.7359589803964,
-     "ms": 288.181,
+     "wall_ms": 280.0406390451826,
+     "ms": 279.589,
      "instructions": null
     },
     "perl": {
      "ok": true,
-     "wall_ms": 245.57808099780232,
-     "ms": 245.19799999999998,
+     "wall_ms": 246.58489995636046,
+     "ms": 246.201,
      "instructions": null
     },
     "php": {
      "ok": true,
-     "wall_ms": 144.71740496810526,
-     "ms": 144.19899999999998,
+     "wall_ms": 142.87177397636697,
+     "ms": 142.385,
      "instructions": null
     },
     "lua": {
      "ok": true,
-     "wall_ms": 259.5838839770295,
-     "ms": 259.233,
+     "wall_ms": 247.42979399161413,
+     "ms": 247.071,
      "instructions": null
     },
     "ruby": {
      "ok": true,
-     "wall_ms": 196.8442009529099,
-     "ms": 196.495,
+     "wall_ms": 180.99443695973605,
+     "ms": 180.581,
      "instructions": null
     },
     "node": {
      "ok": true,
-     "wall_ms": 123.63180500688031,
-     "ms": 128.47799999999998,
+     "wall_ms": 113.23694803286344,
+     "ms": 119.04899999999999,
      "instructions": null
     },
     "julia": {
      "ok": true,
-     "wall_ms": 237.98856796929613,
-     "ms": 804.532,
+     "wall_ms": 240.15701899770647,
+     "ms": 808.519,
      "instructions": null
     }
    }
@@ -698,50 +929,68 @@
    "langs": {
     "zymbol": {
      "ok": true,
-     "wall_ms": 359.32427598163486,
-     "ms": 359.05299999999994,
+     "wall_ms": 355.8333810069598,
+     "ms": 355.57500000000005,
+     "instructions": null
+    },
+    "zymbol_tw": {
+     "ok": true,
+     "wall_ms": 3624.740526021924,
+     "ms": 3623.583,
+     "instructions": null
+    },
+    "zymbol_old": {
+     "ok": true,
+     "wall_ms": 677.0960440044291,
+     "ms": 676.862,
+     "instructions": null
+    },
+    "zymbol_old_tw": {
+     "ok": true,
+     "wall_ms": 3180.8160560321994,
+     "ms": 3179.998,
      "instructions": null
     },
     "python": {
      "ok": true,
-     "wall_ms": 634.8782349959947,
-     "ms": 634.002,
+     "wall_ms": 631.0523219872266,
+     "ms": 630.572,
      "instructions": null
     },
     "perl": {
      "ok": true,
-     "wall_ms": 277.1042689564638,
-     "ms": 276.717,
+     "wall_ms": 265.75511699775234,
+     "ms": 265.29999999999995,
      "instructions": null
     },
     "php": {
      "ok": true,
-     "wall_ms": 307.7182330307551,
-     "ms": 307.315,
+     "wall_ms": 302.6372930034995,
+     "ms": 302.055,
      "instructions": null
     },
     "lua": {
      "ok": true,
-     "wall_ms": 289.4231469836086,
-     "ms": 289.05199999999996,
+     "wall_ms": 295.0662889634259,
+     "ms": 294.71599999999995,
      "instructions": null
     },
     "ruby": {
      "ok": true,
-     "wall_ms": 421.255734981969,
-     "ms": 420.803,
+     "wall_ms": 405.8157699764706,
+     "ms": 405.337,
      "instructions": null
     },
     "node": {
      "ok": true,
-     "wall_ms": 124.82898798771203,
-     "ms": 128.37599999999998,
+     "wall_ms": 129.48569195577875,
+     "ms": 133.66899999999998,
      "instructions": null
     },
     "julia": {
      "ok": true,
-     "wall_ms": 364.5218010060489,
-     "ms": 1015.884,
+     "wall_ms": 354.4406360015273,
+     "ms": 1004.7330000000001,
      "instructions": null
     }
    }
@@ -752,50 +1001,68 @@
    "langs": {
     "zymbol": {
      "ok": true,
-     "wall_ms": 7.140701985917985,
-     "ms": 6.931,
+     "wall_ms": 8.674178970977664,
+     "ms": 8.541,
+     "instructions": null
+    },
+    "zymbol_tw": {
+     "ok": true,
+     "wall_ms": 35.87161505129188,
+     "ms": 35.642999999999994,
+     "instructions": null
+    },
+    "zymbol_old": {
+     "ok": true,
+     "wall_ms": 10.550865030381829,
+     "ms": 9.975,
+     "instructions": null
+    },
+    "zymbol_old_tw": {
+     "ok": true,
+     "wall_ms": 30.984057986643165,
+     "ms": 30.655999999999995,
      "instructions": null
     },
     "python": {
      "ok": true,
-     "wall_ms": 17.512142017949373,
-     "ms": 17.249999999999996,
+     "wall_ms": 30.852961994241923,
+     "ms": 30.584,
      "instructions": null
     },
     "perl": {
      "ok": true,
-     "wall_ms": 6.846381991636008,
-     "ms": 6.443,
+     "wall_ms": 13.399560994002968,
+     "ms": 12.941999999999998,
      "instructions": null
     },
     "php": {
      "ok": true,
-     "wall_ms": 16.913586005102843,
-     "ms": 16.562,
+     "wall_ms": 16.9452209956944,
+     "ms": 16.589,
      "instructions": null
     },
     "lua": {
      "ok": true,
-     "wall_ms": 4.665877029765397,
-     "ms": 4.292,
+     "wall_ms": 10.060984990559518,
+     "ms": 9.823,
      "instructions": null
     },
     "ruby": {
      "ok": true,
-     "wall_ms": 78.73266597744077,
-     "ms": 78.44500000000001,
+     "wall_ms": 66.73980300547555,
+     "ms": 66.48,
      "instructions": null
     },
     "node": {
      "ok": true,
-     "wall_ms": 42.78833698481321,
-     "ms": 45.458,
+     "wall_ms": 30.870491988025606,
+     "ms": 34.864,
      "instructions": null
     },
     "julia": {
      "ok": true,
-     "wall_ms": 338.8370230095461,
-     "ms": 989.93,
+     "wall_ms": 342.6974070025608,
+     "ms": 992.733,
      "instructions": null
     }
    }
@@ -806,50 +1073,68 @@
    "langs": {
     "zymbol": {
      "ok": true,
-     "wall_ms": 29.697130958084017,
-     "ms": 29.561999999999998,
+     "wall_ms": 30.398213013540953,
+     "ms": 30.233,
+     "instructions": null
+    },
+    "zymbol_tw": {
+     "ok": true,
+     "wall_ms": 194.1989950137213,
+     "ms": 193.671,
+     "instructions": null
+    },
+    "zymbol_old": {
+     "ok": true,
+     "wall_ms": 499.4084729696624,
+     "ms": 499.09099999999995,
+     "instructions": null
+    },
+    "zymbol_old_tw": {
+     "ok": true,
+     "wall_ms": 178.87679004343227,
+     "ms": 178.665,
      "instructions": null
     },
     "python": {
      "ok": true,
-     "wall_ms": 53.11109701870009,
-     "ms": 52.82899999999999,
+     "wall_ms": 51.150588027667254,
+     "ms": 50.68599999999999,
      "instructions": null
     },
     "perl": {
      "ok": true,
-     "wall_ms": 69.0796339767985,
-     "ms": 68.613,
+     "wall_ms": 79.09276301506907,
+     "ms": 78.801,
      "instructions": null
     },
     "php": {
      "ok": true,
-     "wall_ms": 29.952758050058037,
-     "ms": 29.397,
+     "wall_ms": 27.41912001511082,
+     "ms": 26.985999999999997,
      "instructions": null
     },
     "lua": {
      "ok": true,
-     "wall_ms": 57.92029103031382,
-     "ms": 57.459999999999994,
+     "wall_ms": 61.106738983653486,
+     "ms": 60.767,
      "instructions": null
     },
     "ruby": {
      "ok": true,
-     "wall_ms": 223.15135301323608,
-     "ms": 222.68799999999996,
+     "wall_ms": 225.59868899406865,
+     "ms": 225.101,
      "instructions": null
     },
     "node": {
      "ok": true,
-     "wall_ms": 53.16382797900587,
-     "ms": 61.808,
+     "wall_ms": 50.704777997452766,
+     "ms": 59.614999999999995,
      "instructions": null
     },
     "julia": {
      "ok": true,
-     "wall_ms": 324.06133896438405,
-     "ms": 975.569,
+     "wall_ms": 340.72587196715176,
+     "ms": 990.5319999999999,
      "instructions": null
     }
    }
@@ -860,50 +1145,68 @@
    "langs": {
     "zymbol": {
      "ok": true,
-     "wall_ms": 58.436153980437666,
-     "ms": 58.157,
+     "wall_ms": 65.48332399688661,
+     "ms": 65.29,
+     "instructions": null
+    },
+    "zymbol_tw": {
+     "ok": true,
+     "wall_ms": 354.05342502053827,
+     "ms": 353.39899999999994,
+     "instructions": null
+    },
+    "zymbol_old": {
+     "ok": true,
+     "wall_ms": 139.12265899125487,
+     "ms": 138.794,
+     "instructions": null
+    },
+    "zymbol_old_tw": {
+     "ok": true,
+     "wall_ms": 346.054280991666,
+     "ms": 345.75,
      "instructions": null
     },
     "python": {
      "ok": true,
-     "wall_ms": 86.56823902856559,
-     "ms": 86.15999999999998,
+     "wall_ms": 98.56568096438423,
+     "ms": 98.28099999999999,
      "instructions": null
     },
     "perl": {
      "ok": true,
-     "wall_ms": 129.2448960011825,
-     "ms": 128.965,
+     "wall_ms": 127.4491340154782,
+     "ms": 127.11399999999998,
      "instructions": null
     },
     "php": {
      "ok": true,
-     "wall_ms": 38.08223002124578,
-     "ms": 37.662,
+     "wall_ms": 38.59173000091687,
+     "ms": 37.973,
      "instructions": null
     },
     "lua": {
      "ok": true,
-     "wall_ms": 78.17622495349497,
-     "ms": 77.899,
+     "wall_ms": 78.19073903374374,
+     "ms": 77.859,
      "instructions": null
     },
     "ruby": {
      "ok": true,
-     "wall_ms": 310.17182604409754,
-     "ms": 309.775,
+     "wall_ms": 309.8453920101747,
+     "ms": 309.395,
      "instructions": null
     },
     "node": {
      "ok": true,
-     "wall_ms": 52.05422901781276,
-     "ms": 58.66,
+     "wall_ms": 45.81428604433313,
+     "ms": 57.626999999999995,
      "instructions": null
     },
     "julia": {
      "ok": true,
-     "wall_ms": 210.01076803077012,
-     "ms": 563.864,
+     "wall_ms": 212.704652978573,
+     "ms": 579.8789999999999,
      "instructions": null
     }
    }
@@ -914,50 +1217,68 @@
    "langs": {
     "zymbol": {
      "ok": true,
-     "wall_ms": 363.9566999627277,
-     "ms": 363.65999999999997,
+     "wall_ms": 358.9327409863472,
+     "ms": 358.5849999999999,
+     "instructions": null
+    },
+    "zymbol_tw": {
+     "ok": true,
+     "wall_ms": 5091.01572597865,
+     "ms": 5090.08,
+     "instructions": null
+    },
+    "zymbol_old": {
+     "ok": true,
+     "wall_ms": 506.4986060024239,
+     "ms": 506.104,
+     "instructions": null
+    },
+    "zymbol_old_tw": {
+     "ok": true,
+     "wall_ms": 5005.286314000841,
+     "ms": 5004.661999999999,
      "instructions": null
     },
     "python": {
      "ok": true,
-     "wall_ms": 309.3846929841675,
-     "ms": 309.084,
+     "wall_ms": 303.2275369623676,
+     "ms": 302.84,
      "instructions": null
     },
     "perl": {
      "ok": true,
-     "wall_ms": 1240.5751390033402,
-     "ms": 1239.441,
+     "wall_ms": 1263.5367009788752,
+     "ms": 1262.9409999999998,
      "instructions": null
     },
     "php": {
      "ok": true,
-     "wall_ms": 165.21031799493358,
-     "ms": 164.83100000000002,
+     "wall_ms": 163.31481200177222,
+     "ms": 162.87899999999996,
      "instructions": null
     },
     "lua": {
      "ok": true,
-     "wall_ms": 171.53720697388053,
-     "ms": 170.98,
+     "wall_ms": 175.13947800034657,
+     "ms": 174.658,
      "instructions": null
     },
     "ruby": {
      "ok": true,
-     "wall_ms": 261.6779959644191,
-     "ms": 261.31399999999996,
+     "wall_ms": 264.5642179995775,
+     "ms": 264.23600000000005,
      "instructions": null
     },
     "node": {
      "ok": true,
-     "wall_ms": 62.39458901109174,
-     "ms": 66.595,
+     "wall_ms": 60.4138930211775,
+     "ms": 64.639,
      "instructions": null
     },
     "julia": {
      "ok": true,
-     "wall_ms": 213.72433402575552,
-     "ms": 624.769,
+     "wall_ms": 218.59613701235503,
+     "ms": 628.246,
      "instructions": null
     }
    }
