@@ -304,9 +304,14 @@ id        = "growth/read-a-text"
 kind      = "growth-ratio"
 template  = "casos/leer_texto.zy.in"
 n         = 2000
+# The clock was off until 2026-10-19, because `s$#` counted the text on every
+# call. ZYVM-028 (2026-10-17) gave the VM's text its count, so the VM's clock
+# answers now and holds that fix: 73 → 270 ms over 800 000 → 3 200 000. The tree-walker
+# still counts and copies; at 2 000 its clock is under the floor and its
+# counted ratios answer it.
+n_by_engine = { zyvm = 800000 }
 factor    = 4
 max_ratio = 6.0
-clock_off = "`s$#` counts the text's characters (PERF-05 b, deferred by D8): the clock is quadratic whatever the read copies"
 open_finding = { zytw = "ZYTW-016" }
 what      = "reading a text that a variable holds does not copy it"
 # The control of the case above, and a case of its own: the same loop with
