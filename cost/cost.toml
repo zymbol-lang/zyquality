@@ -118,7 +118,6 @@ kind     = "peak-ratio"
 subject  = "casos/autofree_resultado_secuencial.zy"
 control  = "casos/autofree_resultado_uno.zy"
 max_ratio = 1.25
-open_finding = { zyvm = "ZYVM-022" }
 what     = "what a call returns and the caller uses once is released before the next call builds its own"
 # The shape the two cases above do not have: the array is never in a named
 # variable, only in the register a call's result lands in. Measured 2026-10-11:
@@ -126,7 +125,10 @@ what     = "what a call returns and the caller uses once is released before the 
 # process are taken out) — as much as the control that keeps both alive on
 # purpose. A `$` expression used as a value does not have it (0.98), and one
 # array is still 6x smaller in the VM than in the tree-walker, so this is the
-# relative win being smaller and not the VM being worse.
+# relative win being smaller and not the VM being worse. ZYVM-022, fixed
+# 2026-10-19: a temporary a call wrote into is cleared when its statement ends,
+# unless arithmetic showed it holds a number — 68 MiB → 39 MiB, for 0.05 % of
+# the steps of `bench/big` (clearing every temporary of unknown type: 18.7 %).
 why      = "the result waits in a temporary register until something reuses it; `emit_auto_free` clears only named variables"
 
 # ── Cost curves ──────────────────────────────────────────────────────────────
