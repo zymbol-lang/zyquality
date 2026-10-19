@@ -61,7 +61,8 @@ hace con cada uno está en el «Plan de cierre» de `interpreter/ROADMAP_V0011_E
   que quedan, así que n de ellos cuestan n² en cualquier lenguaje: Python `pop(0)` 6 → 22 → 87 ms con 10 000, 20 000
   y 40 000. La VM, 21 → 67 → 189 ms (~×2,2 de Python). El árbol, 100 → 418 → 3 141 ms (~×36): su `Value` mide
   **120 bytes** contra los 16 de la VM, mueve 7,5 veces más memoria y se sale de la caché antes. No es un defecto de
-  algoritmo sino el tamaño del valor del árbol, que pesa igual en la memoria de cualquier colección suya.
+  algoritmo sino el tamaño del valor del árbol, que pesa igual en la memoria de cualquier colección suya. **Corregido
+  el 2026-10-19** (`ZYTW-019`): el valor mide 24 bytes, y el árbol tarda ~313 ms donde tardaba ~2 640.
 - **Cadenas muy largas no ASCII:** recorrerlas con `@ ch:s` es lineal en los dos motores. Indexarlas no lo es
   (`GLB-139`).
 - **`$~` profundo (`m[i>j]$~ x`):** constante en la VM; O(filas) por edición en el árbol y en zyjs (`GLB-140`).
