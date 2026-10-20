@@ -20,11 +20,23 @@ _ap.add_argument('--web', default=os.path.join(os.path.dirname(os.path.abspath(_
                  help='the web repository (its install.html gives the header and footer)')
 _ap.add_argument('--commit', default='7ef269c', help='the interpreter commit that was measured')
 _ap.add_argument('--date', default='2026-10-18')
+_ap.add_argument('--out', default='benchmarks',
+                 help='the page to write, without extension: web/<out>.html and its twin web/<out>.md')
+_ap.add_argument('--before', default='',
+                 help='an earlier langs.py run of the same machine: adds a section comparing the two')
+_ap.add_argument('--before-commit', default='', help='the interpreter commit the earlier run measured')
+_ap.add_argument('--before-date', default='', help='the date of the earlier run')
+_ap.add_argument('--ab', default='',
+                 help='an ab.py run of the two commits, built alike and run in turn: the comparison to quote')
 _a = _ap.parse_args()
 WEB = os.path.abspath(_a.web)
 L = json.load(open(_a.data))
 COMMIT = _a.commit
 DATE = _a.date
+OUT = _a.out
+B = json.load(open(_a.before)) if _a.before else None
+AB = json.load(open(_a.ab)) if _a.ab else None
+AB_MOVE = 0.05   # an A/B change smaller than this is within what repeated runs scatter
 REPO = 'https://github.com/zymbol-lang/zyquality/tree/v0.0.11/bench/big'
 NET_MIN = 100
 
@@ -127,13 +139,38 @@ DATA = {
     'programs': [{'name': p, 'desc': DESC[p], 'ms': {k: round(ms[p][k], 2) for k in ORDER}} for p in progs],
 }
 
+# ── against an earlier run (--before) ────────────────────────────────────────
+# The same sixteen programs on the same machine, days apart. Two controls say
+# how much of a change is the machine: v0.0.10 is the SAME binary in both runs,
+# and the other languages did not change either. A Zymbol figure counts as a
+# change only past what those moved.
+if B:
+    bms = {r['program']: {k: r['langs'][k]['wall_ms'] for k in r['langs']} for r in B['rows']}
+    CMP_ZY = [k for k in ('zymbol', 'zymbol_tw') if k in keys and all(k in bms[p] for p in progs)]
+    CTRL_OLD = [k for k in ('zymbol_old', 'zymbol_old_tw') if k in keys and all(k in bms[p] for p in progs)]
+    CTRL_LANG = [k for k in interp_others + jit if all(k in bms[p] for p in progs)]
+    def chg(k, ps=None):
+        return gm([ms[p][k] / bms[p][k] for p in (ps or progs)])
+    cmp_zy = {k: chg(k) for k in CMP_ZY}
+    ctrl_old = {k: chg(k) for k in CTRL_OLD}
+    ctrl_lang = {k: chg(k) for k in CTRL_LANG}
+    ctrl_all = list(ctrl_old.values()) + list(ctrl_lang.values())
+    noise = max(abs(x - 1) for x in ctrl_all)
+
+def pct(x):
+    d = (x - 1) * 100
+    if abs(d) < 0.5:
+        return 'no change'
+    return '%.0f%% %s' % (abs(d), 'slower' if d > 0 else 'faster')
+
 # ── HTML ─────────────────────────────────────────────────────────────────────
 src = open(WEB + '/install.html').read()
 top = src[:src.index('<!-- ═══ HERO ═══ -->')]
-top = top.replace('<title>Install — Zymbol-Lang</title>', '<title>Benchmarks — Zymbol-Lang</title>')
+top = top.replace('<title>Install — Zymbol-Lang</title>',
+                  '<title>Benchmarks%s — Zymbol-Lang</title>' % (' · %s' % DATE if OUT != 'benchmarks' else ''))
 top = re.sub(r'<meta name="description" content="[^"]*">',
              '<meta name="description" content="How fast is Zymbol? Sixteen programs in %s languages and four Zymbol engines, the same printed answer, measured on one machine. Pick any of them as the reference.">' % WORDS[n_lang], top)
-top = top.replace('href="install.md"', 'href="benchmarks.md"')
+top = top.replace('href="install.md"', 'href="%s.md"' % OUT)
 CSS = '''
   <style>
     .bm-ctl { display:flex; flex-wrap:wrap; gap:1rem 2rem; margin:1.25rem 0 0.5rem; align-items:flex-start; }
@@ -235,6 +272,116 @@ def evo_table():
     body.append('<tr><td><strong>geometric mean, v0.0.11 = 1</strong></td>' + ''.join(
         '<td class="num%s">%s</td>' % (' refcol best' if k == 'zymbol' else '', f_x(gm([ms[p][k] / ms[p]['zymbol'] for p in progs]))) for k in EVO) + '</tr>')
     return '<div class="dl-table-wrap" style="margin-top:1rem"><table class="dl-table bm-table"><thead>%s</thead><tbody>%s</tbody></table></div>' % (head, ''.join(body))
+
+# What went into the interpreter between the two commits — the only prose here
+# not computed from the runs, and the page says which figures moved past the noise.
+CHANGES = [
+    ('the tree-walker\'s value', 'shrank from 120 to 24 bytes: a function and an error moved into a box (ZYTW-019)'),
+    ('a call\'s result', 'is let go when its statement ends, unless arithmetic showed it is a number (ZYVM-022) — memory, for 0.05 % of the VM\'s steps'),
+    ('a position in a text', 'that is not ASCII is found from a crumb every 64 characters (GLB-139) — none of the sixteen programs indexes such a text'),
+    ('an edit two levels down', 'is written in place in the tree-walker (GLB-140) — none of the sixteen programs does one'),
+    ('std/db', 'stopped being a default feature (D4); the binary measured here is built with it, as the earlier one was'),
+]
+
+def ab_rows(eng):
+    return [r for r in AB['rows'] if r['engine'] == eng] if AB else []
+
+def ab_gm(eng):
+    return gm([r['b_ms'] / r['a_ms'] for r in ab_rows(eng)])
+
+def ab_moved(eng):
+    return [r for r in ab_rows(eng) if abs(r['b_ms'] / r['a_ms'] - 1) > AB_MOVE]
+
+ENG_NAME = {'vm': 'Zymbol v0.0.11 · VM', 'tw': 'Zymbol v0.0.11 · tree-walker'}
+
+AB_HTML = '''
+    <h3 style="margin-top:1.5rem;font-size:1.05rem">The two commits side by side</h3>
+    <p class="bm-sub">Both binaries built with the same cargo command, and each program run once by one and once by the other, %(runs)d times over, in the same minutes: whatever the machine does, it does to both. Median CPU time in milliseconds. %(same)s</p>
+    <div class="bm-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))">%(cards)s</div>
+    %(table)s
+    <p class="bm-note">Changed by more than %(move).0f%% — what repeated runs of one binary scatter — the VM: %(vm)s. The tree-walker: %(tw)s. A VM figure that moves with the same steps is the compiler laying the VM's loop out differently, not work added or taken away: building the same commit from the workspace root instead of with <code>-p zymbol-cli</code> moved <code>loop_mod</code> by 7%%.</p>
+'''
+
+SINCE_HTML = '''
+<!-- ═══ SINCE ═══ -->
+<div class="install-section" id="since">
+  <div class="container">
+    <h2>Since %(bdate)s</h2>
+    <p class="section-sub">What changed between the commit the page of %(bdate)s measured (<code>%(bcommit)s</code>, <a href="benchmarks.html">benchmarks.html</a>) and the one this page measures (<code>%(commit)s</code>). Below 1.00× is faster now.</p>
+    %(ab)s
+    <h3 style="margin-top:2rem;font-size:1.05rem">Two runs, two days</h3>
+    <p class="bm-sub">The comparison everything else on this page is built from: all the languages measured on %(bdate)s and again on %(date)s, elapsed time, median of %(runs)d runs. It carries the machine as well as the change — the same v0.0.10 binary and the unchanged runtimes moved by up to %(noise).0f%% in the mean, and single programs by more — so it is context%(abword)s.</p>
+    <div class="bm-grid">%(cards)s</div>
+    %(table)s
+    <p class="bm-note">What went into the interpreter between the two commits:</p>
+    <ul class="bm-list">%(changes)s</ul>
+  </div>
+</div>
+'''
+
+def since_section():
+    if not B:
+        return ''
+    bdate, bcommit = _a.before_date, _a.before_commit
+    ab_html = ''
+    if AB:
+        engs = [e for e in ('vm', 'tw') if ab_rows(e)]
+        cards = ''.join(
+            '<div class="bm-card%s" style="cursor:default"><div class="k">%s</div><div class="v">%s</div>'
+            '<div class="s">%s — %s against %s, geometric mean of CPU time over the sixteen programs</div></div>' % (
+                ' ref' if e == 'vm' else '', ENG_NAME[e], f_x(ab_gm(e)), pct(ab_gm(e)), AB['b']['label'], AB['a']['label'])
+            for e in engs)
+        same = all(r['a_steps'] == r['b_steps'] for r in ab_rows('vm'))
+        head = ('<tr><th rowspan="2">Program</th>' + ''.join('<th colspan="3" class="num">%s</th>' % ENG_NAME[e] for e in engs) + '</tr><tr>' +
+                ''.join('<th class="num"><code>%s</code></th><th class="num"><code>%s</code></th><th class="num">÷</th>' % (AB['a']['label'], AB['b']['label']) for e in engs) + '</tr>')
+        body = []
+        for p in progs:
+            cells = []
+            for e in engs:
+                r = next(x for x in ab_rows(e) if x['program'] == p)
+                q = r['b_ms'] / r['a_ms']
+                cls = ' best' if q < 1 - AB_MOVE else ''
+                mark = '' if r['a_steps'] == r['b_steps'] else '<span class="d">steps %+.2f%%</span>' % ((r['b_steps'] / r['a_steps'] - 1) * 100)
+                cells.append('<td class="num">%s</td><td class="num">%s</td><td class="num%s">%s%s</td>' % (f_ms(r['a_ms']), f_ms(r['b_ms']), cls, f_x(q), mark))
+            body.append('<tr><td><code>%s</code></td>%s</tr>' % (p, ''.join(cells)))
+        body.append('<tr><td><strong>geometric mean</strong></td>' + ''.join('<td></td><td></td><td class="num">%s</td>' % f_x(ab_gm(e)) for e in engs) + '</tr>')
+        table = '<div class="dl-table-wrap" style="margin-top:1rem"><table class="dl-table bm-table"><thead>%s</thead><tbody>%s</tbody></table></div>' % (head, ''.join(body))
+
+        def said(e):
+            m = ab_moved(e)
+            return en_list(['<code>%s</code> %s' % (r['program'], pct(r['b_ms'] / r['a_ms'])) for r in m]) if m else 'none'
+        ab_html = AB_HTML % dict(
+            runs=AB['runs'], cards=cards, table=table, move=AB_MOVE * 100, vm=said('vm'), tw=said('tw') if 'tw' in engs else '—',
+            same=('Every VM program ran exactly the same number of steps in both: the bytecode is the same.' if same
+                  else 'A step count that differs is shown under its ratio.'))
+    cards = []
+    for k in CMP_ZY:
+        cards.append('<div class="bm-card" style="cursor:default"><div class="k">%s</div><div class="v">%s</div><div class="s">%s, %s against %s</div></div>' % (
+            html.escape(INFO[k][0]), f_x(cmp_zy[k]), pct(cmp_zy[k]), DATE, bdate))
+    for k in CTRL_OLD[:1]:
+        cards.append('<div class="bm-card" style="cursor:default"><div class="k">control · %s</div><div class="v">%s</div><div class="s">the same binary both days</div></div>' % (
+            html.escape(INFO[k][0]), f_x(ctrl_old[k])))
+    lo, hi = min(ctrl_lang.values()), max(ctrl_lang.values())
+    cards.append('<div class="bm-card" style="cursor:default"><div class="k">control · the other %s languages</div><div class="v">%s–%s</div><div class="s">unchanged runtimes</div></div>' % (
+        WORDS.get(len(ctrl_lang), len(ctrl_lang)), f_x(lo), f_x(hi)))
+    head = ('<tr><th rowspan="2">Program</th>' + ''.join('<th colspan="3" class="num">%s</th>' % html.escape(INFO[k][0]) for k in CMP_ZY) +
+            '<th colspan="2" class="num">controls, now ÷ then</th></tr>' +
+            '<tr>' + ''.join('<th class="num">%s</th><th class="num">%s</th><th class="num">÷</th>' % (bdate, DATE) for k in CMP_ZY) +
+            '<th class="num">%s</th><th class="num">other languages</th></tr>' % (html.escape(INFO[CTRL_OLD[0]][1]) if CTRL_OLD else ''))
+    body = []
+    for p in progs:
+        cells = ''.join('<td class="num">%s</td><td class="num">%s</td><td class="num">%s</td>' % (f_ms(bms[p][k]), f_ms(ms[p][k]), f_x(ms[p][k] / bms[p][k])) for k in CMP_ZY)
+        ctl = ''.join('<td class="num">%s</td>' % f_x(ms[p][k] / bms[p][k]) for k in CTRL_OLD[:1])
+        ctl += '<td class="num">%s</td>' % f_x(gm([ms[p][k] / bms[p][k] for k in CTRL_LANG]))
+        body.append('<tr><td><code>%s</code></td>%s%s</tr>' % (p, cells, ctl))
+    body.append('<tr><td><strong>geometric mean</strong></td>' + ''.join('<td></td><td></td><td class="num">%s</td>' % f_x(cmp_zy[k]) for k in CMP_ZY) +
+                ''.join('<td class="num">%s</td>' % f_x(ctrl_old[k]) for k in CTRL_OLD[:1]) + '<td class="num">%s</td></tr>' % f_x(gm(list(ctrl_lang.values()))))
+    table = '<div class="dl-table-wrap" style="margin-top:1rem"><table class="dl-table bm-table"><thead>%s</thead><tbody>%s</tbody></table></div>' % (head, ''.join(body))
+    changes = ''.join('<li><strong>%s</strong> %s</li>' % (html.escape(a), html.escape(b)) for a, b in CHANGES)
+    return SINCE_HTML % dict(
+        bdate=bdate, bcommit=bcommit, date=DATE, commit=COMMIT, noise=noise * 100, runs=L['runs'], ab=ab_html,
+        abword=', and the side-by-side figures above are the ones to quote' if AB else '',
+        cards=''.join(cards), table=table, changes=changes)
 
 ver_rows = '\n            '.join(
     '<tr><td>%s</td><td>%s</td><td>%s</td></tr>' % (
@@ -399,7 +546,7 @@ body = '''<!-- ═══ HERO ═══ -->
   <p>Sixteen programs, %(nword)s languages and four Zymbol engines, the same printed answer. Pick any of them as the reference and the rest is measured against it. One machine, elapsed time per process — and the programs, their twins and the script that measured them are public.</p>
   <div class="hero-actions">
     <a href="#compare" class="btn-primary">Compare</a>
-    <a href="#evolution" class="btn-ghost">v0.0.10 → v0.0.11</a>
+    %(since_btn)s<a href="#evolution" class="btn-ghost">v0.0.10 → v0.0.11</a>
     <a href="#method" class="btn-ghost">How it was measured</a>
     <a href="%(repo)s" target="_blank" rel="noopener" class="btn-ghost">The programs ↗</a>
   </div>
@@ -433,7 +580,7 @@ body = '''<!-- ═══ HERO ═══ -->
   </div>
 </div>
 
-<!-- ═══ EVOLUTION ═══ -->
+%(since)s<!-- ═══ EVOLUTION ═══ -->
 <div class="install-section" id="evolution">
   <div class="container">
     <h2>From v0.0.10 to v0.0.11</h2>
@@ -484,11 +631,12 @@ body = '''<!-- ═══ HERO ═══ -->
     rest=(', and still behind one of them on a few programs: ' + '; '.join('%s on %s' % (short[k], ', '.join('<code>%s</code>' % p for p in beats[k])) for k in behind if beats[k])) if any(beats[k] for k in behind) else '',
     net_ahead=en_list(['%s (%s)' % (short[k], f_x(net_zy[k])) for k in net_ahead]) + (' are' if len(net_ahead) > 1 else ' is'),
     sp_tw=speed_tw10, sp_vm=speed_vm10, cpu=html.escape(L['cpu']), os=html.escape(L['os']),
-    vers=ver_rows, agree=agree, total=total, evo=evo_table(), jl_cow=cpu_over_wall['julia'], netmin=NET_MIN, commit=COMMIT)
+    vers=ver_rows, agree=agree, total=total, evo=evo_table(), jl_cow=cpu_over_wall['julia'], netmin=NET_MIN, commit=COMMIT,
+    since=since_section(), since_btn=('<a href="#since" class="btn-ghost">Since %s</a>\n    ' % _a.before_date) if B else '')
 
 script = JS % {'data': json.dumps(DATA, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')}
 foot = foot.replace('</body>', script + '</body>')
-open(WEB + '/benchmarks.html', 'w').write(top + body + foot)
+open(WEB + '/%s.html' % OUT, 'w').write(top + body + foot)
 
 # ── Markdown twin ────────────────────────────────────────────────────────────
 md = []
@@ -519,6 +667,57 @@ for p in progs:
     md.append('| `%s` | %s | ' % (p, DESC[p]) + ' | '.join(f_ms(ms[p][k]) for k in cols) + ' |')
 md.append('| geometric mean, Zymbol v0.0.11 = 1 | | ' + ' | '.join(f_x(rel_zy[k]) for k in cols) + ' |')
 md.append('')
+if B:
+    md.append('## Since %s\n' % _a.before_date)
+    md.append('What changed between the commit the page of %s measured (`%s`, benchmarks.md) and the one this page measures (`%s`). Below 1.00× is faster now.\n' % (
+        _a.before_date, _a.before_commit, COMMIT))
+    if AB:
+        engs = [e for e in ('vm', 'tw') if ab_rows(e)]
+        md.append('### The two commits side by side\n')
+        md.append('Both binaries built with the same cargo command, each program run once by one and once by the other, %d times over, in the same minutes. Median CPU time in milliseconds; the steps are `zymbol run --count`, exact.\n' % AB['runs'])
+        md.append('| | %s against %s, geometric mean |' % (AB['b']['label'], AB['a']['label']))
+        md.append('|---|---:|')
+        for e in engs:
+            md.append('| %s | %s (%s) |' % (ENG_NAME[e], f_x(ab_gm(e)), pct(ab_gm(e))))
+        md.append('')
+        md.append('| Program | ' + ' | '.join('%s %s | %s %s | ÷ | same steps' % (e.upper(), AB['a']['label'], e.upper(), AB['b']['label']) for e in engs) + ' |')
+        md.append('|---|' + '---:|---:|---:|:-:|' * len(engs))
+        for p in progs:
+            cells = []
+            for e in engs:
+                r = next(x for x in ab_rows(e) if x['program'] == p)
+                cells.append('%s | %s | %s | %s' % (f_ms(r['a_ms']), f_ms(r['b_ms']), f_x(r['b_ms'] / r['a_ms']), 'yes' if r['a_steps'] == r['b_steps'] else 'no'))
+            md.append('| `%s` | %s |' % (p, ' | '.join(cells)))
+        md.append('')
+
+        def said_md(e):
+            m = ab_moved(e)
+            return en_list(['`%s` %s' % (r['program'], pct(r['b_ms'] / r['a_ms'])) for r in m]) if m else 'none'
+        md.append('Changed by more than %.0f%% — what repeated runs of one binary scatter — the VM: %s. The tree-walker: %s. A VM figure that moves with the same steps is the compiler laying the VM loop out differently, not work added or taken away: building the same commit from the workspace root instead of with `-p zymbol-cli` moved `loop_mod` by 7%%.\n' % (
+            AB_MOVE * 100, said_md('vm'), said_md('tw')))
+    md.append('### Two runs, two days\n')
+    md.append('All the languages measured on %s and again on %s, elapsed milliseconds, median of %d runs. It carries the machine as well as the change — the same v0.0.10 binary and the unchanged runtimes moved by up to %.0f%% in the mean — so it is context%s.\n' % (
+        _a.before_date, DATE, L['runs'], noise * 100, ', and the side-by-side figures above are the ones to quote' if AB else ''))
+    md.append('| | now ÷ then, geometric mean |')
+    md.append('|---|---:|')
+    for k in CMP_ZY:
+        md.append('| %s | %s |' % (INFO[k][0], f_x(cmp_zy[k])))
+    for k in CTRL_OLD:
+        md.append('| control: %s, the same binary | %s |' % (INFO[k][0], f_x(ctrl_old[k])))
+    for k in CTRL_LANG:
+        md.append('| control: %s | %s |' % (INFO[k][0], f_x(ctrl_lang[k])))
+    md.append('')
+    md.append('| Program | ' + ' | '.join('%s %s | %s %s | ÷' % (INFO[k][1], _a.before_date, INFO[k][1], DATE) for k in CMP_ZY) +
+              ' | control %s ÷ | control, other languages ÷ |' % (INFO[CTRL_OLD[0]][1] if CTRL_OLD else ''))
+    md.append('|---|' + '---:|---:|---:|' * len(CMP_ZY) + '---:|---:|')
+    for p in progs:
+        md.append('| `%s` | ' % p + ' | '.join('%s | %s | %s' % (f_ms(bms[p][k]), f_ms(ms[p][k]), f_x(ms[p][k] / bms[p][k])) for k in CMP_ZY) +
+                  ' | %s | %s |' % (f_x(ms[p][CTRL_OLD[0]] / bms[p][CTRL_OLD[0]]) if CTRL_OLD else '', f_x(gm([ms[p][k] / bms[p][k] for k in CTRL_LANG]))))
+    md.append('')
+    md.append('What went into the interpreter between the two commits:\n')
+    for a, b in CHANGES:
+        md.append('- **%s** %s' % (a, b))
+    md.append('')
 md.append('## From v0.0.10 to v0.0.11\n')
 md.append('Zymbol against itself — no other language here. v0.0.10 ran the tree-walker by default; its VM was `zymbol run --vm`. Elapsed milliseconds, median of %d runs; in brackets, against v0.0.11 = 1.00.\n' % L['runs'])
 md.append('| Program | v0.0.11 VM | v0.0.10 `--vm` | v0.0.10 tree-walker (its default) |')
@@ -541,6 +740,6 @@ md.append('- Not a ranking of languages: sixteen small programs say how fast an 
 md.append('- v0.0.11 is not released yet; these are figures of its development branch.')
 md.append('')
 md.append('Reproduce, from `zyquality/bench/big/`: `ZYMBOL_BIN=zymbol ZYMBOL_OLD=zymbol-0.0.10 python3 langs.py --runs %d --json out.json`.' % L['runs'])
-open(WEB + '/benchmarks.md', 'w').write('\n'.join(md) + '\n')
+open(WEB + '/%s.md' % OUT, 'w').write('\n'.join(md) + '\n')
 print('ok', {k: round(rel_zy[k], 3) for k in ORDER}, 'net', {k: round(net_zy[k], 3) for k in ORDER},
       'tw10', round(speed_tw10, 2), 'vm10', round(speed_vm10, 2))
