@@ -68,7 +68,10 @@ ANSI = re.compile(r"\x1b\[[0-9;]*m")
 LAYERS = (
     ("sintaxis",    {"zymbol-lexer", "zymbol-parser"}),
     ("semántica",   {"zymbol-semantic"}),
-    ("ejecución",   {"zymbol-interpreter", "zymbol-vm"}),
+    # zymbol-host is the VM's terminal, network and database, moved out of
+    # zymbol-vm unchanged on 2026-10-20 (ROADMAP_V0011_ES § 3.1): the same
+    # runtime diagnostics, in another crate.
+    ("ejecución",   {"zymbol-interpreter", "zymbol-vm", "zymbol-host"}),
     ("compilación", {"zymbol-compiler"}),
 )
 GATED = [name for name, _ in LAYERS]          # `otros` is measured, never gated
