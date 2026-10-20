@@ -62,6 +62,7 @@ ejecución	slice count must be non-negative, got {}
 ejecución	slice indices out of bounds: [{}:{}] for collection of length {}
 ejecución	sort comparator must be a lambda (a, b) -> Bool
 ejecución	std/db is not available in this build (compiled without ODBC support)
+ejecución	std/net is not available in this build (compiled without HTTP support)
 ejecución	string update index must be an integer, got {}
 ejecución	text of up to {} characters
 ejecución	the dot reaches a dictionary key, and this is {}\nhelp: use d.{} on a #(…) — for a position, use x[1]
@@ -76,6 +77,7 @@ ejecución	unknown builtin id {}
 ejecución	unknown connection '{}'
 ejecución	unknown db builtin id {}
 ejecución	unknown error
+ejecución	unknown net builtin id {}
 ejecución	unsupported binary operator: {:?}
 ejecución	unsupported operator in comparison pattern: {:?}
 ejecución	update operator ($~) requires a place to write like arr[i]$~ val, arr[i>j]$~ val or d.key$~ val
