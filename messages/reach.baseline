@@ -21,7 +21,7 @@ ejecución	$~ writes into a collection, and this is {}\nhelp: use a[1]$~ v on an
 ejecución	'{}' is undefined — did you mean '{}°' (hot definition)?
 ejecución	(year, month, day) or (year, month, day, hour, minute, second), each ###, plus an optional zone
 ejecución	Module '{}' not loaded
-ejecución	ZyStr requires a 64-bit platform
+ejecución	ZyStr requires a 32-bit or 64-bit platform
 ejecución	a dictionary is addressed by key, not by position: `{}` has no meaning here\nhelp: use the key — d[\"{}\"], d[\"{}\"]$~ value, d$-[\"{}\"] — because adding a key changes what sits at each position
 ejecución	a dictionary is addressed by key, not by position\nhelp: use d[\"{}\"] — adding a key changes what sits at each position
 ejecución	a navigation step is a position or a key, got {}
