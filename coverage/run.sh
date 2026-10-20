@@ -57,7 +57,10 @@ fi
 EXCLUDE='(/\.cargo/|/rustc/|zymbol-analyzer|zymbol-repl|zymbol-package|zymbol-standalone|zymbol-lsp)'
 
 echo "── building instrumented binary ─────────────────────────────"
-( cd "$INTERP" && RUSTFLAGS="-C instrument-coverage" cargo build --profile dev 2>&1 | tail -1 )
+# `--features db`: std/db is off by default since v0.0.11 (D4); without it the
+# std/db code would not be compiled, and would vanish from the report instead of
+# showing as covered or not.
+( cd "$INTERP" && RUSTFLAGS="-C instrument-coverage" cargo build --profile dev --features db 2>&1 | tail -1 )
 BIN="$INTERP/target/debug/zymbol"
 [ -x "$BIN" ] || { echo "coverage: build produced no binary" >&2; exit 2; }
 

@@ -4,6 +4,11 @@
 data source named **`zymbol_sqlite`**, backed by SQLite. Without it they fail at
 `db::connect`; every other suite runs regardless.
 
+They also need an interpreter built **with** std/db: `cargo build --release --features
+db`. Since v0.0.11 the feature is off by default (decision D4), and a binary without it
+answers `module not found: std/db` — so these files fail rather than skip, which is how
+the gate says it was handed the wrong binary.
+
 ## Why a DSN and not a driver name
 
 The tests used to say `Driver={SQLite3}`, which is what unixODBC calls the driver
