@@ -40,7 +40,7 @@ de abajo.
 | PERF-05 b, `s$#` y `s[i]` | **Corregido en la VM** (2026-10-17): el texto guarda su número de caracteres. **Queda** la posición en un texto no ASCII | `ZYVM-028` · `GLB-139` (abierto) · `ZYTW-016` (abierto) | `growth/read-a-text` (desde hoy también por reloj en la VM), `growth/index-a-text` |
 | PERF-06 `s = s "x"` | **Corregido** en la VM (2026-10-16); el árbol ya lo estaba en `d736ae6` | `ZYVM-023` | `growth/concat-local`, `concat-in-function`, `concat-module-state` |
 | PERF-07 recursión | **Corregido** (2026-10-16): `##Depth`, capturable con `!?`, a 10 000 llamadas activas, igual en los tres motores; pila de 512 MiB | `GLB-133`, `ZYTW-017`, `ZYVM-027` | `corpus/errors/runtime/depth_*.zy` |
-| PERF-08 musl | **Abierto**: reproducido con los binarios oficiales (×17 en `str_concat`); el asignador sigue siendo el del sistema | `GLB-134` | nada: esta máquina no tiene el target musl. Se decide en la release |
+| PERF-08 musl | **Corregido** (2026-10-19): `mimalloc` sólo en el estático, con tres opciones para que no retenga memoria. Del ×2,1 que quedaba en el `HEAD` (×17 en la v0.0.10) a como glibc; ×0,983 en los 16 programas | `GLB-134` | la medición de la ficha, que hay que repetir en la release: la puerta no construye el estático |
 
 ### Lo que esta revisión encontró
 
