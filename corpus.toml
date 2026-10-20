@@ -191,6 +191,13 @@ reason = "raw mode and key input need a real terminal"
 # finding is a divergence.  So `zyq expect` runs the recording engine unless
 # told otherwise.
 #
+# That stays true with the VM as the default engine (v0.0.11). The VM is graded
+# against every golden all the same — by `consensus`, which holds it to zytw
+# file by file, composed with `expect`, which holds zytw to the golden — and
+# `zyq expect --engines zyvm` gives the same 677 of 677 (2026-10-19). zytw keeps
+# recording because a feature is built in the tree-walker first, before the VM
+# can print it. Decided by the author, D1 of interpreter/ROADMAP_V0011_ES.md.
+#
 # Two scripts knew the `via` split between them and neither said it:
 # expected_compare.sh ran the program and excluded errors/semantic/,
 # semantic_compare.sh checked the program and looked at nothing else.  A file
