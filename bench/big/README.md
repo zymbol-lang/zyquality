@@ -43,6 +43,17 @@ elapsed time with Zymbol v0.0.11's VM (`7ef269c`) = 1.00: Node 0.46, PHP 0.63, L
 (11 programs, against the same reference): Node 0.11, Julia 0.14, PHP 0.38, Lua 0.45, Ruby 0.83,
 Zymbol 0.99, v0.0.10's VM 1.41, Perl 1.64, Python 1.65.
 
+`langs_2026-10-20.json` is the same run two days later, at `52ad7d3`, behind zymbol-lang.org/benchmarks2.html
+(176 of 176 agreeing). Compared with the run of 2026-10-18 it showed how much two days move a machine: the same
+v0.0.10 binary came out 2 % faster, the unchanged runtimes 5 to 10 % faster, and single programs swung by
+more than the change being looked for. So the page leads with `ab.py` instead: the two commits built with the
+same cargo command (`-p zymbol-cli --features db`) and each program run by one and then the other, in turn —
+`ab_2026-10-20.json`, 7 rounds. VM 1.00× in the mean, with the same steps everywhere but three programs that
+differ by a handful (ZYVM-022's `LoadUnit`); tree-walker 0.91× (ZYTW-019, the 24-byte value), `sort_builtin`
+0.70×. A VM figure that moves with the same steps is code layout: building one commit from the workspace root
+instead of with `-p zymbol-cli` moved `loop_mod` by 7 %. `langs_page.py --out benchmarks2 --before … --ab …`
+writes the page; without those flags it writes benchmarks.html exactly as before.
+
 ## The instruments — the project's own, in `instruments.py`
 
 The three runners measure with what `cost/` and `ZyDDT/HALLAZGOS` measure with,

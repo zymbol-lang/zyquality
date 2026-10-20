@@ -1,0 +1,302 @@
+{
+ "what": "two builds of Zymbol, the same programs run in turn, CPU time",
+ "a": {
+  "label": "7ef269c"
+ },
+ "b": {
+  "label": "52ad7d3"
+ },
+ "runs": 7,
+ "cpu": "AMD Ryzen 7 4800H with Radeon Graphics",
+ "os": "Linux 6.12.111+deb13-amd64",
+ "rows": [
+  {
+   "program": "array_update",
+   "engine": "vm",
+   "a_ms": 5.077,
+   "b_ms": 4.550999999999999,
+   "a_steps": 92027,
+   "b_steps": 92027,
+   "same_output": true
+  },
+  {
+   "program": "collatz",
+   "engine": "vm",
+   "a_ms": 352.57899999999984,
+   "b_ms": 346.025,
+   "a_steps": 67966162,
+   "b_steps": 67966162,
+   "same_output": true
+  },
+  {
+   "program": "fib_rec",
+   "engine": "vm",
+   "a_ms": 953.7970000000003,
+   "b_ms": 949.2180000000016,
+   "a_steps": 101502114,
+   "b_steps": 101502115,
+   "same_output": true
+  },
+  {
+   "program": "hof_chain",
+   "engine": "vm",
+   "a_ms": 334.8539999999993,
+   "b_ms": 343.15899999999834,
+   "a_steps": 22800847,
+   "b_steps": 22800847,
+   "same_output": true
+  },
+  {
+   "program": "loop_mod",
+   "engine": "vm",
+   "a_ms": 415.62499999999864,
+   "b_ms": 443.5390000000013,
+   "a_steps": 80000013,
+   "b_steps": 80000013,
+   "same_output": true
+  },
+  {
+   "program": "mandelbrot",
+   "engine": "vm",
+   "a_ms": 188.04200000000054,
+   "b_ms": 192.09899999999925,
+   "a_steps": 37155465,
+   "b_steps": 37155465,
+   "same_output": true
+  },
+  {
+   "program": "match_loop",
+   "engine": "vm",
+   "a_ms": 244.1219999999975,
+   "b_ms": 253.17700000000133,
+   "a_steps": 46600013,
+   "b_steps": 46600013,
+   "same_output": true
+  },
+  {
+   "program": "matmul",
+   "engine": "vm",
+   "a_ms": 403.21499999999577,
+   "b_ms": 404.64000000000067,
+   "a_steps": 41064927,
+   "b_steps": 41064927,
+   "same_output": true
+  },
+  {
+   "program": "nqueens",
+   "engine": "vm",
+   "a_ms": 278.8229999999947,
+   "b_ms": 282.3239999999951,
+   "a_steps": 43778166,
+   "b_steps": 44126317,
+   "same_output": true
+  },
+  {
+   "program": "primes_trial",
+   "engine": "vm",
+   "a_ms": 224.38900000000584,
+   "b_ms": 223.1529999999958,
+   "a_steps": 34440595,
+   "b_steps": 34440595,
+   "same_output": true
+  },
+  {
+   "program": "sort_builtin",
+   "engine": "vm",
+   "a_ms": 98.68499999999847,
+   "b_ms": 98.95899999999725,
+   "a_steps": 4200031,
+   "b_steps": 4200031,
+   "same_output": true
+  },
+  {
+   "program": "sort_cmp_300k",
+   "engine": "vm",
+   "a_ms": 360.58499999999907,
+   "b_ms": 353.9439999999965,
+   "a_steps": 17810653,
+   "b_steps": 17810653,
+   "same_output": true
+  },
+  {
+   "program": "sort_cmp_4k",
+   "engine": "vm",
+   "a_ms": 13.375999999996946,
+   "b_ms": 13.528000000002205,
+   "a_steps": 156107,
+   "b_steps": 156107,
+   "same_output": true
+  },
+  {
+   "program": "strings_scan_long",
+   "engine": "vm",
+   "a_ms": 28.973000000003466,
+   "b_ms": 27.029999999996335,
+   "a_steps": 5006067,
+   "b_steps": 5006067,
+   "same_output": true
+  },
+  {
+   "program": "strings_scan_short",
+   "engine": "vm",
+   "a_ms": 66.85199999999836,
+   "b_ms": 65.37300000000013,
+   "a_steps": 10001927,
+   "b_steps": 10001927,
+   "same_output": true
+  },
+  {
+   "program": "tak",
+   "engine": "vm",
+   "a_ms": 371.572999999997,
+   "b_ms": 373.53500000000264,
+   "a_steps": 33660241,
+   "b_steps": 33660244,
+   "same_output": true
+  },
+  {
+   "program": "array_update",
+   "engine": "tw",
+   "a_ms": 16.121999999997747,
+   "b_ms": 13.618000000004127,
+   "a_steps": 49018,
+   "b_steps": 49018,
+   "same_output": true
+  },
+  {
+   "program": "collatz",
+   "engine": "tw",
+   "a_ms": 2046.4690000000037,
+   "b_ms": 1834.6430000000016,
+   "a_steps": 63829308,
+   "b_steps": 63829308,
+   "same_output": true
+  },
+  {
+   "program": "fib_rec",
+   "engine": "tw",
+   "a_ms": 8333.026000000003,
+   "b_ms": 7824.002000000008,
+   "a_steps": 101502113,
+   "b_steps": 101502113,
+   "same_output": true
+  },
+  {
+   "program": "hof_chain",
+   "engine": "tw",
+   "a_ms": 2211.1119999999983,
+   "b_ms": 2039.830000000014,
+   "a_steps": 11033764,
+   "b_steps": 11033764,
+   "same_output": true
+  },
+  {
+   "program": "loop_mod",
+   "engine": "tw",
+   "a_ms": 2729.309999999984,
+   "b_ms": 2439.493000000006,
+   "a_steps": 100000009,
+   "b_steps": 100000009,
+   "same_output": true
+  },
+  {
+   "program": "mandelbrot",
+   "engine": "tw",
+   "a_ms": 2983.7550000000087,
+   "b_ms": 2768.9459999999667,
+   "a_steps": 64343212,
+   "b_steps": 64343212,
+   "same_output": true
+  },
+  {
+   "program": "match_loop",
+   "engine": "tw",
+   "a_ms": 1853.6159999999793,
+   "b_ms": 1760.420999999992,
+   "a_steps": 21000010,
+   "b_steps": 21000010,
+   "same_output": true
+  },
+  {
+   "program": "matmul",
+   "engine": "tw",
+   "a_ms": 3673.843000000006,
+   "b_ms": 3536.8750000000095,
+   "a_steps": 47926220,
+   "b_steps": 47926220,
+   "same_output": true
+  },
+  {
+   "program": "nqueens",
+   "engine": "tw",
+   "a_ms": 2787.845000000004,
+   "b_ms": 2644.7870000000084,
+   "a_steps": 64746842,
+   "b_steps": 64746842,
+   "same_output": true
+  },
+  {
+   "program": "primes_trial",
+   "engine": "tw",
+   "a_ms": 2213.5499999999943,
+   "b_ms": 2056.4729999999827,
+   "a_steps": 41308511,
+   "b_steps": 41308511,
+   "same_output": true
+  },
+  {
+   "program": "sort_builtin",
+   "engine": "tw",
+   "a_ms": 390.94700000002325,
+   "b_ms": 273.6749999999581,
+   "a_steps": 5400023,
+   "b_steps": 5400023,
+   "same_output": true
+  },
+  {
+   "program": "sort_cmp_300k",
+   "engine": "tw",
+   "a_ms": 3264.4899999999275,
+   "b_ms": 3261.873000000023,
+   "a_steps": 10555335,
+   "b_steps": 10555335,
+   "same_output": true
+  },
+  {
+   "program": "sort_cmp_4k",
+   "engine": "tw",
+   "a_ms": 46.68099999996578,
+   "b_ms": 45.62199999996519,
+   "a_steps": 100062,
+   "b_steps": 100062,
+   "same_output": true
+  },
+  {
+   "program": "strings_scan_long",
+   "engine": "tw",
+   "a_ms": 189.94499999996518,
+   "b_ms": 161.26700000007244,
+   "a_steps": 5444029,
+   "b_steps": 5444029,
+   "same_output": true
+  },
+  {
+   "program": "strings_scan_short",
+   "engine": "tw",
+   "a_ms": 341.846999999948,
+   "b_ms": 299.8030000000842,
+   "a_steps": 10880619,
+   "b_steps": 10880619,
+   "same_output": true
+  },
+  {
+   "program": "tak",
+   "engine": "tw",
+   "a_ms": 4943.868999999896,
+   "b_ms": 4721.647000000043,
+   "a_steps": 44880298,
+   "b_steps": 44880298,
+   "same_output": true
+  }
+ ]
+}
