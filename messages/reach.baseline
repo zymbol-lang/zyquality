@@ -54,6 +54,7 @@ ejecución	invalid savepoint name '{}'
 ejecución	io error: {0}
 ejecución	named tuple index out of bounds: index {} for tuple of length {}
 ejecución	named tuple update index must be an integer or field name (string), got {}
+ejecución	no terminal to read a key from
 ejecución	query_one matched no rows
 ejecución	register {0} out of range
 ejecución	remove index
