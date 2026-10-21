@@ -113,12 +113,11 @@ these sizes, and no figure for them is quoted here.
 
 ## What the documents claim
 
-- `interpreter/MANUAL.md` line 121: *"VM: production, ~1.1–1.5× faster than
-  Python for most workloads"*. This is ZyBench's `ERROR-BEN-004`. It holds for
-  integer loops and not for calls, higher-order functions or text — but the file
-  says at its top that it is **deprecated as of v0.0.5 and frozen at v0.0.4**,
-  kept for historical reference only. Left as the record it is. No current
-  document repeats the figure.
+- `interpreter/MANUAL.md` line 121 said: *"VM: production, ~1.1–1.5× faster
+  than Python for most workloads"*. This is ZyBench's `ERROR-BEN-004`. It held for
+  integer loops and not for calls, higher-order functions or text. The file was
+  frozen at v0.0.4 and was **deleted on 2026-10-21**; no current document repeats
+  the figure.
 - `web/install.md` line 135: *"zymbol run --vm file.zy # register VM (~4×
   faster)"*. A single factor, where `CLAUDE.md` says there is none — 1.4–6.1× on
   the `bench/` microbenchmarks, more on search-shaped programs — and says to quote

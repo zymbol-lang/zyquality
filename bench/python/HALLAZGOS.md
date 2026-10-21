@@ -34,7 +34,7 @@
 | [BUG-BEN-001](#bug-ben-001) | BUG | `zymbol-vm`, `zymbol-interpreter` | `$^ (a, b -> …)` es una burbuja sin salida anticipada: n(n−1)/2 llamadas, siempre | `zytw` y `zyvm` (dos copias) | **CORREGIDO** 2026-10-09 como `GLB-108` (mezcla estable común) — verificado 2026-10-21 |
 | [IDEA-BEN-002](#idea-ben-002) | IDEA | `zymbol-vm` | la mitad del coste de una llamada era preparar y soltar el marco de registros | `zyvm` | **CORREGIDO** 2026-10-09 dentro de `ZYVM-010` (el marco) — sujeto por `cost` `call/frame-as-large-as-every-temporary` |
 | [IDEA-BEN-003](#idea-ben-003) | IDEA | `zyquality/bench/` | la VM gana a Python en 4 de 16 pruebas generales y en 0 de 14 de texto | medición | **MEDIDO** 2026-10-04 a 2026-10-07 |
-| [ERROR-BEN-004](#error-ben-004) | ERROR | `MANUAL.md` línea 121 | «~1.1–1.5× más rápida que Python en la mayoría de las cargas» no se sostiene fuera de los bucles de enteros | medición | **ABIERTO** |
+| [ERROR-BEN-004](#error-ben-004) | ERROR | `MANUAL.md` línea 121 | «~1.1–1.5× más rápida que Python en la mayoría de las cargas» no se sostiene fuera de los bucles de enteros | medición | **CERRADO** 2026-10-21: `MANUAL.md` se borró |
 
 ---
 
@@ -133,6 +133,10 @@ tiene una causa localizada y un arreglo; la salida no es incorrecta, el coste s�
 ## ERROR
 
 ### ERROR-BEN-004
+
+**Cerrado el 2026-10-21: `interpreter/MANUAL.md` se borró**, por decisión del autor — era una instantánea congelada en
+la v0.0.4 que sólo producía ruido, y la frase vivía en ella. Ningún documento vigente repite la cifra
+(`zyquality/notes/VM_VS_PYTHON.md` lo comprobó). Lo que sigue es la medición que la desmintió, que no cambia.
 
 **El manual dice que la VM es «~1.1–1.5× más rápida que Python en la mayoría de las cargas».
 Con los programas de `bench/` es cierto para los bucles de enteros y falso para el resto.**
