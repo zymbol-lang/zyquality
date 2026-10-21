@@ -299,27 +299,29 @@ engines   = ["zytw", "zyvm", "zyjs"]
 # clock what sees a walk. The clock was off on the slice until 2026-10-19: each
 # slice of a text that is not ASCII walked to its position (GLB-139). The VM
 # jumps to a crumb since that day — 121 → 420 ms over 200 000 → 800 000 — and
-# is asked at that size. The tree-walker still walks and copies; at 2 000 its
-# clock is under the floor and its counted ratios answer it.
+# is asked at that size. The tree-walker and zyjs since 2026-10-21 (GLB-139,
+# ZYTW-016): the tree-walker's text is shared, with crumbs, and zyjs keeps a
+# text's characters once split — zytw 95 → 324 ms over 50 000 → 200 000, zyjs
+# 318 → 714 ms over 6 000 → 24 000, where it was 677 → 11 534. Each is asked
+# at a size where its clock answers.
 [[case]]
 id        = "growth/slice-a-text"
 kind      = "growth-ratio"
 template  = "casos/cortar_texto.zy.in"
 n         = 2000
-n_by_engine = { zyvm = 200000 }
+n_by_engine = { zyvm = 200000, zytw = 50000, zyjs = 6000 }
 factor    = 4
 max_ratio = 6.0
-open_finding = { zytw = "ZYTW-016" }
 what      = "a slice of a text costs what it takes, not what the text is long"
 # The three ways the VM slices a text — StrSlice, StrSliceCount, and ArraySlice
 # when the text comes through a parameter — one character each, N times over a
 # text of N «ñ». Measured 2026-10-16, `--count` bytes from 2 000 to 8 000:
 # zyvm 74 MB → 1 155 MB (×15.5), zytw 105 MB → 1 666 MB. ZyBigBench's PERF-05.
 # GLB-130, closed the same day: the piece is found where it is and copied
-# alone — zyvm 2.33 MB → 2.66 MB. The tree-walker still pays ZYTW-016 here,
-# 32 MB → 514 MB: each read of `s` copies it, slice or no slice.
+# alone — zyvm 2.33 MB → 2.66 MB. The tree-walker paid ZYTW-016 here until
+# 2026-10-21, 32 MB → 514 MB: each read of `s` copied it, slice or no slice.
 why       = "a slice copies the whole text into a Vec<char> to cut a piece of it"
-engines   = ["zytw", "zyvm"]
+engines   = ["zytw", "zyvm", "zyjs"]
 
 [[case]]
 id        = "growth/read-a-text"
@@ -328,30 +330,29 @@ template  = "casos/leer_texto.zy.in"
 n         = 2000
 # The clock was off until 2026-10-19, because `s$#` counted the text on every
 # call. ZYVM-028 (2026-10-17) gave the VM's text its count, so the VM's clock
-# answers now and holds that fix: 73 → 270 ms over 800 000 → 3 200 000. The tree-walker
-# still counts and copies; at 2 000 its clock is under the floor and its
-# counted ratios answer it.
-n_by_engine = { zyvm = 800000 }
+# answers now and holds that fix: 73 → 270 ms over 800 000 → 3 200 000. The
+# tree-walker's text keeps its count and is not copied by a read since
+# 2026-10-21 (ZYTW-016), and zyjs keeps a text's characters (GLB-139).
+n_by_engine = { zyvm = 800000, zytw = 200000, zyjs = 6000 }
 factor    = 4
 max_ratio = 6.0
-open_finding = { zytw = "ZYTW-016" }
 what      = "reading a text that a variable holds does not copy it"
 # The control of the case above, and a case of its own: the same loop with
 # only `s$#`. Measured 2026-10-16, `--count` bytes from 2 000 to 8 000: zyvm
 # 2.29 MB → 2.58 MB, zytw 8.1 MB → 128 MB (×15.9) — the tree-walker's text is
-# a `String`, and a read of the variable clones it.
+# a `String`, and a read of the variable clones it. Corrected 2026-10-21: zytw
+# 0.20 MB → 0.68 MB.
 why       = "the tree-walker's text has no Rc: every read of the variable copies it"
-engines   = ["zytw", "zyvm"]
+engines   = ["zytw", "zyvm", "zyjs"]
 
 [[case]]
 id        = "growth/index-a-text"
 kind      = "growth-ratio"
 template  = "casos/indexar_texto.zy.in"
 n         = 16000
-n_by_engine = { zyvm = 200000, zyjs = 6000 }
+n_by_engine = { zyvm = 200000, zytw = 200000, zyjs = 6000 }
 factor    = 4
 max_ratio = 6.0
-open_finding = { zytw = "GLB-139", zyjs = "GLB-139" }
 what      = "reading the character at a position costs the same whatever the text's length"
 # Asked by the clock: each `s[i]` is one step and allocates nothing more, so
 # the counters see 4.00 while the clock does not. Measured 2026-10-19 over N
@@ -360,8 +361,10 @@ what      = "reading the character at a position costs the same whatever the tex
 # the two Rust engines read a byte and are flat; zyjs spreads the whole text
 # into an array on every read, ASCII or not. The VM was fixed on 2026-10-19:
 # a text that is not ASCII keeps a crumb every 64 characters, and 128 000 «ñ»
-# went from 941 ms to 39 ms. The tree-walker and zyjs stay declared debt for
-# v0.0.11, decided that day (interpreter/ROADMAP_V0011_ES.md, group 1).
+# went from 941 ms to 39 ms. The tree-walker and zyjs were declared debt that
+# day and corrected on 2026-10-21, by the author's new decision: the tree-
+# walker's text is shared and keeps crumbs as the VM's does (115 ms at
+# 200 000), and zyjs splits a text once and keeps the characters.
 why       = "a position is found by walking the text from its start"
 engines   = ["zytw", "zyvm", "zyjs"]
 
