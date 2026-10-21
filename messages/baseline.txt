@@ -417,8 +417,8 @@ zyjs	shared	cannot import '§': no module resolver available
 zyjs	shared	cannot modify tuple '§': tuples are immutable help: use 'new_var = §[§]$~ value' for a functional update
 zyjs	shared	cannot run '§': a subscript runs another file as a process, and the browser has none
 zyjs	shared	cannot use bool as array index
-zyjs	shared	cannot write § to [§]: type mismatch — expected element of type §
-zyjs	shared	cannot § § to [§]: type mismatch — expected element of type §
+zyjs	shared	cannot write § to [§]: type mismatch = help: expected element of type §
+zyjs	shared	cannot § § to [§]: type mismatch = help: expected element of type §
 zyjs	shared	chained index does not exist: '§[…][…]' is not a form of zymbol = help: nesting is navigated with '>', so this is '§[i>j]' — one bracket group addresses one element, however deep it lies
 zyjs	shared	checksource: analysis failed
 zyjs	shared	execution limit reached (§ steps) — infinite loop?
