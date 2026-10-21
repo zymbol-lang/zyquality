@@ -214,9 +214,9 @@ fell behind: on 2026-10-20 it still called PERF-05 b deferred and PERF-08 unmeas
 after `HALLAZGOS.md` recorded both as fixed. So it was removed on 2026-10-21 rather than synced
 again.
 
-As of that date, everything but one part of PERF-05 b is fixed. What remains is finding a
-position in a text that is not ASCII, which is open as `GLB-139` and `ZYTW-016`
-(`ZyDDT/HALLAZGOS/`).
+As of that date, everything but one part of PERF-05 b was fixed: finding a position in a
+text that is not ASCII, open as `GLB-139` and `ZYTW-016` (`ZyDDT/HALLAZGOS/`) in the
+tree-walker and zyjs. Both were fixed the same day, 2026-10-21.
 
 ## What changed from ZyBigBench's copy
 

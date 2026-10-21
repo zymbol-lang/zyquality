@@ -37,7 +37,7 @@ de abajo.
 | PERF-03 diccionario | **Corregido** en los tres motores (2026-10-16): `IndexMap`, y desde el 2026-10-18 hash foldhash | `GLB-131`, `GLB-132` | `growth/dictionary-by-key` |
 | PERF-04 `@ ch:texto` | **Corregido** (2026-10-16): un cursor de bytes, `StrCharNext` | `ZYVM-024`, `ZYVM-025` | `growth/foreach-over-text`, `corpus/loops/14_foreach_string_snapshot.zy` |
 | PERF-05 a, el corte | **Corregido** en la VM y el tree-walker (2026-10-16): copia sólo el trozo | `GLB-130`, `ZYVM-026` | `growth/slice-a-text` (por `bytes`) |
-| PERF-05 b, `s$#` y `s[i]` | **Corregido en la VM** (2026-10-17): el texto guarda su número de caracteres. **Queda** la posición en un texto no ASCII | `ZYVM-028` · `GLB-139` (abierto) · `ZYTW-016` (abierto) | `growth/read-a-text` (desde hoy también por reloj en la VM), `growth/index-a-text` |
+| PERF-05 b, `s$#` y `s[i]` | **Corregido en la VM** (2026-10-17): el texto guarda su número de caracteres. La posición en un texto no ASCII, **corregida** en la VM el 2026-10-19 y en el árbol y zyjs el 2026-10-21 | `ZYVM-028` · `GLB-139` · `ZYTW-016` | `growth/read-a-text`, `growth/index-a-text`, `growth/slice-a-text`, por reloj en los tres motores |
 | PERF-06 `s = s "x"` | **Corregido** en la VM (2026-10-16); el árbol ya lo estaba en `d736ae6` | `ZYVM-023` | `growth/concat-local`, `concat-in-function`, `concat-module-state` |
 | PERF-07 recursión | **Corregido** (2026-10-16): `##Depth`, capturable con `!?`, a 10 000 llamadas activas, igual en los tres motores; pila de 512 MiB | `GLB-133`, `ZYTW-017`, `ZYVM-027` | `corpus/errors/runtime/depth_*.zy` |
 | PERF-08 musl | **Corregido** (2026-10-19): `mimalloc` sólo en el estático, con tres opciones para que no retenga memoria. Del ×2,1 que quedaba en el `HEAD` (×17 en la v0.0.10) a como glibc; ×0,983 en los 16 programas | `GLB-134` | la medición de la ficha, que hay que repetir en la release: la puerta no construye el estático |
@@ -49,7 +49,7 @@ hace con cada uno está en el «Plan de cierre» de `interpreter/ROADMAP_V0011_E
 
 | Ficha | Qué | Motores | Medido |
 |---|---|---|---|
-| `GLB-139` | `s[i]` y un corte buscan su posición recorriendo el texto. Es el resto de PERF-05 b. **Corregido en la VM el 2026-10-19** (una miga cada 64 caracteres: 128 000 «ñ», 941 → 39 ms); deuda de la v0.0.11 en el árbol y zyjs | VM y árbol con texto no ASCII; zyjs con cualquiera | VM ×13 de 32 000 a 128 000 «ñ»; ASCII plano |
+| `GLB-139` | `s[i]` y un corte buscan su posición recorriendo el texto. Es el resto de PERF-05 b. **Corregido en la VM el 2026-10-19** (una miga cada 64 caracteres: 128 000 «ñ», 941 → 39 ms), y **en el árbol y zyjs el 2026-10-21** (32 000 «ñ»: 718 → 36 ms y 9 438 → 537 ms) | VM y árbol con texto no ASCII; zyjs con cualquiera | VM ×13 de 32 000 a 128 000 «ñ»; ASCII plano |
 | `GLB-140` | `m[i>j]$~ v` copia el array exterior entero en cada edición. **Corregido el 2026-10-19** en el árbol y zyjs | árbol y zyjs; la VM edita en el sitio | árbol: `copied` = filas + 3 por edición; ahora 0 |
 | `ZYJS-068` | `m$+ [0, 0, 0]`: con un literal de colección como operando, zyjs copia el receptor. **Corregido el 2026-10-19** | zyjs | ×21 de 8 000 a 32 000; ahora ×1,8 |
 
@@ -63,8 +63,8 @@ hace con cada uno está en el «Plan de cierre» de `interpreter/ROADMAP_V0011_E
   **120 bytes** contra los 16 de la VM, mueve 7,5 veces más memoria y se sale de la caché antes. No es un defecto de
   algoritmo sino el tamaño del valor del árbol, que pesa igual en la memoria de cualquier colección suya. **Corregido
   el 2026-10-19** (`ZYTW-019`): el valor mide 24 bytes, y el árbol tarda ~313 ms donde tardaba ~2 640.
-- **Cadenas muy largas no ASCII:** recorrerlas con `@ ch:s` es lineal en los dos motores. Indexarlas no lo es
-  (`GLB-139`).
+- **Cadenas muy largas no ASCII:** recorrerlas con `@ ch:s` es lineal en los dos motores, e indexarlas también desde
+  el 2026-10-21 (`GLB-139`).
 - **`$~` profundo (`m[i>j]$~ x`):** constante en la VM; O(filas) por edición en el árbol y en zyjs (`GLB-140`).
 - **`s[i]`** (PERF-05, «Qué falta»): ver `GLB-139`.
 - **Por qué `s = s "x"` era cuadrático en la VM:** el compilador mandaba `ConcatStr` a un temporal y la rama que

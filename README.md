@@ -259,8 +259,8 @@ Measured 2026-10-20, the whole gate (`./zyq suite`): **all gates pass**.
 | messages | 444 one-sided entries (410 Rust only, 34 `zyjs` only), 179 on the shared surface, nothing new on it |
 | reach | 172 diagnostics nothing provokes, each listed in the baseline |
 | project | 9 applications: every golden holds, and `zytw`/`zyvm` agree on every one |
-| ZyDDT | GREEN: 46 axes, 1 722 cells (all agree, none KNOWN), 12 pins, 2 findings open (2026-10-21) |
-| cost | 25 cases, every ratio within its limit or KNOWN under an open finding (GLB-139, ZYTW-016) |
+| ZyDDT | GREEN: 46 axes, 1 722 cells (all agree, none KNOWN), 12 pins, no finding open (2026-10-21) |
+| cost | 25 cases, every ratio within its limit, none KNOWN (2026-10-21) |
 
 Three things the gate could not see until 2026-10-02, because the verdict was
 green over them: eight exclusions whose reason was the colour of the CLI's
