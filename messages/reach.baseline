@@ -124,7 +124,6 @@ semántica	filter operation requires a lambda, got {}
 semántica	functions must be defined before use, or imported with a module alias (e.g. `math::cos`)
 semántica	key input (<<|)
 semántica	lifetime end (\\)
-semántica	logical not on non-boolean type: {}
 semántica	map operation requires a lambda, got {}
 semántica	numeral mode switch
 semántica	pattern type {} does not match scrutinee type {}
