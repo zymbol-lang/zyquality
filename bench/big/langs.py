@@ -8,8 +8,7 @@ same algorithm, same shape, same printed line — and that line is checked
 against Python's before any figure is kept: a twin that answers something
 else is a different program.
 
-Two kinds of neighbour, and the page that quotes these figures says which is
-which:
+Two kinds of neighbour, and the report keeps them apart:
 
   * interpreters, as Zymbol is: Python (CPython), Perl, PHP, Lua (PUC) and
     Ruby (CRuby) — PHP's opcache JIT is off on the command line by default,
@@ -96,7 +95,7 @@ def wall_and_cpu_ms(cmd):
     Both, because they part ways for a runtime that works on several threads:
     Julia compiles on other cores while it starts, and its CPU time was three
     times its elapsed time (fib_rec: 648 ms of CPU in 223 ms). Elapsed time is
-    what whoever runs the program waits, and the figure the page leads with;
+    what whoever runs the program waits, and the figure the report leads with;
     for a single-threaded interpreter the two agree within a few percent."""
     import time
     t0 = time.perf_counter()
