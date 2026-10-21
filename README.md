@@ -79,10 +79,10 @@ it was missing.
 
 | | |
 |---|---|
-| `corpus/` | 675 `.zy` files, 669 with a `.expected` golden (2026-10-02) |
+| `corpus/` | 714 `.zy` files, 708 with a `.expected` golden (2026-10-20) |
 | `corpus.toml` | which engine may be judged on which file, and why not — 19 rules, each with its reason |
 | `dropped.tsv` | what was retired from the corpus, when, and what holds its question now |
-| `reject/` | 50 forms every engine must refuse — `@reject:` for a live bug, `@reject-pending:` for a rule decided and not yet built |
+| `reject/` | 57 forms every engine must refuse — `@reject:` for a live bug, `@reject-pending:` for a rule decided and not yet built |
 | `engines.toml` | how to run each engine |
 | `suites.toml` | the script suites, so `zyq suite` runs them too |
 | `fmt/` | formatter properties P1–P4, and its baseline |
@@ -248,20 +248,21 @@ desc = "..."
 
 ## Current state
 
-Measured 2026-10-02, the whole gate (`./zyq suite`): **all gates pass**.
+Measured 2026-10-20, the whole gate (`./zyq suite`): **all gates pass**.
 
 | | |
 |---|---|
-| consensus, three engines | 675 files: **669 agree, 0 diverge**, 6 excused for every engine |
-| goldens | 639 via `run` and 30 via `check`, all match, **none unchecked** |
-| rejections | 50 forms, all refused by all three engines |
+| consensus, three engines | 714 files: **708 agree, 0 diverge**, 6 excused for every engine |
+| goldens | 677 via `run` and 31 via `check`, all match, **none unchecked** |
+| rejections | 57 forms, all refused by all three engines |
 | `--strict` | compares what the engines SAY, normalised as ZyDDT normalises it (no colour, no excerpt, the line of a location): the files where the words differ are inventory, not a gate |
-| messages | 447 one-sided entries, 221 on the shared surface |
-| reach | 170 diagnostics nothing provokes, each listed |
-| project | 8 applications: every golden holds, and `zytw`/`zyvm` agree on every one |
-| ZyDDT | GREEN: 45 axes, 1363 cells, 12 pins, 11 declared debts reported as KNOWN |
+| messages | 444 one-sided entries (410 Rust only, 34 `zyjs` only), 179 on the shared surface, nothing new on it |
+| reach | 172 diagnostics nothing provokes, each listed in the baseline |
+| project | 9 applications: every golden holds, and `zytw`/`zyvm` agree on every one |
+| ZyDDT | GREEN: 46 axes, 1 705 cells (1 704 agree, 1 KNOWN for GLB-127), 12 pins, 3 findings open |
+| cost | 25 cases, every ratio within its limit or KNOWN under an open finding (GLB-139, ZYTW-016) |
 
-Three things the gate could not see until that day, because the verdict was
+Three things the gate could not see until 2026-10-02, because the verdict was
 green over them: eight exclusions whose reason was the colour of the CLI's
 output, which hid four real divergences and five corpus files that had not run
 in any engine since the import; a diagnostic inventory whose baseline was half
