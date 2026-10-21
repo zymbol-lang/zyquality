@@ -31,8 +31,8 @@
 
 | ID | Tipo | Módulo | Qué | Motores | Estado |
 |----|------|--------|-----|---------|--------|
-| [BUG-BEN-001](#bug-ben-001) | BUG | `zymbol-vm`, `zymbol-interpreter` | `$^ (a, b -> …)` es una burbuja sin salida anticipada: n(n−1)/2 llamadas, siempre | `zytw` y `zyvm` (dos copias) | **PROPUESTO** 2026-10-04 — `ordenar_comparador.patch` |
-| [IDEA-BEN-002](#idea-ben-002) | IDEA | `zymbol-vm` | la mitad del coste de una llamada era preparar y soltar el marco de registros | `zyvm` | **PROPUESTO** 2026-10-07 — `vm_llamadas.patch`; parte de `ZYVM-010` |
+| [BUG-BEN-001](#bug-ben-001) | BUG | `zymbol-vm`, `zymbol-interpreter` | `$^ (a, b -> …)` es una burbuja sin salida anticipada: n(n−1)/2 llamadas, siempre | `zytw` y `zyvm` (dos copias) | **CORREGIDO** 2026-10-09 como `GLB-108` (mezcla estable común) — verificado 2026-10-21 |
+| [IDEA-BEN-002](#idea-ben-002) | IDEA | `zymbol-vm` | la mitad del coste de una llamada era preparar y soltar el marco de registros | `zyvm` | **CORREGIDO** 2026-10-09 dentro de `ZYVM-010` (el marco) — sujeto por `cost` `call/frame-as-large-as-every-temporary` |
 | [IDEA-BEN-003](#idea-ben-003) | IDEA | `zyquality/bench/` | la VM gana a Python en 4 de 16 pruebas generales y en 0 de 14 de texto | medición | **MEDIDO** 2026-10-04 a 2026-10-07 |
 | [ERROR-BEN-004](#error-ben-004) | ERROR | `MANUAL.md` línea 121 | «~1.1–1.5× más rápida que Python en la mayoría de las cargas» no se sostiene fuera de los bucles de enteros | medición | **ABIERTO** |
 
@@ -116,7 +116,15 @@ tampoco se corrió con el cambio. Solo dos programas del corpus y ninguna aplica
 comparador propio, así que el efecto del cambio de empates en aplicaciones reales (Go,
 Chaturanga) no está medido.
 
-**Estado.** **PROPUESTO** 2026-10-04: `ordenar_comparador.patch` (+199 −50, de ellas 154 son el
+**Estado.** **CORREGIDO el 2026-10-09** como [`GLB-108`](../../../ZyDDT/HALLAZGOS/GLOBAL.md)
+(decisión D3 del autor): una ordenación por mezcla estable en `zymbol-common/src/sort.rs`, la
+misma en los tres motores, sujeta por `zyquality/cost` `growth/sort-with-comparator`.
+**Verificado el 2026-10-21** con `--count`: un comparador que llama a una función hace 26 020,
+58 098 y 127 866 llamadas en la VM para n = 1 000, 2 000 y 4 000 (×2,2 al duplicar, n·log n),
+contra las 499 500, 1 999 000 y 7 998 000 de la burbuja; el tree-walker crece igual, y los dos
+dan la lista ordenada. Lo que sigue es el estado de cuando se propuso.
+
+**Estado (2026-10-04).** **PROPUESTO** 2026-10-04: `ordenar_comparador.patch` (+199 −50, de ellas 154 son el
 módulo nuevo con sus tests), aplica limpio sobre `820a60a`. Se queda en BUG y no en IDEA porque
 tiene una causa localizada y un arreglo; la salida no es incorrecta, el coste sí.
 
@@ -225,7 +233,12 @@ nativas por instrucción de la VM) y no se miró; `call_callable` y la **reentra
 elemento** son ahora el 27 % + 25 % de un `reduce`: quitarla (ejecutar el cuerpo de `$>`/`$<` como un
 bucle de la VM) es un cambio mayor y no está hecho; no se perfilaron `??` ni el texto.
 
-**Estado.** **PROPUESTO** 2026-10-07 (perfil del 2026-10-04): `vm_llamadas.patch` (+66 −24), a aplicar **después** de
+**Estado.** **CORREGIDO el 2026-10-09**, como la primera de las tres partes de
+[`ZYVM-010`](../../../ZyDDT/HALLAZGOS/zyvm.md) (*«el marco (`IDEA-BEN-002`, 2026-10-09)»*), sujeta
+por `zyquality/cost` `call/frame-as-large-as-every-temporary`, que pasó en los tres motores en la
+puerta del 2026-10-20. Lo que sigue es el estado de cuando se propuso.
+
+**Estado (2026-10-07).** **PROPUESTO** 2026-10-07 (perfil del 2026-10-04): `vm_llamadas.patch` (+66 −24), a aplicar **después** de
 `ordenar_comparador.patch`. Se queda en IDEA —como `IDEA-GOL-007`— porque lo accionable es un
 objetivo de optimización de la VM, no un defecto.
 

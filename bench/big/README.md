@@ -207,19 +207,16 @@ cost of musl's allocator against glibc's; `LEEME.txt` says how to build them.
 
 ## The findings, and where they are
 
-| `HALLAZGOS.md` | State on `v0.0.11` (2026-10-14) |
-|---|---|
-| PERF-01 `v[i]$~ x`, VM | Fixed in `ee48143` (2026-10-10, ZYVM-013); held by `cost/` `growth/update-local` |
-| PERF-02 `v = v $-[i]`, VM | Fixed in the same commit |
-| PERF-03 dictionary lookup is linear, both engines | Fixed 2026-10-16 as GLB-131 (a key written twice is refused) and GLB-132 (an IndexMap; zyjs too); held by `cost/` `growth/dictionary-by-key` |
-| PERF-04 `@ ch:text` is quadratic, VM | Fixed 2026-10-16 as ZYVM-025; held by `cost/` `growth/foreach-over-text` |
-| PERF-05 `s$#`, `s$[a..b]`, `s[i]` cost the length of the string, both engines | **a**, the copy, fixed 2026-10-16 as GLB-130 (`cost/` `growth/slice-a-text`); **b**, the scan, deferred by D8; the tree-walker's copy on every read filed as ZYTW-016 (`growth/read-a-text`). Before: More than a scan: `s$[a..b]` copies the whole string into a `Vec<char>` before cutting (VM `StrSlice`, tree-walker `collection_ops.rs`), so a 10-character slice of 73 728 asks the allocator for 516 KB on the VM and 590 KB on the tree-walker — `--count` bytes, exact. And the tree-walker's `s$#` asks for exactly n bytes per call: it copies the string to measure it |
-| PERF-06 `s = s "x"` is quadratic, VM | Fixed 2026-10-16 as ZYVM-023; held by `cost/` `growth/concat-local`, `growth/concat-in-function` and `growth/concat-module-state` |
-| PERF-07 deep recursion aborts the process (exit 134), no Zymbol error | Fixed 2026-10-16 as GLB-133 (D7: a catchable `##Depth` at 10 000 active calls, in the three engines); held by `corpus/errors/runtime/depth_*.zy` |
-| PERF-08 the static musl binary, up to 11× slower | Reproduced 2026-10-16 with v0.0.10's two official x86-64 binaries (SHA-256 verified), filed as GLB-134: `str_concat` ×17, `str_slice_small` ×4.6, interpolation and closures ×1.3, the 16 programs ×1.005. The current `HEAD` is not measured — no musl target here |
+The state of PERF-01 to PERF-08 is kept in one place, the table at the top of
+[`HALLAZGOS.md`](HALLAZGOS.md) (§ *Estado en la rama `v0.0.11`*), with the finding that fixed
+each one and the case that holds it. This README used to carry a copy of that table. The copy
+fell behind: on 2026-10-20 it still called PERF-05 b deferred and PERF-08 unmeasured, two days
+after `HALLAZGOS.md` recorded both as fixed. So it was removed on 2026-10-21 rather than synced
+again.
 
-"Not filed" means the author has not yet decided, per finding, whether to fix,
-defer or dismiss it; until then none has a ZyDDT entry or a `cost/` case.
+As of that date, everything but one part of PERF-05 b is fixed. What remains is finding a
+position in a text that is not ASCII, which is open as `GLB-139` and `ZYTW-016`
+(`ZyDDT/HALLAZGOS/`).
 
 ## What changed from ZyBigBench's copy
 
