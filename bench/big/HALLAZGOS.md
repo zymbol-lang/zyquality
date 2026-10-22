@@ -40,7 +40,7 @@ de abajo.
 | PERF-05 b, `s$#` y `s[i]` | **Corregido en la VM** (2026-10-17): el texto guarda su número de caracteres. La posición en un texto no ASCII, **corregida** en la VM el 2026-10-19 y en el árbol y zyjs el 2026-10-21 | `ZYVM-028` · `GLB-139` · `ZYTW-016` | `growth/read-a-text`, `growth/index-a-text`, `growth/slice-a-text`, por reloj en los tres motores |
 | PERF-06 `s = s "x"` | **Corregido** en la VM (2026-10-16); el árbol ya lo estaba en `d736ae6` | `ZYVM-023` | `growth/concat-local`, `concat-in-function`, `concat-module-state` |
 | PERF-07 recursión | **Corregido** (2026-10-16): `##Depth`, capturable con `!?`, a 10 000 llamadas activas, igual en los tres motores; pila de 512 MiB | `GLB-133`, `ZYTW-017`, `ZYVM-027` | `corpus/errors/runtime/depth_*.zy` |
-| PERF-08 musl | **Corregido** (2026-10-19): `mimalloc` sólo en el estático, con tres opciones para que no retenga memoria. Del ×2,1 que quedaba en el `HEAD` (×17 en la v0.0.10) a como glibc; ×0,983 en los 16 programas | `GLB-134` | la medición de la ficha, que hay que repetir en la release: la puerta no construye el estático |
+| PERF-08 musl | **Corregido** (2026-10-19): `mimalloc` sólo en el estático, con tres opciones para que no retenga memoria. Del ×2,1 que quedaba en el `HEAD` (×17 en la v0.0.10) a como glibc; ×0,983 en los 16 programas | `GLB-134` | la medición de la ficha, que hay que repetir en la release: la puerta no construye el estático. Comprobada en el `HEAD` el 2026-10-21 (×0,995); en la release, fase 5 de `agents/release_installers.md` |
 
 ### Lo que esta revisión encontró
 
