@@ -1,4 +1,4 @@
-// claim: **No capability enforcement and no shell quoting.**
+// claim: **No shell quoting, and capabilities only when asked.**
 // engines: zytw,zyvm
 cmd = "hola; echo inyectado"
 out = <\ "echo {cmd}" \>
