@@ -405,6 +405,7 @@ rust	shared	use a different alias for this import
 rust	shared	variable with non-literal initializer
 rust	shared	write `#(` here: `#(nombre: valor)`. a bare `(…)` is a positional tuple, and `#()` is the empty dictionary — which `()` cannot be, since it would have to be the empty tuple as well
 rust	shared	zymbol: no posix shell found (§); running `<\ \>` through cmd.exe. commands written in posix shell syntax will not work — install git for windows or set zymbol_sh to get the portable behaviour back
+rust	shared	§ cannot be passed to cmd.exe as one word: it holds ", % or a line break
 rust	shared	§ parser errors in §
 rust	shared	§ semantic error(s) in '§' §
 zyjs	shared	'§' is not an array
