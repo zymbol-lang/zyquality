@@ -1,5 +1,6 @@
-// claim: **No shell quoting, and capabilities only when asked.**
+// claim: **Capabilities only when asked.**
 // engines: zytw,zyvm
+// Nothing stops the command, and the value is one word: it is printed, not run.
 cmd = "hola; echo inyectado"
-out = <\ "echo {cmd}" \>
->> (out$? "inyectado") ¶      // → #1
+out = <\ "printf '%s|' " cmd \>
+>> out ¶      // → hola; echo inyectado|

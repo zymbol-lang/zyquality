@@ -23,7 +23,7 @@ SUB    := "───────────────────────
 // ─── Helper: append one line to the log ──────────────────────────────────────
 // (single-quote-free text only — sufficient for paths, PASS/FAIL, timestamps)
 wlog(file, line) {
-    <\ "printf '%s\\n' '" line "' >> " file \>
+    <\ "printf '%s\\n' " line " >> " file \>
 }
 
 // ─── Setup ───────────────────────────────────────────────────────────────────
@@ -43,7 +43,7 @@ plan = <\ ZYMBOL " run " MANUAL "/manual.zy 2>&1" \>
 // ─── Write log header ────────────────────────────────────────────────────────
 date_str = <\ "date '+%Y-%m-%d %H:%M:%S'" \>
 
-<\ "printf '%s\\n' '" SEP "' > " log_file \>
+<\ "printf '%s\\n' " SEP " > " log_file \>
 wlog(log_file, "  Zymbol Manual Test Log")
 wlog(log_file, "  Date => " $++ date_str)
 wlog(log_file, "  Log  => " $++ log_file)
@@ -85,7 +85,7 @@ skipped = 0
     // BashExec captures nothing here; the user sees and interacts with the program.
     >> "  [ running — observe terminal output below ]" ¶
     >> "" ¶
-    <\ "bash -c 'timeout 30 " ZYMBOL " run " test_file " </dev/tty >/dev/tty 2>/dev/tty || true'" \>
+    <\ "timeout 30 " ZYMBOL " run " test_file " </dev/tty >/dev/tty 2>/dev/tty || true" \>
     >> "" ¶
 
     // ── Ask for result ────────────────────────────────────────────────────────
