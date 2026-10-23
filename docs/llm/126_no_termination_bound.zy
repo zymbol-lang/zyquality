@@ -1,7 +1,9 @@
-// claim: **No termination bound.**
+// claim: **No termination bound unless asked.**
 // The claim is an absence, which no program can show by finishing. What runs
 // here is the nearest thing that does finish: a loop bounded by nothing but
-// its own `@!` goes round as many times as it is told.
+// its own `@!` goes round as many times as it is told. The bound asked for,
+// `zymbol run --timeout`, is a flag no probe can pass: it is held by
+// interpreter/crates/zymbol-cli/tests/cli_timeout.rs.
 n = 0
 @ {
     n = n + 1
