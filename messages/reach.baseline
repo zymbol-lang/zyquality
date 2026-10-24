@@ -126,14 +126,12 @@ semántica	key input (<<|)
 semántica	lifetime end (\\)
 semántica	map operation requires a lambda, got {}
 semántica	numeral mode switch
-semántica	pattern type {} does not match scrutinee type {}
 semántica	pipe callable must be a function, got {}
 semántica	pipe expression has no placeholder '_'
 semántica	pipe expression has {} placeholders, only first will be used
 semántica	piped value type {} incompatible with function parameter {}
 semántica	positioned output (>>~)
 semántica	range pattern start must be Int, Float, or Char, got {}
-semántica	range pattern type {} does not match scrutinee type {}
 semántica	range start type {} differs from end type {}
 semántica	read it with '.': {}.{}
 semántica	reduce operation requires a lambda, got {}
