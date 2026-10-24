@@ -1,6 +1,7 @@
 // claim: **`check` does not catch everything it looks like it should**
-// The other half of this bullet — `zymbol check` saying nothing — is asserted by
-// `// quiet` in 128; here: the program is refused only when it runs.
+// Here: the program is refused only when it runs. Since v0.0.11 (G4) `check`
+// also warns at the read — the `\` is certain — and the program still runs up
+// to it: `antes` is printed first.
 // verdict: error
 // says: use after destruction
 x = [1, 2]
