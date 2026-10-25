@@ -76,7 +76,7 @@ does is anywhere else.
 ```text
 zyquality/
     zyq                 the differential runner (OCaml, no dependencies)
-    corpus/             714 .zy, 708 with a .expected golden (2026-10-20)
+    corpus/             714 .zy, 708 with a .expected golden (2026-10-25)
     corpus.toml         who may be judged on what, and why not
     dropped.tsv         what left the corpus, when, and what asks its question now
     reject/             forms every engine must refuse

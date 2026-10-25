@@ -79,7 +79,7 @@ it was missing.
 
 | | |
 |---|---|
-| `corpus/` | 714 `.zy` files, 708 with a `.expected` golden (2026-10-20) |
+| `corpus/` | 714 `.zy` files, 708 with a `.expected` golden (2026-10-25) |
 | `corpus.toml` | which engine may be judged on which file, and why not — 19 rules, each with its reason |
 | `dropped.tsv` | what was retired from the corpus, when, and what holds its question now |
 | `reject/` | 57 forms every engine must refuse — `@reject:` for a live bug, `@reject-pending:` for a rule decided and not yet built |
@@ -248,7 +248,7 @@ desc = "..."
 
 ## Current state
 
-Measured 2026-10-20, the whole gate (`./zyq suite`): **all gates pass**.
+Measured 2026-10-25 on `interpreter` `b2a14b0`, the whole gate (`./zyq suite`): **all gates pass**.
 
 | | |
 |---|---|
@@ -256,11 +256,11 @@ Measured 2026-10-20, the whole gate (`./zyq suite`): **all gates pass**.
 | goldens | 677 via `run` and 31 via `check`, all match, **none unchecked** |
 | rejections | 57 forms, all refused by all three engines |
 | `--strict` | compares what the engines SAY, normalised as ZyDDT normalises it (no colour, no excerpt, the line of a location): the files where the words differ are inventory, not a gate |
-| messages | 444 one-sided entries (410 Rust only, 34 `zyjs` only), 179 on the shared surface, nothing new on it |
-| reach | 172 diagnostics nothing provokes, each listed in the baseline |
+| messages | 453 one-sided entries (419 Rust only, 34 `zyjs` only), 177 on the shared surface, nothing new on it |
+| reach | 169 diagnostics nothing provokes, each listed in the baseline |
 | project | 9 applications: every golden holds, and `zytw`/`zyvm` agree on every one |
-| ZyDDT | GREEN: 46 axes, 1 722 cells (all agree, none KNOWN), 12 pins, no finding open (2026-10-21) |
-| cost | 25 cases, every ratio within its limit, none KNOWN (2026-10-21) |
+| ZyDDT | GREEN: 46 axes, 1 765 cells (all agree, none KNOWN), 12 pins, no finding open |
+| cost | 25 cases, every ratio within its limit, none KNOWN |
 
 Three things the gate could not see until 2026-10-02, because the verdict was
 green over them: eight exclusions whose reason was the colour of the CLI's
