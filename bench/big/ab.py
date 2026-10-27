@@ -28,7 +28,10 @@ import statistics
 import subprocess
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ENGINES = {'vm': [], 'tw': ['--tw']}
+# Each engine by its flag: a bare `zymbol run` is the VM since v0.0.11 and the
+# tree-walker before it, so with a v0.0.10 build as --a an empty flag measured
+# the wrong engine on one side.
+ENGINES = {'vm': ['--vm'], 'tw': ['--tw']}
 
 
 def cpu_ms(cmd):
