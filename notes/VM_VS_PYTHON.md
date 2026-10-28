@@ -24,7 +24,7 @@ agree with Zymbol's in all 65, under Python 3.12. Its log calls the comparison
 the log itself (`HALLAZGOS.md`). Re-run here that day, the 65 results agree with
 Zymbol's in all 65 again, under Python 3.13.5. The
 figures below that are ZyBench's are quoted as such; they were taken from the
-published v0.0.9 VM and from builds of `820a60a` at opt-level 1 without LTO,
+published v0.0.9 VM and from builds of `7af111b` at opt-level 1 without LTO,
 slower than this repository's release profile — a ratio between two of them
 holds, a millisecond does not.
 
@@ -75,7 +75,7 @@ text tests come out at 0–2 ms on both sides, mostly level.
 Milliseconds that small are bounds either way, so the figures below are each
 program's **whole CPU time** (`perf stat` task-clock, median of 10) minus what
 each interpreter takes to start an empty program (Zymbol 3.0 ms, Python 13.5 ms).
-Release build of `v0.0.10` after ZYVM-010's frame half (`8a1726c`), VM, Python
+Release build of `v0.0.10` after ZYVM-010's frame half (`1240c9d`), VM, Python
 3.13.5, the `std/time` copy of the timer; all 65 results agree with the ports.
 
 | program | Python ms | VM ms | VM / Python |

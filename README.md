@@ -248,7 +248,7 @@ desc = "..."
 
 ## Current state
 
-Measured 2026-10-25 on `interpreter` `b2a14b0`, the whole gate (`./zyq suite`): **all gates pass**.
+Measured 2026-10-25 on `interpreter` `11d121d`, the whole gate (`./zyq suite`): **all gates pass**.
 
 | | |
 |---|---|

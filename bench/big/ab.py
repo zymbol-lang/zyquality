@@ -15,7 +15,7 @@ reports — exact, so equal steps mean the same work and a difference in time is
 how the code was laid out, not what it does — and whether both printed the
 same thing.
 
-    python3 ab.py --a old/zymbol --a-label 7ef269c --b new/zymbol --b-label 52ad7d3 \\
+    python3 ab.py --a old/zymbol --a-label bda6588 --b new/zymbol --b-label 29a6a07 \\
                   --runs 7 --json ab.json
 """
 import argparse

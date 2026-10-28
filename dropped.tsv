@@ -18,7 +18,7 @@ corpus/i18n/test_modulos_sistema.expected	2026-10-02	DEAD GOLDEN	as test_archivo
 corpus/i18n/test_all_i18n.sh	2026-10-02	REDUNDANT	a runner registered nowhere, so nothing ran it; its two checks — an import is analysed (L21, v0.0.8) and the VM runs the module code — are `zyq expect` and `zyq consensus` over the four consumer programs
 corpus/manual/logs/*.log	2026-10-02	ARTIFACT	seven logs of manual sessions (2026-05-05, 2026-08-08) committed with the corpus, and the .gitkeep that kept their directory
 corpus/i18n/25	2026-10-02	ARTIFACT	an empty file the shell created from `WHERE edad > 25` in test_database.zy, committed with the initial import
-25	2026-10-02	ARTIFACT	the same file, created in this repository's root by fmt's P3 running the corpus there, and committed in bef2ab6
+25	2026-10-02	ARTIFACT	the same file, created in this repository's root by fmt's P3 running the corpus there, and committed in 79c3392
 cases/arith/int_overflow_add.zy	2026-10-02	CELL	a seed for an oracle phase never built in zyq; written for i64 and four engines. Overflow is ZyDDT arithmetic/i53-* and integer-arithmetic (oracled)
 cases/arith/pow_overflow.zy	2026-10-02	CELL	as int_overflow_add.zy
 cases/arith/pow_negative_exponent.zy	2026-10-02	CELL	`2 ^ -1` answers 0.5 in the three engines today, and the corpus asks it already

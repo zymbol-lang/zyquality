@@ -37,12 +37,12 @@ figure is also given with it subtracted, over the programs Zymbol takes 100 ms o
 `langs_2026-10-18.json` is the first full run, 176 of 176 twins agreeing, with `ZYMBOL_OLD` set so
 the four Zymbol engines are in it — v0.0.11's VM and tree-walker, v0.0.10's VM and tree-walker.
 Geometric mean of
-elapsed time with Zymbol v0.0.11's VM (`7ef269c`) = 1.00: Node 0.46, PHP 0.63, Lua 0.64, v0.0.10's VM
+elapsed time with Zymbol v0.0.11's VM (`bda6588`) = 1.00: Node 0.46, PHP 0.63, Lua 0.64, v0.0.10's VM
 1.68, Perl 1.70, Julia 1.76, Ruby 1.77, Python 1.84, the tree-walkers 7.2–7.5. Start-up subtracted
 (11 programs, against the same reference): Node 0.11, Julia 0.14, PHP 0.38, Lua 0.45, Ruby 0.83,
 Zymbol 0.99, v0.0.10's VM 1.41, Perl 1.64, Python 1.65.
 
-`langs_2026-10-20.json` is the same run two days later, at `52ad7d3` (176 of 176 agreeing). Compared
+`langs_2026-10-20.json` is the same run two days later, at `29a6a07` (176 of 176 agreeing). Compared
 with the run of 2026-10-18 it showed how much two days move a machine: the same v0.0.10 binary came out
 2 % faster, the unchanged runtimes 5 to 10 % faster, and single programs swung by more than the change
 being looked for. So a before/after between commits is asked with `ab.py` instead: the two commits built with the
@@ -89,10 +89,10 @@ findings — with no `noisy` row, and without the clock's false positive on
 programs come out at 1.02× Python in instructions and 0.86× in CPU time.
 
 **Stage 2 measured, 2026-10-17** — CPU time (`perf` was locked, `perf_event_paranoid=3`), the
-VM, against `b49fc26` (the branch when stage 2 began, built here with the same profile) and
+VM, against `df33d0a` (the branch when stage 2 began, built here with the same profile) and
 against the official v0.0.10 `.deb` binary, each pair interleaved in one session. `run.py`: 16 of
 16 programs agree with Python; geometric mean of the 15 compared, after/before — cpu-ms **0.842**
-against `b49fc26` and **0.785** against v0.0.10, bytes **0.784**, steps 1.000. The gain is the
+against `df33d0a` and **0.785** against v0.0.10, bytes **0.784**, steps 1.000. The gain is the
 string programs: `strings_scan_long` 487 → 42 ms (bytes 90.4 MB → 2.6 MB), `strings_scan_short`
 140 → 70 ms; the rest move within the clock's ±10 %. Zymbol/Python over the 13 programs above
 50 ms: **0.80**. The tree-walker is unchanged (1.07, noise) — stage 2 did not aim at it.
@@ -114,16 +114,16 @@ left, inside the clock's reach and not attributable without `perf`. And **`s$#` 
 ASCII text** runs ~18 % slower, 200 000 times over: the same code and the same steps, so the
 compiled dispatch loop and not `StrLen` — the scan itself is PERF-05 b, deferred by D8, whose fix
 would make it O(1). `bench/baseline.txt` (2026-10-09) passes 16 of 16; its `vm/bench_recursion`
-reads +15 % against a figure of another day, and interleaved with `b49fc26` the two are equal.
+reads +15 % against a figure of another day, and interleaved with `df33d0a` the two are equal.
 
-**Stage 2, later on 2026-10-17, in instructions** (`perf_event_paranoid=1`, median of 7, VM): `d1c9554` (the
-branch that morning) against `71141c1`, each against its Python twin. The counted loop in one instruction
+**Stage 2, later on 2026-10-17, in instructions** (`perf_event_paranoid=1`, median of 7, VM): `26f1cfb` (the
+branch that morning) against `f5b0fb0`, each against its Python twin. The counted loop in one instruction
 (`RangeStep`, ZYVM-029), `$>`/`$|`/`$<` on the VM's frames (`HofNext`), no `LoadUnit` before a `Return`, and a
 call that pushes its frame inline. Every program still prints what its twin prints. Above Python: `tak` 1.27,
 `sort_cmp_300k` 1.25, `fib_rec` 1.10, `nqueens` 1.06 — what is left is the cost of a call.
 Later the same day, `call_callable` writing its arguments in place and option B — `$^` evaluating a comparator
 that is a comparison of its parameters without a call — took `sort_cmp_300k` to **0.69** of Python
-(`30ad8ae` −9.8 %, then −39.0 %).
+(`dbd6d87` −9.8 %, then −39.0 %).
 
 | program | before | after | after/before | before / Python | after / Python |
 |---|---:|---:|---:|---:|---:|

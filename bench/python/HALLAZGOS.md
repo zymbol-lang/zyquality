@@ -18,7 +18,7 @@
 >
 > **Cómo se midió, para que se pueda repetir.** Los tiempos son medianas de 2 a 5 ejecuciones. Las
 > mediciones de la VM, salvo que se diga otra cosa, son del binario publicado v0.0.9 (opt-level 3) o de
-> compilaciones propias de la rama v0.0.10 (`820a60a`) con **opt-level 1 y sin LTO**, más lentas que el
+> compilaciones propias de la rama v0.0.10 (`7af111b`) con **opt-level 1 y sin LTO**, más lentas que el
 > perfil release del repositorio: la proporción entre dos compilaciones iguales vale, el milisegundo
 > absoluto no. Donde se puede, se da el número de **instrucciones** (callgrind), que no varía entre
 > ejecuciones. `T::elapsed` imprime milisegundos enteros: por debajo de ~10 ms es ruido, y una razón
@@ -125,7 +125,7 @@ contra las 499 500, 1 999 000 y 7 998 000 de la burbuja; el tree-walker crece ig
 dan la lista ordenada. Lo que sigue es el estado de cuando se propuso.
 
 **Estado (2026-10-04).** **PROPUESTO** 2026-10-04: `ordenar_comparador.patch` (+199 −50, de ellas 154 son el
-módulo nuevo con sus tests), aplica limpio sobre `820a60a`. Se queda en BUG y no en IDEA porque
+módulo nuevo con sus tests), aplica limpio sobre `7af111b`. Se queda en BUG y no en IDEA porque
 tiene una causa localizada y un arreglo; la salida no es incorrecta, el coste sí.
 
 ---
@@ -178,7 +178,7 @@ pequeños en `zymbol-vm` lo recortan un 19–27 % en instrucciones. Es parte de 
 dato que esa ficha dejaba sin separar.**
 
 Perfilado el **2026-10-04** con callgrind (instrucciones, determinista; `prof/perfilar.sh`) sobre
-una compilación de `820a60a` con símbolos. `fib(22)` en la VM: 56 905 142 instrucciones,
+una compilación de `7af111b` con símbolos. `fib(22)` en la VM: 56 905 142 instrucciones,
 ~1 000 por llamada. El marco de `fib` tiene 7 registros (el compilador asigna 8 y descarta 1;
 9 instrucciones por llamada):
 
@@ -330,7 +330,7 @@ y **un oráculo independiente** (`sorted()` de Python, que es estable) para la o
 
 | fichero | qué es |
 |---|---|
-| `ordenar_comparador.patch` | BEN-001 (sobre `820a60a`) |
+| `ordenar_comparador.patch` | BEN-001 (sobre `7af111b`) |
 | `vm_llamadas.patch` | BEN-002 (sobre el anterior) |
 | `NOTAS_orden_comparador.md`, `NOTAS_optimizaciones_vm.md` | las notas largas de cada parche |
 | `corpus/33_sort_custom_stable.*`, `corpus/34_sort_custom_large.*` | dos casos nuevos para ZyQuality |

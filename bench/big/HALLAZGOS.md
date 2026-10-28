@@ -7,11 +7,11 @@ oráculo de valores y de referencia de tiempo (sección «Brecha frente a Python
 O(n) por llamada convierte un bucle de n vueltas en uno cuadrático, aunque cada vuelta parezca
 barata.
 
-Fecha: 2026-10-10. Binarios: `zymbol 0.0.10` en `c309d44` (nuevo) y `38b21bf` (anterior), ambos
+Fecha: 2026-10-10. Binarios: `zymbol 0.0.10` en `1661b77` (nuevo) y `3b2485a` (anterior), ambos
 compilados **sin LTO**, en un contenedor de 4 GB con Python 3.12.3. «Verificado» significa que
 lo reproduje con un programa mínimo en esta sesión; «Hipótesis», que lo infiero y no lo probé.
 
-> **Estado en la versión publicada (2026-10-11):** la etiqueta `v0.0.10` apunta a `d736ae6`, que
+> **Estado en la versión publicada (2026-10-11):** la etiqueta `v0.0.10` apunta a `0a8d29e`, que
 > corrige **PERF-01, PERF-02 y la parte de actualización de PERF-03**, hace lineal `s = s "x"` en
 > el árbol y alinea mi DG-09. Siguen abiertos PERF-03 (búsqueda lineal), 04, 05, 06 (en la VM) y
 > 07. Hay un hallazgo nuevo, PERF-08. Ver «Estado en la versión publicada» más abajo.
@@ -27,7 +27,7 @@ lo reproduje con un programa mínimo en esta sesión; «Hipótesis», que lo inf
 > 07 figuran como abiertos, y en la rama ya no lo están. El estado vivo de cada ficha lo calcula `./bin/zyddt findings`
 > en `ZyDDT/`, y las razones las sujeta `zyquality/cost/` en cada `zyq suite`.
 
-Revisado sobre `7ef269c` (`interpreter/`), con `zyq suite --only cost` en verde y una sonda por cada «Falta probar»
+Revisado sobre `bda6588` (`interpreter/`), con `zyq suite --only cost` en verde y una sonda por cada «Falta probar»
 de abajo.
 
 | ID | Estado | Ficha | Qué lo sujeta |
@@ -38,7 +38,7 @@ de abajo.
 | PERF-04 `@ ch:texto` | **Corregido** (2026-10-16): un cursor de bytes, `StrCharNext` | `ZYVM-024`, `ZYVM-025` | `growth/foreach-over-text`, `corpus/loops/14_foreach_string_snapshot.zy` |
 | PERF-05 a, el corte | **Corregido** en la VM y el tree-walker (2026-10-16): copia sólo el trozo | `GLB-130`, `ZYVM-026` | `growth/slice-a-text` (por `bytes`) |
 | PERF-05 b, `s$#` y `s[i]` | **Corregido en la VM** (2026-10-17): el texto guarda su número de caracteres. La posición en un texto no ASCII, **corregida** en la VM el 2026-10-19 y en el árbol y zyjs el 2026-10-21 | `ZYVM-028` · `GLB-139` · `ZYTW-016` | `growth/read-a-text`, `growth/index-a-text`, `growth/slice-a-text`, por reloj en los tres motores |
-| PERF-06 `s = s "x"` | **Corregido** en la VM (2026-10-16); el árbol ya lo estaba en `d736ae6` | `ZYVM-023` | `growth/concat-local`, `concat-in-function`, `concat-module-state` |
+| PERF-06 `s = s "x"` | **Corregido** en la VM (2026-10-16); el árbol ya lo estaba en `0a8d29e` | `ZYVM-023` | `growth/concat-local`, `concat-in-function`, `concat-module-state` |
 | PERF-07 recursión | **Corregido** (2026-10-16): `##Depth`, capturable con `!?`, a 10 000 llamadas activas, igual en los tres motores; pila de 512 MiB | `GLB-133`, `ZYTW-017`, `ZYVM-027` | `corpus/errors/runtime/depth_*.zy` |
 | PERF-08 musl | **Corregido** (2026-10-19): `mimalloc` sólo en el estático, con tres opciones para que no retenga memoria. Del ×2,1 que quedaba en el `HEAD` (×17 en la v0.0.10) a como glibc; ×0,983 en los 16 programas | `GLB-134` | la medición de la ficha, que hay que repetir en la release: la puerta no construye el estático. Comprobada en el `HEAD` el 2026-10-21 (×0,995); en la release, fase 5 de `agents/release_installers.md` |
 
@@ -89,14 +89,14 @@ hace con cada uno está en el «Plan de cierre» de `interpreter/ROADMAP_V0011_E
 ## Estado en la versión publicada (v0.0.10, 2026-10-11)
 
 **Qué se midió.** La página `zymbol-lang.org/install.html` publica la `v0.0.10`; su etiqueta
-apunta al commit **`d736ae6`**, el mismo que yo había compilado (13 commits después de
-`c309d44`, donde se midieron los siete hallazgos). Descargué dos binarios oficiales y verifiqué
+apunta al commit **`0a8d29e`**, el mismo que yo había compilado (13 commits después de
+`1661b77`, donde se midieron los siete hallazgos). Descargué dos binarios oficiales y verifiqué
 su SHA256 contra el prefijo de la página: el estático para Linux x86_64 (musl, `f17f98542dbb…`)
 y el `.deb` x86_64 (glibc, `965a4b57b7a6…`). Ambos dan `zymbol 0.0.10`. Los 52 valores de
 `gap.py` coinciden con Python con el estático; con el `.deb`, los 16 programas completos, y
 ZyBF pasa 13 de 13 en los dos motores.
 
-| ID | Estado en `d736ae6` | Evidencia |
+| ID | Estado en `0a8d29e` | Evidencia |
 |----|---------------------|-----------|
 | PERF-01 `v[i]$~ x` (VM) | **Corregido** | `arr_update_each`, n = 16 000: **1 073 → 3 ms**; `b` de 1,98 a **0,98** (n = 1 600 000 en 259 ms). `arr_update_one`: 907 → menos de 1 ms |
 | PERF-02 `$-[idx]` (VM) | **Corregido** | 555 → 1–2 ms; `b` de 1,99 a **1,04** |
@@ -108,8 +108,8 @@ ZyBF pasa 13 de 13 en los dos motores.
 | DG-09 (mío) `f = f + "."` | **Corregido** | El árbol y la VM rechazan por igual `f = f + "."` y `f += "."` |
 
 **PERF-07: el límite depende de la compilación.** Búsqueda binaria del primer nivel que aborta
-con `stack overflow`: ~9 900 con mi compilación sin LTO de `d736ae6` y ~10 000 con la de
-`c309d44`, pero **~8 400 con los dos binarios oficiales** (el `.deb` y el estático). Es un
+con `stack overflow`: ~9 900 con mi compilación sin LTO de `0a8d29e` y ~10 000 con la de
+`1661b77`, pero **~8 400 con los dos binarios oficiales** (el `.deb` y el estático). Es un
 tamaño de pila fijo y marcos de distinto tamaño según la compilación; el aborto sigue sin error
 de Zymbol (código 134).
 
@@ -147,7 +147,7 @@ defecto.
   **Pierde en 6:** `hof_chain` 1,16, `fib_rec` 1,22, `nqueens` 1,27, `sort_cmp_300k` 1,28,
   `tak` 1,89, `strings_scan_short` 1,99. `strings_scan_long` queda en 21 veces (PERF-04), pero
   Python lo hace en 31 ms y no entra en la media.
-- Frente a la compilación anterior (`c309d44` sin LTO), en 13 programas: media geométrica
+- Frente a la compilación anterior (`1661b77` sin LTO), en 13 programas: media geométrica
   **0,81**, de 0,59 a 1,04. Esa cifra mezcla el cambio de commits con el cambio de compilación
   (LTO y glibc).
 
@@ -155,12 +155,12 @@ defecto.
 
 ## Causas confirmadas (código y pruebas)
 
-Todo sobre `d736ae6`. «Confirmada» significa que el código, el mensaje de un commit del autor o
+Todo sobre `0a8d29e`. «Confirmada» significa que el código, el mensaje de un commit del autor o
 una prueba independiente muestra el mecanismo; entre paréntesis, dónde.
 
 | ID | Causa | Evidencia |
 |----|-------|-----------|
-| PERF-01, 02 | Una copia de registro (`CopyReg`) antes de `DeepSet` deja un **segundo dueño** del `Rc`, y `Rc::make_mut` clona la colección entera | Mensaje del commit `ee48143`: «`CopyReg` before `DeepSet` made a second owner of the `Rc`»; afectaba también a `t$-[i]`, `t$+ v` y al estado de módulo. Mi hipótesis era esa, pero el commit la confirma y la amplía |
+| PERF-01, 02 | Una copia de registro (`CopyReg`) antes de `DeepSet` deja un **segundo dueño** del `Rc`, y `Rc::make_mut` clona la colección entera | Mensaje del commit `176ad28`: «`CopyReg` before `DeepSet` made a second owner of the `Rc`»; afectaba también a `t$-[i]`, `t$+ v` y al estado de módulo. Mi hipótesis era esa, pero el commit la confirma y la amplía |
 | PERF-03 | Un diccionario es `Value::NamedTuple(Vec<(String, Value)>)`; leer es `fields.iter().find(|(k, _)| *k == key)` y escribir es `rc.iter().position(...)`, una **búsqueda lineal**. Además la lectura copia la clave a un `String` nuevo | `zymbol-vm/src/lib.rs` ~2463 y ~5269. Ya hay un `indexmap` como dependencia en `zymbol-common` |
 | PERF-04 | `@ ch:texto` se compila a un `StrLen` más un `StrCharAt` por vuelta; `StrCharAt` llama a **`s.is_ascii()`** (recorre todo el texto) y, si hay un carácter no ASCII, a `chars().nth(i)` (O(i)). El comentario del código lo llama «O(1) ASCII fast path», pero `is_ascii()` es O(longitud) | `zymbol-compiler/src/lib.rs` ~4921; `zymbol-vm/src/lib.rs` ~3283 |
 | PERF-05 | `s$#` es `if s.is_ascii() { s.len() } else { s.chars().count() }`; el índice `s[i]` hace `chars().count()` y `chars().nth(i)`; el trozo `s$[a..b]` hace `chars().count()` y `char_indices().nth(p)` | `zymbol-vm/src/lib.rs` ~2146, ~2526, ~3394 |
@@ -278,7 +278,7 @@ clave), y por eso insertar n claves es cuadrático. En los dos motores.**
 - **Causa (CONFIRMADA en el código):** el diccionario se guarda como un `Vec` de pares y se busca
   por recorrido, no por tabla hash. Eso explica a la vez que leer la primera clave sea
   instantáneo, que insertar sea O(n) y que actualizar una clave existente cueste lo mismo que
-  leerla (en `c309d44` costaba además una copia, ver el estado más abajo).
+  leerla (en `1661b77` costaba además una copia, ver el estado más abajo).
 - **Frente a Python** (diccionario de 4 000 claves, última clave): Python no depende de la
   posición; Zymbol tarda ~24 µs por lectura con 8 000 claves.
 
