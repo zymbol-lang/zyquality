@@ -1,0 +1,26 @@
+// The left operand of an operator is evaluated once, also when the right one is a
+// small integer literal and the left one is a Float or a text.
+//
+// The VM's compiler tried an immediate form first (`AddIntImm`, `CmpLtImm`, …),
+// compiled the left operand, found it a Float, and compiled it again on the general
+// path — so `(f() + 0.5) + 1` called `f` twice and printed `f f` (BUG-VMJS-005,
+// found by the JavaScript port of the VM). One `f` per line below.
+
+f() {
+    >> "f "
+    <~ 1.5
+}
+s() {
+    >> "s "
+    <~ "t"
+}
+>> (f() + 0.5) + 1 ¶
+>> ((f() + 0.5) < 3) ¶
+>> (f() * 2.0) / 3 ¶
+>> (f() + 0.5) % 2 ¶
+>> f() + 1 ¶
+!? {
+    x = (s() "a") + 2
+} :! {
+    >> "error" ¶
+}

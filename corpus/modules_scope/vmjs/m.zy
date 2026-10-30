@@ -1,0 +1,10 @@
+// A module whose function uses the name of the module's own import alias as a
+// variable of its own; see `../alias_as_local_in_module_fn.zy`.
+# m {
+    #> { f }
+    <# ./util => g
+    f(x) {
+        g = x * 2
+        <~ g + g::uno()
+    }
+}

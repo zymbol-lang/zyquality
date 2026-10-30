@@ -1,0 +1,21 @@
+// `$-` on a text removes the first occurrence of a char or of a substring. A
+// substring longer than the text is not in it, and the text comes back as it was.
+//
+// Both Rust engines sliced past the end of the text and the process panicked with
+// exit code 101 — a crash `!?` cannot catch (BUG-VMJS-002, found by the JavaScript
+// port of the VM). The rest are the edges around it: empty text, pattern equal to
+// the text, multi-byte characters, a match that is not at the start, a char.
+
+a = ""
+a$- "x"
+b = "ab"
+b$- "ab"
+c = "ab"
+c$- "abc"
+d = "ñü"
+d$- "ñüé"
+e = "abab"
+e$- "ba"
+g = "a"
+g$- 'a'
+>> "[" a "][" b "][" c "][" d "][" e "][" g "]" ¶
