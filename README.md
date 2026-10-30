@@ -40,7 +40,9 @@ would accept without complaint.
 > 131 of the 599 corpus files and diverged on 15 more, and the register VM beat
 > it 3.4× on the largest real workload
 > ([DEPRECATED.md](https://github.com/zymbol-lang/zyml/blob/main/DEPRECATED.md)).
-> There are three engines now. The table above stays because it is the argument
+> There were three engines after that, and since v0.0.11 there are four again:
+> `zyjsvm`, the playground's default, is the Rust compiler and register VM ported to
+> JavaScript, and builds the bytecode the Rust compiler builds. The table above stays because it is the argument
 > this repository was built on, and because a fourth answer is exactly what made
 > the disagreement undeniable — see `corpus/arity/` and `corpus/loops/labels/`,
 > which exist because of that engine.

@@ -64,13 +64,13 @@ reason = "re-export layer for the i18n/matematicas/ tests; has no output of its 
 
 [[rule]]
 match = "stdlib/stdlib_db_*.zy"
-engines = ["zyjs"]
+engines = ["zyjs", "zyjsvm"]
 tag = "STD_DB"
 reason = "std/db is ODBC; a browser has no equivalent"
 
 [[rule]]
 match = "stdlib/stdlib_i18n_db_es.zy"
-engines = ["zyjs"]
+engines = ["zyjs", "zyjsvm"]
 tag = "STD_DB"
 reason = "std/db is ODBC; a browser has no equivalent"
 
@@ -81,67 +81,67 @@ reason = "std/db is ODBC; a browser has no equivalent"
 
 [[rule]]
 match = "output/pantalla_virtual.zy"
-engines = ["zyjs"]
+engines = ["zyjs", "zyjsvm"]
 tag = "TUI"
 reason = "raw mode and key input need a real terminal — and the virtual screen `zymbol run --keys` gives in its place exists only in the Rust CLI"
 
 [[rule]]
 match = "errors/catchable/argumentos_del_subscript.zy"
-engines = ["zyjs"]
+engines = ["zyjs", "zyjsvm"]
 tag = "BASH_EXEC"
 reason = "`</ … />` runs another file as a process, and a browser has none"
 
 [[rule]]
 match = "errors/catchable/estado_de_salida.zy"
-engines = ["zyjs"]
+engines = ["zyjs", "zyjsvm"]
 tag = "BASH_EXEC"
 reason = "`<\\ shell \\>` has no browser equivalent, and neither has `</ … />` — the exit status these read belongs to a process, and a browser has none"
 
 [[rule]]
 match = "bugs/bug03_bashexec_void_statement.zy"
-engines = ["zyjs"]
+engines = ["zyjs", "zyjsvm"]
 tag = "BASH_EXEC"
 reason = "`<\\ shell \\>` has no browser equivalent — this file agreed until 2026-09-29 only because the browser answered `true`, `mkdir` and `rmdir` with a random number and discarded it (BUG-GOL-014); now it refuses them"
 
 [[rule]]
 match = "i18n/test_archivos.zy"
-engines = ["zyjs"]
+engines = ["zyjs", "zyjsvm"]
 tag = "BASH_EXEC"
 reason = "`<\\ shell \\>` has no browser equivalent"
 
 [[rule]]
 match = "i18n/test_database.zy"
-engines = ["zyjs"]
+engines = ["zyjs", "zyjsvm"]
 tag = "BASH_EXEC"
 reason = "`<\\ shell \\>` has no browser equivalent"
 
 [[rule]]
 match = "i18n/test_http_api.zy"
-engines = ["zyjs"]
+engines = ["zyjs", "zyjsvm"]
 tag = "BASH_EXEC"
 reason = "`<\\ shell \\>` has no browser equivalent"
 
 [[rule]]
 match = "i18n/test_modulos_sistema.zy"
-engines = ["zyjs"]
+engines = ["zyjs", "zyjsvm"]
 tag = "BASH_EXEC"
 reason = "`<\\ shell \\>` has no browser equivalent"
 
 [[rule]]
 match = "i18n/test_execute.zy"
-engines = ["zyjs"]
+engines = ["zyjs", "zyjsvm"]
 tag = "BASH_EXEC"
 reason = "`<\\ shell \\>` has no browser equivalent"
 
 [[rule]]
 match = "gaps/g12_bashexec_expression.zy"
-engines = ["zyjs"]
+engines = ["zyjs", "zyjsvm"]
 tag = "BASH_EXEC"
 reason = "`<\\ shell \\>` has no browser equivalent"
 
 [[rule]]
 match = "errors/semantic/no_false_positive_unused.zy"
-engines = ["zyjs"]
+engines = ["zyjs", "zyjsvm"]
 tag = "BASH_EXEC"
 reason = "`<\\ shell \\>` has no browser equivalent"
 
@@ -174,7 +174,7 @@ reason = "`<\\ shell \\>` has no browser equivalent"
 
 [[rule]]
 match = "manual/tui/05_key_input.zy"
-engines = ["zyjs"]
+engines = ["zyjs", "zyjsvm"]
 tag = "TUI"
 reason = "raw mode and key input need a real terminal"
 

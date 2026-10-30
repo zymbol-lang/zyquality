@@ -53,7 +53,18 @@ desc = "Rust register VM (default engine)"
 id = "zyjs"
 cmd = ["node", "${ZYJS_HARNESS:-../web/tests/run_one.mjs}", "{file}"]
 lang = "zymbol"
-desc = "JavaScript engine used by the playground (driver lives in web/)"
+desc = "JavaScript tree-walker, zymbol.js: the playground's TW (driver lives in web/)"
+
+# The playground's default engine since v0.0.11: zymbol.js's parser and checker,
+# then the Rust compiler and register VM ported to JavaScript (web/src/zymbol/vm/),
+# which build the bytecode the Rust compiler builds. Its driver gives it what the
+# page has — std/io in memory, the shell stand-ins, no subscripts — so every
+# exclusion corpus.toml makes for zyjs, for that reason, it makes for this one.
+[[engine]]
+id = "zyjsvm"
+cmd = ["node", "${ZYJSVM_HARNESS:-../web/tests/run_one_vm.mjs}", "{file}"]
+lang = "zymbol"
+desc = "JavaScript register VM, zymbol_vm.js: the playground's default (driver lives in web/)"
 
 # ── Oracles ──────────────────────────────────────────────────────────────────
 # These do not run Zymbol.  They run the same computation written in their own

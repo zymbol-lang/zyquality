@@ -1,6 +1,9 @@
 # The point of record
 
-Zymbol has three engines in three repositories. **They are graded here, against
+Zymbol has four engines in two repositories: the tree-walker and the register VM
+in `interpreter/`, and their two JavaScript counterparts in `web/` — `zymbol.js`
+(`zyjs`, a tree-walker) and `zymbol_vm.js` (`zyjsvm`, the Rust compiler and VM
+ported, the playground's default since v0.0.11). **They are graded here, against
 one corpus, under one set of rules.** This document says what that commits each
 repository to.
 
