@@ -1,0 +1,27 @@
+// A counted loop whose bound is the largest integer ends there (ZYVM-029,
+// 2026-10-17).
+//
+// The VM stepped its hidden counter once more after the last pass and then
+// compared it with the bound; at 2^53−1 that step overflowed and the program
+// stopped with `integer overflow` after running every pass. The tree-walker and
+// zymbol.js compare before they step. Both directions, and a step that jumps
+// past the bound, end the same way.
+n = 0
+@ _i:9007199254740989..9007199254740991 { n = n + 1 }
+>> "up to the top: " n ¶
+
+m = 0
+@ _j:-9007199254740989..-9007199254740991 { m = m + 1 }
+>> "down to the bottom: " m ¶
+
+k = 0
+last = 0
+@ q:9007199254740980..9007199254740991:20 {
+    k = k + 1
+    last = q
+}
+>> "a step past the top: " k " " last ¶
+
+r = 0
+@ _s:-9007199254740980..-9007199254740991:20 { r = r + 1 }
+>> "a step past the bottom: " r ¶

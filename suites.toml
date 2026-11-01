@@ -177,6 +177,19 @@ needs = ["zymbol"]
 gate = false
 
 [[suite]]
+id = "bigbench"
+cmd = ["python3", "bench/big/run.py"]
+desc = "ZyBigBench: sixteen long programs on the VM, each output checked against a Python twin before its cost is compared — `--count` always, instructions:u where perf is allowed, CPU time where it is not"
+needs = ["zymbol", "python3"]
+# Not a gate, for the same reason as `bench`: the times are one machine's. The
+# half that is not — sixteen outputs that have to equal Python's — exits 1 when
+# one differs, so a red here is a wrong answer before it is a slow one. The two
+# other runners in bench/big/ (gap.py, scaling.py) are measurements to run by
+# hand: each takes minutes, and scaling.py exits 1 on the open findings it was
+# written to find.
+gate = false
+
+[[suite]]
 id = "zyddt"
 cmd = ["../ZyDDT/bin/zyddt", "suite"]
 desc = "ZyDDT: the declared matrix — every engine asked the same cell, and the pins that name a finding"

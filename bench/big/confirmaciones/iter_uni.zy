@@ -1,0 +1,13 @@
+<# std/time => clock
+>< 引数
+n = #|引数[1]|
+chunk = "0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxéz"
+s = ""
+@ _c:1..(n / 72) { s = s chunk }
+t0 = clock::now()
+c = 0
+@ ch:s {
+    ? ch == 'a' { c = c + 1 }
+}
+t1 = clock::now()
+>> "recorrer " s$# " caracteres: " (t1 - t0) "ms (c=" c ")" ¶

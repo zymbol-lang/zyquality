@@ -1,0 +1,19 @@
+1 dos alias:
+1 2 2 2
+2 reexporta:
+3 3 3 10 10
+3 lambda del llamante:
+10
+4 copia de estado:
+[1, 2, 99] [1, 2]
+[1, 2, 3] [1, 2, 99]
+5 salida:
+[0, 3]
+6 privada:
+42
+7 fabrica:
+300 4
+8 orden de argumentos:
+ <a><b><c>abc
+9 estado propio de capa:
+1 2

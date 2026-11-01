@@ -1,0 +1,8 @@
+// `s[i]` over a text of «N» «ñ», once per position. Reading one character
+// does not depend on how long the text is, so the whole is linear; an engine
+// that walks the text to reach position i is quadratic.
+s = ""
+@ _i:1..«N» { s = s "ñ" }
+k = 0
+@ i:1..«N» { ? s[i] == 'ñ' { k = k + 1 } }
+>> k ¶

@@ -1,0 +1,35 @@
+// An edit of one step — `v[i]$~ x`, `d["k"]$~ x`, `d.k$~ x` — writes with the
+// step in a register of its own instead of a one-element path built on the
+// heap for every edit (`SetOne`, 2026-10-17). The same write: in place and
+// functional, arrays, dictionaries, a tuple (derived, and refused in place),
+// a text, negative and wrong indexes, and an edit inside a collection.
+v = [1, 2, 3]
+v[1]$~ 10
+v[-1]$~ 30
+>> v ¶
+u = v[2]$~ 20
+>> u " " v ¶
+d = #(a: 1, b: 2)
+d["a"]$~ 5
+d.b$~ 6
+d["c"]$~ 7
+>> d ¶
+e = d.a$~ 0
+>> e " " d ¶
+t = (1, 2)
+w = t[1]$~ 9
+>> w " " t ¶
+!? { t[1]$~ 9 } :! { >> "T1 " _err ¶ }
+!? { v[0]$~ 1 } :! { >> "E0 " _err ¶ }
+!? { v[9]$~ 1 } :! { >> "E9 " _err ¶ }
+!? { v["x"]$~ 1 } :! { >> "EX " _err ¶ }
+!? { d[1]$~ 1 } :! { >> "ED " _err ¶ }
+s = "abc"
+!? { s[1]$~ 'z' } :! { >> "ES " _err ¶ }
+>> s ¶
+m = [[1, 2], [3, 4]]
+m[1]$~ [9]
+>> m ¶
+i = 2
+m[i]$~ [i, i]
+>> m ¶

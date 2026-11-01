@@ -1,0 +1,26 @@
+safe(cols, c) {
+    n = cols$#
+    r = 1
+    ok = #1
+    @ r <= n {
+        d = cols[r] - c
+        ? d == 0 { ok = #0 }
+        ? d == (n + 1 - r) { ok = #0 }
+        ? d == (r - n - 1) { ok = #0 }
+        r = r + 1
+    }
+    <~ ok
+}
+place(n, cols) {
+    ? cols$# == n { <~ 1 }
+    total = 0
+    c = 1
+    @ c <= n {
+        ? safe(cols, c) {
+            total = total + place(n, cols $+ c)
+        }
+        c = c + 1
+    }
+    <~ total
+}
+>> "nqueens(10) = " place(10, []) ¶

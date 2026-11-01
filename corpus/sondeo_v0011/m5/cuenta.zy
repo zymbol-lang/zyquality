@@ -1,0 +1,19 @@
+# cuenta {
+    #> { sube, lee, aplica, lista, guarda, LIM, saca, doble_priv, fabrica, empuja }
+    LIM := 10
+    n = 0
+    xs = [1, 2]
+    sube() {
+        n = n + 1
+        <~ n
+    }
+    lee() { <~ n }
+    aplica(f) { <~ f(n) }
+    lista() { <~ xs }
+    guarda(v) { xs = xs$+ v }
+    saca(o<~) { o = o$+ n }
+    _priv(x) { <~ x * 2 }
+    doble_priv(x) { <~ _priv(x) }
+    fabrica() { <~ () -> n * 100 }
+    empuja(a, b, c) { <~ a b c }
+}

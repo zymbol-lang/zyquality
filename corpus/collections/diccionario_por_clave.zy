@@ -1,0 +1,35 @@
+// A dictionary written where it is (GLB-132, 2026-10-16) — and every other
+// name that holds it keeps what it held.
+//
+// The three engines find a key by hash now, and write into a dictionary in
+// place when its variable is its only holder. That is safe only if a second
+// holder — another name, an argument, a value taken in a loop — makes the
+// next write copy. Each line below has one.
+d = #(a: 1)
+d["b"]$~ 2
+e = d
+d["c"]$~ 3
+d["a"]$~ 9
+>> d " " e ¶
+f = e
+e["b"]$~ 7
+e["z"]$~ 0
+>> d " " e " " f ¶
+g(x) {
+    x["q"]$~ 1
+    <~ x
+}
+h = g(d)
+>> d " " h ¶
+m = #()
+n = #()
+@ i:1..5 {
+    k = "k" i
+    m[k]$~ i
+    ? i == 3 { n = m }
+}
+>> m " " n ¶
+m$-["k2"]
+>> m " " m["k4"] ¶
+!? { >> m["k2"] ¶ } :! { >> _err ¶ }
+>> (m == #(k5: 5, k1: 1, k3: 3, k4: 4)) ¶

@@ -1,0 +1,27 @@
+[#(name: Luis, age: 25), #(name: Ana, age: 31), #(name: Eva, age: 31)]
+[#(name: Ana, age: 31), #(name: Eva, age: 31), #(name: Luis, age: 25)]
+[#(name: Luis, age: 25), #(name: Eva, age: 31), #(name: Ana, age: 31)]
+[(0, y), (1, x), (1, z)]
+[(1, z), (0, y), (1, x)]
+[, a, bb, ccc]
+[3, 1, 2]
+[3, 1, 2]
+[0.5, 1, 1.5, 2]
+[a, b, c]
+[1, 2, 5, 4]
+[5, 4, 2, 1]
+P1 ##Key(no key 'edad' in dictionary — available: name, age)
+P2 ##Parse(cannot compare integer 1 with string 'a' using operator '<')
+P3 ##Index(tuple index out of bounds: index 3 for tuple of length 2)
+P4 ##Type(cannot get length of Int - only arrays, tuples, and strings have length)
+P5 ##Type(a positional tuple is addressed by position, not by name: 'x'
+help: use t[1] — names live in a dictionary, #(key: value))
+P6 ##Type(a dictionary is addressed by key, not by position
+help: use d["a"] — adding a key changes what sits at each position)
+[#(a: 1), #(a: 2)]
+fin
+[#(x: 1), #(x: 2), #(x: 3)]
+[1, 5, 4, 2]
+[1, 2, 4, 5]
+[5, 4, 1, 2]
+[a, b]

@@ -1,0 +1,14 @@
+// A negative integer in a base carries its sign in front, and the digits are
+// those of its absolute value, padded as a positive one is (GLB-136, decided
+// by the author 2026-10-16) — `hex(-255)` is `-0xff` in Python.
+//
+// The two Rust engines printed the two's complement of an i64, a width the
+// integer model of ±(2^53 − 1) does not have; zyjs put the sign inside the
+// padding.
+m = 0 - 1
+>> 0x|m| " " 0b|m| " " 0o|m| " " 0d|m| ¶
+>> 0x|(0 - 255)| " " 0x|255| ¶
+>> 0x|(0 - 9007199254740991)| " " 0x|9007199254740991| ¶
+>> 0x|0| " " 0d|0| ¶
+r = 0b|(0 - 5)|
+>> r " " r$# ¶

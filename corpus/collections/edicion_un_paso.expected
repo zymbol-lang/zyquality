@@ -1,0 +1,15 @@
+[10, 2, 30]
+[10, 20, 30] [10, 2, 30]
+#(a: 5, b: 6, c: 7)
+#(a: 0, b: 6, c: 7) #(a: 5, b: 6, c: 7)
+(9, 2) (1, 2)
+T1 ##_(cannot modify tuple 't': tuples are immutable
+help: use 'new = t[i]$~ value' for a functional update)
+E0 ##Index(index 0 is invalid — Zymbol uses 1-based indexing (use 1 for the first element, -1 for the last))
+E9 ##Index(array index out of bounds: index 9 for array of length 3)
+EX ##Type(array update index must be an integer, got String)
+ED ##Type(a dictionary is addressed by key, not by position: `d[n]$~ value` has no meaning here
+help: use the key — d["a"], d["a"]$~ value, d$-["a"] — because adding a key changes what sits at each position)
+zbc
+[[9], [3, 4]]
+[[9], [2, 2]]

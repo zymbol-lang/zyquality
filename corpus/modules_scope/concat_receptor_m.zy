@@ -1,0 +1,15 @@
+// The module of `concat_receptor.zy`: a text held as module state, grown by
+// `s = s …` from its functions — once by an operand that rewrites it first.
+# concat_receptor_m {
+    #> { crece, lee, doble, mete, largo }
+    s = "estado-largo"
+    crece(x) { s = s "+" x }
+    lee() { <~ s }
+    doble() { s = s "|" s "|" s }
+    mete() { s = s cambia() }
+    cambia() {
+        s = "otro-valor-largo"
+        <~ "!"
+    }
+    largo() { <~ s$# }
+}

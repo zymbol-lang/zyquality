@@ -231,22 +231,23 @@ if wanted go && [[ "${GO_LEVEL}" != "none" ]]; then
         TW_MAX_BOARD=19
     fi
 
-    # Default engine is the tree-walker, the one `zymbol run` gives you. --vm
-    # adds a VM pass: the point is that a game completes under both engines, not
-    # which finishes sooner.
-    ENGINES=("")
+    # The pass that always runs is the tree-walker's, asked for by name: since
+    # v0.0.11 a bare `zymbol run` is the VM, and an empty flag here would make
+    # both passes the same engine. --vm adds a VM pass: the point is that a game
+    # completes under both engines, not which finishes sooner.
+    ENGINES=("--tw")
     [[ "${RUN_VM}" == true ]] && ENGINES+=("--vm")
 
     for engine_flag in "${ENGINES[@]}"; do
         for spec in "${BOARDS[@]}"; do
             board="${spec%%:*}"; games="${spec##*:}"
 
-            if [[ -z "${engine_flag}" && "${board}" -gt "${TW_MAX_BOARD}" ]]; then
+            if [[ "${engine_flag}" == "--tw" && "${board}" -gt "${TW_MAX_BOARD}" ]]; then
                 note "skipping ${board}x${board} on the tree-walker at --go quick (${games} game would take ~$(( board == 19 ? 14 : 3 )) min; the VM pass covers this board)"
                 continue
             fi
 
-            label="${games} game(s) on ${board}x${board} (${engine_flag:-tree-walker})"
+            label="${games} game(s) on ${board}x${board} (${engine_flag})"
             echo -e "  ${CYAN}····${NC}  ${label} — running"
             start=$(date +%s)
             out="$(cd "${ROOT}/GO" && timeout 36000 zymbol run ${engine_flag} 棋戦.zy "${games}" "${board}" 静 en 2>&1)"

@@ -96,7 +96,9 @@ def main():
     for port, zy in GROUPS[a.group]:
         zpath = os.path.join(BENCH, zy)
         py, err_py = measure([sys.executable, port + '.py'], HERE, a.runs, port + '.py')
-        zcmd = [zymbol, 'run'] + (['--vm'] if a.engine == 'vm' else []) + [zpath]
+        # Both engines by name: since v0.0.11 a bare `run` is the VM, and
+        # `--engine tw` without the flag measured the VM twice.
+        zcmd = [zymbol, 'run', '--' + a.engine, zpath]
         zr, err_zy = measure(zcmd, os.path.dirname(zpath), a.runs, zy)
         for e in (err_py, err_zy):
             if e:

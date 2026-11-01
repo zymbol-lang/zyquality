@@ -52,6 +52,13 @@
 #
 # `zybf` (2026-10-09) agrees under all three as well: its suite imports the
 # interpreter as a module and reads no input.
+#
+# `zyedit` (2026-10-27): only the goldens of its two pure modules, the buffer
+# and the undo history, are judged here; its screen tests drive `--keys` and a
+# pty, which `zyq expect` does not, and stay in its own tests/run.sh. Under all
+# three, `history.zy` agrees and `buffer.zy` does not: zyjs reads "\r" inside a
+# string as the letter r (BUG-ZYE-013, ZyEdit/HALLAZGOS.md), which the corpus
+# never writes.
 
 [[app]]
 id = "go"
@@ -102,3 +109,8 @@ desc = "Conway's Game of Life, written in Greek — B/S rules, torus and bounded
 id = "zybf"
 dir = "../ZyBrainfuck/pruebas"
 desc = "ZyBF, a Brainf*** interpreter in Spanish — a mini LDV of v0.0.10: its three findings changed the language, and its `.` is `##'` now; 13 cases against an independent Python oracle"
+
+[[app]]
+id = "zyedit"
+dir = "../ZyEdit/tests"
+desc = "ZyEdit, a terminal text editor in English — the buffer of lines (clusters, tabs, search) and the undo history, the two modules that never touch the terminal"

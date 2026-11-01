@@ -1,0 +1,15 @@
+// `m[r>2]$~ v`, an edit two steps down, «N» times over «N» rows of three.
+// Writing one cell in place does not depend on how many rows there are, so the
+// whole is linear; an engine that copies the outer array to write it is
+// quadratic. The rows are appended from a variable, not written as a literal:
+// zyjs copies the receiver of `m$+ [0, 0, 0]` (ZYJS-068, its own case below),
+// and that would be measured here instead of the edit. A shared row is copied
+// once, by its first edit: three elements per row, linear.
+fila = [0, 0, 0]
+m = []
+@ _i:1..«N» { m$+ fila }
+@ k:1..«N» {
+    r = (k % «N») + 1
+    m[r>2]$~ k
+}
+>> m[1>2] + m$# + fila[2] ¶

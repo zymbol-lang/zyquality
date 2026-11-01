@@ -425,7 +425,7 @@ function Invoke-VmSuite {
 
         $stdin = [IO.Path]::ChangeExtension($file.FullName, '.input')
 
-        $treeOut = Invoke-Zymbol -Arguments @('run', $file.FullName) -StdinFile $stdin
+        $treeOut = Invoke-Zymbol -Arguments @('run', '--tw', $file.FullName) -StdinFile $stdin
         $vmOut   = Invoke-Zymbol -Arguments @('run', '--vm', $file.FullName) -StdinFile $stdin
 
         if ($null -eq $treeOut -or $null -eq $vmOut) {

@@ -1,0 +1,41 @@
+1 interpolacion:
+a3bñc3
+2 no ascii:
+7 and #1 [7] [ñan, ú🦆é]
+3 vacio:
+[0]#1 [] []
+4 reemplazo:
+xxx xxña aaaaaa
+5 insertar quitar:
+ña--ndú ñndú ñdú andú
+6 formato:
+3.14 3 4 -0.001 7
+7 flotantes:
+0.30000000000000004 0.3333333333333333 1000000000000000000000 0.0000001 2 -0 inf
+8 casts:
+7 4 -4 3
+9 hex:
+0x00FF 0x0001 0b101
+10 colecciones:
+[1, 2.5] [1, a, b, #1, [2]] (1, (2, 3)) #(a: [1, 2], b: #(c: 1))
+11 unit en coleccion:
+[][(), 1]
+12 caracteres:
+241 ñ ab
+13 comparacion texto:
+#1 #1 #1 #1
+14 $++ con efecto:
+<x><1><y> x1y
+15 $~~ con efecto:
+<aXa><a><b> bXb
+16 numeral:
+१२३४ ३.५ [१, २] १.५
+1234
+17 repetir:
+ababab []
+18 escapes:
+a	b \ "q" {x}
+19 dividir multi:
+[a, b, , c] [abc]
+20 interp de expr:
+#(k: 1) [5, 6]

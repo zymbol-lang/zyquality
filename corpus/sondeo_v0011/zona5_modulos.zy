@@ -1,0 +1,41 @@
+// The five-zone probe of v0.0.11, zone 5 (modules), 2026-10-16.
+//
+// Every operand that could be evaluated twice, or in another order, is a call
+// that prints: the output says how many times and in which order, which a
+// golden of values alone cannot. What it found is filed in ZyDDT/HALLAZGOS:
+// nothing.
+
+<# ./m5/cuenta => A
+<# ./m5/cuenta => B
+<# ./m5/capa => C
+eco(x) {
+    >> "<" x ">"
+    <~ x
+}
+>> "1 dos alias:" ¶
+>> A::sube() " " B::sube() " " A::lee() " " B::lee() ¶
+>> "2 reexporta:" ¶
+>> C::avanza() " " A::lee() " " C::via() " " C.TOPE " " A.LIM ¶
+>> "3 lambda del llamante:" ¶
+k = 7
+>> A::aplica((x) -> x + k) ¶
+>> "4 copia de estado:" ¶
+l = A::lista()
+l = l$+ 99
+>> l " " A::lista() ¶
+A::guarda(3)
+>> A::lista() " " l ¶
+>> "5 salida:" ¶
+w = [0]
+A::saca(w<~)
+>> w ¶
+>> "6 privada:" ¶
+>> A::doble_priv(21) ¶
+>> "7 fabrica:" ¶
+g = A::fabrica()
+A::sube()
+>> g() " " A::lee() ¶
+>> "8 orden de argumentos:" ¶
+>> " " A::empuja(eco("a"), eco("b"), eco("c")) ¶
+>> "9 estado propio de capa:" ¶
+>> C::propio() " " C::propio() ¶

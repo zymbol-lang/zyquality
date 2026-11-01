@@ -1,0 +1,13 @@
+// `\r` inside a text is a carriage return, code point 13 — as it is in a char
+// literal `'\r'`.
+//
+// The web interpreter's string escapes had `\n` and `\t` only, and read `"\r"` as
+// the letter `r` (114), while its char literals had `\r` right (BUG-ZYE-013, found
+// by ZyEdit; corrected for v0.0.11). Printed as numbers: a raw carriage return in
+// a golden would be invisible.
+
+s = "a\rb"
+>> s$# " " ##!s[2] ¶
+c = '\r'
+>> ##!c ¶
+>> ("x\r" $? '\r') ¶

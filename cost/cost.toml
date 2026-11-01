@@ -118,7 +118,6 @@ kind     = "peak-ratio"
 subject  = "casos/autofree_resultado_secuencial.zy"
 control  = "casos/autofree_resultado_uno.zy"
 max_ratio = 1.25
-open_finding = { zyvm = "ZYVM-022" }
 what     = "what a call returns and the caller uses once is released before the next call builds its own"
 # The shape the two cases above do not have: the array is never in a named
 # variable, only in the register a call's result lands in. Measured 2026-10-11:
@@ -126,7 +125,10 @@ what     = "what a call returns and the caller uses once is released before the 
 # process are taken out) — as much as the control that keeps both alive on
 # purpose. A `$` expression used as a value does not have it (0.98), and one
 # array is still 6x smaller in the VM than in the tree-walker, so this is the
-# relative win being smaller and not the VM being worse.
+# relative win being smaller and not the VM being worse. ZYVM-022, fixed
+# 2026-10-19: a temporary a call wrote into is cleared when its statement ends,
+# unless arithmetic showed it holds a number — 68 MiB → 39 MiB, for 0.05 % of
+# the steps of `bench/big` (clearing every temporary of unknown type: 18.7 %).
 why      = "the result waits in a temporary register until something reuses it; `emit_auto_free` clears only named variables"
 
 # ── Cost curves ──────────────────────────────────────────────────────────────
@@ -192,6 +194,181 @@ why       = "the bulk append builds a new collection even when its result goes b
 engines   = ["zytw", "zyvm", "zyjs"]
 
 [[case]]
+id        = "growth/append-rows"
+kind      = "growth-ratio"
+template  = "casos/append_filas.zy.in"
+n         = 200000
+n_by_engine = { zyjs = 8000 }
+factor    = 4
+max_ratio = 6.0
+what      = "appending a row written as a literal is linear, like appending a number"
+# Measured 2026-10-19, `m$+ [i, 0, 0]`: zyjs 312 ms → 6 634 ms over 8 000 →
+# 32 000 (×21), while `m$+ 0` and `m$+ fila` stay linear. zyjs writes in place
+# only beside an operand that `plainOperand` lists, and a collection literal is
+# not listed. zytw 212 → 749 ms and zyvm 74 → 223 ms over 200 000 → 800 000,
+# `copied` 0 in both. ZYJS-068, fixed the same day: a collection literal of
+# plain operands is one — 171 → 317 ms over 8 000 → 32 000.
+why       = "an append whose operand is a collection literal copies its receiver"
+engines   = ["zytw", "zyvm", "zyjs"]
+
+# `s = s "x"` — the way any program builds a text. Three cases because the
+# compiler has three receivers for it, and each one is its own code path: a
+# script's variable (its register is mirrored in a slot), a function's local,
+# and a module's state.
+[[case]]
+id        = "growth/concat-local"
+kind      = "growth-ratio"
+template  = "casos/concat_local.zy.in"
+n         = 400000
+# The VM at three times the size: it builds 400 000 in 55 ms, at the floor.
+n_by_engine = { zyvm = 1200000, zyjs = 20000 }
+factor    = 4
+max_ratio = 6.0
+what      = "building a text by appending to it is linear in its length"
+# Measured 2026-10-16, `--count` bytes from 2 000 to 8 000 to 32 000: zyvm 4.2 MB
+# → 34.5 MB → 515 MB (×8.1, ×14.9), zytw 42 KB → 78 KB → 223 KB. ZyBigBench's
+# PERF-06: 128 000 appends were 968 M instructions against 290 M for half.
+# ZYVM-023, closed the same day: the append is written into the receiver's own
+# register, where `ConcatStr` grows the buffer — zyvm 2.3 MB → 2.5 MB → 3.6 MB.
+why       = "a concatenation that writes to a new register copies the whole text on every append"
+engines   = ["zytw", "zyvm", "zyjs"]
+
+[[case]]
+id        = "growth/concat-in-function"
+kind      = "growth-ratio"
+template  = "casos/concat_funcion.zy.in"
+n         = 400000
+n_by_engine = { zyvm = 1200000 }
+factor    = 4
+max_ratio = 6.0
+what      = "building a text in a function's local is linear in its length"
+why       = "a concatenation that writes to a new register copies the whole text on every append"
+
+[[case]]
+id        = "growth/concat-module-state"
+kind      = "growth-ratio"
+template  = "casos/concat_modulo.zy.in"
+n         = 400000
+n_by_engine = { zyvm = 1200000 }
+factor    = 4
+max_ratio = 6.0
+what      = "building a text in a module's own state is linear in its length"
+why       = "a concatenation that writes to a new register copies the whole text on every append"
+
+[[case]]
+id        = "growth/foreach-over-text"
+kind      = "growth-ratio"
+template  = "casos/recorrer_texto.zy.in"
+n         = 160000
+# The VM at four times the size once it walks in a straight line: 80 000 is
+# 34 ms, under the floor.
+n_by_engine = { zyvm = 320000, zyjs = 10000 }
+factor    = 4
+max_ratio = 6.0
+what      = "walking a text character by character is linear in its length"
+# The counters are blind to this one: each turn is one instruction whatever it
+# scans, so `steps` is 4.00 while the clock says 8. Asked by the clock, and on a
+# text that is not ASCII, where a scan per turn shows soonest. Measured
+# 2026-10-16: zyvm 47 ms → 387 ms over 20 000 → 80 000 «ñ», and 6 s at 320 000;
+# ASCII hides it longer — 1.26 s → 21.4 s over 320 000 → 1 280 000, zytw
+# 135 ms → 471 ms. ZyBigBench's PERF-04. ZYVM-025, closed the same day: the
+# loop keeps a byte cursor and `StrCharNext` decodes the character there —
+# 320 000 «ñ» in 58 ms, 1 280 000 ASCII in 207 ms.
+why       = "each turn finds its character by scanning the text from the start"
+engines   = ["zytw", "zyvm", "zyjs"]
+
+[[case]]
+id        = "growth/dictionary-by-key"
+kind      = "growth-ratio"
+template  = "casos/diccionario.zy.in"
+n         = 64000
+n_by_engine = { zyvm = 128000, zyjs = 16000 }
+factor    = 4
+max_ratio = 6.0
+what      = "adding and reading keys of a dictionary costs the same whatever its size"
+# Asked by the clock: a lookup is one instruction whatever it walks, so the
+# counters see 4.00. Measured 2026-10-16, n keys added with `d[k]$~ i` and
+# each read once, 4 000 → 16 000: zyvm 57 → 438 ms, zytw 66 → 651 ms, zyjs
+# 302 → 2 685 ms. ZyBigBench's PERF-03. GLB-132, closed the same day: an
+# IndexMap in the Rust engines, and in zyjs a key index plus the in-place write
+# ZYJS-014 gave arrays. 16 000 keys: zyvm 14 ms, zytw 28 ms, zyjs 399 ms.
+why       = "a dictionary that finds a key by walking its pairs makes n insertions cost n²"
+engines   = ["zytw", "zyvm", "zyjs"]
+
+# A slice of a text and a read of one. `bytes` is what sees a copy, and the
+# clock what sees a walk. The clock was off on the slice until 2026-10-19: each
+# slice of a text that is not ASCII walked to its position (GLB-139). The VM
+# jumps to a crumb since that day — 121 → 420 ms over 200 000 → 800 000 — and
+# is asked at that size. The tree-walker and zyjs since 2026-10-21 (GLB-139,
+# ZYTW-016): the tree-walker's text is shared, with crumbs, and zyjs keeps a
+# text's characters once split — zytw 95 → 324 ms over 50 000 → 200 000, zyjs
+# 318 → 714 ms over 6 000 → 24 000, where it was 677 → 11 534. Each is asked
+# at a size where its clock answers.
+[[case]]
+id        = "growth/slice-a-text"
+kind      = "growth-ratio"
+template  = "casos/cortar_texto.zy.in"
+n         = 2000
+n_by_engine = { zyvm = 200000, zytw = 50000, zyjs = 6000 }
+factor    = 4
+max_ratio = 6.0
+what      = "a slice of a text costs what it takes, not what the text is long"
+# The three ways the VM slices a text — StrSlice, StrSliceCount, and ArraySlice
+# when the text comes through a parameter — one character each, N times over a
+# text of N «ñ». Measured 2026-10-16, `--count` bytes from 2 000 to 8 000:
+# zyvm 74 MB → 1 155 MB (×15.5), zytw 105 MB → 1 666 MB. ZyBigBench's PERF-05.
+# GLB-130, closed the same day: the piece is found where it is and copied
+# alone — zyvm 2.33 MB → 2.66 MB. The tree-walker paid ZYTW-016 here until
+# 2026-10-21, 32 MB → 514 MB: each read of `s` copied it, slice or no slice.
+why       = "a slice copies the whole text into a Vec<char> to cut a piece of it"
+engines   = ["zytw", "zyvm", "zyjs"]
+
+[[case]]
+id        = "growth/read-a-text"
+kind      = "growth-ratio"
+template  = "casos/leer_texto.zy.in"
+n         = 2000
+# The clock was off until 2026-10-19, because `s$#` counted the text on every
+# call. ZYVM-028 (2026-10-17) gave the VM's text its count, so the VM's clock
+# answers now and holds that fix: 73 → 270 ms over 800 000 → 3 200 000. The
+# tree-walker's text keeps its count and is not copied by a read since
+# 2026-10-21 (ZYTW-016), and zyjs keeps a text's characters (GLB-139).
+n_by_engine = { zyvm = 800000, zytw = 200000, zyjs = 6000 }
+factor    = 4
+max_ratio = 6.0
+what      = "reading a text that a variable holds does not copy it"
+# The control of the case above, and a case of its own: the same loop with
+# only `s$#`. Measured 2026-10-16, `--count` bytes from 2 000 to 8 000: zyvm
+# 2.29 MB → 2.58 MB, zytw 8.1 MB → 128 MB (×15.9) — the tree-walker's text is
+# a `String`, and a read of the variable clones it. Corrected 2026-10-21: zytw
+# 0.20 MB → 0.68 MB.
+why       = "the tree-walker's text has no Rc: every read of the variable copies it"
+engines   = ["zytw", "zyvm", "zyjs"]
+
+[[case]]
+id        = "growth/index-a-text"
+kind      = "growth-ratio"
+template  = "casos/indexar_texto.zy.in"
+n         = 16000
+n_by_engine = { zyvm = 200000, zytw = 200000, zyjs = 6000 }
+factor    = 4
+max_ratio = 6.0
+what      = "reading the character at a position costs the same whatever the text's length"
+# Asked by the clock: each `s[i]` is one step and allocates nothing more, so
+# the counters see 4.00 while the clock does not. Measured 2026-10-19 over N
+# «ñ»: zyvm 71 → 941 ms over 32 000 → 128 000, zytw 140 → 1 820 ms over
+# 16 000 → 64 000, zyjs 378 → 5 609 ms over 6 000 → 24 000. On an ASCII text
+# the two Rust engines read a byte and are flat; zyjs spreads the whole text
+# into an array on every read, ASCII or not. The VM was fixed on 2026-10-19:
+# a text that is not ASCII keeps a crumb every 64 characters, and 128 000 «ñ»
+# went from 941 ms to 39 ms. The tree-walker and zyjs were declared debt that
+# day and corrected on 2026-10-21, by the author's new decision: the tree-
+# walker's text is shared and keeps crumbs as the VM's does (115 ms at
+# 200 000), and zyjs splits a text once and keeps the characters.
+why       = "a position is found by walking the text from its start"
+engines   = ["zytw", "zyvm", "zyjs"]
+
+[[case]]
 id        = "growth/update-local"
 kind      = "growth-ratio"
 template  = "casos/actualizar_local.zy.in"
@@ -209,6 +386,26 @@ what      = "writing one element of a collection in place costs the same whateve
 # plain local, in a function, with a literal index (ZYVM-013). Closed the same
 # day: 16 M.
 why       = "a second owner of the collection at the moment of the write makes the write copy all of it"
+engines   = ["zytw", "zyvm", "zyjs"]
+
+[[case]]
+id        = "growth/update-nested"
+kind      = "growth-ratio"
+template  = "casos/actualizar_anidado.zy.in"
+n         = 30000
+n_by_engine = { zyvm = 400000, zyjs = 8000 }
+factor    = 4
+max_ratio = 6.0
+what      = "writing one cell two steps down costs the same whatever the number of rows"
+# Measured 2026-10-19, `m[r>2]$~ k` N times over N rows: zytw copied
+# 4 006 000 → 64 024 000 over 2 000 → 8 000 (×16), and 133 → 2 006 ms over
+# 3 000 → 12 000; zyjs 384 → 5 916 ms over 8 000 → 32 000. zyvm copies 3 per
+# row, the first edit of a row it shares with `fila`, and is linear. The
+# one-step form above is linear in all three: the deep one took another path.
+# GLB-140, fixed the same day: the tree-walker writes the path where it is
+# (copied as the VM, 6 000 → 24 000; 46 → 150 ms over 25 000 → 100 000), and
+# zyjs the outermost level, copying only the row it writes (275 → 474 ms).
+why       = "an edit through a path copies the outer collection, which has a second owner at the moment of the write"
 engines   = ["zytw", "zyvm", "zyjs"]
 
 [[case]]

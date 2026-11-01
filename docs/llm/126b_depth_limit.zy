@@ -1,0 +1,9 @@
+// claim: **A recursion that is not a tail call stops at 10 000 active calls**
+// 10 000 calls at once are allowed; the next one is a `##Depth` error that
+// `!?` catches, and the program goes on (D7, GLB-133).
+f(n) {
+    ? n == 0 { <~ 0 }
+    <~ 1 + f(n - 1)
+}
+>> f(9999) ¶                                        // → 9999
+!? { >> f(10000) ¶ } :! ##Depth { >> "##Depth" ¶ }  // → ##Depth

@@ -1,0 +1,29 @@
+// What `$>` and `$|` answer when they walk a text (ZYJS-067, 2026-10-17).
+//
+// They walk its characters and rebuild a text only from characters and texts.
+// A lambda that turns the characters into something else has left the text
+// behind, and the answer is an array. zymbol.js glued the results together
+// whatever they were: `979899` where the Rust engines answer `[97, 98, 99]`.
+codes = "abc" $> (c -> ##!c)
+>> codes " " (codes#?)[1] ¶
+
+same = "abc" $> (c -> c)
+>> same " " (same#?)[1] ¶
+
+doubled = "abc" $> (c -> "{c}{c}")
+>> doubled " " (doubled#?)[1] ¶
+
+ones = "abc" $> (_c -> 1)
+>> ones ¶
+
+mixed = "ab" $> (c -> {
+    ? c == 'a' { <~ 'x' }
+    <~ 0
+})
+>> mixed " " (mixed#?)[1] ¶
+
+kept = "abcab" $| (c -> c <> 'b')
+>> kept " " (kept#?)[1] ¶
+
+total = "abc" $< (0, (n, c) -> n + ##!c)
+>> total ¶

@@ -1,0 +1,11 @@
+classify(x) {
+    <~ ?? x {
+        0..9 => 1
+        10..49 => 2
+        50..99 => 3
+        _ => 4
+    }
+}
+acc = 0
+@ i:1..3000000 { acc = acc + classify(i % 150) }
+>> "match_loop " acc ¶

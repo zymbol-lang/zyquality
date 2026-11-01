@@ -1,0 +1,50 @@
+// `@ cond { … }` tests its condition once a pass, and the first test is the
+// value read to tell a count from a condition (GLB-135, 2026-10-16).
+//
+// `@ <expr>` is a count when the value is an Int and a condition when it is a
+// Bool, and where the type is not known before it runs both Rust engines read
+// the value to decide and then read it again for the first test — the calls in
+// it ran one extra time. The tree-walker did it even for a comparison.
+eco(x) {
+    >> "<" x ">"
+    <~ x
+}
+s() {
+    >> "?"
+    <~ #1
+}
+falso() {
+    >> "!"
+    <~ #0
+}
+k = 0
+@ eco(k) < 2 { k = k + 1 }
+>> ¶
+c = 0
+@ s() && c < 2 { c = c + 1 }
+>> ¶
+c = 0
+@ c < 2 && s() { c = c + 1 }
+>> ¶
+c = 0
+@ s() {
+    c = c + 1
+    ? c == 2 { @! }
+}
+>> ¶
+c = 0
+@ s() && c < 4 {
+    c = c + 1
+    ? c % 2 == 0 { @> }
+    >> c
+}
+>> ¶
+@ falso() { >> "nunca" }
+>> ¶
+n = 0
+cuenta() {
+    >> "#"
+    <~ 3
+}
+@ cuenta() { n = n + 1 }
+>> " " n ¶

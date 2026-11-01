@@ -1,0 +1,19 @@
+best = 0
+bestn = 0
+@ n:1..60000 {
+    x = n
+    steps = 0
+    @ x <> 1 {
+        ? x % 2 == 0 {
+            x = x / 2
+        } _ {
+            x = 3 * x + 1
+        }
+        steps = steps + 1
+    }
+    ? steps > best {
+        best = steps
+        bestn = n
+    }
+}
+>> "collatz " bestn " " best ¶

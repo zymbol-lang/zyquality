@@ -1,0 +1,6 @@
+construir() {
+    s = ""
+    @ _i:1..«N» { s = s "x" }
+    <~ s$#
+}
+>> construir() ¶

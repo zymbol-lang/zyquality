@@ -1,0 +1,15 @@
+<# std/time => clock
+>< 引数
+n = #|引数[1]|
+chunk = "0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz"
+s = ""
+@ _c:1..(n / 72) { s = s chunk }
+t0 = clock::now()
+m = 0
+@ i:1..5000 { m = s$# }
+t1 = clock::now()
+@ i:1..2000 { t = s$[1..10] }
+t2 = clock::now()
+@ i:1..2000 { t = s$[(n - 10)..(n - 1)] }
+t3 = clock::now()
+>> "len x5000=" (t1 - t0) "ms  slice_inicio x2000=" (t2 - t1) "ms  slice_final x2000=" (t3 - t2) "ms" ¶

@@ -64,7 +64,6 @@ rust	rust-only	duplicate [[script]] name '§' in zyp.toml
 rust	rust-only	dynamic range in match
 rust	rust-only	enter - execute current line\r
 rust	rust-only	esc - cancel current input\r
-rust	rust-only	execute using the register vm (experimental)
 rust	rust-only	explicit |> f(_) must keep the placeholder: §
 rust	rust-only	extra explicit args must be preserved: §
 rust	rust-only	extract '§' to function
@@ -265,7 +264,6 @@ rust	shared	circular dependency detected
 rust	shared	clear screen (>>!)
 rust	shared	cli args capture (><)
 rust	shared	comparison pattern did not produce a boolean
-rust	shared	comparison pattern requires scalar scrutinee, got §
 rust	shared	connection string
 rust	shared	consider removing this variable or prefixing with '_' if intentionally unused
 rust	shared	constant with non-literal initializer
@@ -353,7 +351,6 @@ rust	shared	no shell found — `<\ \>` and `</ />` run their commands through on
 rust	shared	numeral mode switch
 rust	shared	only exported items can be imported
 rust	shared	only one '*rest' is allowed in a destructure pattern
-rust	shared	pattern type § does not match scrutinee type §
 rust	shared	pipe callable must be a function, got §
 rust	shared	pipe expression has no placeholder '_'
 rust	shared	pipe expression has § placeholders, only first will be used
@@ -362,7 +359,6 @@ rust	shared	positioned output (>>~)
 rust	shared	precision must be a non-negative integer
 rust	shared	query_one matched no rows
 rust	shared	range pattern start must be int, float, or char, got §
-rust	shared	range pattern type § does not match scrutinee type §
 rust	shared	range start type § differs from end type §
 rust	shared	reduce operation requires a lambda, got §
 rust	shared	refactor to remove the circular dependency
@@ -371,6 +367,7 @@ rust	shared	remove it, or use it — `>> name ¶` to print it
 rust	shared	remove one of the two '°' markers
 rust	shared	savepoint name
 rust	shared	sh.exe on path
+rust	shared	slice count must be an integer, got §
 rust	shared	slice end must be an integer, got §
 rust	shared	slice start must be an integer, got §
 rust	shared	sort comparator must be a lambda (a, b) -> bool
@@ -405,6 +402,7 @@ rust	shared	use a different alias for this import
 rust	shared	variable with non-literal initializer
 rust	shared	write `#(` here: `#(nombre: valor)`. a bare `(…)` is a positional tuple, and `#()` is the empty dictionary — which `()` cannot be, since it would have to be the empty tuple as well
 rust	shared	zymbol: no posix shell found (§); running `<\ \>` through cmd.exe. commands written in posix shell syntax will not work — install git for windows or set zymbol_sh to get the portable behaviour back
+rust	shared	§ cannot be passed to cmd.exe as one word: it holds ", % or a line break
 rust	shared	§ parser errors in §
 rust	shared	§ semantic error(s) in '§' §
 zyjs	shared	'§' is not an array
@@ -417,8 +415,8 @@ zyjs	shared	cannot import '§': no module resolver available
 zyjs	shared	cannot modify tuple '§': tuples are immutable help: use 'new_var = §[§]$~ value' for a functional update
 zyjs	shared	cannot run '§': a subscript runs another file as a process, and the browser has none
 zyjs	shared	cannot use bool as array index
-zyjs	shared	cannot write § to [§]: type mismatch — expected element of type §
-zyjs	shared	cannot § § to [§]: type mismatch — expected element of type §
+zyjs	shared	cannot write § to [§]: type mismatch = help: expected element of type §
+zyjs	shared	cannot § § to [§]: type mismatch = help: expected element of type §
 zyjs	shared	chained index does not exist: '§[…][…]' is not a form of zymbol = help: nesting is navigated with '>', so this is '§[i>j]' — one bracket group addresses one element, however deep it lies
 zyjs	shared	checksource: analysis failed
 zyjs	shared	execution limit reached (§ steps) — infinite loop?

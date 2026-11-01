@@ -52,7 +52,9 @@ done
 if [[ $NO_BUILD -eq 0 ]]; then
     echo ">>> Building Zymbol-Lang (release)..."
     cd "$PROJECT_ROOT"
-    cargo build --release 2>&1 | tail -3
+    # With std/db, as the gate builds it (D4, v0.0.11): a plain build would
+    # leave a binary the gate's std/db files then fail on.
+    cargo build --release --features db 2>&1 | tail -3
     echo ""
 fi
 
@@ -125,13 +127,13 @@ run_n_times() {
 # -----------------------------------------------------------------------------
 TOTAL_START=$(date +%s%N)
 
-run_n_times "STRESS TEST (core)"        "\"$BINARY\" run \"$BENCH_DIR/stress.zy\""
-run_n_times "BENCHMARK: Pattern Match"  "\"$BINARY\" run \"$BENCH_DIR/bench_match.zy\""
-run_n_times "BENCHMARK: Recursion"      "\"$BINARY\" run \"$BENCH_DIR/bench_recursion.zy\""
-run_n_times "BENCHMARK: Collections"    "\"$BINARY\" run \"$BENCH_DIR/bench_collections.zy\""
-run_n_times "BENCHMARK: Strings"        "\"$BINARY\" run \"$BENCH_DIR/bench_strings.zy\""
-run_n_times "BENCHMARK: Strings Stress"  "\"$BINARY\" run \"$BENCH_DIR/bench_strings_stress.zy\""
-run_n_times "BENCHMARK: Strings Modify" "\"$BINARY\" run \"$BENCH_DIR/bench_strings_modify.zy\""
+run_n_times "STRESS TEST (core)"        "\"$BINARY\" run --tw \"$BENCH_DIR/stress.zy\""
+run_n_times "BENCHMARK: Pattern Match"  "\"$BINARY\" run --tw \"$BENCH_DIR/bench_match.zy\""
+run_n_times "BENCHMARK: Recursion"      "\"$BINARY\" run --tw \"$BENCH_DIR/bench_recursion.zy\""
+run_n_times "BENCHMARK: Collections"    "\"$BINARY\" run --tw \"$BENCH_DIR/bench_collections.zy\""
+run_n_times "BENCHMARK: Strings"        "\"$BINARY\" run --tw \"$BENCH_DIR/bench_strings.zy\""
+run_n_times "BENCHMARK: Strings Stress"  "\"$BINARY\" run --tw \"$BENCH_DIR/bench_strings_stress.zy\""
+run_n_times "BENCHMARK: Strings Modify" "\"$BINARY\" run --tw \"$BENCH_DIR/bench_strings_modify.zy\""
 
 # -----------------------------------------------------------------------------
 # Optional: VM benchmarks

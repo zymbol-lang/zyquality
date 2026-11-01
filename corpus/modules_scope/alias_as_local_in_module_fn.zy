@@ -1,0 +1,12 @@
+// Inside a MODULE, a function may still use an import alias's name as a variable
+// of its own: the function is its own strong environment (MEM-7, GLB-070), and
+// there `g` is the local and `g::uno()` the module.
+//
+// `alias_shadowed_by_variable.zy` is the same rule in a program. In a module the
+// web interpreter's checker took everything at module scope for module state,
+// aliases included, and refused `m.zy` with "'g' is a module, not a value" — which
+// kept GoL from starting in the browser (BUG-VMJS-006, found by the JavaScript
+// port of the VM).
+
+<# ./vmjs/m => m
+>> m::f(3) ¶

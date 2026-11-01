@@ -57,7 +57,10 @@ fi
 EXCLUDE='(/\.cargo/|/rustc/|zymbol-analyzer|zymbol-repl|zymbol-package|zymbol-standalone|zymbol-lsp)'
 
 echo "── building instrumented binary ─────────────────────────────"
-( cd "$INTERP" && RUSTFLAGS="-C instrument-coverage" cargo build --profile dev 2>&1 | tail -1 )
+# `--features db`: std/db is off by default since v0.0.11 (D4); without it the
+# std/db code would not be compiled, and would vanish from the report instead of
+# showing as covered or not.
+( cd "$INTERP" && RUSTFLAGS="-C instrument-coverage" cargo build --profile dev --features db 2>&1 | tail -1 )
 BIN="$INTERP/target/debug/zymbol"
 [ -x "$BIN" ] || { echo "coverage: build produced no binary" >&2; exit 2; }
 
@@ -67,11 +70,11 @@ rm -rf "$OUT"; mkdir -p "$OUT"
 # raw profiles and filled a 7 GB tmpfs.
 export LLVM_PROFILE_FILE="$OUT/zy-%8m.profraw"
 
-echo "── running the corpus through run / --vm / check / fmt ──────"
+echo "── running the corpus through run --tw / --vm / check / fmt ──────"
 cd "$ZQ_DIR"
 n=0
 while IFS= read -r f; do
-    timeout 10 "$BIN" run      "$f" >/dev/null 2>&1
+    timeout 10 "$BIN" run --tw "$f" >/dev/null 2>&1
     timeout 10 "$BIN" run --vm "$f" >/dev/null 2>&1
     timeout 10 "$BIN" check    "$f" >/dev/null 2>&1
     timeout 10 "$BIN" fmt      "$f" >/dev/null 2>&1

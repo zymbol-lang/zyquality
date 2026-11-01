@@ -1,0 +1,28 @@
+// A text that is not ASCII keeps, once a position is asked of it, the byte
+// where every 64th character starts (GLB-139, 2026-10-19): `s[i]` and a slice
+// jump to the crumb before their position instead of walking from the start.
+// Positions just before, on and after each crumb, with characters of one to
+// four bytes; slices across a crumb, backwards and by count; and a text grown
+// after being indexed, whose crumbs must not outlive it.
+pieza = "añ€🦆"
+t = ""
+@ i:1..300 { t = t pieza[((i - 1) % 4) + 1] }
+>> t$# ¶
+@ p:[1, 2, 63, 64, 65, 66, 127, 128, 129, 130, 192, 193, 256, 257, 299, 300] {
+    >> p ":" t[p] " "
+}
+>> ¶
+@ p:[-1, -2, -64, -65, -128, -129, -300] {
+    >> p ":" t[p] " "
+}
+>> ¶
+>> t$[62..67] " " t$[127..131] " " t$[67..62] " " t$[64:3] " " t$[-70:5] ¶
+>> t$[1..1] " " t$[300..300] " " t$[298..300] " " t$[1:4] ¶
+u = t
+t = t "xyz"
+>> t$# " " t[301] t[302] t[303] " " t[300] " " t$[299..302] ¶
+>> u$# " " u[-1] " " u$[64..66] ¶
+a = ""
+@ _i:1..129 { a = a "x" }
+a = a "é"
+>> a$# " " a[129] a[130] " " a$[128..130] " " a[-1] a[-2] ¶

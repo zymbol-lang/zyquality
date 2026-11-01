@@ -1,0 +1,23 @@
+1 rango: <1><3>123
+2 paso: <1><9><4>159
+3 veces: <3>...
+4 mientras: <0><1><2><3> k=3
+5 iterable: <[1, 2]>12
+6 limite cambia: 123 n=1
+7 var de bucle: 10 20 30 
+8 arreglo crece: 12 [1, 2, 9, 9]
+9 dicc crece: x#(x: 1, z: 2) #(x: 1)
+10 descendente: 321 paso neg: 10 7 4 1 
+11 veces 0: fin
+12 caliente: <1><2><3> t=6
+13 cadena caliente: abc
+14 producto: 24
+15 anidado: 30 60 
+16 postfijo: 1 3 6 
+17 funcion: 2 4 
+18 cierres: 100 200 300 
+19 etiquetas: 11 13 
+20 retorno: (2, 3) 
+21 rango float: ##Type(range bounds must be integers, got Float and Float)
+22 paso 0: ##_(step must be positive, got 0)
+23 mientras efecto: ???

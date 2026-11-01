@@ -1,0 +1,7 @@
+// The module `alias_as_local_in_module_fn.zy` reaches through `m.zy`.
+# util {
+    #> { uno }
+    uno() {
+        <~ 1
+    }
+}

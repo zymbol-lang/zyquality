@@ -1,0 +1,16 @@
+[[1, 20], [3, 4]] [[1, 2], [3, 4]]
+[3, 4] [[1, 20], [31, 4]]
+[[5, 0], [0, 0]] [0, 0]
+[[[1, 2], [30, 4]], [[5, 6], [7, 80]]]
+[(1, 2), (33, 4)]
+#(a: #(b: 2, c: 3), lista: [10, 200, 30])
+[hola, Mundo]
+E1 ##Index(array index out of bounds: index 9 for array of length 2)
+E2 ##Index(index 0 is invalid — Zymbol uses 1-based indexing (use 1 for the first element, -1 for the last))
+E3 ##Index(array index out of bounds: index 3 for array of length 2)
+E4 ##Key(no key 'zz' in dictionary — available: a, lista)
+E5 ##Type(a dictionary is addressed by key, not by position: `d[n>…]$~ value` has no meaning here
+help: use the key — d["a"], d["a"]$~ value, d$-["a"] — because adding a key changes what sits at each position)
+E6 ##Type(cannot index into Char — expected array, tuple, or string)
+[[1, 20], [31, 4]] #(a: #(b: 2, c: 3), lista: [10, 200, 30])
+[[1, 0], [3, 4]]

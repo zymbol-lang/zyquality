@@ -1,0 +1,3 @@
+<# ./mod/texto => T
+T::crecer(«N»)
+>> T::largo() ¶

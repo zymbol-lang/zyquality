@@ -1,0 +1,9 @@
+// `\\` is a newline, as `¶` is: at the end of a `>>` and as a statement of its own.
+//
+// The web interpreter accepted it only at the end of a `>>` and refused the second
+// line below with "expected expression, found '\\'" (BUG-VMJS-003, found by the
+// JavaScript port of the VM, whose AST is compared against Rust's node for node).
+
+>> "a" \\
+\\
+>> "b" ¶

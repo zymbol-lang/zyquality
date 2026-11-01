@@ -1,0 +1,18 @@
+// A parameter that nothing reads still gets a register (ZYVM-030, 2026-10-17).
+//
+// The VM's compiler recounted a function's registers from the instructions
+// that survived dead-code elimination, and a parameter nothing reads is in none
+// of them: `f(a, b, c) { <~ a }` got a frame of one register, and every call
+// wrote `b` and `c` past its end, without a bounds check. A release build
+// answered right by luck; a debug build aborts. What holds it is the compiler
+// test `a_frame_holds_every_parameter_even_one_nothing_reads`; this file is
+// the program, for whoever runs the corpus on a debug build.
+f(a, b, c) {
+    <~ a
+}
+t = 0
+@ i:1..5 { t = t + f(i, i, i) }
+>> t ¶
+
+g = (x, y) -> x
+>> g(7, 8) ¶

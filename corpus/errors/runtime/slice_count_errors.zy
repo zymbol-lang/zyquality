@@ -1,0 +1,34 @@
+// `$[i:n]` — the count form of a slice — refuses what it cannot take, and says
+// so in the form the reader wrote (GLB-129, decided 2026-10-16: the VM's
+// wording is the rule, as GLB-047 made it for `$-[i:n]`).
+//
+// Until then no two engines agreed on any of its errors: the tree-walker wrote
+// a count as a range (`[4..9]`) and refused a negative count as "start
+// cannot be greater than end", in no family; zyjs clamped every bound and
+// read a non-integer as whatever it held.
+
+t = "ñandú"
+a = [1, 2, 3, 4, 5]
+// a parameter, so the VM cannot pick its instruction by the type
+cortar(x, i, n) { <~ x$[i:n] }
+
+// what it takes
+>> t$[2:2] " " a$[2:2] " " cortar(t, 2, 2) " " cortar(a, 2, 2) ¶
+>> t$[-2:2] " " a$[-2:2] ¶
+>> "[" t$[6:0] "] " a$[6:0] " [" t$[2:0] "]" ¶
+>> t$[5:1] " " a$[5:1] ¶
+
+// past the end: refused, and caught as an index error
+!? { >> t$[4:9] ¶ } :! ##Index { >> "Index: " _err ¶ }
+!? { >> a$[4:9] ¶ } :! ##Index { >> "Index: " _err ¶ }
+!? { >> cortar(t, -2, 9) ¶ } :! ##Index { >> "Index: " _err ¶ }
+!? { >> a$[7:0] ¶ } :! ##Index { >> "Index: " _err ¶ }
+
+// a negative count never reverses: an index error, about the count
+!? { >> t$[2:-1] ¶ } :! ##Index { >> "Index: " _err ¶ } :! { >> "other: " _err ¶ }
+!? { >> cortar(a, 2, -1) ¶ } :! ##Index { >> "Index: " _err ¶ } :! { >> "other: " _err ¶ }
+
+// a bound that is not an integer: a type error, naming the count
+!? { >> t$[2:2.0] ¶ } :! ##Type { >> "Type: " _err ¶ }
+!? { >> cortar(a, 2, "b") ¶ } :! ##Type { >> "Type: " _err ¶ }
+!? { >> cortar(t, "a", 2) ¶ } :! ##Type { >> "Type: " _err ¶ }

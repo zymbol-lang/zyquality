@@ -1,6 +1,9 @@
 # The point of record
 
-Zymbol has three engines in three repositories. **They are graded here, against
+Zymbol has four engines in two repositories: the tree-walker and the register VM
+in `interpreter/`, and their two JavaScript counterparts in `web/` — `zymbol.js`
+(`zyjs`, a tree-walker) and `zymbol_vm.js` (`zyjsvm`, the Rust compiler and VM
+ported, the playground's default since v0.0.11). **They are graded here, against
 one corpus, under one set of rules.** This document says what that commits each
 repository to.
 
@@ -76,7 +79,7 @@ does is anywhere else.
 ```text
 zyquality/
     zyq                 the differential runner (OCaml, no dependencies)
-    corpus/             675 .zy, 669 with a .expected golden (2026-10-02)
+    corpus/             714 .zy, 708 with a .expected golden (2026-10-25)
     corpus.toml         who may be judged on what, and why not
     dropped.tsv         what left the corpus, when, and what asks its question now
     reject/             forms every engine must refuse

@@ -1,0 +1,6 @@
+Compilar una vez con glibc y otra con musl:
+  gcc -O2 -o b_glibc patron_concat.c
+  musl-gcc -O2 -static -o b_musl patron_concat.c
+  gcc -O2 -fno-builtin-malloc -fno-builtin-free -o s_glibc por_tamano.c
+  musl-gcc -O2 -static -fno-builtin-malloc -fno-builtin-free -o s_musl por_tamano.c
+(En patron_concat.c la medida de «4M malloc pequeños» sale 0 ms porque el compilador la elimina: ignorarla; por_tamano.c la repite bien.)

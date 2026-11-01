@@ -68,6 +68,14 @@ ZYMBOL_BIN=/usr/bin/zymbol ./run.py
 `KNOWN` case starts passing the runner says so and asks for the finding to be
 closed — an `open_finding` nobody removes is how debt becomes permanent.
 
+## A copy the clock cannot see
+
+`clock_off = "<reason>"` asks a growth case by the counters alone. It is for a
+copy that a scan hides: `s$[a..b]` stopped copying the whole text on 2026-10-16,
+and each slice still counts the text's characters, so the clock stays quadratic
+while `bytes` goes linear. The reason is printed on every run, and a
+`clock_off` case that nothing counts is `NO VERDICT`.
+
 ## Sizes are per engine
 
 One question, asked at the size each engine can answer it at (`n_by_engine`).
@@ -97,3 +105,8 @@ call returns and the caller uses once stays in its temporary register until some
 nothing since 2026-10-10: `ZYTW-010` (`growth/module-call-that-writes-one-cell`, 13.8 under the tree-walker)
 and `ZYVM-010` (`call/frame-as-large-as-every-temporary`, 2.76 under the VM) were declared here as `KNOWN` and
 fixed that day; both cases are plain `PASS` now, and a ratio that climbs back is a regression.
+`ZYVM-023` (`growth/concat-*`, `s = s "x"` copying the whole text on every append) was the first debt declared
+on a **counted** ratio, `bytes`, on 2026-10-16, and was fixed the same day. Until then the runner read
+`open_finding` only on the clock's ratios; it reads it on the counted ones too, and calls a debt paid only
+when every reading of its engine passes — a defect `--count` is blind to passes every counted ratio while
+it is still open.

@@ -21,7 +21,7 @@ ejecución	$~ writes into a collection, and this is {}\nhelp: use a[1]$~ v on an
 ejecución	'{}' is undefined — did you mean '{}°' (hot definition)?
 ejecución	(year, month, day) or (year, month, day, hour, minute, second), each ###, plus an optional zone
 ejecución	Module '{}' not loaded
-ejecución	ZyStr requires a 64-bit platform
+ejecución	ZyStr requires a 32-bit or 64-bit platform
 ejecución	a dictionary is addressed by key, not by position: `{}` has no meaning here\nhelp: use the key — d[\"{}\"], d[\"{}\"]$~ value, d$-[\"{}\"] — because adding a key changes what sits at each position
 ejecución	a dictionary is addressed by key, not by position\nhelp: use d[\"{}\"] — adding a key changes what sits at each position
 ejecución	a navigation step is a position or a key, got {}
@@ -47,12 +47,14 @@ ejecución	index out of bounds: index {} for named tuple of length {}
 ejecución	input read error: {}
 ejecución	input: failed to disable raw mode: {}
 ejecución	input: failed to restore raw mode: {}
+ejecución	internal: string cursor {} outside the text
 ejecución	internal: use of '{}' after auto-destruction (string interpolation) — this is a bug in the last-use analyzer, please report it
 ejecución	internal: use of '{}' after auto-destruction — this is a bug in the last-use analyzer, please report it (workaround: add a later `>> {}` mention or a `\\ {}` at the intended end of life)
 ejecución	invalid savepoint name '{}'
 ejecución	io error: {0}
 ejecución	named tuple index out of bounds: index {} for tuple of length {}
 ejecución	named tuple update index must be an integer or field name (string), got {}
+ejecución	no terminal to read a key from
 ejecución	query_one matched no rows
 ejecución	register {0} out of range
 ejecución	remove index
@@ -61,6 +63,7 @@ ejecución	slice count must be non-negative, got {}
 ejecución	slice indices out of bounds: [{}:{}] for collection of length {}
 ejecución	sort comparator must be a lambda (a, b) -> Bool
 ejecución	std/db is not available in this build (compiled without ODBC support)
+ejecución	std/net is not available in this build (compiled without HTTP support)
 ejecución	string update index must be an integer, got {}
 ejecución	text of up to {} characters
 ejecución	the dot reaches a dictionary key, and this is {}\nhelp: use d.{} on a #(…) — for a position, use x[1]
@@ -75,6 +78,7 @@ ejecución	unknown builtin id {}
 ejecución	unknown connection '{}'
 ejecución	unknown db builtin id {}
 ejecución	unknown error
+ejecución	unknown net builtin id {}
 ejecución	unsupported binary operator: {:?}
 ejecución	unsupported operator in comparison pattern: {:?}
 ejecución	update operator ($~) requires a place to write like arr[i]$~ val, arr[i>j]$~ val or d.key$~ val
@@ -120,17 +124,14 @@ semántica	filter operation requires a lambda, got {}
 semántica	functions must be defined before use, or imported with a module alias (e.g. `math::cos`)
 semántica	key input (<<|)
 semántica	lifetime end (\\)
-semántica	logical not on non-boolean type: {}
 semántica	map operation requires a lambda, got {}
 semántica	numeral mode switch
-semántica	pattern type {} does not match scrutinee type {}
 semántica	pipe callable must be a function, got {}
 semántica	pipe expression has no placeholder '_'
 semántica	pipe expression has {} placeholders, only first will be used
 semántica	piped value type {} incompatible with function parameter {}
 semántica	positioned output (>>~)
 semántica	range pattern start must be Int, Float, or Char, got {}
-semántica	range pattern type {} does not match scrutinee type {}
 semántica	range start type {} differs from end type {}
 semántica	read it with '.': {}.{}
 semántica	reduce operation requires a lambda, got {}
