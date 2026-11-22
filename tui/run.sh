@@ -71,6 +71,9 @@ keys_for() {
         # BUG-ZYB-006 was about, plus the three that already worked, so a fix
         # that broke those would show up here too.
         keys_control)  printf '%s\n' '\x01' '\x03' '\x08' '\x09' '\x7f' '\x1b' '\r' 'ñ' ;;
+        # One key per wait: the first frame is shown at the first `<<|`, the
+        # second at `@~ 0`, the third at the second `<<|` (GAP-ZYE-015).
+        frame_newline) printf '%s\n' 'x' 'q' ;;
         *)             printf '%s\n' 'q' ;;
     esac
 }

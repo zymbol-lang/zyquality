@@ -1,0 +1,22 @@
+// What reaches the terminal inside `>>|`, and when.
+//
+// GAP-ZYE-015 (D-09, v0.0.12): what a program draws is kept in a frame and
+// shown, in one write between ESC[?2026h and ESC[?2026l, when the program
+// waits — here at each `<<|` and at `@~ 0` — and when the block ends.
+//
+// ZYVM-033: `¶` inside `>>|` is CR LF. Raw mode turns off the terminal's own
+// translation, so a bare LF moves down without going back to the first column.
+// The tree-walker always wrote CR LF; the VM wrote LF until v0.0.12 and drew
+// `>> … ¶` as a staircase. A pipe cannot see this, and the two engines
+// disagreed, so this case carries a golden and not just their agreement.
+>>| {
+    >>!
+    >> "ab" ¶
+    >> "cd" ¶
+    >>~ (4, 1) > "row 4"
+    <<| k
+    >>~ (5, 1, 1, 196, 0) > "key " ##!k
+    @~ 0
+    >>~ (6, 1) > "last"
+    <<| _q
+}
