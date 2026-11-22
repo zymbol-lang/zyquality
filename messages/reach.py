@@ -202,11 +202,25 @@ def emitted(verbose: bool = True) -> set[str]:
     seen: set[str] = set()
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
         for text in pool.map(_run, jobs):
+            last = None          # the diagnostic on the line before, if any
             for line in text.splitlines():
                 if m := DIAG.match(line):
-                    seen.add(E.norm(m.group(1).strip()))
+                    last = m.group(1).strip()
+                    seen.add(E.norm(last))
                 elif m := HELP.match(line):
                     seen.add(E.norm(m.group(1).strip()))
+                    # A runtime message can carry its guidance inside the one
+                    # string — `"…\nhelp: …"` — and the CLI prints it on two
+                    # lines. Matched line by line, no such message could ever be
+                    # seen provoked: the seven that existed sat in the baseline
+                    # as "nothing provokes", with corpus files provoking them
+                    # (found 2026-11-22, with GLB-152's). The template joins its
+                    # `\n` with a space, so the two lines are joined the same way.
+                    if last is not None:
+                        seen.add(E.norm(f"{last} help: {m.group(1).strip()}"))
+                    last = None
+                else:
+                    last = None
     return seen
 
 

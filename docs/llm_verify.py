@@ -274,7 +274,10 @@ def main() -> int:
         return 2
     try:
         answer = subprocess.run([ZYMBOL, "--version"], capture_output=True, text=True, timeout=10)
-        binary = answer.stdout.split()[-1]
+        # The version, not the last word: since v0.0.12 the line names the
+        # release stage after it — `zymbol 0.0.12 (alpha)` (decision D-01).
+        found = re.search(r"\d+\.\d+\.\d+", answer.stdout)
+        binary = found.group(0) if found else answer.stdout.strip()
     except Exception as e:
         print(f"llm_verify: cannot run {ZYMBOL}: {e}", file=sys.stderr)
         return 2

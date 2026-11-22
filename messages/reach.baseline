@@ -17,20 +17,15 @@ compilación	too many registers (>65535) in function '{0}'
 compilación	unsupported construct: {0}
 compilación	unsupported op {:?} in comparison pattern
 compilación	{} label '{}' not found
-ejecución	$~ writes into a collection, and this is {}\nhelp: use a[1]$~ v on an array or tuple, d[\"key\"]$~ v on a #(…)
 ejecución	'{}' is undefined — did you mean '{}°' (hot definition)?
 ejecución	(year, month, day) or (year, month, day, hour, minute, second), each ###, plus an optional zone
 ejecución	Module '{}' not loaded
 ejecución	ZyStr requires a 32-bit or 64-bit platform
-ejecución	a dictionary is addressed by key, not by position: `{}` has no meaning here\nhelp: use the key — d[\"{}\"], d[\"{}\"]$~ value, d$-[\"{}\"] — because adding a key changes what sits at each position
-ejecución	a dictionary is addressed by key, not by position\nhelp: use d[\"{}\"] — adding a key changes what sits at each position
 ejecución	a navigation step is a position or a key, got {}
 ejecución	a number with up to {} digits and {} decimals
-ejecución	a positional tuple is addressed by position, not by name: '{}'\nhelp: use t[1] — names live in a dictionary, #(key: value)
 ejecución	a single character
 ejecución	an integer of up to {} digits
 ejecución	an optional zone String
-ejecución	cannot modify tuple '{}': tuples are immutable\nhelp: use 'new = {}[i]$~ value' for a functional update
 ejecución	cannot reassign constant '{}' (declared with :=)
 ejecución	cannot run '{}': a subscript needs the zymbol command, and this program runs without it
 ejecución	cannot update {} during deep update
@@ -66,8 +61,6 @@ ejecución	std/db is not available in this build (compiled without ODBC support)
 ejecución	std/net is not available in this build (compiled without HTTP support)
 ejecución	string update index must be an integer, got {}
 ejecución	text of up to {} characters
-ejecución	the dot reaches a dictionary key, and this is {}\nhelp: use d.{} on a #(…) — for a position, use x[1]
-ejecución	the pattern #(…) requires a dictionary, got {}\nhelp: #(key: name) = d unpacks a dictionary; use (a, b) for a tuple, [a, b] for an array
 ejecución	this needs {expected} and got {got}
 ejecución	transaction already active (use savepoints to nest)
 ejecución	undefined function index {0}
