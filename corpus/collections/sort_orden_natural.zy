@@ -1,0 +1,43 @@
+// The natural order of `$^+` and `$^-` (v0.0.12, decisions D-05, D-07, D-08).
+//
+// Texts and characters by code point, in every engine and on every machine:
+// zyjs sorted texts by the browser's language (BUG-TET-001), and compared them
+// with `<` by UTF-16 code unit, so a character outside the BMP went before
+// U+E000–U+FFFF. A numeric text is not read as a number here, unlike under `<`:
+// that reading is not a total order mixed with other texts, so `$^+` keeps "10"
+// before "9". Characters were not ordered at all, and two elements with no order
+// between them were sorted as equal and the array returned untouched — reversed
+// by `$^-` — with no error, in all four engines (GLB-152).
+
+// Texts: case, accents, Cyrillic, outside the BMP
+>> ["b", "A", "a", "B"] $^+ ¶
+>> ["b", "A", "a", "B"] $^- ¶
+>> ["é", "e", "f", "E"] $^+ ¶
+>> ["Ё", "Я", "А", "ё", "а"] $^+ ¶
+>> ["～", "😀", "a"] $^+ ¶
+>> ("😀" < "～") ¶
+>> ["😀", "～"] $^ (x, y -> x < y) ¶
+
+// Numeric texts: code point under `$^+`, numbers under `<`
+>> ["10", "9", "100"] $^+ ¶
+>> ["10", "9", "100"] $^ (x, y -> x < y) ¶
+n = ["10", "9", "100"] $> (s -> #|s|)
+>> n $^+ ¶
+
+// Characters
+c = ['b', 'A', 'a']
+>> c $^+ ¶
+>> c $^- ¶
+>> [0d66, 0d65, 0d128512] $^+ ¶
+
+// Fewer than two elements: nothing to compare, nothing refused
+>> [[1]] $^+ ¶
+>> [] $^+ ¶
+
+// No natural order: a ##Type, the first element and the first that cannot meet it
+!? { >> [[2], [1]] $^+ ¶ } :! { >> "E1 " _err ¶ }
+!? { >> [(2, 1), (1, 2)] $^- ¶ } :! { >> "E2 " _err ¶ }
+!? { >> [#(a: 1), #(a: 0)] $^+ ¶ } :! { >> "E3 " _err ¶ }
+!? { >> #[3, "a", 1] $^+ ¶ } :! { >> "E4 " _err ¶ }
+!? { >> #['a', "a"] $^- ¶ } :! { >> "E5 " _err ¶ }
+!? { >> [[2], [1]] $^+ ¶ } :! ##Type { >> "E6 caught as ##Type" ¶ }

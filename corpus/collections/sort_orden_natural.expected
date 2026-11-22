@@ -1,0 +1,26 @@
+[A, B, a, b]
+[b, a, B, A]
+[E, e, f, é]
+[Ё, А, Я, а, ё]
+[a, ～, 😀]
+#0
+[～, 😀]
+[10, 100, 9]
+[9, 10, 100]
+[9, 10, 100]
+[A, a, b]
+[b, a, A]
+[A, B, 😀]
+[[1]]
+[]
+E1 ##Type($^+ cannot order Array and Array
+help: give the order with a comparator: $^ (a, b -> …))
+E2 ##Type($^- cannot order Tuple and Tuple
+help: give the order with a comparator: $^ (a, b -> …))
+E3 ##Type($^+ cannot order Dict and Dict
+help: give the order with a comparator: $^ (a, b -> …))
+E4 ##Type($^+ cannot order Int and String
+help: give the order with a comparator: $^ (a, b -> …))
+E5 ##Type($^- cannot order Char and String
+help: give the order with a comparator: $^ (a, b -> …))
+E6 caught as ##Type
