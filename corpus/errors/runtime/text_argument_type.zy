@@ -1,0 +1,18 @@
+// std/text refuses what is not text, as a `##Type` named by the type (D-18).
+//
+// `upper`, `lower` and `fold` take a String or a Char. Every other type is
+// swept here, each through the three functions, so that a function which let
+// one through — answering "5" for `upper(5)` — would change a line.
+<# std/text => tx
+
+id(v) { <~ v }
+valores = [id(5), id(2.5), id(#1), id([1]), id(##_), id((1, 2))]
+@ v:valores {
+    !? { >> tx::upper(v) ¶ } :! ##Type { >> _err ¶ }
+    !? { >> tx::lower(v) ¶ } :! ##Type { >> _err ¶ }
+    !? { >> tx::fold(v) ¶ } :! ##Type { >> _err ¶ }
+}
+
+// And uncaught, the run ends on it.
+>> tx::upper(42) ¶
+>> "not reached" ¶

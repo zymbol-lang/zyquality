@@ -1,0 +1,39 @@
+// std/text — upper case, lower case and case folding (D-18; GAP-ZYE-010,
+// GAP-TET-005). Unicode's rules with no locale, the same in every engine:
+// the browser ones carry a table generated from the Unicode version Rust uses,
+// so a letter newer than the browser still answers alike (Ꟗ, U+A7DD, is one
+// such: Node 24's toUpperCase did not know it).
+<# std/text => tx
+
+// The full mappings may change the length.
+>> tx::upper("straße") ¶                         // STRASSE
+>> tx::lower("ТЕТРИС") " " tx::upper("ёлка") ¶     // тетрис ЁЛКА
+>> tx::upper("ﬁ") " " tx::lower("İ")$# ¶           // FI 2
+>> tx::upper("i") ¶                               // I: no locale, never İ
+
+// The final sigma: σ inside a word, ς at its end.
+>> tx::lower("ΣΑΣ ΟΔΥΣΣΕΥΣ Σ") ¶                    // σας οδυσσευς σ
+
+// A Char: upper and lower give a String, fold gives a Char.
+>> tx::upper('ß') " " (tx::upper('ß') #?) ¶
+>> (tx::fold('Ц') #?) ¶
+
+// fold keeps the length, for a search whose positions serve in the original.
+t = "Straße in GROẞEN Städten"
+f = tx::fold(t)
+>> f " " (t$#) " " (f$#) ¶
+>> (tx::fold("Árbol") == tx::fold("áRBOL")) ¶       // #1
+>> (tx::fold("ΣΑΣ") == tx::fold("σας")) ¶           // #1: ς folds to σ
+>> (tx::fold("ſ") == tx::fold("S")) ¶               // #1
+>> (tx::fold("ß") == tx::fold("ss")) ¶              // #0: one point for one
+>> tx::fold('İ') " " tx::fold('ꭰ') ¶                 // İ Ꭰ — Cherokee folds up
+
+// Letters newer than some browsers' Unicode: U+0277 and its capital U+A7DD,
+// and U+1DF40, whose lower case is U+1DF41.
+nueva = tx::upper(##'631)
+otra = tx::lower(##'122688)
+>> ##!nueva[1] " " ##!otra[1] ¶                     // 42973 122689
+
+// Anything else is a ##Type, named by its type.
+!? { tx::upper(5) } :! ##Type { >> _err ¶ }
+!? { tx::fold([1]) } :! ##Type { >> _err ¶ }
