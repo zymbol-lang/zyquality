@@ -1,0 +1,8 @@
+# each SHOW prints the frame the next key is read on
+a
+SHOW
+b
+SHOW
+c
+SHOW
+d

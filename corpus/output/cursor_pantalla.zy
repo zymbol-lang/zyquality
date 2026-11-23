@@ -1,0 +1,27 @@
+// The terminal's cursor inside `>>|` (D-16, DIS-ZYE-004), on the virtual screen
+// of `zymbol run --keys`, where a cursor shown is one line after the frame:
+// `[cursor row,col]`. A frame with the cursor hidden has no such line.
+//
+// The cursor stays where `>>~ (row, col)` put it while the program draws
+// elsewhere, survives `>>!`, is hidden by `>>~ (0, 0)`, and can be held in a
+// variable. A place that is not one is a `##Range`; a slot that is not an Int
+// is a `##Type`; and outside `>>|` the cursor is the shell's, so it is refused.
+// The SHOW lines of the `.keys` script print the frame at each wait.
+!? { >>~ (1, 1) } :! { >> "outside >>|: refused" ¶ }
+>>| {
+    >>!
+    >>~ (1, 1) > "hello"
+    >>~ (1, 6)
+    <<| k
+    >>~ (2, 1) > "key " k
+    <<| k
+    >>!
+    >>~ (2, 1) > "cleared"
+    <<| k
+    >>~ (0, 0)
+    <<| k
+    !? { >>~ (0, 3) } :! ##Range { >>~ (3, 1) > "(0, 3) is a ##Range" }
+    !? { >>~ (1, 'x') } :! ##Type { >>~ (4, 1) > "a Char slot is a ##Type" }
+    at = (5, 2)
+    >>~ at
+}

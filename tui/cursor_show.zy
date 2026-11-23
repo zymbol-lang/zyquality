@@ -1,0 +1,19 @@
+// The terminal's cursor inside `>>|` (D-16, DIS-ZYE-004 in ZyEdit/HALLAZGOS.md).
+//
+// `>>|` hides it. `>>~ (row, col)` with nothing to print shows it there, and
+// every frame shown afterwards ends with it moved back there and shown, whatever
+// the frame drew elsewhere: the second frame draws on row 2 and still leaves
+// the cursor at row 1, column 6. `>>~ (0, 0)` hides it, and a frame after that
+// ends with nothing about the cursor. Drawing moves the terminal's cursor, so
+// the only way to see where the user sees it is the bytes, in order.
+>>| {
+    >>!
+    >>~ (1, 1) > "hello"
+    >>~ (1, 6)
+    <<| k
+    >>~ (2, 1) > "key " ##!k
+    <<| _y
+    >>~ (0, 0)
+    >>~ (3, 1) > "hidden"
+    <<| _q
+}

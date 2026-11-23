@@ -1,0 +1,7 @@
+// @reject: `>>~ (row, col)` with nothing to print shows the terminal's cursor
+// @reject: there (D-16). A style or a colour has nothing to apply to, so a
+// @reject: third slot is refused rather than ignored: the reader who wrote it
+// @reject: meant to print, and forgot `> items`. `>>~ (1, 6)` is the cursor.
+>>| {
+    >>~ (1, 6, 1)
+}

@@ -253,9 +253,24 @@ def write_baseline(rows):
         for r in sorted(rows):
             f.write(r + '\n')
 
+def zyjs_files():
+    """zymbol.js and the modules it imports: the engine is all of them.
+
+    It was one file until v0.0.12 moved the cursor's messages (D-16) into
+    `screen.js`, shared with the browser's VM; reading zymbol.js alone made
+    them look one-sided, as if zyjs said nothing when the program erred.
+    """
+    base = os.path.join(ROOT, 'web', 'src', 'zymbol')
+    main_js = os.path.join(base, 'zymbol.js')
+    files = [main_js]
+    src = io.open(main_js, encoding='utf-8').read()
+    for rel in re.findall(r"^import\s[^;]*?from\s+'(\./[^']+\.js)'", src, re.M):
+        files.append(os.path.normpath(os.path.join(base, rel)))
+    return files
+
 def main():
     R = harvest(rust_files(os.path.join(ROOT, 'interpreter', 'crates')), '"')
-    J = harvest([os.path.join(ROOT, 'web', 'src', 'zymbol', 'zymbol.js')], '"\'`')
+    J = harvest(zyjs_files(), '"\'`')
     same, only_r, only_j = sorted(set(R) & set(J)), sorted(set(R) - set(J)), sorted(set(J) - set(R))
     print('  Rust  %4d · zyjs %4d' % (len(R), len(J)))
     print('  coinciden %4d · sólo Rust %4d · sólo zyjs %4d' % (len(same), len(only_r), len(only_j)))

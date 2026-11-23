@@ -92,6 +92,12 @@ tag = "TUI"
 reason = "raw mode and key input need a real terminal — and the virtual screen `zymbol run --keys` gives in its place exists only in the Rust CLI"
 
 [[rule]]
+match = "output/cursor_pantalla.zy"
+engines = ["zyjs", "zyjsvm"]
+tag = "TUI"
+reason = "raw mode and key input need a real terminal — and the virtual screen `zymbol run --keys` gives in its place exists only in the Rust CLI; web/tests/test_keys.mjs runs it in both browser engines against this golden"
+
+[[rule]]
 match = "errors/catchable/argumentos_del_subscript.zy"
 engines = ["zyjs", "zyjsvm"]
 tag = "BASH_EXEC"

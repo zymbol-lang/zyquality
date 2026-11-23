@@ -1,0 +1,7 @@
+// @reject: `>>~ (row,)` leaves the column empty. On a `>>~` that prints, an
+// @reject: empty slot means "leave it as it is"; the cursor is placed, never
+// @reject: left half where it was, so both places are written (D-16):
+// @reject: `>>~ (1, 6)`.
+>>| {
+    >>~ (1,)
+}
