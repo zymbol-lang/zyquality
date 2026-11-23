@@ -32,10 +32,11 @@ if [ ! -d "$WEB/tests" ]; then
 fi
 command -v node >/dev/null 2>&1 || { echo "  node is not on PATH" >&2; exit 2; }
 
-# Run with node alone — test_casemap also runs the Rust binary (ZYMBOL_BIN, or
-# the build tree's), whose case tables it holds casemap.js to (D-18).
+# Run with node alone — test_casemap and test_graphemes also run the Rust binary
+# (ZYMBOL_BIN, or the build tree's), whose case tables (D-18) and grapheme
+# clusters (D-19) they hold the browser's generated tables to.
 RUN=(
-    test_agents test_casemap test_catalog test_check test_confusables test_filestore test_keys
+    test_agents test_casemap test_graphemes test_catalog test_check test_confusables test_filestore test_keys
     test_i18n_atlas test_i18n_playground test_licenses test_limits test_manual
     test_manual_v009 test_manual_v0011 test_markdown test_net test_shell test_symbols test_zyp
 )

@@ -1,0 +1,46 @@
+// tx::graphemes — a text cut into what a reader takes for one letter (D-19,
+// GAP-ZYE-007): extended grapheme clusters, UAX #29. A Char stays one code
+// point, so `$#` counts code points and the clusters are an Array of Strings.
+// Each case is built from code points, so what the source holds is unambiguous.
+// It does not print `t::width` of these clusters: there zyjs still adds the
+// columns of each code point (ZYJS-075, ZyDDT axes/term-width.toml).
+<# std/text => tx
+<# std/term => t
+
+de(cps) {
+    s = ""
+    @ cp:cps { s = s ##'cp }
+    <~ s
+}
+mostrar(nombre, s) {
+    g = tx::graphemes(s)
+    >> nombre ": " (s$#) " points, " (g$#) " clusters" ¶
+}
+
+mostrar("e + U+0301", de([101, 769]))
+mostrar("family", de([128104, 8205, 128105, 8205, 128103]))
+mostrar("flag ES", de([127466, 127480]))
+mostrar("three regional indicators", de([127466, 127480, 127466]))
+mostrar("skin tone", de([128077, 127997]))
+mostrar("hangul jamo", de([4352, 4449, 4520]))
+mostrar("devanagari conjunct", de([2325, 2381, 2359]))
+mostrar("CR LF", de([13, 10]))
+mostrar("empty", "")
+
+// The clusters themselves, and a cursor that moves by them.
+l = de([128104, 8205, 128105, 8205, 128103, 32, 101, 769, 127466, 127480])
+g = tx::graphemes(l)
+i = 0
+@ c:g {
+    i = i + 1
+    >> i ":" (c$#) " "
+}
+>> ¶
+// Deleting the cluster under the cursor, and joining the rest again.
+sin = g$-[3]
+junto = ""
+@ pieza:sin { junto = junto pieza }
+>> (junto == de([128104, 8205, 128105, 8205, 128103, 32, 127466, 127480])) ¶
+>> tx::graphemes('x') ¶
+// std/term cuts by the same clusters: never half a flag.
+>> "[" t::truncate(de([127466, 127480, 127466, 127480]), 3) "]" ¶
