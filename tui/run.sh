@@ -74,6 +74,12 @@ keys_for() {
         # One key per wait: the first frame is shown at the first `<<|`, the
         # second at `@~ 0`, the third at the second `<<|` (GAP-ZYE-015).
         frame_newline) printf '%s\n' 'x' 'q' ;;
+        # D-13 and D-14, as an xterm sends them: Home, End, PgUp, PgDn, Del,
+        # Shift+Tab, F1, F12, Shift+F5, Shift+Right, Ctrl+Left, Alt+x, Ctrl+S,
+        # a capital, then q.
+        keys_mods)     printf '%s\n' '\x1b[H' '\x1b[F' '\x1b[5~' '\x1b[6~' '\x1b[3~' \
+                           '\x1b[Z' '\x1bOP' '\x1b[24~' '\x1b[15;2~' '\x1b[1;2C' \
+                           '\x1b[1;5D' '\x1bx' '\x13' 'A' 'q' ;;
         *)             printf '%s\n' 'q' ;;
     esac
 }

@@ -335,8 +335,7 @@ rust	shared	key input (<<|)
 rust	shared	labels in scope here: §
 rust	shared	lambda syntax: x -> expr
 rust	shared	lifetime end (\)
-rust	shared	line §: '§' is not one key — write one character, or space, enter, esc, tab, backspace, up, down, left, right, ctrl+x, wait n or show
-rust	shared	line §: ctrl+ takes one letter, got '§'
+rust	shared	line §: '§' is not one key — write one character, or space, enter, esc, tab, backtab, backspace, up, down, left, right, home, end, pgup, pgdn, del or f1…f12, with shift+, alt+ or ctrl+ before it if held, or wait n, or show
 rust	shared	line §: wait takes a whole number of polls, got '§'
 rust	shared	logical and requires boolean operands, got §
 rust	shared	logical or requires boolean operands, got §

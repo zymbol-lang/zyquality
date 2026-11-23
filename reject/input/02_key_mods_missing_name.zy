@@ -1,0 +1,5 @@
+// @reject: the `,` of `<<| k, m` promises the modifiers' variable (D-14); a
+// @reject: comma with nothing after it is not `<<| k`.
+>>| {
+    <<| k,
+}

@@ -1,0 +1,17 @@
+// `<<| k, m` under `--keys` (D-13, D-14, D-15): the names the key script
+// gained, and the modifier number each one arrives with. The same rule
+// (zymbol_common::keys) decides a real keyboard's keys, so the two cannot drift.
+>>| {
+    k = 'x'
+    @ k <> 'q' {
+        <<| k, m
+        // A control character is shown as ^, so the golden holds no raw byte.
+        ? ##!k < 32 { >> "^" } _ { >> k }
+        >> " " ##!k " " m ¶
+    }
+    // No key waiting: '\0' and no modifiers.
+    <<|? p, n
+    >> "poll " ##!p " " n ¶
+    <<| solo
+    >> "solo " solo ¶
+}

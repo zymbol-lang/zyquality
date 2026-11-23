@@ -1,0 +1,24 @@
+# D-13: the keys that are not text arrive as glyphs
+HOME
+END
+PGUP
+PGDN
+DEL
+BACKTAB
+F1
+F12
+# D-14: the prefixes, in any order, on any key
+SHIFT+F5
+SHIFT+RIGHT
+CTRL+LEFT
+ALT+x
+CTRL+ALT+DEL
+# Ctrl+letter is still its control character, with m = 4
+CTRL+S
+# D-15: a capital says Shift itself, so m is 0 either way
+A
+SHIFT+A
+SHIFT+TAB
+q
+WAIT 1
+z

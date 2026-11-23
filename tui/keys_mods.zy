@@ -1,0 +1,13 @@
+// What `<<| k, m` yields for the keys D-13 named and the modifiers D-14 added,
+// from the escape sequences a real terminal sends — the part `--keys` cannot
+// test, because a key script never goes through crossterm's parser.
+//
+// Each line is the key's code point and `m` (Shift 1, Alt 2, Ctrl 4). A capital
+// typed with Shift arrives with m = 0: the character already says it (D-15).
+>>| {
+    k = 'x'
+    @ k <> 'q' {
+        <<| k, m
+        >> ##!k " " m ¶
+    }
+}

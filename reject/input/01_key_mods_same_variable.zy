@@ -1,0 +1,7 @@
+// @reject: `<<| k, m` puts the key in `k` and its modifiers in `m` (D-14). One
+// @reject: name for both would hold a Char and then an Int from the same
+// @reject: statement, and which one it ended with would be an engine's choice.
+// @reject: `<<| k, m` with two names is the form that works.
+>>| {
+    <<| k, k
+}
