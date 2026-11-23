@@ -80,6 +80,8 @@ keys_for() {
         keys_mods)     printf '%s\n' '\x1b[H' '\x1b[F' '\x1b[5~' '\x1b[6~' '\x1b[3~' \
                            '\x1b[Z' '\x1bOP' '\x1b[24~' '\x1b[15;2~' '\x1b[1;2C' \
                            '\x1b[1;5D' '\x1bx' '\x13' 'A' 'q' ;;
+        # D-17: the window changes size twice, with no key between; then q.
+        resize_key)    printf '%s\n' 'RESIZE:12x60' 'RESIZE:20x40' 'q' ;;
         # D-16: one key per frame — the cursor shown, kept, then hidden.
         cursor_show)   printf '%s\n' 'x' 'y' 'q' ;;
         *)             printf '%s\n' 'q' ;;

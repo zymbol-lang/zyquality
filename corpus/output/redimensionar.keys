@@ -1,0 +1,8 @@
+# a key that is not a resize, then two resizes
+x
+RESIZE 10 30
+SHOW
+y
+RESIZE 4 12
+z
+q

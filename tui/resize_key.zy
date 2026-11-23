@@ -1,0 +1,14 @@
+// A change of the window's size wakes `<<|` with `⤢` (D-17, GAP-ZYE-012).
+//
+// ptydrive.py changes the pty's size with no key sent; the kernel tells the
+// program with SIGWINCH. Each line printed is the key `<<|` returned, its
+// modifiers, and what `>>?` answers after it: 10530 is `⤢`, and the size must
+// be the new one. Before D-17 the program learned nothing until `q`.
+>>| {
+    @ {
+        <<| k, m
+        ? k == 'q' { @! }
+        (h, w) = >>?
+        >> "key " ##!k " m " m " size " h "x" w ¶
+    }
+}

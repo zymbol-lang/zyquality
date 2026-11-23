@@ -7,6 +7,9 @@ only way to test key input without a human at the keyboard.
 Keys are sent interleaved with reading, not up front: a program that has not
 yet put the terminal into raw mode is still line-buffered, and anything sent
 before that point is either echoed or swallowed.
+
+A step written `RESIZE:<rows>x<cols>` is not a key: the pty takes that size, and
+the kernel tells the program with SIGWINCH, as when a window is dragged (D-17).
 """
 import os, pty, sys, time, select, signal, fcntl, termios, struct
 
@@ -37,7 +40,12 @@ def run(cmd, keys, settle=0.35, quiet=0.6, timeout=12.0, rows=30, cols=100):
             out += chunk
             last_read = time.time()
         elif pending:
-            os.write(fd, pending.pop(0))    # it is waiting: give it a key
+            step = pending.pop(0)           # it is waiting: give it a key
+            if step.startswith(b"RESIZE:"):
+                r_, c_ = step[7:].split(b"x")
+                fcntl.ioctl(fd, termios.TIOCSWINSZ, struct.pack("HHHH", int(r_), int(c_), 0, 0))
+            else:
+                os.write(fd, step)
             time.sleep(0.05)
         elif time.time() - last_read > quiet:
             break                           # no keys left and nothing coming

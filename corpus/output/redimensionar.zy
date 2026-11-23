@@ -1,0 +1,24 @@
+// A change of the window's size arrives at `<<|` as `⤢` (D-17, GAP-ZYE-012),
+// here from the `RESIZE rows cols` steps of `redimensionar.keys`: the screen
+// takes the new size, `>>?` answers it, and the program redraws. What was drawn
+// keeps its place and what no longer fits is cut, which the SHOW after the
+// first resize holds: the long line is cut at column 30 before any redraw. The
+// last row is written first and last, so the frame shows the bottom-right cell.
+>>| {
+    (h, w) = >>?
+    >>~ (1, 1) > "size " h "x" w
+    >>~ (2, 1) > "a line that is longer than thirty columns"
+    @ {
+        <<| k, m
+        ? k == 'q' { @! }
+        ? k == '⤢' {
+            >>~ (3, 1) > "woken by " ##!k " m=" m
+            <<| _k2
+            (h, w) = >>?
+            >>!
+            >>~ (1, 1) > "resized to " h "x" w
+            >>~ (h, 1) > "row " h
+            >>~ (h, w) > "#"
+        }
+    }
+}
