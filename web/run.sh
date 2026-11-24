@@ -35,9 +35,11 @@ command -v node >/dev/null 2>&1 || { echo "  node is not on PATH" >&2; exit 2; }
 # Run with node alone — test_casemap, test_graphemes and test_normalize also run
 # the Rust binary (ZYMBOL_BIN, or the build tree's), whose case tables (D-18),
 # grapheme clusters (D-19) and NFC of names (D-20) they hold the browser's
-# generated tables to.
+# generated tables to; test_lookalike opens a document in the language server
+# (ZYMBOL_LSP_BIN, or the build tree's) and holds the playground's look-alike
+# names hint to its warnings (D-21).
 RUN=(
-    test_agents test_casemap test_graphemes test_normalize test_catalog test_check test_confusables test_filestore test_keys
+    test_agents test_casemap test_graphemes test_normalize test_lookalike test_catalog test_check test_confusables test_filestore test_keys
     test_i18n_atlas test_i18n_playground test_licenses test_limits test_manual
     test_manual_v009 test_manual_v0011 test_markdown test_net test_shell test_symbols test_zyp
 )

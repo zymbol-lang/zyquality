@@ -255,7 +255,7 @@ gate = true
 id = "web"
 cmd = ["bash", "web/run.sh"]
 desc = "the web repository's own suites: example pool, Markdown twins, licences, published skill, playground translations and symbol cards, shell stand-ins"
-needs = ["node", "zymbol", "web", "interpreter"]
+needs = ["node", "zymbol", "zymbol-lsp", "web", "interpreter"]
 # `web/` keeps suites for the things that are not the language, and until
 # 2026-10-10 none of them was here: `zyq suite` could be green over a playground
 # whose published games could not seed their generator (ZYJS-059, red for days
