@@ -1,0 +1,7 @@
+// The module of `i18n/nombres_nfc.zy`. Its file name spells `ё` decomposed
+// (U+0435 U+0308); the declaration below spells it composed, and the two are one
+// name (D-20).
+# nfc_ёж_m {
+    #> { йти }
+    йти() { <~ "import ok" }
+}

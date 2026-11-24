@@ -1,0 +1,52 @@
+// Names are read in NFC (D-20, decided 2026-11-23): a name typed composed and
+// the same name typed decomposed are one name. Every pair below writes a name
+// once each way — the comment on a line says which (c: composed, d: decomposed).
+// Strings are data: they keep what was written.
+
+<# ../modules_scope/nfc_ёж_m => ёж    // the path as the file is named (d), the alias c
+
+й = 2                          // d: U+0438 U+0306
+>> й ¶                         // c: U+0439
+
+café = 3                       // d
+>> café " {café}" ¶            // c, and d inside the interpolation
+
+Việt = 4                      // d: dot below, then circumflex
+>> Việt " " Việt ¶             // c, and d in the other mark order
+
+// A function and its parameter.
+añadir(año) { <~ año + 1 }
+>> añadir(1) ¶
+
+// Hangul: jamo L V T against the syllable.
+한 = "ok"
+>> 한 ¶
+
+// A label.
+@:ёлка i:1..5 {
+    ? i == 3 { @:ёлка! }
+    >> i " "
+}
+>> ¶
+
+// A hot name, anchored above the loop so it outlives it.
+@ _k:1..3 {
+    °ёмкость += 2
+}
+>> ёмкость ¶
+
+// An error kind.
+r = ##ёж("колючий")
+>> ?? r {
+    ##ёж(m) => ("caught: " m)
+    _ => "missed"
+} ¶
+
+// The module imported above: its file name is spelled decomposed, so the path
+// is written as the file is named; the alias and the names it exports are names.
+>> ёж::йти() ¶
+
+// Strings keep what was written.
+s = "й"
+t = "й"
+>> s$# " " t$# " " (s == t) ¶
