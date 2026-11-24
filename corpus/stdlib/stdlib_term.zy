@@ -29,6 +29,6 @@
 >> "[" t::truncate("short", 20) "]" ¶
 
 // pairs with ##! on a Char: classify by code-point range
-n = ##!'A'
+n = 0d|'A'|
 >> n ¶                        // 65
->> ##!'あ' ¶                  // 12354
+>> 0d|'あ'| ¶                  // 12354

@@ -1,8 +1,8 @@
 // Test: base conversion never writes fewer digits than a byte takes (D-23)
 // A byte is a Char from 0x00 to 0xFF, and its literal can be written in any
 // base. `0x|…|`, `0o|…|` and `0b|…|` read it back with the width of one byte,
-// so the 256 of them line up in a column; `0d|…|` writes the decimal as it is
-// read. A larger value takes the digits it needs.
+// so the 256 of them line up in a column, and a larger value takes the digits
+// it needs. `0d|…|` gives the code itself, a number (D-24).
 
 // The two ends of a byte, written in each base, are one Char
 >> (0x00 == 0d0) " " (0d00 == 0b00000000) " " (0b00000000 == 0o000) ¶
@@ -17,15 +17,15 @@ a = 'A'
 >> 0x|a| " " 0d|a| " " 0o|a| " " 0b|a| ¶
 
 // An Int is written the same way as the Char with that code
->> 0x|65| " " 0d|65| " " 0o|65| " " 0b|65| ¶
+>> 0x|65| " " 0o|65| " " 0b|65| ¶
 >> (0x|65| == 0x|'A'|) " " (0b|1| == 0b|0x01|) ¶
 
 // Past a byte, the digits it needs
->> 0x|256| " " 0o|256| " " 0b|256| " " 0d|256| ¶
+>> 0x|256| " " 0o|256| " " 0b|256| ¶
 >> 0x|'€'| " " 0d|'€'| ¶
 
 // The sign in front, the padding after it
->> 0x|(0 - 1)| " " 0o|(0 - 1)| " " 0b|(0 - 1)| " " 0d|(0 - 1)| ¶
+>> 0x|(0 - 1)| " " 0o|(0 - 1)| " " 0b|(0 - 1)| ¶
 
 // What it writes reads back as the same Char
 tx = 0x|hi|
@@ -38,7 +38,7 @@ xs = 0
 bs = 0
 os = 0
 @ i:0..255 {
-    c = ##'i
+    c = 0d|i|
     ? 0x|c|$# <> 4 { xs = xs + 1 }
     ? 0b|c|$# <> 10 { bs = bs + 1 }
     ? 0o|c|$# <> 5 { os = os + 1 }

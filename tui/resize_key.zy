@@ -9,6 +9,6 @@
         <<| k, m
         ? k == 'q' { @! }
         (h, w) = >>?
-        >> "key " ##!k " m " m " size " h "x" w ¶
+        >> "key " 0d|k| " m " m " size " h "x" w ¶
     }
 }

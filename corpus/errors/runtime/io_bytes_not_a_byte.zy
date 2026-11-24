@@ -6,7 +6,7 @@
 <# std/io => io
 
 tmp = "zy_io_bytes_not_a_byte.bin"
-@ c:[##'256, 'あ', ##'128512] {
+@ c:[0d|256|, 'あ', 0d|128512|] {
     !? { io::write_bytes(tmp, "ok" c) } :! ##Range { >> _err ¶ }
 }
 >> io::exists(tmp) ¶

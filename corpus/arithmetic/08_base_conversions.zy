@@ -11,5 +11,6 @@ bin_str = 0b|65|
 oct_str = 0o|8|
 >> oct_str ¶
 
+// 0d|n| is the character with that code since v0.0.12 (D-24)
 dec_str = 0d|255|
 >> dec_str ¶

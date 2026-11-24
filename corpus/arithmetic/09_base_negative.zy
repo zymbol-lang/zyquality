@@ -6,9 +6,12 @@
 // integer model of ±(2^53 − 1) does not have; zyjs put the sign inside the
 // padding.
 m = 0 - 1
->> 0x|m| " " 0b|m| " " 0o|m| " " 0d|m| ¶
+>> 0x|m| " " 0b|m| " " 0o|m| ¶
 >> 0x|(0 - 255)| " " 0x|255| ¶
 >> 0x|(0 - 9007199254740991)| " " 0x|9007199254740991| ¶
->> 0x|0| " " 0d|0| ¶
+>> 0x|0| ¶
+// `0d|…|` of an Int is the character with that code since v0.0.12 (D-24), so a
+// negative one is no character: ##Range, not a sign.
+!? { >> 0d|m| ¶ } :! ##Range { >> "range" ¶ }
 r = 0b|(0 - 5)|
 >> r " " r$# ¶

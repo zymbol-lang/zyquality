@@ -4,7 +4,7 @@
 // A lambda that turns the characters into something else has left the text
 // behind, and the answer is an array. zymbol.js glued the results together
 // whatever they were: `979899` where the Rust engines answer `[97, 98, 99]`.
-codes = "abc" $> (c -> ##!c)
+codes = "abc" $> (c -> 0d|c|)
 >> codes " " (codes#?)[1] ¶
 
 same = "abc" $> (c -> c)
@@ -25,5 +25,5 @@ mixed = "ab" $> (c -> {
 kept = "abcab" $| (c -> c <> 'b')
 >> kept " " (kept#?)[1] ¶
 
-total = "abc" $< (0, (n, c) -> n + ##!c)
+total = "abc" $< (0, (n, c) -> n + 0d|c|)
 >> total ¶

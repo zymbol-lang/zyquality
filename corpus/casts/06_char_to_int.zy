@@ -1,28 +1,32 @@
-// Test: ##! (ToIntTrunc) on a Char yields its Unicode code point.
-// This is the only direct Char→Int route in Zymbol, and it makes characters
-// classifiable by range (Char is not otherwise comparable or castable).
+// Test: 0d|c| gives a character's code point, an Int (D-24, v0.0.12).
+// `0d` is the door between a character and its code: the element of a
+// character in decimal is the number. It was `##!c` from v0.0.8 to v0.0.11,
+// which no longer takes a Char.
 
->> ##!'A' ¶        // 65
->> ##!'z' ¶        // 122
->> ##!'0' ¶        // 48
->> ##!' ' ¶        // 32
->> ##!'あ' ¶       // 12354  (hiragana A)
->> ##!'⚫' ¶       // 9899
+>> 0d|'A'| ¶        // 65
+>> 0d|'z'| ¶        // 122
+>> 0d|'0'| ¶        // 48
+>> 0d|' '| ¶        // 32
+>> 0d|'あ'| ¶       // 12354  (hiragana A)
+>> 0d|'⚫'| ¶       // 9899
 
 // Result type is Int
-r = ##!'A'
+r = 0d|'A'|
 meta = r#?
 >> meta[1] ¶       // ###
 
-// Iterating a string yields Chars; ##! turns each into its code point
+// Iterating a string yields Chars; 0d|…| turns each into its code point
 total = 0
 @ c:"ABC" {
-    total = total + ##!c
+    total = total + 0d|c|
 }
 >> total ¶         // 65+66+67 = 198
 
 // Usable in a range classification (is 'M' an ASCII uppercase letter?)
-p = ##!'M'
+p = 0d|'M'|
 ? p >= 65 && p <= 90 {
     >> "upper" ¶
 }
+
+// A base literal is a Char, so its code is 0d|…| of it
+>> 0d|0x41| " " 0d|0b11111111| " " 0d|0o101| ¶   // 65 255 65

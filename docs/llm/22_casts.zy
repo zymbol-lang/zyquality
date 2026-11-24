@@ -1,9 +1,13 @@
 // claim: `##.x` Float, `###x` Int (round),
-// claim: `##!x` Int (truncate; `Char`→code point), `##'x` Char (an Int code point → its character;
+// claim: `##!x` Int (truncate). A character and its code cross through `0d|…|` only: `0d|'A'|` is `65`,
+// claim: `0d|65|` is `'A'`, and a code with no character is an error; `0x|c|`, `0o|c|`, `0b|c|` write
+// claim: its code as text (`"0x41"`), and `0x|"41"|` reads it back.
 x = 2.7
 n = 65
 >> ###x ¶             // → 3
 >> ##!x ¶             // → 2
 >> ##.n + 0.5 ¶       // → 65.5
->> ##'n ¶             // → A
->> ##!'A' ¶           // → 65
+>> 0d|n| ¶            // → A
+>> 0d|'A'| ¶          // → 65
+>> 0x|'A'| ¶          // → 0x41
+>> 0x|"41"| ¶         // → A
