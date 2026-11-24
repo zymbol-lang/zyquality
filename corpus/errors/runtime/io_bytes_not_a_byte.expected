@@ -1,0 +1,7 @@
+##Range(io::write_bytes: 'Ā' is U+0100, out of range for a byte: a byte is a Char from 0x00 to 0xFF)
+##Range(io::write_bytes: 'あ' is U+3042, out of range for a byte: a byte is a Char from 0x00 to 0xFF)
+##Range(io::write_bytes: '😀' is U+1F600, out of range for a byte: a byte is a Char from 0x00 to 0xFF)
+#0
+##_(io::read_bytes: expected String path)
+##_(io::write_bytes: expected (String, String))
+Runtime error: io::write_bytes: 'Ā' is U+0100, out of range for a byte: a byte is a Char from 0x00 to 0xFF

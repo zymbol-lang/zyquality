@@ -431,6 +431,7 @@ zyjs	shared	only one '*rest' is allowed in a destructure pattern — two rests c
 zyjs	shared	program stopped
 zyjs	shared	standard library module 'std/db' is not available in the web playground (requires odbc)
 zyjs	shared	standard library module '§' not found
+zyjs	shared	stream did not contain valid utf-8
 zyjs	shared	this `#[…]` has no mixed types: every element is § = help: use `[…]` — `#[…]` is for declaring a mix that is deliberate
 zyjs	shared	unknown collection operator: §
 zyjs	shared	unknown nav spec kind: §

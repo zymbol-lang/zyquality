@@ -1,0 +1,18 @@
+// io::write_bytes refuses a Char that is no byte, as a `##Range` (D-22).
+//
+// A byte is a Char from 0x00 to 0xFF. One past it — the first after, a kana,
+// an emoji — is refused before the file is opened, so nothing is written.
+// A path or a text that is no String is refused too, as for io::write.
+<# std/io => io
+
+tmp = "zy_io_bytes_not_a_byte.bin"
+@ c:[##'256, 'あ', ##'128512] {
+    !? { io::write_bytes(tmp, "ok" c) } :! ##Range { >> _err ¶ }
+}
+>> io::exists(tmp) ¶
+!? { io::read_bytes(5) } :! ##_ { >> _err ¶ }
+!? { io::write_bytes(tmp, 5) } :! ##_ { >> _err ¶ }
+
+// And uncaught, the run ends on it.
+io::write_bytes(tmp, "Ā")
+>> "not reached" ¶

@@ -1,0 +1,8 @@
+##IO(stream did not contain valid UTF-8)
+11 255 254 #1 #1
+#1
+256 #1 0 255
+2 0x00C3 0x00A9 é
+##Range
+é
+#0
