@@ -15,7 +15,7 @@ xxx xxña aaaaaa
 8 casts:
 7 4 -4 3
 9 hex:
-0x00FF 0x0001 0b101
+0xFF 0x01 0b00000101
 10 colecciones:
 [1, 2.5] [1, a, b, #1, [2]] (1, (2, 3)) #(a: [1, 2], b: #(c: 1))
 11 unit en coleccion:

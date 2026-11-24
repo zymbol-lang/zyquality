@@ -30,7 +30,7 @@ back = io::read_bytes(tmp)
 // A UTF-8 file seen as bytes: é is C3 A9, and io::read still reads it as text.
 io::write(tmp, "é")
 e = io::read_bytes(tmp)
->> e$# " " 0x|##!e[1]| " " 0x|##!e[2]| " " io::read(tmp) ¶
+>> e$# " " 0x|e[1]| " " 0x|e[2]| " " io::read(tmp) ¶
 
 // A Char past 0xFF is no byte: ##Range, and the file is left as it was.
 !? {
