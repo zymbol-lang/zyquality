@@ -1,0 +1,22 @@
+5 165 240
+240 9007199254740991
+9007199254740991
+16 15 4503599627370496 0
+0
+0x34 0x12 0x12 0x34 2
+4660 4660 127
+6 281474976710655
+-1 127 -32768
+4660
+range ##Range(integer overflow: bits::shl(1, 53))
+range ##Range(bits::and: -1 is out of range: bits are taken of integers from 0 to 9007199254740991)
+range ##Range(bits::not: 256 is out of range for 8 bits)
+range ##Range(bits::not: a width of 54 bits is out of range: it goes from 1 to 53)
+range ##Range(bits::to_le: 256 is out of range for 1 bytes)
+range ##Range(bits::to_le: 7 bytes is out of range: a word goes from 1 to 6)
+range ##Range(bits::from_le: '€' is U+20AC, out of range for a byte: a byte is a Char from 0x00 to 0xFF)
+range ##Range(bits::from_le: 0 bytes is out of range: a word goes from 1 to 6)
+range ##Range(bits::signed: 256 is out of range for 8 bits)
+range ##Range(bits::shr: a shift of -1 is out of range: it goes from 0)
+type ##Type(bits::xor: argument type must be Int or Char, got Float)
+type ##Type(bits::from_be: argument type must be String or Char, got Int)

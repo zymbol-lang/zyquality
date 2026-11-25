@@ -1,0 +1,10 @@
+// Test: $* repeats a Char as the one-character text it is (D-27, decided by
+// the author 2026-11-25): a buffer of n bytes is `0x00 $* n`. Three engines
+// already took it; zyjs refused it until then.
+z = 0x00
+b = z $* 4
+c = "" 0x00 0x00 0x00 0x00
+>> b$# " " (b#?)[1] " " (b == c) ¶
+>> 'é' $* 3 " " (0x41 $* 0)$# ¶
+// Anything else is no text
+!? { >> [1] $* 2 ¶ } :! ##Type { >> "type " _err ¶ }

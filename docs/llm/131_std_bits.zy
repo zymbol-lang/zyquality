@@ -1,0 +1,8 @@
+// claim: `std/bits` (`and or xor shl shr not to_le to_be from_le from_be signed` — the bits of a
+// claim: non-negative Int up to 2⁵³ − 1, a Char taken as its code; `not(n, w)` and `signed(n, w)` take
+// claim: a width; `to_le(n, k)` writes `k` bytes, 1 to 6).
+<# std/bits => b
+>> b::and(0xA5, 0x0F) " " b::xor(255, 15) ¶      // → 5 240
+>> b::not(0x0F, 8) " " b::signed(0xFF, 8) ¶      // → 240 -1
+w = b::to_le(4660, 2)
+>> w$# " " b::from_le(w) ¶                       // → 2 4660

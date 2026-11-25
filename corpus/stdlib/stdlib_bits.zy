@@ -1,0 +1,43 @@
+// Test: std/bits — the bits of an integer, and words of several bytes (D-28).
+// The bits are those of a non-negative integer, up to 2^53 - 1; `not` and
+// `signed` take the width they need, because an Int of Zymbol has none. A Char
+// is its code, so the byte literals are taken as they are written.
+<# std/bits => b
+
+// Bit by bit
+>> b::and(0xA5, 0x0F) " " b::or(0xA0, 0x05) " " b::xor(0xFF, 0x0F) ¶
+>> b::not(0x0F, 8) " " b::not(0, 53) ¶
+>> b::and(9007199254740991, 9007199254740991) ¶
+
+// Shifts: shl overflows past the range, shr runs out to 0
+>> b::shl(1, 4) " " b::shr(0xF0, 4) " " b::shl(1, 52) " " b::shr(5, 500) ¶
+>> b::shl(0, 500) ¶
+
+// Words of several bytes, either end first
+w = b::to_le(4660, 2)
+v = b::to_be(4660, 2)
+>> 0x|w[1]| " " 0x|w[2]| " " 0x|v[1]| " " 0x|v[2]| " " w$# ¶
+>> b::from_le(w) " " b::from_be(v) " " b::from_le(0x7F) ¶
+top = b::to_be(281474976710655, 6)
+>> top$# " " b::from_be(top) ¶
+>> b::signed(0xFF, 8) " " b::signed(0x7F, 8) " " b::signed(32768, 16) ¶
+
+// A word read out of a buffer
+buf = 0x00 $* 4
+buf[2]$~ 0x34
+buf[3]$~ 0x12
+>> b::from_le(buf$[2..3]) ¶
+
+// The refusals, each in its family
+!? { >> b::shl(1, 53) ¶ } :! ##Range { >> "range " _err ¶ }
+!? { >> b::and(0 - 1, 1) ¶ } :! ##Range { >> "range " _err ¶ }
+!? { >> b::not(256, 8) ¶ } :! ##Range { >> "range " _err ¶ }
+!? { >> b::not(1, 54) ¶ } :! ##Range { >> "range " _err ¶ }
+!? { >> b::to_le(256, 1) ¶ } :! ##Range { >> "range " _err ¶ }
+!? { >> b::to_le(1, 7) ¶ } :! ##Range { >> "range " _err ¶ }
+!? { >> b::from_le("€") ¶ } :! ##Range { >> "range " _err ¶ }
+!? { >> b::from_le("") ¶ } :! ##Range { >> "range " _err ¶ }
+!? { >> b::signed(256, 8) ¶ } :! ##Range { >> "range " _err ¶ }
+!? { >> b::shr(1, 0 - 1) ¶ } :! ##Range { >> "range " _err ¶ }
+!? { >> b::xor(1.5, 1) ¶ } :! ##Type { >> "type " _err ¶ }
+!? { >> b::from_be(1) ¶ } :! ##Type { >> "type " _err ¶ }
