@@ -1,6 +1,6 @@
 // Test: std/io read_bytes / write_bytes — a file's bytes as a text of bytes
 // (D-22, decided 2026-11-24). A byte is a Char from 0x00 to 0xFF, the way the
-// language already writes one (0x01, 0d|n|), so a file that is not UTF-8 can be
+// language already writes one (0x01, |n|), so a file that is not UTF-8 can be
 // read, looked at and written back as it was.
 <# std/io => io
 
@@ -14,7 +14,7 @@ r = io::read(tmp)
 
 // read_bytes gives one Char per byte, and they are the bytes written.
 b = io::read_bytes(tmp)
->> b$# " " 0d|b[5]| " " 0d|b[6]| " " (b[5] == 0xFF) " " (b == bad) ¶
+>> b$# " " #|b[5]| " " #|b[6]| " " (b[5] == 0xFF) " " (b == bad) ¶
 
 // The round trip: written back, read again, the same bytes.
 io::write_bytes(tmp, b)
@@ -22,10 +22,10 @@ io::write_bytes(tmp, b)
 
 // Every byte from 0x00 to 0xFF, there and back.
 all = ""
-@ n:0..255 { all = all 0d|n| }
+@ n:0..255 { all = all |n| }
 io::write_bytes(tmp, all)
 back = io::read_bytes(tmp)
->> back$# " " (back == all) " " 0d|back[1]| " " 0d|back[256]| ¶
+>> back$# " " (back == all) " " #|back[1]| " " #|back[256]| ¶
 
 // A UTF-8 file seen as bytes: é is C3 A9, and io::read still reads it as text.
 io::write(tmp, "é")

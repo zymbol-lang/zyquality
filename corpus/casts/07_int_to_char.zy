@@ -1,32 +1,33 @@
-// Test: 0d|n| turns an Int code point into its Char (D-24, v0.0.12) — the
-// pair of 06_char_to_int. It was `##'n` from v0.0.10 to v0.0.11 (GLB-109).
+// Test: the bare bars |n| turn an Int code point into its Char (D-25,
+// v0.0.12) — the pair of 06_char_to_int. It was `##'n` from v0.0.10 to
+// v0.0.11 (GLB-109), and `0d|n|` for a day of v0.0.12 (D-24).
 
->> 0d|65| ¶           // A
->> 0d|122| ¶          // z
->> 0d|12354| ¶        // あ  (hiragana A)
+>> |65| ¶           // A
+>> |122| ¶          // z
+>> |12354| ¶        // あ  (hiragana A)
 
 // Result type is Char
-c = 0d|66|
+c = |66|
 meta = c#?
 >> meta[1] ¶          // ##'
 
 // A computed code, which no literal can spell: shift each letter by 3
 shifted = ""
 @ ch:"abc" {
-    shifted = shifted 0d|0d|ch| + 3|
+    shifted = shifted |#|ch| + 3|
 }
 >> shifted ¶          // def
 
 // Round trip at the edges of Unicode
 @ code:[0, 55295, 57344, 1114111] {
-    back = 0d|code|
-    >> (0d|back| == code) ¶
+    back = |code|
+    >> (#|back| == code) ¶
 }
 
 // A code with no character is ##Range: past 0x10FFFF, a surrogate, below 0
 @ code:[1114112, 55296, -1] {
     !? {
-        >> 0d|code| ¶
+        >> |code| ¶
     } :! ##Range {
         >> "range" ¶
     }
@@ -34,10 +35,10 @@ shifted = ""
 
 // Only an Int is a code: a Float, even a whole one, is ##Type
 !? {
-    >> 0d|65.0| ¶
+    >> |65.0| ¶
 } :! ##Type {
     >> "type" ¶
 }
 
-// The other three bases write the code as text, and read it back
->> 0x|(0d|65|)| " " 0x|"41"| " " 0b|"01000001"| " " 0o|"101"| ¶   // 0x41 A A A
+// The bases write the code as text, and the bare bars read any of them back
+>> 0x|65| " " 0d|65| " " |"0x41"| " " |"0b01000001"| " " |"0o101"| " " |"65"| ¶   // 0x41 0d65 A A A A

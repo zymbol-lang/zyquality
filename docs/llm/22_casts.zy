@@ -1,13 +1,14 @@
 // claim: `##.x` Float, `###x` Int (round),
-// claim: `##!x` Int (truncate). A character and its code cross through `0d|…|` only: `0d|'A'|` is `65`,
-// claim: `0d|65|` is `'A'`, and a code with no character is an error; `0x|c|`, `0o|c|`, `0b|c|` write
-// claim: its code as text (`"0x41"`), and `0x|"41"|` reads it back.
+// claim: `##!x` Int (truncate). Three doors, one per result: `0x|v|`, `0d|v|`, `0o|v|`, `0b|v|` give the
+// claim: text in that base (`0d|'A'|` is `"0d65"`), the bare bars `|v|` the character (`|65|` and `|"0x41"|`
+// claim: are `'A'`), and `#|v|` the number (`#|'A'|` is `65`); a code with no character is an error.
 x = 2.7
 n = 65
 >> ###x ¶             // → 3
 >> ##!x ¶             // → 2
 >> ##.n + 0.5 ¶       // → 65.5
->> 0d|n| ¶            // → A
->> 0d|'A'| ¶          // → 65
+>> 0d|'A'| ¶          // → 0d65
 >> 0x|'A'| ¶          // → 0x41
->> 0x|"41"| ¶         // → A
+>> |n| ¶              // → A
+>> |"0x41"| ¶         // → A
+>> #|'A'| ¶           // → 65

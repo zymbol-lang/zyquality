@@ -9,7 +9,7 @@
 
 de(cps) {
     s = ""
-    @ cp:cps { s = s 0d|cp| }
+    @ cp:cps { s = s |cp| }
     <~ s
 }
 mostrar(nombre, s) {

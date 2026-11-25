@@ -1,0 +1,21 @@
+0d65
+0d65 0d65 0d65
+0x41 0o101 0b01000001
+0x41 0b00000101 0o041
+A A A A A A
+#1 #1
+65 65 65 5 -1
+55 7
+-0x01 B 0b00110000
+aB aBCD
+0x1F0000 2031616
+#1 #1 #1
+#1 #1 #1
+#1 #1 #1
+#1 #1 #1
+range ##Range(character out of range: |…| cannot represent this code)
+parse ##Parse(failed to parse 'ZZ' as hexadecimal number)
+parse ##Parse(failed to parse '41' as binary number)
+type ##Type(base conversion expressions work with char, int, or string, got Float)
+type ##Type(|…| works with char, int, or string, got Bool)
+range ##Range(integer overflow: 'FFFFFFFFFFFFFFFF' is past the integer range)

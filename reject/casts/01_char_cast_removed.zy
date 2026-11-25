@@ -1,6 +1,6 @@
 // @reject: `##'n`, the cast from a code to its character, was removed in
-// @reject: v0.0.12 (D-24): a character and its code cross through `0d|…|`
-// @reject: only — `0d|65|` is 'A'. Refused before anything runs, with a help
+// @reject: v0.0.12 (D-24): a code becomes its character with the bare bars
+// @reject: — `|65|` is 'A' (D-25). Refused before anything runs, with a help
 // @reject: line naming the form to write.
 n = 65
 >> ##'n ¶

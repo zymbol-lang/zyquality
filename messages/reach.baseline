@@ -19,7 +19,7 @@ compilación	unsupported op {:?} in comparison pattern
 compilación	{} label '{}' not found
 ejecución	'{}' is undefined — did you mean '{}°' (hot definition)?
 ejecución	(year, month, day) or (year, month, day, hour, minute, second), each ###, plus an optional zone
-ejecución	IntToChar is retired: a code becomes its character with 0d|n|
+ejecución	IntToChar is retired: a code becomes its character with |n|
 ejecución	Module '{}' not loaded
 ejecución	ZyStr requires a 32-bit or 64-bit platform
 ejecución	a navigation step is a position or a key, got {}

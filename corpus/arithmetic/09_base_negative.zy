@@ -10,8 +10,9 @@ m = 0 - 1
 >> 0x|(0 - 255)| " " 0x|255| ¶
 >> 0x|(0 - 9007199254740991)| " " 0x|9007199254740991| ¶
 >> 0x|0| ¶
-// `0d|…|` of an Int is the character with that code since v0.0.12 (D-24), so a
-// negative one is no character: ##Range, not a sign.
-!? { >> 0d|m| ¶ } :! ##Range { >> "range" ¶ }
+// The decimal carries its sign as the others do (D-25); the character of a
+// negative code does not exist: ##Range.
+>> 0d|m| ¶
+!? { >> |m| ¶ } :! ##Range { >> "range" ¶ }
 r = 0b|(0 - 5)|
 >> r " " r$# ¶

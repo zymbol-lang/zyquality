@@ -1,5 +1,5 @@
 // @reject: `##!` truncates a Float, and since v0.0.12 (D-24) it does not take
-// @reject: a Char: a character's code is `0d|c|`. Refused before anything runs
+// @reject: a Char: a character's code is `#|c|` (D-25). Refused before anything runs
 // @reject: when the operand is known to be a character.
 c = 'A'
 >> ##!c ¶

@@ -30,9 +30,9 @@ f = tx::fold(t)
 
 // Letters newer than some browsers' Unicode: U+0277 and its capital U+A7DD,
 // and U+1DF40, whose lower case is U+1DF41.
-nueva = tx::upper(0d|631|)
-otra = tx::lower(0d|122688|)
->> 0d|nueva[1]| " " 0d|otra[1]| ¶                     // 42973 122689
+nueva = tx::upper(|631|)
+otra = tx::lower(|122688|)
+>> #|nueva[1]| " " #|otra[1]| ¶                     // 42973 122689
 
 // Anything else is a ##Type, named by its type.
 !? { tx::upper(5) } :! ##Type { >> _err ¶ }

@@ -2,7 +2,7 @@
 // A byte is a Char from 0x00 to 0xFF, and its literal can be written in any
 // base. `0x|…|`, `0o|…|` and `0b|…|` read it back with the width of one byte,
 // so the 256 of them line up in a column, and a larger value takes the digits
-// it needs. `0d|…|` gives the code itself, a number (D-24).
+// it needs. `0d|…|` writes the decimal as it is read, `0d65` (D-25).
 
 // The two ends of a byte, written in each base, are one Char
 >> (0x00 == 0d0) " " (0d00 == 0b00000000) " " (0b00000000 == 0o000) ¶
@@ -27,18 +27,19 @@ a = 'A'
 // The sign in front, the padding after it
 >> 0x|(0 - 1)| " " 0o|(0 - 1)| " " 0b|(0 - 1)| ¶
 
-// What it writes reads back as the same Char
+// What it writes reads back as the same Char, through the bare bars
 tx = 0x|hi|
 tb = 0b|a|
 to = 0o|lo|
->> (0x|tx| == hi) " " (0b|tb| == a) " " (0o|to| == lo) ¶
+td = 0d|a|
+>> (|tx| == hi) " " (|tb| == a) " " (|to| == lo) " " (|td| == a) ¶
 
 // Every byte reads back in a column of the same width
 xs = 0
 bs = 0
 os = 0
 @ i:0..255 {
-    c = 0d|i|
+    c = |i|
     ? 0x|c|$# <> 4 { xs = xs + 1 }
     ? 0b|c|$# <> 10 { bs = bs + 1 }
     ? 0o|c|$# <> 5 { os = os + 1 }

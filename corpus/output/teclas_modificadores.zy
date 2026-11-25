@@ -6,12 +6,12 @@
     @ k <> 'q' {
         <<| k, m
         // A control character is shown as ^, so the golden holds no raw byte.
-        ? 0d|k| < 32 { >> "^" } _ { >> k }
-        >> " " 0d|k| " " m ¶
+        ? #|k| < 32 { >> "^" } _ { >> k }
+        >> " " #|k| " " m ¶
     }
     // No key waiting: '\0' and no modifiers.
     <<|? p, n
-    >> "poll " 0d|p| " " n ¶
+    >> "poll " #|p| " " n ¶
     <<| solo
     >> "solo " solo ¶
 }

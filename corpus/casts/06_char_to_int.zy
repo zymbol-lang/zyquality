@@ -1,32 +1,36 @@
-// Test: 0d|c| gives a character's code point, an Int (D-24, v0.0.12).
-// `0d` is the door between a character and its code: the element of a
-// character in decimal is the number. It was `##!c` from v0.0.8 to v0.0.11,
-// which no longer takes a Char.
+// Test: #|c| gives a character's code point, an Int (D-25, v0.0.12).
+// `#|…|` is the door to the number, and a character is a number: its code.
+// It was `##!c` from v0.0.8 to v0.0.11, which no longer takes a Char, and
+// `0d|c|` for a day of v0.0.12 (D-24), which is text again.
 
->> 0d|'A'| ¶        // 65
->> 0d|'z'| ¶        // 122
->> 0d|'0'| ¶        // 48
->> 0d|' '| ¶        // 32
->> 0d|'あ'| ¶       // 12354  (hiragana A)
->> 0d|'⚫'| ¶       // 9899
+>> #|'A'| ¶        // 65
+>> #|'z'| ¶        // 122
+>> #|'0'| ¶        // 48
+>> #|' '| ¶        // 32
+>> #|'あ'| ¶       // 12354  (hiragana A)
+>> #|'⚫'| ¶       // 9899
 
 // Result type is Int
-r = 0d|'A'|
+r = #|'A'|
 meta = r#?
 >> meta[1] ¶       // ###
 
-// Iterating a string yields Chars; 0d|…| turns each into its code point
+// Iterating a string yields Chars; #|…| turns each into its code point
 total = 0
 @ c:"ABC" {
-    total = total + 0d|c|
+    total = total + #|c|
 }
 >> total ¶         // 65+66+67 = 198
 
 // Usable in a range classification (is 'M' an ASCII uppercase letter?)
-p = 0d|'M'|
+p = #|'M'|
 ? p >= 65 && p <= 90 {
     >> "upper" ¶
 }
 
-// A base literal is a Char, so its code is 0d|…| of it
->> 0d|0x41| " " 0d|0b11111111| " " 0d|0o101| ¶   // 65 255 65
+// A base literal is a Char, so its code is #|…| of it
+>> #|0x41| " " #|0b11111111| " " #|0o101| ¶   // 65 255 65
+
+// The digit's value is the text's reading, not the character's
+siete = '7'
+>> #|siete| " " #|"{siete}"| ¶   // 55 7

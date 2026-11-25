@@ -14,9 +14,16 @@
 // which is a different question, and is the fifth finding in this log to
 // have tested the operator NEXT TO the one that answers.
 //
+// v0.0.12 (D-25, decided by the author 2026-11-24): a character is a number,
+// its code, so `#|'7'|` is 55 — the door to the number answers the same
+// question for every character. The digit's value is the TEXT's reading, and
+// a Char becomes the text of one character by interpolation: `#|"{c}"|`.
+//
 // `<<|` delivers a Char, so this is the shape a keyboard actually produces.
-valor(c) { <~ #|c| }
-es_digito(c) { <~ ((#|c|)#?)[1] == "###" }
+valor(c) { <~ #|"{c}"| }
+es_digito(c) { <~ ((#|"{c}"|)#?)[1] == "###" }
+
+>> "código:     " #|'7'| ¶
 
 >> "ascii:      " valor('7') ¶
 >> "devanagari: " valor('७') ¶

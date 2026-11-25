@@ -7,7 +7,7 @@
 // a golden would be invisible.
 
 s = "a\rb"
->> s$# " " 0d|s[2]| ¶
+>> s$# " " #|s[2]| ¶
 c = '\r'
->> 0d|c| ¶
+>> #|c| ¶
 >> ("x\r" $? '\r') ¶

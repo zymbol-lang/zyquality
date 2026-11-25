@@ -1,0 +1,48 @@
+// Test: three doors, one per result (D-25, decided by the author 2026-11-24).
+// A base gives the text in that base, the bare bars |…| give the character,
+// and #|…| gives the number. Each takes a Char, an Int, or a text written in
+// any base, with a sign and any of the four prefixes; a text with no prefix is
+// read in the base of the door, and in decimal for |…| and #|…|.
+
+caracter = 'A'
+numero = 65
+
+// The bases: always the text in that base, 0d like its three siblings
+elemento = 0d|caracter|
+>> elemento ¶
+>> 0d|numero| " " 0d|"0b01000001"| " " 0d|0o101| ¶
+>> 0x|"0d65"| " " 0o|"0x41"| " " 0b|"0o101"| ¶
+>> 0x|"41"| " " 0b|"101"| " " 0o|"41"| ¶
+
+// The bare bars: always the character
+>> |elemento| " " |numero| " " |"0d{numero}"| " " |0d65| " " |"0x41"| " " |"65"| ¶
+>> (|0x41| == 'A') " " (|'A'| == 'A') ¶
+
+// #|…|: always the number, and a character is its code
+>> #|caracter| " " #|elemento| " " #|"0x41"| " " #|"0b0101"| " " #|"-0x01"| ¶
+siete = '7'
+>> #|siete| " " #|"{siete}"| ¶
+
+// Doors inside doors; two bars together are one token, ||, so a door that
+// would close against another is written in parentheses
+>> 0x|(0 - 1)| " " |#|caracter| + 1| " " 0b|(#|'0'|)| ¶
+
+// Outside every other pair of bars, |…| opens an operand after a value
+s = "a" |66|
+t = s$++ |67| |68|
+>> s " " t ¶
+
+// What a base writes, the other doors read back
+x = 0x|"1F0000"|
+>> x " " #|x| ¶
+@ v:[0x00, 0x7F, 0xFF, '€'] {
+    >> (|(0x|v|)| == v) " " (|(0b|v|)| == v) " " (#|(0o|v|)| == #|v|) ¶
+}
+
+// The failures, each with its family
+!? { >> |(0 - 1)| ¶ } :! ##Range { >> "range " _err ¶ }
+!? { >> |"0xZZ"| ¶ } :! ##Parse { >> "parse " _err ¶ }
+!? { >> 0b|"41"| ¶ } :! ##Parse { >> "parse " _err ¶ }
+!? { >> 0x|3.5| ¶ } :! ##Type { >> "type " _err ¶ }
+!? { >> |#1| ¶ } :! ##Type { >> "type " _err ¶ }
+!? { >> 0d|"0xFFFFFFFFFFFFFFFF"| ¶ } :! ##Range { >> "range " _err ¶ }
