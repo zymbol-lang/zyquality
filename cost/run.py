@@ -35,6 +35,9 @@ GREEN, RED, NOVERDICT = 0, 1, 2
 
 ZYMBOL = os.environ.get("ZYMBOL_BIN", "zymbol")
 ZYJS = os.environ.get("ZYJS_RUNNER", str(ROOT.parents[1] / "web/tests/run_one.mjs"))
+# The playground's default engine since v0.0.11: zymbol.js's parser, then the
+# register VM ported to JavaScript (asked first by ZYJS-076's case).
+ZYJSVM = os.environ.get("ZYJSVM_RUNNER", str(ROOT.parents[1] / "web/tests/run_one_vm.mjs"))
 
 class TooFast(RuntimeError):
     """The base run is too short for its ratio to mean anything."""
@@ -44,6 +47,7 @@ ENGINES = {
     "zytw": lambda f: [ZYMBOL, "run", "--tw", str(f)],
     "zyvm": lambda f: [ZYMBOL, "run", "--vm", str(f)],
     "zyjs": lambda f: ["node", ZYJS, str(f)],
+    "zyjsvm": lambda f: ["node", ZYJSVM, str(f)],
 }
 
 # The engines `zymbol run --count` exists for. zyjs has no counters, so the
